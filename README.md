@@ -1,6 +1,6 @@
 # curb
 
-The **C**ar **U**niversal **R**ecord **B**roker.
+The **C**ar **U**niversal **R**ental **B**usiness.
 
 ## What is it?
 
@@ -9,7 +9,7 @@ track their cars, providing record keeping for each car they host.
 
 ## Roadmap
 
-Phase 1:
+Phase 1: (Completed)
 - Database
   - Address database
     - First street address
@@ -64,7 +64,7 @@ Phase 1:
     - Storage location physical location
     - Storage location mailing address
     - Storage description
-    - Phone numbers
+    - Phone number
     - Contact name
   - Note database
     - Note description
@@ -97,26 +97,40 @@ Phase 1:
     - Car ID
     - Photo ID
     - Date of Photo
+  - Incidentals database
+    - Car ID
+    - Photo ID
+    - Note ID
   - Car Registration History database
     - Car ID
     - Registration ID
   - Drivers License database
     - License number
-    - License state/province
-    - License country
+    - Issuing state/province
+    - Issuing country
     - Registered address
+    - Registered contact
     - Issue Date
     - Expiration Date
     - Photo
   - Renters database
     - Renter name
     - Renter birth date
-    - Renter comments
     - Drivers License record
     - Photo record
     - URL to user info on rental site
-  - Renter Infractions database
+
+Phase 1: (To Do)
+  - Trip database
+    - Car ID
+    - Start Time
+    - End Time
+  - Trip Renter database
+    - Trip ID
     - Renter ID
+    - Renter Type (primary, authorized)
+  - Trip Infractions database
+    - Trip Renter ID
     - Infraction ID
   - Renter Notes database
     - Renter ID

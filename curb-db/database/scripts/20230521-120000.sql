@@ -18,6 +18,7 @@ CREATE TABLE curb.address (
 ---
 
 DROP TABLE IF EXISTS curb.phone CASCADE;
+DROP TYPE IF EXISTS phone_type;
 
 CREATE TYPE phone_type AS ENUM ('physical', 'cell_phone', 'fax');
 
@@ -38,6 +39,7 @@ CREATE TABLE curb.contact (
     first_name VARCHAR(200) NOT NULL,
     middle_name VARCHAR(200),
     last_name VARCHAR(200) NOT NULL,
+    other_name VARCHAR(200) NOT NULL,
     address_id INT NOT NULL REFERENCES curb.address(id),
     phone_id INT NOT NULL REFERENCES curb.phone(id)
 );
@@ -132,4 +134,155 @@ CREATE TABLE curb.car_owner (
 );
 
 CREATE UNIQUE INDEX idx_car_owner_unique ON curb.car_owner(car_id, owner_id);
+
+---
+
+DROP TABLE IF EXISTS curb.car_storage;
+DROP INDEX IF EXISTS idx_car_storage;
+
+CREATE TABLE curb.car_storage (
+    id SERIAL NOT NULL PRIMARY KEY,
+    phone_id INT NOT NULL REFERENCES curb.phone(id),
+    contact_id INT NOT NULL REFERENCES curb.contact(id),
+    address_id INT NOT NULL REFERENCES curb.address(id),
+    physical_address_id INT NOT NULL REFERENCES curb.address(id),
+    location_description VARCHAR(4096) NOT NULL
+);
+
+CREATE UNIQUE INDEX idx_car_storage ON curb.car_storage(physical_address_id, UPPER(location_description));
+
+---
+
+DROP TABLE IF EXISTS curb.note;
+
+CREATE TABLE curb.note (
+    id SERIAL NOT NULL PRIMARY KEY,
+    description TEXT NOT NULL,
+    note_cost FLOAT,
+    note_date TIMESTAMP NOT NULL
+);
+
+---
+
+DROP TABLE IF EXISTS curb.infraction;
+DROP TYPE IF EXISTS infraction_type;
+
+CREATE TYPE infraction_type AS ENUM (
+    'normal_wear_and_tear',
+    'excessive_wear_and_tear',
+    'intentional_damage_vandalism',
+    'smoking_vaping',
+    'speeding_vehicle_misuse',
+    'minor_accident',
+    'major_accident',
+    'total_loss',
+    'exception'
+);
+
+CREATE TABLE curb.infraction (
+    id SERIAL NOT NULL PRIMARY KEY,
+    infraction_type infraction_type NOT NULL,
+    note_id INT NOT NULL REFERENCES curb.note(id)
+);
+
+---
+
+DROP TABLE IF EXISTS curb.photo;
+DROP TYPE IF EXISTS photo_type;
+
+CREATE TYPE photo_type AS ENUM (
+    'car_interior',
+    'car_exterior',
+    'car_before',
+    'car_after',
+    'car_claim',
+    'car_initial_interior',
+    'car_initial_exterior',
+    'renter_dl',
+    'renter_selfie_and_dl',
+    'renter_selfie_and_car'
+);
+
+CREATE TABLE curb.photo (
+    id SERIAL NOT NULL PRIMARY KEY,
+    photo_type photo_type NOT NULL,
+    photo_url VARCHAR(1024) NOT NULL
+);
+
+---
+
+DROP TABLE IF EXISTS curb.car_photo;
+DROP INDEX IF EXISTS idx_car_photo_unique;
+
+CREATE TABLE curb.car_photo (
+    id SERIAL NOT NULL PRIMARY KEY,
+    car_id INT NOT NULL REFERENCES curb.car(id),
+    photo_id INT NOT NULL REFERENCES curb.photo(id),
+    photo_time TIMESTAMP NOT NULL
+);
+
+CREATE UNIQUE INDEX idx_car_photo_unique ON curb.car_photo(car_id, photo_id);
+
+---
+
+DROP TABLE IF EXISTS curb.incidental;
+DROP INDEX IF EXISTS idx_incidental_unique;
+
+CREATE TABLE curb.incidental (
+    id SERIAL NOT NULL PRIMARY KEY,
+    car_id INT NOT NULL REFERENCES curb.car(id),
+    photo_id INT NOT NULL REFERENCES curb.photo(id),
+    note_id INT NOT NULL REFERENCES curb.note(id)
+);
+
+CREATE UNIQUE INDEX idx_incidental_unique ON curb.incidental(car_id, photo_id, note_id);
+
+---
+
+DROP TABLE IF EXISTS curb.car_registration;
+DROP INDEX IF EXISTS idx_car_registration_unique;
+
+CREATE TABLE curb.car_registration (
+    id SERIAL NOT NULL PRIMARY KEY,
+    car_id INT NOT NULL REFERENCES curb.car(id),
+    registration_id INT NOT NULL REFERENCES curb.registration(id)
+);
+
+CREATE UNIQUE INDEX idx_car_registration_unique ON curb.car_registration(car_id, registration_id);
+
+---
+
+DROP TABLE IF EXISTS curb.drivers_license;
+DROP INDEX IF EXISTS idx_drivers_license_unique;
+
+CREATE TABLE curb.drivers_license (
+    id SERIAL NOT NULL PRIMARY KEY,
+    contact_id INT NOT NULL REFERENCES curb.contact(id),
+    photo_id INT NOT NULL REFERENCES curb.photo(id),
+    license_number VARCHAR(200) NOT NULL,
+    issuing_state_province VARCHAR(200) NOT NULL,
+    issuing_country VARCHAR(200) NOT NULL,
+    birth_date DATE NOT NULL,
+    expiration_date DATE NOT NULL
+);
+
+CREATE UNIQUE INDEX idx_drivers_license_unique ON curb.drivers_license(contact_id, license_number);
+
+---
+
+DROP TABLE IF EXISTS curb.renter;
+DROP INDEX IF EXISTS idx_renter_unique;
+
+CREATE TABLE curb.renter (
+    id SERIAL NOT NULL PRIMARY KEY,
+    contact_id INT NOT NULL REFERENCES curb.contact(id),
+    drivers_license_id INT NOT NULL REFERENCES curb.drivers_license(id),
+    photo_id INT NOT NULL REFERENCES curb.photo(id),
+    birth_date DATE NOT NULL,
+    renter_url VARCHAR(1024) NOT NULL
+);
+
+CREATE UNIQUE INDEX idx_renter_unique ON curb.renter(drivers_license_id);
+
+---
 
