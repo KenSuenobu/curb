@@ -15,9 +15,7 @@ Phase 1:
     - Username
     - Password
     - Name of the user
-    - Access type:
-      - User
-      - Administrator
+    - E-Mail Address
   - Cars database
     - URL to car listing on Turo or hosted site
     - Car make
