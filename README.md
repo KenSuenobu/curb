@@ -92,7 +92,7 @@ Phase 1:
       - Renter DL
       - Renter Selfie and DL
       - Renter Selfie and Car
-    - Photo store
+    - Photo store location URL
   - Car Photos database
     - Car ID
     - Photo ID
