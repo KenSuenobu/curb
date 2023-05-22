@@ -29,21 +29,45 @@ Phase 1:
     - Car initial photos at time of creation
       - Interior Photos
       - Exterior Photos
-  - Car Note
-      - Note description
-      - Cost and Date
+  - Address database
+    - First street address
+    - Second street address
+    - City
+    - State/Province
+    - Zipcode
+    - Country
+  - Phone database
+    - Phone number
+    - Country of number
+    - Phone number type:
+      - Physical
+      - Cell Phone
+      - Fax
+  - Contact database
+    - First name
+    - Middle name
+    - Last name
+    - Address
+    - Phone
+  - Car Storage database
+    - Storage location physical location
+    - Storage location mailing address
+    - Phone numbers
+    - Contact name
+  - Note database
+    - Note description
+    - Cost and Date
   - Infractions database
     - Infraction type:
       - Normal Wear and Tear
       - Excessive Wear and Tear
       - Intentional Damage/Vandalism
       - Smoking/Vaping
-      - Accident
+      - Speeding/Vehicle Misuse
+      - Minor Accident
+      - Major Accident
+      - Total Loss
     - Car note
-  - Renters database
-    - Renter name
-    - Renter birth date
-    - Renter comments
   - Photos database
     - Photo types:
       - Car Interior
@@ -55,6 +79,21 @@ Phase 1:
       - Renter Selfie and DL
       - Renter Selfie and Car
     - Photo store
+  - Drivers License database
+    - License number
+    - License state/province
+    - License country
+    - Registered address
+    - Issue Date
+    - Expiration Date
+    - Photo
+  - Renters database
+    - Renter name
+    - Renter birth date
+    - Renter comments
+    - Drivers License record
+    - Photo record
+    - Renter notes
   - Car Condition database
     - Car ID
     - Condition before rental
