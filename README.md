@@ -11,18 +11,6 @@ track their cars, providing record keeping for each car they host.
 
 Phase 1:
 - Database
-  - Users database
-    - Username
-    - Password
-    - Name of the user
-    - E-Mail Address
-  - Cars database
-    - URL to car listing on Turo or hosted site
-    - Car make
-    - Car model
-    - Car initial photos at time of creation
-      - Interior Photos
-      - Exterior Photos
   - Address database
     - First street address
     - Second street address
@@ -43,9 +31,39 @@ Phase 1:
     - Last name
     - Address
     - Phone
+  - Users database
+    - Username
+    - Password
+    - Contact ID
+    - E-Mail Address
+  - Insurance Carrier database
+    - Name
+    - Phone ID
+    - Address ID
+  - Insurance database
+    - Insurance Carrier ID
+    - Insurance Identifier
+    - Origination Date
+    - Expiration Date
+  - Car Registration database
+    - Number
+    - Expire Date
+    - Registration State/Province
+    - Registered Contact
+  - Cars database
+    - URL to car listing on Turo or hosted site
+    - Nickname
+    - Car year
+    - Car make
+    - Car model
+  - Car Owners database
+    - Car ID
+    - Contact ID
+    - Percentage
   - Car Storage database
     - Storage location physical location
     - Storage location mailing address
+    - Storage description
     - Phone numbers
     - Contact name
   - Note database
@@ -69,10 +87,19 @@ Phase 1:
       - Car Before
       - Car After
       - Car Claim
+      - Car Initial Interior
+      - Car Initial Exterior
       - Renter DL
       - Renter Selfie and DL
       - Renter Selfie and Car
     - Photo store
+  - Car Photos database
+    - Car ID
+    - Photo ID
+    - Date of Photo
+  - Car Registration History database
+    - Car ID
+    - Registration ID
   - Drivers License database
     - License number
     - License state/province
@@ -87,13 +114,25 @@ Phase 1:
     - Renter comments
     - Drivers License record
     - Photo record
-    - Renter notes
+    - URL to user info on rental site
+  - Renter Infractions database
+    - Renter ID
+    - Infraction ID
+  - Renter Notes database
+    - Renter ID
+    - Note ID
   - Car Condition database
     - Car ID
     - Condition before rental
     - Condition after rental
     - Photos of conditional issues
     - Car notes including cost and dates
+  - Car Registrations database
+    - Car ID
+    - Registration ID
+  - Car Insurances database
+    - Car ID
+    - Insurance ID
   - Toll Transponders database
     - ID of the transponder
     - Car
