@@ -10,10 +10,6 @@ track their cars, providing record keeping for each car they host.
 ## Roadmap
 
 Phase 1:
-- Layout of main page:
-  - Users
-  - Cars
-  - Toll Transponders
 - Database
   - Users database
     - Username
