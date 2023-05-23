@@ -154,3 +154,16 @@ Phase 1: (Completed)
     - Trip ID
     - Note ID
     - Renter associated with toll
+
+Phase 1: (Unanswered)
+  - Company database
+    - Company name
+    - Contact ID
+    - Mailing Address ID
+    - Physical Address ID
+  - Fleet database
+    - Fleet Name
+    - Company ID
+  - Fleet Car database
+    - Car ID
+    - Fleet ID
