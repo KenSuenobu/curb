@@ -2,6 +2,8 @@
 
 The **C**ar **U**niversal **R**ental **B**usiness.
 
+(I reserve the right to rename this sucker if the acronym doesn't stick!)
+
 ## What is it?
 
 Curb is a NextJS/NestJS application that allows Turo hosts to easily
