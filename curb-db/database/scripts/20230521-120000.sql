@@ -286,3 +286,134 @@ CREATE UNIQUE INDEX idx_renter_unique ON curb.renter(drivers_license_id);
 
 ---
 
+DROP TABLE IF EXISTS curb.trip;
+
+CREATE TABLE curb.trip (
+    id SERIAL NOT NULL PRIMARY KEY,
+    car_id INT NOT NULL REFERENCES curb.car(id),
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL,
+    payout FLOAT NOT NULL DEFAULT 0.00
+);
+
+---
+
+DROP TABLE IF EXISTS curb.trip_photo;
+DROP INDEX IF EXISTS idx_trip_photo_unique;
+
+CREATE TABLE curb.trip_photo (
+    id SERIAL NOT NULL PRIMARY KEY,
+    trip_id INT NOT NULL REFERENCES curb.trip(id),
+    photo_id INT NOT NULL REFERENCES curb.photo(id),
+    photo_date DATE NOT NULL
+);
+
+CREATE UNIQUE INDEX idx_trip_photo_unique ON curb.trip_photo(trip_id, photo_id);
+
+---
+
+DROP TABLE IF EXISTS curb.trip_renter;
+DROP INDEX IF EXISTS idx_trip_renter_unique;
+DROP TYPE IF EXISTS trip_renter_type;
+
+CREATE TYPE trip_renter_type AS ENUM (
+    'primary',
+    'authorized'
+);
+
+CREATE TABLE curb.trip_renter (
+    id SERIAL NOT NULL PRIMARY KEY,
+    trip_id INT NOT NULL REFERENCES curb.trip(id),
+    renter_id INT NOT NULL REFERENCES curb.renter(id)
+);
+
+CREATE UNIQUE INDEX idx_trip_renter_unique ON curb.trip_renter(trip_id, renter_id);
+
+---
+
+DROP TABLE IF EXISTS curb.trip_infraction;
+DROP INDEX IF EXISTS idx_trip_infraction_unique;
+
+CREATE TABLE curb.trip_infraction (
+    id SERIAL NOT NULL PRIMARY KEY,
+    trip_renter_id INT NOT NULL REFERENCES curb.trip_renter(id),
+    infraction_id INT NOT NULL REFERENCES curb.infraction(id)
+);
+
+CREATE UNIQUE INDEX idx_trip_infraction_unique ON curb.trip_infraction(trip_renter_id, infraction_id);
+
+---
+
+DROP TABLE IF EXISTS curb.renter_note;
+DROP INDEX IF EXISTS idx_renter_note_unique;
+
+CREATE TABLE curb.renter_note (
+    id SERIAL NOT NULL PRIMARY KEY,
+    renter_id INT NOT NULL REFERENCES curb.renter(id),
+    note_id INT NOT NULL REFERENCES curb.note(id)
+);
+
+CREATE UNIQUE INDEX idx_renter_note_unique ON curb.renter_note(renter_id, note_id);
+
+---
+
+DROP TABLE IF EXISTS curb.car_condition_photo;
+
+CREATE TABLE curb.car_condition_photo (
+    id SERIAL NOT NULL PRIMARY KEY,
+    car_id INT NOT NULL REFERENCES curb.car(id),
+    photo_id INT NOT NULL REFERENCES curb.photo(id),
+    note_id INT NOT NULL REFERENCES curb.note(id)
+);
+
+CREATE UNIQUE INDEX idx_car_condition_photo_unique ON curb.car_condition_photo(car_id, photo_id, note_id);
+
+---
+
+DROP TABLE IF EXISTS curb.car_insurance;
+DROP INDEX IF EXISTS idx_car_insurance_unique;
+
+CREATE TABLE curb.car_insurance (
+    id SERIAL NOT NULL PRIMARY KEY,
+    car_id INT NOT NULL REFERENCES curb.car(id),
+    insurance_id INT NOT NULL REFERENCES curb.insurance(id)
+);
+
+CREATE UNIQUE INDEX idx_car_insurance_unique ON curb.car_insurance(car_id, insurance_id);
+
+---
+
+DROP TABLE IF EXISTS curb.car_investment;
+
+CREATE TABLE curb.car_investment (
+    id SERIAL NOT NULL PRIMARY KEY,
+    car_id INT NOT NULL REFERENCES curb.car(id),
+    contact_id INT NOT NULL REFERENCES curb.contact(id),
+    percentage FLOAT NOT NULL DEFAULT 100.0,
+    investment_amount FLOAT NOT NULL DEFAULT 0.00
+);
+
+---
+
+DROP TABLE IF EXISTS curb.toll_transponder;
+
+CREATE TABLE curb.toll_transponder (
+    id SERIAL NOT NULL PRIMARY KEY,
+    car_id INT NOT NULL REFERENCES curb.car(id),
+    transponder_id VARCHAR(80) NOT NULL,
+    transponder_login VARCHAR(1024) NOT NULL
+);
+
+CREATE UNIQUE INDEX idx_toll_transponder_unique ON curb.toll_transponder(car_id, UPPER(transponder_id));
+
+---
+
+DROP TABLE IF EXISTS curb.trip_toll;
+
+CREATE TABLE curb.trip_toll (
+    id SERIAL NOT NULL PRIMARY KEY,
+    transponder_id INT NOT NULL REFERENCES curb.toll_transponder(id),
+    trip_id INT NOT NULL REFERENCES curb.trip(id),
+    note_id INT NOT NULL REFERENCES curb.note(id)
+);
+

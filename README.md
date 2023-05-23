@@ -119,12 +119,16 @@ Phase 1: (Completed)
     - Drivers License record
     - Photo record
     - URL to user info on rental site
-
-Phase 1: (To Do)
   - Trip database
     - Car ID
-    - Start Time
-    - End Time
+    - Start time of rent
+    - End time of rent
+    - Total Mileage
+    - Total payout
+  - Trip Photos database
+    - Trip ID
+    - Photo ID
+    - Date
   - Trip Renter database
     - Trip ID
     - Renter ID
@@ -132,37 +136,21 @@ Phase 1: (To Do)
   - Trip Infractions database
     - Trip Renter ID
     - Infraction ID
-  - Renter Notes database
-    - Renter ID
-    - Note ID
   - Car Condition database
     - Car ID
-    - Condition before rental
-    - Condition after rental
-    - Photos of conditional issues
-    - Car notes including cost and dates
-  - Car Registrations database
+    - Photo ID
+    - Note ID
+  - Car Investment database
     - Car ID
-    - Registration ID
-  - Car Insurances database
-    - Car ID
-    - Insurance ID
+    - Investor Contact ID
+    - Percentage
+    - Amount Invested
   - Toll Transponders database
     - ID of the transponder
-    - Car
+    - Car ID
     - Login for transponder database
-  - Toll records database
+  - Trip Toll database
     - Toll transponder ID
-    - Toll date
-    - Toll cost
+    - Trip ID
+    - Note ID
     - Renter associated with toll
-  - Trip database
-    - Car condition before and after
-    - Car photos before and after
-    - Renter
-    - Start time of rent
-    - End time of rent
-    - Total Mileage
-    - Infractions
-    - Tolls
-    - Total payout
