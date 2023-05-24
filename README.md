@@ -11,6 +11,21 @@ track their cars, providing record keeping for each car they host.
 
 ## Roadmap
 
+Phase 2:
+- OpenAPI Definitions
+
+Phase 3:
+- Application screen layout
+  - Login screen
+  - Register Insurance information
+  - Car information
+    - Car price
+    - Depreciation schedule
+    - Insurance
+    - Registration
+
+## Semi-completed Roadmap
+
 Phase 1: (Completed)
 - Database
   - Address database
@@ -169,3 +184,9 @@ Phase 1: (Unanswered)
   - Fleet Car database
     - Car ID
     - Fleet ID
+  - Car Depreciation database
+    - Car ID
+    - Purchase Price
+    - Purchase Date
+    - Depreciation per month (Float) - 20% of purchase price amortized over 12 months
+    - Depreciation termination date (60 month after purchase date)
