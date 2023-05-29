@@ -1,3 +1,2 @@
-export { AddressDto } from "./address.dto";
-export { PhoneDto } from "./phone.dto";
-export { ContactDto } from "./contact.dto";
+export { CarMakeDTO } from './car-make.dto';
+export { CarModelDTO } from './car-model.dto';

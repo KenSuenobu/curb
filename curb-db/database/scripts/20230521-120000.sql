@@ -3,64 +3,90 @@ CREATE SCHEMA curb;
 
 ---
 
-DROP TABLE IF EXISTS curb.address CASCADE;
+DROP TABLE IF EXISTS curb.car_make CASCADE;
+DROP INDEX IF EXISTS idx_car_make_unique;
 
-CREATE TABLE curb.address (
+CREATE TABLE curb.car_make (
     id SERIAL NOT NULL PRIMARY KEY,
-    address_1 VARCHAR(255) NOT NULL,
-    address_2 VARCHAR(255) NOT NULL,
-    city VARCHAR(255) NOT NULL,
-    state_province VARCHAR(255) NOT NULL,
-    zipcode VARCHAR(40) NOT NULL,
-    country VARCHAR(100) NOT NULL
+    name VARCHAR(80) NOT NULL
 );
+
+CREATE UNIQUE INDEX idx_car_make_unique ON curb.car_make(name);
 
 ---
 
-DROP TABLE IF EXISTS curb.phone CASCADE;
-DROP TYPE IF EXISTS phone_type;
+DROP TABLE IF EXISTS curb.car_model CASCADE;
+DROP INDEX IF EXISTS idx_car_model_unique;
 
-CREATE TYPE phone_type AS ENUM ('physical', 'cell_phone', 'fax');
+CREATE TYPE car_model_powertrain_type AS ENUM ('gas', 'ev', 'phev', 'hybrid');
 
-CREATE TABLE curb.phone (
+CREATE TABLE curb.car_model (
     id SERIAL NOT NULL PRIMARY KEY,
-    phone_number VARCHAR(200) NOT NULL,
-    country VARCHAR(100) NOT NULL,
-    phone_type phone_type NOT NULL DEFAULT 'cell_phone'
+    make_id INT NOT NULL REFERENCES curb.car_make(id),
+    name VARCHAR(80) NOT NULL,
+    powertrain car_model_powertrain_type NOT NULL DEFAULT 'gas'
 );
 
----
+CREATE UNIQUE INDEX idx_car_model_unique ON curb.car_model(make_id, name, powertrain);
 
-DROP TABLE IF EXISTS curb.contact CASCADE;
-DROP INDEX IF EXISTS idx_contact_unique;
-
-CREATE TABLE curb.contact (
-    id SERIAL NOT NULL PRIMARY KEY,
-    first_name VARCHAR(200) NOT NULL,
-    middle_name VARCHAR(200),
-    last_name VARCHAR(200) NOT NULL,
-    other_name VARCHAR(200) NOT NULL,
-    address_id INT NOT NULL REFERENCES curb.address(id),
-    phone_id INT NOT NULL REFERENCES curb.phone(id)
-);
-
-CREATE UNIQUE INDEX idx_contact_unique ON curb.contact(UPPER(first_name), UPPER(last_name), address_id);
-
----
-
-DROP TABLE IF EXISTS curb.user CASCADE;
-DROP INDEX IF EXISTS idx_curb_unique_user;
-
-CREATE TABLE curb.user (
-    id SERIAL NOT NULL PRIMARY KEY,
-    username VARCHAR(40) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    email_address VARCHAR(1024) NOT NULL,
-    contact_id INT NOT NULL REFERENCES curb.contact(id)
-);
-
-CREATE UNIQUE INDEX idx_curb_unique_user ON curb.user(UPPER(username));
-
+-- DROP TABLE IF EXISTS curb.address CASCADE;
+--
+-- CREATE TABLE curb.address (
+--     id SERIAL NOT NULL PRIMARY KEY,
+--     address_1 VARCHAR(255) NOT NULL,
+--     address_2 VARCHAR(255) NOT NULL,
+--     city VARCHAR(255) NOT NULL,
+--     state_province VARCHAR(255) NOT NULL,
+--     zipcode VARCHAR(40) NOT NULL,
+--     country VARCHAR(100) NOT NULL
+-- );
+--
+-- ---
+--
+-- DROP TABLE IF EXISTS curb.phone CASCADE;
+-- DROP TYPE IF EXISTS phone_type;
+--
+-- CREATE TYPE phone_type AS ENUM ('physical', 'cell_phone', 'fax');
+--
+-- CREATE TABLE curb.phone (
+--     id SERIAL NOT NULL PRIMARY KEY,
+--     phone_number VARCHAR(200) NOT NULL,
+--     country VARCHAR(100) NOT NULL,
+--     phone_type phone_type NOT NULL DEFAULT 'cell_phone'
+-- );
+--
+-- ---
+--
+-- DROP TABLE IF EXISTS curb.contact CASCADE;
+-- DROP INDEX IF EXISTS idx_contact_unique;
+--
+-- CREATE TABLE curb.contact (
+--     id SERIAL NOT NULL PRIMARY KEY,
+--     first_name VARCHAR(200) NOT NULL,
+--     middle_name VARCHAR(200),
+--     last_name VARCHAR(200) NOT NULL,
+--     other_name VARCHAR(200) NOT NULL,
+--     address_id INT NOT NULL REFERENCES curb.address(id),
+--     phone_id INT NOT NULL REFERENCES curb.phone(id)
+-- );
+--
+-- CREATE UNIQUE INDEX idx_contact_unique ON curb.contact(UPPER(first_name), UPPER(last_name), address_id);
+--
+-- ---
+--
+-- DROP TABLE IF EXISTS curb.user CASCADE;
+-- DROP INDEX IF EXISTS idx_curb_unique_user;
+--
+-- CREATE TABLE curb.user (
+--     id SERIAL NOT NULL PRIMARY KEY,
+--     username VARCHAR(40) NOT NULL,
+--     password VARCHAR(255) NOT NULL,
+--     email_address VARCHAR(1024) NOT NULL,
+--     contact_id INT NOT NULL REFERENCES curb.contact(id)
+-- );
+--
+-- CREATE UNIQUE INDEX idx_curb_unique_user ON curb.user(UPPER(username));
+--
 -- ---
 --
 -- DROP TABLE IF EXISTS curb.insurance_carrier CASCADE;
