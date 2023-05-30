@@ -1,6 +1,6 @@
 import {ApiProperty} from "@nestjs/swagger";
 
-export class CarMakeDTO {
+export class CarMakeDto {
   @ApiProperty({
     description: 'ID of the `CarMake` object, auto-numbered and set if null.',
     nullable: true,

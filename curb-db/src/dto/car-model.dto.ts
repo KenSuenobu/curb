@@ -7,7 +7,7 @@ export enum CarModelPowerTrainType {
   hybrid
 }
 
-export class CarModelDTO {
+export class CarModelDto {
   @ApiProperty({
     description: 'ID of the `CarModel` object, auto-numbered and set if null.',
     nullable: true,

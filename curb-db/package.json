@@ -10,7 +10,8 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@nestjs/swagger": "^6.3.0"
+    "@nestjs/swagger": "^6.3.0",
+    "pg-promise": "^11.5.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.0.0",

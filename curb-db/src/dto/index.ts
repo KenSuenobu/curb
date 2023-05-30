@@ -1,2 +1,2 @@
-export { CarMakeDTO } from './car-make.dto';
-export { CarModelDTO } from './car-model.dto';
+export * from './car-make.dto';
+export * from './car-model.dto';
