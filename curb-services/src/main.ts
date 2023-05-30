@@ -16,7 +16,7 @@ async function bootstrap() {
       'CURB Documentation',
       'https://www.suenobu.llc/curb/docs/',
     )
-    .addTag('main', 'Main services', {
+    .addTag('car-make', 'Car Make services', {
       description: 'Main Documentation and Suggestions',
       url: 'https://www.suenobu.llc/curb/docs/',
     })
