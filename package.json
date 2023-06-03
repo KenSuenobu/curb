@@ -1,0 +1,12 @@
+{
+  "name": "curb",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": [
+    "curb-db",
+    "curb-services"
+  ],
+  "scripts": {},
+  "devDependencies": {},
+  "dependencies": {}
+}

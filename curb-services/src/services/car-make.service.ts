@@ -1,4 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
+import {CarMakeDto} from "curb-db/dist/dto";
+import {DaoUtils} from "curb-db/dist/dao/dao-utils.dao";
+import {CarMakeDao} from "curb-db/dist/dao/car-make.dao";
 
 @Injectable()
 export class CarMakeService {
