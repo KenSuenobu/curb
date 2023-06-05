@@ -7,6 +7,12 @@ export class CarMakeDao extends BaseDao<CarMakeDto> {
     super(db, "curb.car_make");
   }
 
+  override async list(): Promise<CarMakeDto[]> {
+    const selectStatement = `SELECT * FROM ${this.section} ORDER BY name ASC`;
+
+    return this.db.any<CarMakeDto>(selectStatement);
+  }
+
   async edit(id: number, payload: CarMakeDto): Promise<Boolean> {
     const sqlStatement =
       "UPDATE curb.car_make SET name=$1 WHERE id=$2";
