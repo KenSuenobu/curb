@@ -10,13 +10,14 @@ import {
   Button,
   Dialog,
   DialogTitle,
-  DialogContent, TextField, DialogActions
+  DialogContent, TextField, DialogActions, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton
 } from '@mui/material';
 import { NextPage } from "next";
 import React, { useEffect, useRef, useState } from "react";
 import {StackItem } from '../../components/StackItem';
 import {alertDialog, errorDialog} from '../../components/dialogs/ConfirmDialog';
 import axios from 'axios';
+import {AddOutlined, ArrowRightOutlined} from '@mui/icons-material';
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -91,70 +92,138 @@ const CarDefinitions: NextPage = () => {
       <Paper sx={{ width: '100%' }}>
         <div style={{ display: 'flex' }}>
           <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
-            <Stack direction={'row'} sx={{ borderBottom: '1px solid #ccc' }}>
-              <Item sx={{ width: '75%', textAlign: 'left' }}>Car Makes</Item>
-              <Item sx={{ width: '25%', textAlign: 'right' }}>+</Item>
-            </Stack>
-              {carMakes.length > 0 ? (
-                <>
-                  {carMakes.map((x) => (
-                    <>
-                      <Stack direction={'row'}>
-                        <Item sx={{ width: '85%', textAlign: 'left'}}>{x.name}</Item>
-                        <Item sx={{ width: '15%', textAlign: 'right'}}>&gt;</Item>
-                      </Stack>
-                    </>
-                  ))}
-                </>
-              ) : (
-                <>
-                </>
-              )}
-          </div>
-          <div style={{ width: '25%', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' }}>
-            <Stack direction={'row'}>
-              <Item sx={{ width: '75%', textAlign: 'left' }}>Car Models</Item>
-              <Item sx={{ width: '25%', textAlign: 'right' }}>+</Item>
-            </Stack>
-          </div>
-          <div style={{ width: '25%', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' }}>
-            <Stack direction={'row'}>
-              <Item sx={{ width: '75%', textAlign: 'left' }}>Model Year</Item>
-              <Item sx={{ width: '25%', textAlign: 'right' }}>+</Item>
-            </Stack>
-          </div>
-          <div style={{ width: '25%', borderBottom: '1px solid #ccc' }}>
-            <Stack direction={'row'}>
-              <Item sx={{ width: '75%', textAlign: 'left' }}>Trim Level</Item>
-              <Item sx={{ width: '25%', textAlign: 'right' }}>+</Item>
-            </Stack>
-          </div>
-        </div>
-        <p/>
-        <Stack direction={'column'}>
-          <Item sx={{ width: '25%', paddingLeft: '6px', borderRight: '1px solid #ccc' }}>
-            <Box sx={{ display: 'flex' }}>
-              <Item>Car Make</Item>
-              <FormControl fullWidth>
-                <InputLabel id={'car-make-select-label'}>Car Make</InputLabel>
-                <Select labelId={'car-make-select-label'} id={'car-make-select'} label={'Car Make'}>
+            <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
+              <Table stickyHeader size={'small'}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Car Make</TableCell>
+                    <TableCell sx={{ textAlign: 'right' }}>
+                      <IconButton onClick={() => setCarMakesDialogShowing(true)}>
+                        <AddOutlined/>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
                   {carMakes.length > 0 ? (
                     <>
-                      {carMakes.map((x) => <MenuItem value={x.id}>{x.name}</MenuItem>)}
+                      {carMakes.map((x) => (
+                        <>
+                          <TableRow hover>
+                            <TableCell><Typography>{x.name}</Typography></TableCell>
+                            <TableCell sx={{ textAlign: 'right' }}><ArrowRightOutlined/></TableCell>
+                          </TableRow>
+                        </>
+                      ))}
                     </>
                   ) : (
                     <>
                     </>
                   )}
-                </Select>
-              </FormControl>
-              &nbsp;
-              <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-                <Button variant={'outlined'} onClick={() => setCarMakesDialogShowing(true)}>ADD</Button>
-              </Box>
-            </Box>
-          </Item>
-        </Stack>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+          <div style={{ width: '25%', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' }}>
+            <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
+              <Table stickyHeader size={'small'}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Car Models</TableCell>
+                    <TableCell sx={{ textAlign: 'right' }}>
+                      <IconButton onClick={() => setCarMakesDialogShowing(true)}>
+                        <AddOutlined/>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {/*{carMakes.length > 0 ? (*/}
+                  {/*  <>*/}
+                  {/*    {carMakes.map((x) => (*/}
+                  {/*      <>*/}
+                  {/*        <TableRow hover>*/}
+                  {/*          <TableCell><Typography>{x.name}</Typography></TableCell>*/}
+                  {/*          <TableCell sx={{ textAlign: 'right' }}><ArrowRightOutlined/></TableCell>*/}
+                  {/*        </TableRow>*/}
+                  {/*      </>*/}
+                  {/*    ))}*/}
+                  {/*  </>*/}
+                  {/*) : (*/}
+                  {/*  <>*/}
+                  {/*  </>*/}
+                  {/*)}*/}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+          <div style={{ width: '25%', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' }}>
+            <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
+              <Table stickyHeader size={'small'}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Model Year</TableCell>
+                    <TableCell sx={{ textAlign: 'right' }}>
+                      <IconButton onClick={() => setCarMakesDialogShowing(true)}>
+                        <AddOutlined/>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {/*{carMakes.length > 0 ? (*/}
+                  {/*  <>*/}
+                  {/*    {carMakes.map((x) => (*/}
+                  {/*      <>*/}
+                  {/*        <TableRow hover>*/}
+                  {/*          <TableCell><Typography>{x.name}</Typography></TableCell>*/}
+                  {/*          <TableCell sx={{ textAlign: 'right' }}><ArrowRightOutlined/></TableCell>*/}
+                  {/*        </TableRow>*/}
+                  {/*      </>*/}
+                  {/*    ))}*/}
+                  {/*  </>*/}
+                  {/*) : (*/}
+                  {/*  <>*/}
+                  {/*  </>*/}
+                  {/*)}*/}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+          <div style={{ width: '25%', borderBottom: '1px solid #ccc' }}>
+            <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
+              <Table stickyHeader size={'small'}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Trim Level</TableCell>
+                    <TableCell sx={{ textAlign: 'right' }}>
+                      <IconButton onClick={() => setCarMakesDialogShowing(true)}>
+                        <AddOutlined/>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {/*{carMakes.length > 0 ? (*/}
+                  {/*  <>*/}
+                  {/*    {carMakes.map((x) => (*/}
+                  {/*      <>*/}
+                  {/*        <TableRow hover>*/}
+                  {/*          <TableCell><Typography>{x.name}</Typography></TableCell>*/}
+                  {/*          <TableCell sx={{ textAlign: 'right' }}><ArrowRightOutlined/></TableCell>*/}
+                  {/*        </TableRow>*/}
+                  {/*      </>*/}
+                  {/*    ))}*/}
+                  {/*  </>*/}
+                  {/*) : (*/}
+                  {/*  <>*/}
+                  {/*  </>*/}
+                  {/*)}*/}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        </div>
       </Paper>
     </>
   );
