@@ -89,9 +89,52 @@ const CarDefinitions: NextPage = () => {
       </Dialog>
 
       <Paper sx={{ width: '100%' }}>
+        <div style={{ display: 'flex' }}>
+          <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
+            <Stack direction={'row'} sx={{ borderBottom: '1px solid #ccc' }}>
+              <Item sx={{ width: '75%', textAlign: 'left' }}>Car Makes</Item>
+              <Item sx={{ width: '25%', textAlign: 'right' }}>+</Item>
+            </Stack>
+              {carMakes.length > 0 ? (
+                <>
+                  {carMakes.map((x) => (
+                    <>
+                      <Stack direction={'row'}>
+                        <Item sx={{ width: '85%', textAlign: 'left'}}>{x.name}</Item>
+                        <Item sx={{ width: '15%', textAlign: 'right'}}>&gt;</Item>
+                      </Stack>
+                    </>
+                  ))}
+                </>
+              ) : (
+                <>
+                </>
+              )}
+          </div>
+          <div style={{ width: '25%', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' }}>
+            <Stack direction={'row'}>
+              <Item sx={{ width: '75%', textAlign: 'left' }}>Car Models</Item>
+              <Item sx={{ width: '25%', textAlign: 'right' }}>+</Item>
+            </Stack>
+          </div>
+          <div style={{ width: '25%', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' }}>
+            <Stack direction={'row'}>
+              <Item sx={{ width: '75%', textAlign: 'left' }}>Model Year</Item>
+              <Item sx={{ width: '25%', textAlign: 'right' }}>+</Item>
+            </Stack>
+          </div>
+          <div style={{ width: '25%', borderBottom: '1px solid #ccc' }}>
+            <Stack direction={'row'}>
+              <Item sx={{ width: '75%', textAlign: 'left' }}>Trim Level</Item>
+              <Item sx={{ width: '25%', textAlign: 'right' }}>+</Item>
+            </Stack>
+          </div>
+        </div>
+        <p/>
         <Stack direction={'column'}>
-          <Item sx={{ width: '33%', paddingLeft: '6px', borderRight: '1px solid #ccc' }}>
+          <Item sx={{ width: '25%', paddingLeft: '6px', borderRight: '1px solid #ccc' }}>
             <Box sx={{ display: 'flex' }}>
+              <Item>Car Make</Item>
               <FormControl fullWidth>
                 <InputLabel id={'car-make-select-label'}>Car Make</InputLabel>
                 <Select labelId={'car-make-select-label'} id={'car-make-select'} label={'Car Make'}>
