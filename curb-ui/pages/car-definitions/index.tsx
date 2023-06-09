@@ -34,7 +34,8 @@ interface ICarMake {
 
 const CarDefinitions: NextPage = () => {
   const [carMakes, setCarMakes] = useState([]);
-  const [carMakesDialogShowing, setCarMakesDialogShowing] = useState(false);
+  const [carMakesInputShowing, setCarMakesInputShowing] = useState(false);
+  const [carMakeId, setCarMakeId] = useState(0);
   const carMakeRef = useRef();
 
   const reloadCarMakes = () => {
@@ -62,7 +63,7 @@ const CarDefinitions: NextPage = () => {
         reloadCarMakes();
       });
 
-    setCarMakesDialogShowing(false);
+    setCarMakesInputShowing(false);
 
     carMakeRef.current.value = '';
   }
@@ -71,24 +72,6 @@ const CarDefinitions: NextPage = () => {
 
   return (
     <>
-      <Dialog open={carMakesDialogShowing} maxWidth={'sm'} fullWidth>
-        <DialogContent>
-          <Stack direction={'column'}>
-            <Item sx={{ width: '100%' }}>
-              <Box sx={{ display: 'flex' }}>
-                <TextField id={'namespace'} label={'Car Make'} variant={'outlined'} required inputRef={carMakeRef}
-                           autoFocus fullWidth/>
-                &nbsp;
-                <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-                  <Button onClick={() => addCarMake()} variant={'contained'}>ADD</Button>&nbsp;
-                  <Button onClick={() => setCarMakesDialogShowing(false)} variant={'contained'} color={'error'}>CANCEL</Button>
-                </Box>
-              </Box>
-            </Item>
-          </Stack>
-        </DialogContent>
-      </Dialog>
-
       <Paper sx={{ width: '100%' }}>
         <div style={{ display: 'flex' }}>
           <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
@@ -96,42 +79,71 @@ const CarDefinitions: NextPage = () => {
               <Table stickyHeader size={'small'}>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Car Make</TableCell>
-                    <TableCell sx={{ textAlign: 'right' }}>
-                      <IconButton onClick={() => setCarMakesDialogShowing(true)}>
+                    <TableCell sx={{ backgroundColor: '#ddd' }}>Car Make</TableCell>
+                    <TableCell sx={{ backgroundColor: '#ddd', textAlign: 'right', borderRight: '1px solid #aaa' }}>
+                      <IconButton onClick={() => setCarMakesInputShowing(true)}>
                         <AddOutlined/>
                       </IconButton>
                     </TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  {carMakes.length > 0 ? (
-                    <>
-                      {carMakes.map((x) => (
+                {carMakesInputShowing ? (
+                  <>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell colSpan={2}>
+                          <TextField id={'namespace'} variant={'standard'}
+                            required inputRef={carMakeRef} autoFocus fullWidth
+                                     helperText={'[Enter] Saves, [ESC] cancels'}
+                            onKeyDown={(ev) => {
+                              if (ev.key === 'Escape') {
+                                setCarMakesInputShowing(false);
+                                carMakeRef.current.value = null;
+                              } else if (ev.key === 'Enter') {
+                                addCarMake();
+                              }
+                            }}/></TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </>
+                ) : (
+                  <>
+                  </>
+                )}
+                {carMakes.length > 0 ? (
+                  <TableBody>
+                    {carMakes.map((x) => {
+                      const bgColor = carMakeId === x.id ? '#ccc' : '#fff';
+
+                      return (
                         <>
                           <TableRow hover>
-                            <TableCell><Typography>{x.name}</Typography></TableCell>
-                            <TableCell sx={{ textAlign: 'right' }}><ArrowRightOutlined/></TableCell>
+                            <TableCell
+                              sx={{ backgroundColor: bgColor}}
+                              onClick={() => setCarMakeId(x.id)}><Typography>{x.name}</Typography></TableCell>
+                            <TableCell
+                              onClick={() => setCarMakeId(x.id)}
+                              sx={{ textAlign: 'right', backgroundColor: bgColor }}><ArrowRightOutlined/></TableCell>
                           </TableRow>
                         </>
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                    </>
-                  )}
-                </TableBody>
+                      )})}
+                  </TableBody>
+                ) : (
+                  <>
+                  </>
+                )}
               </Table>
             </TableContainer>
+            <div style={{ height: '360px', textAlign: 'center', paddingTop: '160px' }}/>
           </div>
           <div style={{ width: '25%', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' }}>
             <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
               <Table stickyHeader size={'small'}>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Car Models</TableCell>
-                    <TableCell sx={{ textAlign: 'right' }}>
-                      <IconButton onClick={() => setCarMakesDialogShowing(true)}>
+                    <TableCell sx={{ backgroundColor: '#ddd' }}>Car Models</TableCell>
+                    <TableCell sx={{ backgroundColor: '#ddd', textAlign: 'right', borderRight: '1px solid #aaa' }}>
+                      <IconButton onClick={() => setCarMakesInputShowing(true)}>
                         <AddOutlined/>
                       </IconButton>
                     </TableCell>
@@ -156,15 +168,16 @@ const CarDefinitions: NextPage = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+            <div style={{ height: '360px', textAlign: 'center', paddingTop: '160px' }}/>
           </div>
           <div style={{ width: '25%', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' }}>
             <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
               <Table stickyHeader size={'small'}>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Model Year</TableCell>
-                    <TableCell sx={{ textAlign: 'right' }}>
-                      <IconButton onClick={() => setCarMakesDialogShowing(true)}>
+                    <TableCell sx={{ backgroundColor: '#ddd' }}>Model Year</TableCell>
+                    <TableCell sx={{ backgroundColor: '#ddd', textAlign: 'right', borderRight: '1px solid #aaa' }}>
+                      <IconButton onClick={() => setCarMakesInputShowing(true)}>
                         <AddOutlined/>
                       </IconButton>
                     </TableCell>
@@ -189,15 +202,16 @@ const CarDefinitions: NextPage = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+            <div style={{ height: '360px', textAlign: 'center', paddingTop: '160px' }}/>
           </div>
           <div style={{ width: '25%', borderBottom: '1px solid #ccc' }}>
             <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
               <Table stickyHeader size={'small'}>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Trim Level</TableCell>
-                    <TableCell sx={{ textAlign: 'right' }}>
-                      <IconButton onClick={() => setCarMakesDialogShowing(true)}>
+                    <TableCell sx={{ backgroundColor: '#ddd' }}>Trim Level</TableCell>
+                    <TableCell sx={{ backgroundColor: '#ddd', textAlign: 'right' }}>
+                      <IconButton onClick={() => setCarMakesInputShowing(true)}>
                         <AddOutlined/>
                       </IconButton>
                     </TableCell>
@@ -222,6 +236,7 @@ const CarDefinitions: NextPage = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+            <div style={{ height: '360px', textAlign: 'center', paddingTop: '160px' }}/>
           </div>
         </div>
       </Paper>
