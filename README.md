@@ -18,7 +18,12 @@ Phase 1:
   - Car Model
     - Car Make ID
     - Name
-    - Powertrain (Gas, EV, PHEV, Hybrid)
+  - Car Year
+    - Car Model ID
+    - Year
+  - Car Trim
+    - Car Year ID
+    - Name
 
 [//]: # (  - Address database)
 
