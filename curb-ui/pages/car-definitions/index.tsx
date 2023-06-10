@@ -45,19 +45,29 @@ interface ICarYear {
   year: number;
 }
 
+interface ICarTrim {
+  id?: number;
+  yearId: number;
+  name: string;
+}
+
 const CarDefinitions: NextPage = () => {
   const [carMakes, setCarMakes] = useState([]);
   const [carModels, setCarModels] = useState([]);
   const [carYears, setCarYears] = useState([]);
+  const [carTrims, setCarTrims] = useState([]);
   const [carMakesInputShowing, setCarMakesInputShowing] = useState(false);
   const [carModelsInputShowing, setCarModelsInputShowing] = useState(false);
   const [carYearsInputShowing, setCarYearsInputShowing] = useState(false);
+  const [carTrimsInputShowing, setCarTrimsInputShowing] = useState(false);
   const [carMakeId, setCarMakeId] = useState(0);
   const [carModelId, setCarModelId] = useState(0);
   const [carYearId, setCarYearId] = useState(0);
+  const [carTrimId, setCarTrimId] = useState(0);
   const carMakeRef = useRef();
   const carModelRef = useRef();
   const carYearRef = useRef();
+  const carTrimRef = useRef();
 
   const reloadCarMakes = () => {
     axios.get('/app/car-make/list')
@@ -77,6 +87,13 @@ const CarDefinitions: NextPage = () => {
     axios.get(`/app/car-year/list/${modelId}`)
       .then((x) => {
         setCarYears(x.data);
+      });
+  }
+
+  const loadCarTrims = (yearId) => {
+    axios.get(`/app/car-trim/list/${yearId}`)
+      .then((x) => {
+        setCarTrims(x.data);
       });
   }
 
@@ -150,6 +167,31 @@ const CarDefinitions: NextPage = () => {
     carYearRef.current.value = '';
   }
 
+  const addCarTrim = () => {
+    const carTrim = carTrimRef.current.value;
+
+    if (carTrim.length === 0) {
+      errorDialog('Car Trim level is required.');
+      return;
+    }
+
+    const payload: ICarTrim = {
+      name: carTrim,
+      yearId: carYearId,
+    };
+
+    console.log(`Payload: ${JSON.stringify(payload, null, 2)}`);
+
+    axios.post('/app/car-trim/create', payload)
+      .then((x) => {
+        loadCarTrims(carYearId);
+      });
+
+    setCarTrimsInputShowing(false);
+
+    carTrimRef.current.value = '';
+  }
+
   useEffect(() => reloadCarMakes(), []);
 
   return (
@@ -199,16 +241,20 @@ const CarDefinitions: NextPage = () => {
                                 setCarMakeId(x.id);
                                 setCarModelId(0);
                                 setCarYearId(0);
+                                setCarTrimId(0);
                                 loadCarModels(x.id);
                                 setCarYears([]);
+                                setCarTrims([]);
                               }}><Typography>{x.name}</Typography></TableCell>
                             <TableCell
                               onClick={() => {
                                 setCarMakeId(x.id);
                                 setCarModelId(0);
                                 setCarYearId(0);
+                                setCarTrimId(0);
                                 loadCarModels(x.id);
                                 setCarYears([]);
+                                setCarTrims([]);
                               }}
                               sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
                           </TableRow>
@@ -269,12 +315,16 @@ const CarDefinitions: NextPage = () => {
                               setCarModelId(x.id);
                               loadModelYears(x.id);
                               setCarYearId(0);
+                              setCarTrimId(0);
+                              setCarTrims([]);
                             }}><Typography>{x.name}</Typography></TableCell>
                           <TableCell
                             onClick={() => {
                               setCarModelId(x.id);
                               loadModelYears(x.id);
                               setCarYearId(0);
+                              setCarTrimId(0);
+                              setCarTrims([]);
                             }}
                             sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
                         </TableRow>
@@ -333,10 +383,14 @@ const CarDefinitions: NextPage = () => {
                             sx={{ backgroundColor: bgColor, width: '90%' }}
                             onClick={() => {
                               setCarYearId(x.id);
+                              setCarTrimId(0);
+                              loadCarTrims(x.id);
                             }}><Typography>{x.year}</Typography></TableCell>
                           <TableCell
                             onClick={() => {
                               setCarYearId(x.id);
+                              setCarTrimId(0);
+                              loadCarTrims(x.id);
                             }}
                             sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
                         </TableRow>
@@ -352,25 +406,62 @@ const CarDefinitions: NextPage = () => {
           <div style={{ width: '25%' }}>
             <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
               <Table stickyHeader size={'small'}>
-                <TableHeader header={'Trim Level'} onAdd={() => {}}
+                <TableHeader header={'Trim Level'} onAdd={() => {
+                  if (carYearId === 0) {
+                    errorDialog('You cannot add a car trim without first selecting a car year.');
+                    return;
+                  }
+
+                  setCarTrimsInputShowing(!carYearsInputShowing);
+                }}
                   onEdit={() => {}}/>
-                <TableBody>
-                  {/*{carMakes.length > 0 ? (*/}
-                  {/*  <>*/}
-                  {/*    {carMakes.map((x) => (*/}
-                  {/*      <>*/}
-                  {/*        <TableRow hover>*/}
-                  {/*          <TableCell><Typography>{x.name}</Typography></TableCell>*/}
-                  {/*          <TableCell sx={{ textAlign: 'right' }}><ArrowRightOutlined/></TableCell>*/}
-                  {/*        </TableRow>*/}
-                  {/*      </>*/}
-                  {/*    ))}*/}
-                  {/*  </>*/}
-                  {/*) : (*/}
-                  {/*  <>*/}
-                  {/*  </>*/}
-                  {/*)}*/}
-                </TableBody>
+                {carTrimsInputShowing ? (
+                  <>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell colSpan={2}>
+                          <TextField id={'namespace'} variant={'standard'}
+                                     required inputRef={carTrimRef} autoFocus fullWidth
+                                     helperText={'[Enter] Saves, [ESC] cancels'}
+                                     onKeyDown={(ev) => {
+                                       if (ev.key === 'Escape') {
+                                         setCarTrimsInputShowing(false);
+                                         carTrimRef.current.value = null;
+                                       } else if (ev.key === 'Enter') {
+                                         addCarTrim();
+                                       }
+                                     }}/></TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </>
+                ) : (
+                  <>
+                  </>
+                )}
+                {carTrims.length > 0 ? (
+                  <TableBody>
+                    {carTrims.map((x) => {
+                      const bgColor = carTrimId === x.id ? '#ccc' : '#fff';
+
+                      return (
+                        <TableRow hover>
+                          <TableCell
+                            sx={{ backgroundColor: bgColor, width: '90%' }}
+                            onClick={() => {
+                              setCarTrimId(x.id);
+                            }}><Typography>{x.name}</Typography></TableCell>
+                          <TableCell
+                            onClick={() => {
+                              setCarTrimId(x.id);
+                            }}
+                            sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
+                        </TableRow>
+                      )})}
+                  </TableBody>
+                ) : (
+                  <>
+                  </>
+                )}
               </Table>
             </TableContainer>
             <div style={{ height: '360px', textAlign: 'center', paddingTop: '160px' }}/>
