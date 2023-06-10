@@ -39,15 +39,25 @@ interface ICarModel {
   name: string;
 }
 
+interface ICarYear {
+  id?: number;
+  modelId: number;
+  year: number;
+}
+
 const CarDefinitions: NextPage = () => {
   const [carMakes, setCarMakes] = useState([]);
   const [carModels, setCarModels] = useState([]);
+  const [carYears, setCarYears] = useState([]);
   const [carMakesInputShowing, setCarMakesInputShowing] = useState(false);
   const [carModelsInputShowing, setCarModelsInputShowing] = useState(false);
+  const [carYearsInputShowing, setCarYearsInputShowing] = useState(false);
   const [carMakeId, setCarMakeId] = useState(0);
   const [carModelId, setCarModelId] = useState(0);
+  const [carYearId, setCarYearId] = useState(0);
   const carMakeRef = useRef();
   const carModelRef = useRef();
+  const carYearRef = useRef();
 
   const reloadCarMakes = () => {
     axios.get('/app/car-make/list')
@@ -60,6 +70,13 @@ const CarDefinitions: NextPage = () => {
     axios.get(`/app/car-model/list/${makeId}`)
       .then((x) => {
         setCarModels(x.data);
+      });
+  }
+
+  const loadModelYears = (modelId: number) => {
+    axios.get(`/app/car-year/list/${modelId}`)
+      .then((x) => {
+        setCarYears(x.data);
       });
   }
 
@@ -77,7 +94,6 @@ const CarDefinitions: NextPage = () => {
 
     axios.post('/app/car-make/create', payload)
       .then((x) => {
-        console.log(`Data: ${JSON.stringify(x.data, null, 2)}`);
         reloadCarMakes();
       });
 
@@ -99,17 +115,39 @@ const CarDefinitions: NextPage = () => {
       makeId: carMakeId,
     };
 
-    console.log(`Payload: ${JSON.stringify(payload, null, 2)}`);
-
     axios.post('/app/car-model/create', payload)
       .then((x) => {
-        console.log(`Data: ${JSON.stringify(x.data, null, 2)}`);
         loadCarModels(carMakeId);
       });
 
     setCarModelsInputShowing(false);
 
     carModelRef.current.value = '';
+  }
+
+  const addCarYear = () => {
+    const carYear = carYearRef.current.value;
+
+    if (carYear.length === 0) {
+      errorDialog('Car Year is required.');
+      return;
+    }
+
+    const payload: ICarYear = {
+      year: parseInt(carYear, 10),
+      modelId: carModelId,
+    };
+
+    console.log(`Payload: ${JSON.stringify(payload, null, 2)}`);
+
+    axios.post('/app/car-year/create', payload)
+      .then((x) => {
+        loadModelYears(carModelId);
+      });
+
+    setCarYearsInputShowing(false);
+
+    carYearRef.current.value = '';
   }
 
   useEffect(() => reloadCarMakes(), []);
@@ -121,7 +159,9 @@ const CarDefinitions: NextPage = () => {
           <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
             <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc', width: '100%' }}>
               <Table stickyHeader size={'small'}>
-                <TableHeader header={'Car Make'} onClick={() => setCarMakesInputShowing(!carMakesInputShowing)}/>
+                <TableHeader header={'Car Make'}
+                  onAdd={() => setCarMakesInputShowing(!carMakesInputShowing)}
+                  onEdit={() => {}}/>
                 {carMakesInputShowing ? (
                   <>
                     <TableBody>
@@ -158,15 +198,19 @@ const CarDefinitions: NextPage = () => {
                               onClick={() => {
                                 setCarMakeId(x.id);
                                 setCarModelId(0);
+                                setCarYearId(0);
                                 loadCarModels(x.id);
+                                setCarYears([]);
                               }}><Typography>{x.name}</Typography></TableCell>
                             <TableCell
                               onClick={() => {
                                 setCarMakeId(x.id);
                                 setCarModelId(0);
+                                setCarYearId(0);
                                 loadCarModels(x.id);
+                                setCarYears([]);
                               }}
-                              sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%' }}><ArrowRightOutlined/></TableCell>
+                              sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
                           </TableRow>
                         </>
                       )}
@@ -182,14 +226,15 @@ const CarDefinitions: NextPage = () => {
           <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
             <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc', width: '100%' }}>
               <Table stickyHeader size={'small'}>
-                <TableHeader header={'Car Models'} onClick={() => {
+                <TableHeader header={'Car Models'}
+                   onAdd={() => {
                   if (carMakeId === 0) {
                     errorDialog('You cannot add a car model without first selecting a car make.');
                     return;
                   }
 
                   setCarModelsInputShowing(!carModelsInputShowing);
-                }}/>
+                }} onEdit={() => {}}/>
                 {carModelsInputShowing ? (
                   <TableBody>
                     <TableRow>
@@ -220,10 +265,18 @@ const CarDefinitions: NextPage = () => {
                         <TableRow hover>
                           <TableCell
                             sx={{ backgroundColor: bgColor, width: '90%' }}
-                            onClick={() => setCarModelId(x.id)}><Typography>{x.name}</Typography></TableCell>
+                            onClick={() => {
+                              setCarModelId(x.id);
+                              loadModelYears(x.id);
+                              setCarYearId(0);
+                            }}><Typography>{x.name}</Typography></TableCell>
                           <TableCell
-                            onClick={() => setCarModelId(x.id)}
-                            sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%' }}><ArrowRightOutlined/></TableCell>
+                            onClick={() => {
+                              setCarModelId(x.id);
+                              loadModelYears(x.id);
+                              setCarYearId(0);
+                            }}
+                            sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
                         </TableRow>
                       )})}
                   </TableBody>
@@ -237,32 +290,70 @@ const CarDefinitions: NextPage = () => {
           <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
             <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
               <Table stickyHeader size={'small'}>
-                <TableHeader header={'Model Year'} onClick={() => {}}/>
-                <TableBody>
-                  {/*{carMakes.length > 0 ? (*/}
-                  {/*  <>*/}
-                  {/*    {carMakes.map((x) => (*/}
-                  {/*      <>*/}
-                  {/*        <TableRow hover>*/}
-                  {/*          <TableCell><Typography>{x.name}</Typography></TableCell>*/}
-                  {/*          <TableCell sx={{ textAlign: 'right' }}><ArrowRightOutlined/></TableCell>*/}
-                  {/*        </TableRow>*/}
-                  {/*      </>*/}
-                  {/*    ))}*/}
-                  {/*  </>*/}
-                  {/*) : (*/}
-                  {/*  <>*/}
-                  {/*  </>*/}
-                  {/*)}*/}
-                </TableBody>
+                <TableHeader header={'Model Year'} onAdd={() => {
+                  if (carModelId === 0) {
+                    errorDialog('You cannot add a car year without first selecting a car model.');
+                    return;
+                  }
+
+                  setCarYearsInputShowing(!carYearsInputShowing);
+                }}
+                  onEdit={() => {}}/>
+                {carYearsInputShowing ? (
+                  <>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell colSpan={2}>
+                          <TextField id={'namespace'} variant={'standard'}
+                                     required inputRef={carYearRef} autoFocus fullWidth
+                                     helperText={'[Enter] Saves, [ESC] cancels'}
+                                     onKeyDown={(ev) => {
+                                       if (ev.key === 'Escape') {
+                                         setCarYearsInputShowing(false);
+                                         carYearRef.current.value = null;
+                                       } else if (ev.key === 'Enter') {
+                                         addCarYear();
+                                       }
+                                     }}/></TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </>
+                ) : (
+                  <>
+                  </>
+                )}
+                {carYears.length > 0 ? (
+                  <TableBody>
+                    {carYears.map((x) => {
+                      const bgColor = carYearId === x.id ? '#ccc' : '#fff';
+
+                      return (
+                        <TableRow hover>
+                          <TableCell
+                            sx={{ backgroundColor: bgColor, width: '90%' }}
+                            onClick={() => {
+                              setCarYearId(x.id);
+                            }}><Typography>{x.year}</Typography></TableCell>
+                          <TableCell
+                            onClick={() => {
+                              setCarYearId(x.id);
+                            }}
+                            sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
+                        </TableRow>
+                      )})}
+                  </TableBody>
+                ) : (
+                  <>
+                  </>
+                )}
               </Table>
             </TableContainer>
-            <div style={{ height: '360px', textAlign: 'center', paddingTop: '160px' }}/>
           </div>
           <div style={{ width: '25%' }}>
             <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
               <Table stickyHeader size={'small'}>
-                <TableHeader header={'Trim Level'} onClick={() => {}}/>
+                <TableHeader header={'Trim Level'} onAdd={() => {}}
+                  onEdit={() => {}}/>
                 <TableBody>
                   {/*{carMakes.length > 0 ? (*/}
                   {/*  <>*/}

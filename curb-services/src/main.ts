@@ -11,12 +11,20 @@ async function bootstrap() {
   const logger = new Logger('main');
   const config = new DocumentBuilder()
     .setTitle('curb-services')
-    .setVersion('0.1')
+    .setVersion('0.1.0')
     .setExternalDoc(
       'CURB Documentation',
       'https://www.suenobu.llc/curb/docs/',
     )
     .addTag('car-make', 'Car Make services', {
+      description: 'Main Documentation and Suggestions',
+      url: 'https://www.suenobu.llc/curb/docs/',
+    })
+    .addTag('car-model', 'Car Model services', {
+      description: 'Main Documentation and Suggestions',
+      url: 'https://www.suenobu.llc/curb/docs/',
+    })
+    .addTag('car-year', 'Car Year services', {
       description: 'Main Documentation and Suggestions',
       url: 'https://www.suenobu.llc/curb/docs/',
     })
