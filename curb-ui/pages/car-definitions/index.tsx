@@ -18,6 +18,7 @@ import {StackItem } from '../../components/StackItem';
 import {alertDialog, errorDialog} from '../../components/dialogs/ConfirmDialog';
 import axios from 'axios';
 import {AddOutlined, ArrowRightOutlined} from '@mui/icons-material';
+import { TableHeader } from '../../components/car-definitions/TableHeader';
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -32,11 +33,21 @@ interface ICarMake {
   name: string;
 }
 
+interface ICarModel {
+  id?: number;
+  makeId: number;
+  name: string;
+}
+
 const CarDefinitions: NextPage = () => {
   const [carMakes, setCarMakes] = useState([]);
+  const [carModels, setCarModels] = useState([]);
   const [carMakesInputShowing, setCarMakesInputShowing] = useState(false);
+  const [carModelsInputShowing, setCarModelsInputShowing] = useState(false);
   const [carMakeId, setCarMakeId] = useState(0);
+  const [carModelId, setCarModelId] = useState(0);
   const carMakeRef = useRef();
+  const carModelRef = useRef();
 
   const reloadCarMakes = () => {
     axios.get('/app/car-make/list')
@@ -44,6 +55,13 @@ const CarDefinitions: NextPage = () => {
         setCarMakes(x.data);
       });
   };
+
+  const loadCarModels = (makeId: number) => {
+    axios.get(`/app/car-model/list/${makeId}`)
+      .then((x) => {
+        setCarModels(x.data);
+      });
+  }
 
   const addCarMake = () => {
     const carMake = carMakeRef.current.value;
@@ -68,6 +86,32 @@ const CarDefinitions: NextPage = () => {
     carMakeRef.current.value = '';
   }
 
+  const addCarModel = () => {
+    const carModel = carModelRef.current.value;
+
+    if (carModel.length === 0) {
+      errorDialog('Car Model is required.');
+      return;
+    }
+
+    const payload: ICarModel = {
+      name: carModel,
+      makeId: carMakeId,
+    };
+
+    console.log(`Payload: ${JSON.stringify(payload, null, 2)}`);
+
+    axios.post('/app/car-model/create', payload)
+      .then((x) => {
+        console.log(`Data: ${JSON.stringify(x.data, null, 2)}`);
+        loadCarModels(carMakeId);
+      });
+
+    setCarModelsInputShowing(false);
+
+    carModelRef.current.value = '';
+  }
+
   useEffect(() => reloadCarMakes(), []);
 
   return (
@@ -75,18 +119,9 @@ const CarDefinitions: NextPage = () => {
       <Paper sx={{ width: '100%' }}>
         <div style={{ display: 'flex' }}>
           <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
-            <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
+            <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc', width: '100%' }}>
               <Table stickyHeader size={'small'}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ backgroundColor: '#ddd' }}>Car Make</TableCell>
-                    <TableCell sx={{ backgroundColor: '#ddd', textAlign: 'right', borderRight: '1px solid #aaa' }}>
-                      <IconButton onClick={() => setCarMakesInputShowing(true)}>
-                        <AddOutlined/>
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
+                <TableHeader header={'Car Make'} onClick={() => setCarMakesInputShowing(!carMakesInputShowing)}/>
                 {carMakesInputShowing ? (
                   <>
                     <TableBody>
@@ -119,13 +154,77 @@ const CarDefinitions: NextPage = () => {
                         <>
                           <TableRow hover>
                             <TableCell
-                              sx={{ backgroundColor: bgColor}}
-                              onClick={() => setCarMakeId(x.id)}><Typography>{x.name}</Typography></TableCell>
+                              sx={{ backgroundColor: bgColor, width: '90%' }}
+                              onClick={() => {
+                                setCarMakeId(x.id);
+                                setCarModelId(0);
+                                loadCarModels(x.id);
+                              }}><Typography>{x.name}</Typography></TableCell>
                             <TableCell
-                              onClick={() => setCarMakeId(x.id)}
-                              sx={{ textAlign: 'right', backgroundColor: bgColor }}><ArrowRightOutlined/></TableCell>
+                              onClick={() => {
+                                setCarMakeId(x.id);
+                                setCarModelId(0);
+                                loadCarModels(x.id);
+                              }}
+                              sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%' }}><ArrowRightOutlined/></TableCell>
                           </TableRow>
                         </>
+                      )}
+                    )}
+                  </TableBody>
+                ) : (
+                  <>
+                  </>
+                )}
+              </Table>
+            </TableContainer>
+          </div>
+          <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
+            <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc', width: '100%' }}>
+              <Table stickyHeader size={'small'}>
+                <TableHeader header={'Car Models'} onClick={() => {
+                  if (carMakeId === 0) {
+                    errorDialog('You cannot add a car model without first selecting a car make.');
+                    return;
+                  }
+
+                  setCarModelsInputShowing(!carModelsInputShowing);
+                }}/>
+                {carModelsInputShowing ? (
+                  <TableBody>
+                    <TableRow>
+                      <TableCell colSpan={2}>
+                        <TextField id={'namespace'} variant={'standard'}
+                                   required inputRef={carModelRef} autoFocus fullWidth
+                                   helperText={'[Enter] Saves, [ESC] cancels'}
+                                   onKeyDown={(ev) => {
+                                     if (ev.key === 'Escape') {
+                                       setCarModelsInputShowing(false);
+                                       carModelRef.current.value = null;
+                                     } else if (ev.key === 'Enter') {
+                                       addCarModel();
+                                     }
+                                   }}/></TableCell>
+                    </TableRow>
+                  </TableBody>
+                ) : (
+                  <>
+                  </>
+                )}
+                {carModels.length > 0 ? (
+                  <TableBody>
+                    {carModels.map((x) => {
+                      const bgColor = carModelId === x.id ? '#ccc' : '#fff';
+
+                      return (
+                        <TableRow hover>
+                          <TableCell
+                            sx={{ backgroundColor: bgColor, width: '90%' }}
+                            onClick={() => setCarModelId(x.id)}><Typography>{x.name}</Typography></TableCell>
+                          <TableCell
+                            onClick={() => setCarModelId(x.id)}
+                            sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%' }}><ArrowRightOutlined/></TableCell>
+                        </TableRow>
                       )})}
                   </TableBody>
                 ) : (
@@ -134,21 +233,11 @@ const CarDefinitions: NextPage = () => {
                 )}
               </Table>
             </TableContainer>
-            <div style={{ height: '360px', textAlign: 'center', paddingTop: '160px' }}/>
           </div>
-          <div style={{ width: '25%', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' }}>
+          <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
             <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
               <Table stickyHeader size={'small'}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ backgroundColor: '#ddd' }}>Car Models</TableCell>
-                    <TableCell sx={{ backgroundColor: '#ddd', textAlign: 'right', borderRight: '1px solid #aaa' }}>
-                      <IconButton onClick={() => setCarMakesInputShowing(true)}>
-                        <AddOutlined/>
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
+                <TableHeader header={'Model Year'} onClick={() => {}}/>
                 <TableBody>
                   {/*{carMakes.length > 0 ? (*/}
                   {/*  <>*/}
@@ -170,53 +259,10 @@ const CarDefinitions: NextPage = () => {
             </TableContainer>
             <div style={{ height: '360px', textAlign: 'center', paddingTop: '160px' }}/>
           </div>
-          <div style={{ width: '25%', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' }}>
+          <div style={{ width: '25%' }}>
             <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
               <Table stickyHeader size={'small'}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ backgroundColor: '#ddd' }}>Model Year</TableCell>
-                    <TableCell sx={{ backgroundColor: '#ddd', textAlign: 'right', borderRight: '1px solid #aaa' }}>
-                      <IconButton onClick={() => setCarMakesInputShowing(true)}>
-                        <AddOutlined/>
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {/*{carMakes.length > 0 ? (*/}
-                  {/*  <>*/}
-                  {/*    {carMakes.map((x) => (*/}
-                  {/*      <>*/}
-                  {/*        <TableRow hover>*/}
-                  {/*          <TableCell><Typography>{x.name}</Typography></TableCell>*/}
-                  {/*          <TableCell sx={{ textAlign: 'right' }}><ArrowRightOutlined/></TableCell>*/}
-                  {/*        </TableRow>*/}
-                  {/*      </>*/}
-                  {/*    ))}*/}
-                  {/*  </>*/}
-                  {/*) : (*/}
-                  {/*  <>*/}
-                  {/*  </>*/}
-                  {/*)}*/}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <div style={{ height: '360px', textAlign: 'center', paddingTop: '160px' }}/>
-          </div>
-          <div style={{ width: '25%', borderBottom: '1px solid #ccc' }}>
-            <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
-              <Table stickyHeader size={'small'}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ backgroundColor: '#ddd' }}>Trim Level</TableCell>
-                    <TableCell sx={{ backgroundColor: '#ddd', textAlign: 'right' }}>
-                      <IconButton onClick={() => setCarMakesInputShowing(true)}>
-                        <AddOutlined/>
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
+                <TableHeader header={'Trim Level'} onClick={() => {}}/>
                 <TableBody>
                   {/*{carMakes.length > 0 ? (*/}
                   {/*  <>*/}

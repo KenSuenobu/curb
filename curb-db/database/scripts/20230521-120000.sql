@@ -18,16 +18,13 @@ CREATE UNIQUE INDEX idx_car_make_unique ON curb.car_make(name);
 DROP TABLE IF EXISTS curb.car_model CASCADE;
 DROP INDEX IF EXISTS idx_car_model_unique;
 
-CREATE TYPE car_model_powertrain_type AS ENUM ('gas', 'ev', 'phev', 'hybrid');
-
 CREATE TABLE curb.car_model (
     id SERIAL NOT NULL PRIMARY KEY,
     make_id INT NOT NULL REFERENCES curb.car_make(id),
-    name VARCHAR(80) NOT NULL,
-    powertrain car_model_powertrain_type NOT NULL DEFAULT 'gas'
+    name VARCHAR(80) NOT NULL
 );
 
-CREATE UNIQUE INDEX idx_car_model_unique ON curb.car_model(make_id, name, powertrain);
+CREATE UNIQUE INDEX idx_car_model_unique ON curb.car_model(make_id, name);
 
 -- DROP TABLE IF EXISTS curb.address CASCADE;
 --
