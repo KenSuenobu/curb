@@ -19,6 +19,7 @@ import {alertDialog, errorDialog} from '../../components/dialogs/ConfirmDialog';
 import axios from 'axios';
 import {AddOutlined, ArrowRightOutlined} from '@mui/icons-material';
 import { TableHeader } from '../../components/car-definitions/TableHeader';
+import {ICarMake, ListCarMakes } from '../../components/database/car-make';
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -27,11 +28,6 @@ const Item = styled(Box)(({ theme }) => ({
   textAlign: 'center',
   color: theme.palette.text.secondary,
 }));
-
-interface ICarMake {
-  id?: number;
-  name: string;
-}
 
 interface ICarModel {
   id?: number;
@@ -51,11 +47,18 @@ interface ICarTrim {
   name: string;
 }
 
+interface ICarTrimInfo {
+  id?: number;
+  trimId: number;
+  data: any;
+}
+
 const CarDefinitions: NextPage = () => {
-  const [carMakes, setCarMakes] = useState([]);
+  const [carMakes, setCarMakes] = useState<ICarMake[]>([]);
   const [carModels, setCarModels] = useState([]);
   const [carYears, setCarYears] = useState([]);
   const [carTrims, setCarTrims] = useState([]);
+  const [carTrimInfo, setCarTrimInfo] = useState(undefined);
   const [carMakesInputShowing, setCarMakesInputShowing] = useState(false);
   const [carModelsInputShowing, setCarModelsInputShowing] = useState(false);
   const [carYearsInputShowing, setCarYearsInputShowing] = useState(false);
@@ -68,13 +71,6 @@ const CarDefinitions: NextPage = () => {
   const carModelRef = useRef();
   const carYearRef = useRef();
   const carTrimRef = useRef();
-
-  const reloadCarMakes = () => {
-    axios.get('/app/car-make/list')
-      .then((x) => {
-        setCarMakes(x.data);
-      });
-  };
 
   const loadCarModels = (makeId: number) => {
     axios.get(`/app/car-model/list/${makeId}`)
@@ -97,6 +93,13 @@ const CarDefinitions: NextPage = () => {
       });
   }
 
+  const loadCarTrimInfo = (trimId) => {
+    axios.get(`/app/car-trim-info/get/${trimId}`)
+      .then((x) => {
+        setCarTrimInfo(x.data);
+      });
+  }
+
   const addCarMake = () => {
     const carMake = carMakeRef.current.value;
 
@@ -111,7 +114,7 @@ const CarDefinitions: NextPage = () => {
 
     axios.post('/app/car-make/create', payload)
       .then((x) => {
-        reloadCarMakes();
+        ListCarMakes((x: ICarMake[]) => setCarMakes(x));
       });
 
     setCarMakesInputShowing(false);
@@ -192,7 +195,7 @@ const CarDefinitions: NextPage = () => {
     carTrimRef.current.value = '';
   }
 
-  useEffect(() => reloadCarMakes(), []);
+  useEffect(() => ListCarMakes((x) => setCarMakes(x)), []);
 
   return (
     <>
@@ -245,6 +248,7 @@ const CarDefinitions: NextPage = () => {
                                 loadCarModels(x.id);
                                 setCarYears([]);
                                 setCarTrims([]);
+                                setCarTrimInfo(undefined);
                               }}><Typography>{x.name}</Typography></TableCell>
                             <TableCell
                               onClick={() => {
@@ -255,6 +259,7 @@ const CarDefinitions: NextPage = () => {
                                 loadCarModels(x.id);
                                 setCarYears([]);
                                 setCarTrims([]);
+                                setCarTrimInfo(undefined);
                               }}
                               sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
                           </TableRow>
@@ -317,6 +322,7 @@ const CarDefinitions: NextPage = () => {
                               setCarYearId(0);
                               setCarTrimId(0);
                               setCarTrims([]);
+                              setCarTrimInfo(undefined);
                             }}><Typography>{x.name}</Typography></TableCell>
                           <TableCell
                             onClick={() => {
@@ -325,6 +331,7 @@ const CarDefinitions: NextPage = () => {
                               setCarYearId(0);
                               setCarTrimId(0);
                               setCarTrims([]);
+                              setCarTrimInfo(undefined);
                             }}
                             sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
                         </TableRow>
@@ -385,12 +392,14 @@ const CarDefinitions: NextPage = () => {
                               setCarYearId(x.id);
                               setCarTrimId(0);
                               loadCarTrims(x.id);
+                              setCarTrimInfo(undefined);
                             }}><Typography>{x.year}</Typography></TableCell>
                           <TableCell
                             onClick={() => {
                               setCarYearId(x.id);
                               setCarTrimId(0);
                               loadCarTrims(x.id);
+                              setCarTrimInfo(undefined);
                             }}
                             sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
                         </TableRow>

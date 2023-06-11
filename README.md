@@ -24,6 +24,9 @@ Phase 1:
   - Car Trim
     - Car Year ID
     - Name
+  - Car Trim Info
+    - Car Trim ID
+    - Data (JSONB)
 
 [//]: # (  - Address database)
 
