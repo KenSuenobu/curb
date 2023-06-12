@@ -17,9 +17,9 @@ import React, { useEffect, useRef, useState } from "react";
 import {StackItem } from '../../components/StackItem';
 import {alertDialog, errorDialog} from '../../components/dialogs/ConfirmDialog';
 import axios from 'axios';
-import {AddOutlined, ArrowRightOutlined} from '@mui/icons-material';
+import {AddOutlined, ArrowRightOutlined, CheckBoxOutlineBlankOutlined, CheckBoxOutlined} from '@mui/icons-material';
 import { TableHeader } from '../../components/car-definitions/TableHeader';
-import {ICarMake, ListCarMakes } from '../../components/database/car-make';
+import {ICarMake, ListCarMakes, StandardEquipmentList} from '../../components/database/car-make';
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -63,10 +63,12 @@ const CarDefinitions: NextPage = () => {
   const [carModelsInputShowing, setCarModelsInputShowing] = useState(false);
   const [carYearsInputShowing, setCarYearsInputShowing] = useState(false);
   const [carTrimsInputShowing, setCarTrimsInputShowing] = useState(false);
+  const [carOptionsInputShowing, setCarOptionsInputShowing] = useState(false);
   const [carMakeId, setCarMakeId] = useState(0);
   const [carModelId, setCarModelId] = useState(0);
   const [carYearId, setCarYearId] = useState(0);
   const [carTrimId, setCarTrimId] = useState(0);
+  const [trimInfoPayload, setTrimInfoPayload] = useState({});
   const carMakeRef = useRef();
   const carModelRef = useRef();
   const carYearRef = useRef();
@@ -96,7 +98,14 @@ const CarDefinitions: NextPage = () => {
   const loadCarTrimInfo = (trimId) => {
     axios.get(`/app/car-trim-info/get/${trimId}`)
       .then((x) => {
-        setCarTrimInfo(x.data);
+        if (!x.data.id) {
+          setCarTrimInfo(undefined);
+          setTrimInfoPayload({});
+        } else {
+          console.log(`Get: ${JSON.stringify(x.data, null, 2)}`);
+          setCarTrimInfo(x.data);
+          setTrimInfoPayload(x.data.data);
+        }
       });
   }
 
@@ -195,6 +204,37 @@ const CarDefinitions: NextPage = () => {
     carTrimRef.current.value = '';
   }
 
+  const saveCarTrimInfo = () => {
+    const payload: ICarTrimInfo = carTrimInfo ? carTrimInfo :
+      {
+        trimId: carTrimId,
+      };
+
+    payload.data = trimInfoPayload;
+
+    if (carTrimInfo) {
+      console.log(`Sending payload: ${JSON.stringify(payload, null, 2)}`);
+
+      const result = axios.put(`/app/car-trim-info/edit/${payload.id}`, payload)
+        .then((x) => {
+          console.log(`Edit: ${JSON.stringify(result, null, 2)}`);
+          return x.data;
+        });
+
+    } else {
+      console.log(`Sending payload: ${JSON.stringify(payload, null, 2)}`);
+
+      const result = axios.post('/app/car-trim-info/create', payload)
+        .then((x) => {
+          console.log(`Save: ${JSON.stringify(x, null, 2)}`);
+          return x.data;
+        });
+
+      setCarTrimInfo(result);
+      setTrimInfoPayload(result.data);
+    }
+  }
+
   useEffect(() => ListCarMakes((x) => setCarMakes(x)), []);
 
   return (
@@ -202,7 +242,7 @@ const CarDefinitions: NextPage = () => {
       <Paper sx={{ width: '100%' }}>
         <div style={{ display: 'flex' }}>
           <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
-            <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc', width: '100%' }}>
+            <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>
               <Table stickyHeader size={'small'}>
                 <TableHeader header={'Car Make'}
                   onAdd={() => setCarMakesInputShowing(!carMakesInputShowing)}
@@ -275,7 +315,7 @@ const CarDefinitions: NextPage = () => {
             </TableContainer>
           </div>
           <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
-            <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc', width: '100%' }}>
+            <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>
               <Table stickyHeader size={'small'}>
                 <TableHeader header={'Car Models'}
                    onAdd={() => {
@@ -345,7 +385,7 @@ const CarDefinitions: NextPage = () => {
             </TableContainer>
           </div>
           <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
-            <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
+            <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc' }}>
               <Table stickyHeader size={'small'}>
                 <TableHeader header={'Model Year'} onAdd={() => {
                   if (carModelId === 0) {
@@ -413,7 +453,7 @@ const CarDefinitions: NextPage = () => {
             </TableContainer>
           </div>
           <div style={{ width: '25%' }}>
-            <TableContainer sx={{ maxHeight: 400, borderBottom: '1px solid #ccc' }}>
+            <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc' }}>
               <Table stickyHeader size={'small'}>
                 <TableHeader header={'Trim Level'} onAdd={() => {
                   if (carYearId === 0) {
@@ -458,10 +498,12 @@ const CarDefinitions: NextPage = () => {
                             sx={{ backgroundColor: bgColor, width: '90%' }}
                             onClick={() => {
                               setCarTrimId(x.id);
+                              loadCarTrimInfo(x.id);
                             }}><Typography>{x.name}</Typography></TableCell>
                           <TableCell
                             onClick={() => {
                               setCarTrimId(x.id);
+                              loadCarTrimInfo(x.id);
                             }}
                             sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
                         </TableRow>
@@ -473,10 +515,191 @@ const CarDefinitions: NextPage = () => {
                 )}
               </Table>
             </TableContainer>
-            <div style={{ height: '360px', textAlign: 'center', paddingTop: '160px' }}/>
           </div>
         </div>
       </Paper>
+
+      {carTrimId != 0 ? (
+        <>
+          <p/>
+          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1em' }}>
+            <Typography sx={{ fontWeight: 'bold' }}><u>Trim Details</u></Typography>
+          </div>
+
+          <div style={{ display: 'flex' }}>
+            <div style={{ width: '50%' }}>
+              <Stack direction={'row'}>
+                <Item sx={{ width: '50%' }}>
+                  <TextField label={'MSRP/Base Price'} fullWidth/>
+                </Item>
+                <Item sx={{ width: '50%' }}>
+                  <FormControl fullWidth>
+                    <InputLabel id={'fuel-type-label'}>Fuel Type</InputLabel>
+                    <Select labelId={'fuel-type-label'} label={'Fuel Type'}
+                            style={{ textAlign: 'left' }}
+                            fullWidth>
+                      <MenuItem value={0}>Regular</MenuItem>
+                      <MenuItem value={1}>Mid-Grade</MenuItem>
+                      <MenuItem value={2}>Premium</MenuItem>
+                      <MenuItem value={3}>Battery</MenuItem>
+                      <MenuItem value={4}>E-85/Bio-Ethanol</MenuItem>
+                      <MenuItem value={5}>Diesel</MenuItem>
+                      <MenuItem value={6}>Bio-Diesel</MenuItem>
+                      <MenuItem value={7}>Hydrogen</MenuItem>
+                      <MenuItem value={8}>LNG/CNG</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Item>
+              </Stack>
+              <Stack direction={'row'}>
+                <Item sx={{ width: '50%' }}>
+                  <FormControl fullWidth>
+                    <InputLabel id={'transmission-label'}>Transmission</InputLabel>
+                    <Select labelId={'transmission-label'} label={'Transmission'}
+                            style={{ textAlign: 'left' }}
+                            fullWidth>
+                      <MenuItem value={0}>5 Speed Manual</MenuItem>
+                      <MenuItem value={1}>6 Speed Manual</MenuItem>
+                      <MenuItem value={2}>7 Speed Manual</MenuItem>
+                      <MenuItem value={3}>Automatic</MenuItem>
+                      <MenuItem value={4}>CVT</MenuItem>
+                      <MenuItem value={5}>Single Speed Drive</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Item>
+                <Item sx={{ width: '50%' }}>
+                  <FormControl fullWidth>
+                    <InputLabel id={'drivetrain-label'}>Drivetrain</InputLabel>
+                    <Select labelId={'drivetrain-label'} label={'Drivetrain'}
+                            style={{ textAlign: 'left' }}
+                            fullWidth>
+                      <MenuItem value={0}>Front-Wheel Drive</MenuItem>
+                      <MenuItem value={1}>Rear-Wheel Drive</MenuItem>
+                      <MenuItem value={2}>4WD</MenuItem>
+                      <MenuItem value={3}>All Wheel Drive</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Item>
+              </Stack>
+            </div>
+
+            <div style={{ width: '50%' }}>
+              <Stack direction={'row'}>
+                <Item sx={{ width: '33%' }}>
+                  <TextField label={'Doors'} fullWidth/>
+                </Item>
+                <Item sx={{ width: '33%' }}>
+                  <TextField label={'Seats'} fullWidth/>
+                </Item>
+                <Item sx={{ width: '33%' }}>
+                  <TextField label={'Rows'} fullWidth/>
+                </Item>
+              </Stack>
+
+              <Stack direction={'row'}>
+                <Item sx={{ width: '37%' }}>
+                  <TextField label={'Front Tire Size'} fullWidth/>
+                </Item>
+                <Item sx={{ width: '37%' }}>
+                  <TextField label={'Rear Tire Size'} fullWidth/>
+                </Item>
+                <Item sx={{ width: '25%' }}>
+                  <TextField label={'Cargo Area'}
+                             helperText={'(ft³)'} fullWidth/>
+                </Item>
+              </Stack>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex' }}>
+            <div style={{ width: '50%', paddingLeft: '1em' }}>
+              <Typography sx={{ fontWeight: 'bold' }}><u>Standard Equipment</u></Typography>
+
+              <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
+                <Table stickyHeader size={'small'}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '10%' }}></TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '90%' }}>Name</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  {StandardEquipmentList.map((x) => (
+                    <TableRow hover>
+                      <TableCell><CheckBoxOutlineBlankOutlined/></TableCell>
+                      <TableCell>{x}</TableCell>
+                    </TableRow>
+                  ))}
+                </Table>
+              </TableContainer>
+            </div>
+
+            <div style={{ width: '50%', paddingLeft: '1em' }}>
+              <Typography sx={{ fontWeight: 'bold' }}><u>Standard Equipment</u></Typography>
+
+              <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
+                <Table stickyHeader size={'small'}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '65%' }}>Option Name</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '25%' }}>Price</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '10%' }}>
+                        <IconButton size={'small'} onClick={() => setCarOptionsInputShowing(!carOptionsInputShowing)}>
+                          <AddOutlined/>
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  {carOptionsInputShowing ? (
+                    <>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>
+                            <TextField
+                              label={'Name'} autoFocus fullWidth variant={'standard'}
+                              onKeyDown={(ev) => {
+                                if (ev.key === 'Escape') {
+                                  setCarOptionsInputShowing(false);
+                                  // carTrimRef.current.value = null;
+                                } else if (ev.key === 'Enter') {
+                                  setCarOptionsInputShowing(false);
+                                  // addCarTrim();
+                                }
+                              }}/>
+                          </TableCell>
+                          <TableCell>
+                            <TextField
+                              label={'Price'} autoFocus fullWidth variant={'standard'}
+                              onKeyDown={(ev) => {
+                                if (ev.key === 'Escape') {
+                                  setCarOptionsInputShowing(false);
+                                  // carTrimRef.current.value = null;
+                                } else if (ev.key === 'Enter') {
+                                  setCarOptionsInputShowing(false);
+                                  // addCarTrim();
+                                }
+                              }}/>
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </>
+                  ) : (
+                    <>
+                    </>
+                  )}
+                </Table>
+              </TableContainer>
+            </div>
+          </div>
+
+          <div sx={{ display: 'flex', width: '100%', textAlign: 'right' }}>
+            <Button onClick={() => saveCarTrimInfo()}>Save</Button>
+            <Button>Cancel</Button>
+          </div>
+        </>
+      ) : (
+        <>
+        </>
+      )}
     </>
   );
 }

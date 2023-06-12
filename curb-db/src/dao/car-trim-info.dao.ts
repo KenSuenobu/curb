@@ -20,7 +20,7 @@ export class CarTrimInfoDao extends BaseDao<CarTrimInfoDto> {
     return this.db
       .none(sqlStatement, [
         payload.data,
-        payload.trimId,
+        payload['trim_id'],
         id,
       ])
       .then(() => true);
