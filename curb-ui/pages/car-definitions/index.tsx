@@ -539,6 +539,8 @@ const CarDefinitions: NextPage = () => {
                     <InputLabel id={'fuel-type-label'}>Fuel Type</InputLabel>
                     <Select labelId={'fuel-type-label'} label={'Fuel Type'}
                             style={{ textAlign: 'left' }}
+                            onChange={(e) => trimInfoPayload.fuelType = e.target.value}
+                            defaultValue={trimInfoPayload.fuelType}
                             fullWidth>
                       <MenuItem value={0}>Regular</MenuItem>
                       <MenuItem value={1}>Mid-Grade</MenuItem>
@@ -559,6 +561,8 @@ const CarDefinitions: NextPage = () => {
                     <InputLabel id={'transmission-label'}>Transmission</InputLabel>
                     <Select labelId={'transmission-label'} label={'Transmission'}
                             style={{ textAlign: 'left' }}
+                            defaultValue={trimInfoPayload.transmission}
+                            onChange={(e) => trimInfoPayload.transmission = e.target.value}
                             fullWidth>
                       <MenuItem value={0}>5 Speed Manual</MenuItem>
                       <MenuItem value={1}>6 Speed Manual</MenuItem>
@@ -574,6 +578,8 @@ const CarDefinitions: NextPage = () => {
                     <InputLabel id={'drivetrain-label'}>Drivetrain</InputLabel>
                     <Select labelId={'drivetrain-label'} label={'Drivetrain'}
                             style={{ textAlign: 'left' }}
+                            defaultValue={trimInfoPayload.driveTrain}
+                            onChange={(e) => trimInfoPayload.driveTrain = e.target.value}
                             fullWidth>
                       <MenuItem value={0}>Front-Wheel Drive</MenuItem>
                       <MenuItem value={1}>Rear-Wheel Drive</MenuItem>
