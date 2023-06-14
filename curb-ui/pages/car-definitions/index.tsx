@@ -10,7 +10,7 @@ import {
   Button,
   Dialog,
   DialogTitle,
-  DialogContent, TextField, DialogActions, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton
+  DialogContent, TextField, DialogActions, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, InputAdornment
 } from '@mui/material';
 import { NextPage } from "next";
 import React, { useEffect, useRef, useState } from "react";
@@ -102,7 +102,6 @@ const CarDefinitions: NextPage = () => {
           setCarTrimInfo(undefined);
           setTrimInfoPayload({});
         } else {
-          console.log(`Get: ${JSON.stringify(x.data, null, 2)}`);
           setCarTrimInfo(x.data);
           setTrimInfoPayload(x.data.data);
         }
@@ -530,7 +529,10 @@ const CarDefinitions: NextPage = () => {
             <div style={{ width: '50%' }}>
               <Stack direction={'row'}>
                 <Item sx={{ width: '50%' }}>
-                  <TextField label={'MSRP/Base Price'} fullWidth/>
+                  <TextField label={'MSRP/Base Price'} fullWidth
+                             defaultValue={trimInfoPayload.msrp}
+                             inputProps={{ type: 'number' }}
+                             onChange={(e) => trimInfoPayload.msrp = e.target.value}/>
                 </Item>
                 <Item sx={{ width: '50%' }}>
                   <FormControl fullWidth>
@@ -586,25 +588,38 @@ const CarDefinitions: NextPage = () => {
             <div style={{ width: '50%' }}>
               <Stack direction={'row'}>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Doors'} fullWidth/>
+                  <TextField label={'Doors'} fullWidth
+                             defaultValue={trimInfoPayload.doors}
+                             onChange={(e) => trimInfoPayload.doors = e.target.value}/>
                 </Item>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Seats'} fullWidth/>
+                  <TextField label={'Seats'} fullWidth
+                             defaultValue={trimInfoPayload.seats}
+                             onChange={(e) => trimInfoPayload.seats = e.target.value}/>
                 </Item>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Rows'} fullWidth/>
+                  <TextField label={'Rows'} fullWidth
+                             defaultValue={trimInfoPayload.rows}
+                             onChange={(e) => trimInfoPayload.rows = e.target.value}/>
                 </Item>
               </Stack>
 
               <Stack direction={'row'}>
                 <Item sx={{ width: '37%' }}>
-                  <TextField label={'Front Tire Size'} fullWidth/>
+                  <TextField label={'Front Tire Size'} fullWidth
+                             defaultValue={trimInfoPayload.frontTire}
+                             onChange={(e) => trimInfoPayload.frontTire = e.target.value}/>
                 </Item>
                 <Item sx={{ width: '37%' }}>
-                  <TextField label={'Rear Tire Size'} fullWidth/>
+                  <TextField label={'Rear Tire Size'} fullWidth
+                             defaultValue={trimInfoPayload.rearTire}
+                             onChange={(e) => trimInfoPayload.rearTire = e.target.value}/>
                 </Item>
                 <Item sx={{ width: '25%' }}>
                   <TextField label={'Cargo Area'}
+                             defaultValue={trimInfoPayload.cargoArea}
+                             inputProps={{ type: 'number' }}
+                             onChange={(e) => trimInfoPayload.cargoArea = e.target.value}
                              helperText={'(ft³)'} fullWidth/>
                 </Item>
               </Stack>
@@ -625,7 +640,7 @@ const CarDefinitions: NextPage = () => {
                   </TableHead>
                   {StandardEquipmentList.map((x) => (
                     <TableRow hover>
-                      <TableCell><CheckBoxOutlineBlankOutlined/></TableCell>
+                      <TableCell><CheckBoxOutlineBlankOutlined sx={{ paddingTop: '4px' }}/></TableCell>
                       <TableCell>{x}</TableCell>
                     </TableRow>
                   ))}
