@@ -152,7 +152,7 @@ const Home: NextPage = () => {
       <SideBar width={260} sidebarItems={[carItems,]} />
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3 }}
+        sx={{ flexGrow: 1, p: 3, backgroundColor: '#fff'  }}
         position={"relative"}
         left={260}
         marginRight={"260px"}

@@ -73,6 +73,8 @@ const CarDefinitions: NextPage = () => {
   const carModelRef = useRef();
   const carYearRef = useRef();
   const carTrimRef = useRef();
+  const trimInfoOptionNameRef = useRef();
+  const trimInfoOptionPriceRef = useRef();
 
   const loadCarModels = (makeId: number) => {
     axios.get(`/app/car-model/list/${makeId}`)
@@ -645,9 +647,36 @@ const CarDefinitions: NextPage = () => {
                     </TableRow>
                   </TableHead>
                   {StandardEquipmentList.map((x) => (
-                    <TableRow hover>
-                      <TableCell><CheckBoxOutlineBlankOutlined sx={{ paddingTop: '4px' }}/></TableCell>
-                      <TableCell>{x}</TableCell>
+                    <TableRow hover onClick={() => {
+                      const tpi = trimInfoPayload;
+
+                      if (!tpi.standardEquipment) {
+                        tpi.standardEquipment = [];
+                      }
+
+                      if (tpi.standardEquipment.includes(x)) {
+                        tpi.standardEquipment = tpi.standardEquipment
+                          .filter((y) => x != y);
+                      } else {
+                        tpi.standardEquipment.push(x);
+                      }
+
+                      setTrimInfoPayload(tpi);
+                    }}>
+                      <TableCell>
+                        <IconButton>
+                          {trimInfoPayload.standardEquipment?.includes(x) ? (
+                            <>
+                              <CheckBoxOutlined sx={{ paddingTop: '2px', color: '#000' }}/>
+                            </>
+                          ) : (
+                            <>
+                              <CheckBoxOutlineBlankOutlined sx={{ paddingTop: '2px', color: '#000' }}/>
+                            </>
+                          )}
+                        </IconButton>
+                      </TableCell>
+                      <TableCell sx={{ color: '#000' }}>{x}</TableCell>
                     </TableRow>
                   ))}
                 </Table>
@@ -663,7 +692,7 @@ const CarDefinitions: NextPage = () => {
                     <TableRow>
                       <TableCell sx={{ backgroundColor: '#cff', width: '65%' }}>Option Name</TableCell>
                       <TableCell sx={{ backgroundColor: '#cff', width: '25%' }}>Price</TableCell>
-                      <TableCell sx={{ backgroundColor: '#cff', width: '10%' }}>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '10%', textAlign: 'right' }}>
                         <IconButton size={'small'} onClick={() => setCarOptionsInputShowing(!carOptionsInputShowing)}>
                           <AddOutlined/>
                         </IconButton>
@@ -677,28 +706,56 @@ const CarDefinitions: NextPage = () => {
                           <TableCell>
                             <TextField
                               label={'Name'} autoFocus fullWidth variant={'standard'}
+                              inputRef={trimInfoOptionNameRef}
                               onKeyDown={(ev) => {
                                 if (ev.key === 'Escape') {
                                   setCarOptionsInputShowing(false);
-                                  // carTrimRef.current.value = null;
                                 } else if (ev.key === 'Enter') {
                                   setCarOptionsInputShowing(false);
-                                  // addCarTrim();
                                 }
                               }}/>
                           </TableCell>
                           <TableCell>
                             <TextField
                               label={'Price'} autoFocus fullWidth variant={'standard'}
+                              inputRef={trimInfoOptionPriceRef}
                               onKeyDown={(ev) => {
                                 if (ev.key === 'Escape') {
                                   setCarOptionsInputShowing(false);
-                                  // carTrimRef.current.value = null;
                                 } else if (ev.key === 'Enter') {
                                   setCarOptionsInputShowing(false);
-                                  // addCarTrim();
                                 }
                               }}/>
+                          </TableCell>
+                          <TableCell>
+                            <Button variant={'contained'}
+                              onClick={() => {
+                                const optionName = trimInfoOptionNameRef.current.value ?? '';
+                                const optionValue = trimInfoOptionPriceRef.current.value ?? '';
+
+                                if (!optionName || !optionValue) {
+                                  errorDialog('Option name and value are required.');
+                                  return;
+                                }
+
+                                const tip = trimInfoPayload;
+
+                                if (!tip.optionList) {
+                                  tip.optionList = [];
+                                }
+
+                                tip.optionList.push({
+                                  name: optionName,
+                                  value: optionValue,
+                                });
+
+                                setTrimInfoPayload(tip);
+
+                                trimInfoOptionNameRef.current.value = '';
+                                trimInfoOptionPriceRef.current.value = '';
+
+                                setCarOptionsInputShowing(false);
+                              }}>ADD</Button>
                           </TableCell>
                         </TableRow>
                       </TableBody>
@@ -707,6 +764,16 @@ const CarDefinitions: NextPage = () => {
                     <>
                     </>
                   )}
+                  <TableBody>
+                    {trimInfoPayload.optionList?.map((x) => (
+                      <>
+                        <TableRow hover>
+                          <TableCell>{x.name}</TableCell>
+                          <TableCell colspan={2}>{x.value}</TableCell>
+                        </TableRow>
+                      </>
+                    ))}
+                  </TableBody>
                 </Table>
               </TableContainer>
             </div>
