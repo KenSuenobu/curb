@@ -325,7 +325,7 @@ const CarDefinitions: NextPage = () => {
 
                       return (
                         <>
-                          <TableRow hover>
+                          <TableRow hover sx={{ cursor: 'pointer' }}>
                             <TableCell
                               sx={{ backgroundColor: bgColor, width: '90%' }}
                               onClick={() => {
@@ -403,7 +403,7 @@ const CarDefinitions: NextPage = () => {
                       const bgColor = carModelId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
-                        <TableRow hover>
+                        <TableRow hover sx={{ cursor: 'pointer' }}>
                           <TableCell
                             sx={{ backgroundColor: bgColor, width: '90%' }}
                             onClick={() => {
@@ -453,6 +453,7 @@ const CarDefinitions: NextPage = () => {
                         <TableCell>
                           <TextField id={'namespace'} variant={'standard'}
                                      required inputRef={carYearRef} autoFocus fullWidth
+                                     inputProps={{ type: 'number' }}
                                      onKeyDown={(ev) => {
                                        if (ev.key === 'Escape') {
                                          setCarYearsInputShowing(false);
@@ -477,7 +478,7 @@ const CarDefinitions: NextPage = () => {
                       const bgColor = carYearId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
-                        <TableRow hover>
+                        <TableRow hover sx={{ cursor: 'pointer' }}>
                           <TableCell
                             sx={{ backgroundColor: bgColor, width: '90%' }}
                             onClick={() => {
@@ -547,19 +548,13 @@ const CarDefinitions: NextPage = () => {
                       const bgColor = carTrimId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
-                        <TableRow hover>
-                          <TableCell
+                        <TableRow hover sx={{ cursor: 'pointer' }}>
+                          <TableCell colSpan={2}
                             sx={{ backgroundColor: bgColor, width: '90%' }}
                             onClick={() => {
                               setCarTrimId(x.id);
                               loadCarTrimInfo(x.id);
                             }}><Typography>{x.name}</Typography></TableCell>
-                          <TableCell
-                            onClick={() => {
-                              setCarTrimId(x.id);
-                              loadCarTrimInfo(x.id);
-                            }}
-                            sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
                         </TableRow>
                       )})}
                   </TableBody>
@@ -584,7 +579,7 @@ const CarDefinitions: NextPage = () => {
             <div style={{ width: '50%' }}>
               <Stack direction={'row'}>
                 <Item sx={{ width: '50%' }}>
-                  <TextField label={'MSRP/Base Price'} fullWidth defaultValue={trimInfoPayload.msrp}
+                  <TextField label={'MSRP/Base Price'} fullWidth value={trimInfoPayload.msrp ?? ''}
                              inputProps={{ type: 'number' }}
                              onChange={(e) => trimInfoPayload.msrp = e.target.value}/>
                 </Item>
@@ -592,7 +587,7 @@ const CarDefinitions: NextPage = () => {
                   <FormControl fullWidth>
                     <InputLabel id={'fuel-type-label'}>Fuel Type</InputLabel>
                     <Select labelId={'fuel-type-label'} label={'Fuel Type'}
-                            style={{ textAlign: 'left' }} defaultValue={trimInfoPayload.fuelType ?? 0} fullWidth
+                            style={{ textAlign: 'left' }} value={trimInfoPayload.fuelType ?? 0} fullWidth
                             onChange={(e) => trimInfoPayload.fuelType = e.target.value}>
                       <MenuItem value={0}>Regular</MenuItem>
                       <MenuItem value={1}>Mid-Grade</MenuItem>
@@ -613,7 +608,7 @@ const CarDefinitions: NextPage = () => {
                     <InputLabel id={'transmission-label'}>Transmission</InputLabel>
                     <Select labelId={'transmission-label'} label={'Transmission'}
                             style={{ textAlign: 'left' }}
-                            defaultValue={trimInfoPayload.transmission ?? 0}
+                            value={trimInfoPayload.transmission ?? 0}
                             onChange={(e) => trimInfoPayload.transmission = e.target.value}
                             fullWidth>
                       <MenuItem value={0}>5 Speed Manual</MenuItem>
@@ -629,7 +624,7 @@ const CarDefinitions: NextPage = () => {
                   <FormControl fullWidth>
                     <InputLabel id={'drivetrain-label'}>Drivetrain</InputLabel>
                     <Select labelId={'drivetrain-label'} label={'Drivetrain'} style={{ textAlign: 'left' }}
-                            defaultValue={trimInfoPayload.driveTrain ?? 0} fullWidth
+                            value={trimInfoPayload.driveTrain ?? 0} fullWidth
                             onChange={(e) => trimInfoPayload.driveTrain = e.target.value}>
                       <MenuItem value={0}>Front-Wheel Drive</MenuItem>
                       <MenuItem value={1}>Rear-Wheel Drive</MenuItem>
@@ -644,30 +639,30 @@ const CarDefinitions: NextPage = () => {
             <div style={{ width: '50%' }}>
               <Stack direction={'row'}>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Doors'} fullWidth defaultValue={trimInfoPayload.doors}
+                  <TextField label={'Doors'} fullWidth value={trimInfoPayload.doors ?? ''}
                              onChange={(e) => trimInfoPayload.doors = e.target.value}/>
                 </Item>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Seats'} fullWidth defaultValue={trimInfoPayload.seats}
+                  <TextField label={'Seats'} fullWidth value={trimInfoPayload.seats ?? ''}
                              onChange={(e) => trimInfoPayload.seats = e.target.value}/>
                 </Item>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Rows'} fullWidth defaultValue={trimInfoPayload.rows}
+                  <TextField label={'Rows'} fullWidth value={trimInfoPayload.rows ?? ''}
                              onChange={(e) => trimInfoPayload.rows = e.target.value}/>
                 </Item>
               </Stack>
 
               <Stack direction={'row'}>
                 <Item sx={{ width: '37%' }}>
-                  <TextField label={'Front Tire Size'} fullWidth defaultValue={trimInfoPayload.frontTire}
+                  <TextField label={'Front Tire Size'} fullWidth value={trimInfoPayload.frontTire ?? ''}
                              onChange={(e) => trimInfoPayload.frontTire = e.target.value}/>
                 </Item>
                 <Item sx={{ width: '37%' }}>
-                  <TextField label={'Rear Tire Size'} fullWidth defaultValue={trimInfoPayload.rearTire}
+                  <TextField label={'Rear Tire Size'} fullWidth value={trimInfoPayload.rearTire ?? ''}
                              onChange={(e) => trimInfoPayload.rearTire = e.target.value}/>
                 </Item>
                 <Item sx={{ width: '25%' }}>
-                  <TextField label={'Cargo Area'} defaultValue={trimInfoPayload.cargoArea} helperText={'(ft³)'} fullWidth
+                  <TextField label={'Cargo Area'} value={trimInfoPayload.cargoArea ?? ''} helperText={'(ft³)'} fullWidth
                              inputProps={{ type: 'number' }}
                              onChange={(e) => trimInfoPayload.cargoArea = e.target.value}/>
                 </Item>
@@ -706,9 +701,9 @@ const CarDefinitions: NextPage = () => {
                       <TableCell>
                         <IconButton>
                           {trimInfoPayload.standardEquipment?.includes(x) ? (
-                            <CheckBoxOutlined sx={{ paddingTop: '2px', color: '#000' }}/>
+                            <CheckBoxOutlined sx={{ paddingTop: '1px', color: '#000' }}/>
                           ) : (
-                            <CheckBoxOutlineBlankOutlined sx={{ paddingTop: '2px', color: '#000' }}/>
+                            <CheckBoxOutlineBlankOutlined sx={{ paddingTop: '1px', color: '#000' }}/>
                           )}
                         </IconButton>
                       </TableCell>
@@ -777,7 +772,9 @@ const CarDefinitions: NextPage = () => {
                     </>
                   )}
                   <TableBody>
-                    {trimInfoPayload.optionList?.map((x) => (
+                    {trimInfoPayload.optionList?
+                      .sort((a, b) => (a.name > b.name ? 1 : -1))
+                      .map((x) => (
                       <>
                         <TableRow hover>
                           <TableCell>{x.name}</TableCell>
