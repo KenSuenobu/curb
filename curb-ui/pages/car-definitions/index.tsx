@@ -53,6 +53,8 @@ interface ICarTrimInfo {
   data: any;
 }
 
+const SELECTED_COLOR = '#ccf';
+
 const CarDefinitions: NextPage = () => {
   const [carMakes, setCarMakes] = useState<ICarMake[]>([]);
   const [carModels, setCarModels] = useState([]);
@@ -236,6 +238,49 @@ const CarDefinitions: NextPage = () => {
     }
   }
 
+  const addTrimOption = () => {
+    const optionName = trimInfoOptionNameRef.current.value ?? '';
+    const optionValue = trimInfoOptionPriceRef.current.value ?? '';
+
+    if (!optionName || !optionValue) {
+      errorDialog('Option name and value are required.');
+      return;
+    }
+
+    const tip = trimInfoPayload;
+
+    if (!tip.optionList) {
+      tip.optionList = [];
+    }
+
+    let found = false;
+
+    tip.optionList.forEach((x) => {
+      if (x.name === optionName) {
+        found = true;
+      }
+    });
+
+    if (found) {
+      errorDialog(`Option '${optionName}' already exists in the list.`);
+      trimInfoOptionNameRef.current.value = '';
+      trimInfoOptionPriceRef.current.value = '';
+      return;
+    }
+
+    tip.optionList.push({
+      name: optionName,
+      value: optionValue,
+    });
+
+    setTrimInfoPayload(tip);
+
+    trimInfoOptionNameRef.current.value = '';
+    trimInfoOptionPriceRef.current.value = '';
+
+    setCarOptionsInputShowing(false);
+  }
+
   useEffect(() => ListCarMakes((x) => setCarMakes(x)), []);
 
   return (
@@ -252,18 +297,20 @@ const CarDefinitions: NextPage = () => {
                   <>
                     <TableBody>
                       <TableRow>
-                        <TableCell colSpan={2}>
-                          <TextField id={'namespace'} variant={'standard'}
-                            required inputRef={carMakeRef} autoFocus fullWidth
-                                     helperText={'[Enter] Saves, [ESC] cancels'}
+                        <TableCell>
+                          <TextField id={'namespace'} variant={'standard'} required inputRef={carMakeRef}
+                                     autoFocus fullWidth
                             onKeyDown={(ev) => {
                               if (ev.key === 'Escape') {
                                 setCarMakesInputShowing(false);
-                                carMakeRef.current.value = null;
+                                carMakeRef.current.value = '';
                               } else if (ev.key === 'Enter') {
                                 addCarMake();
                               }
                             }}/></TableCell>
+                        <TableCell>
+                          <Button variant={'contained'} onClick={() => addCarMake()}>ADD</Button>
+                        </TableCell>
                       </TableRow>
                     </TableBody>
                   </>
@@ -274,7 +321,7 @@ const CarDefinitions: NextPage = () => {
                 {carMakes.length > 0 ? (
                   <TableBody>
                     {carMakes.map((x) => {
-                      const bgColor = carMakeId === x.id ? '#ccc' : '#fff';
+                      const bgColor = carMakeId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
                         <>
@@ -330,10 +377,9 @@ const CarDefinitions: NextPage = () => {
                 {carModelsInputShowing ? (
                   <TableBody>
                     <TableRow>
-                      <TableCell colSpan={2}>
+                      <TableCell>
                         <TextField id={'namespace'} variant={'standard'}
                                    required inputRef={carModelRef} autoFocus fullWidth
-                                   helperText={'[Enter] Saves, [ESC] cancels'}
                                    onKeyDown={(ev) => {
                                      if (ev.key === 'Escape') {
                                        setCarModelsInputShowing(false);
@@ -342,6 +388,9 @@ const CarDefinitions: NextPage = () => {
                                        addCarModel();
                                      }
                                    }}/></TableCell>
+                      <TableCell>
+                        <Button variant={'contained'} onClick={() => addCarModel()}>ADD</Button>
+                      </TableCell>
                     </TableRow>
                   </TableBody>
                 ) : (
@@ -351,7 +400,7 @@ const CarDefinitions: NextPage = () => {
                 {carModels.length > 0 ? (
                   <TableBody>
                     {carModels.map((x) => {
-                      const bgColor = carModelId === x.id ? '#ccc' : '#fff';
+                      const bgColor = carModelId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
                         <TableRow hover>
@@ -401,10 +450,9 @@ const CarDefinitions: NextPage = () => {
                   <>
                     <TableBody>
                       <TableRow>
-                        <TableCell colSpan={2}>
+                        <TableCell>
                           <TextField id={'namespace'} variant={'standard'}
                                      required inputRef={carYearRef} autoFocus fullWidth
-                                     helperText={'[Enter] Saves, [ESC] cancels'}
                                      onKeyDown={(ev) => {
                                        if (ev.key === 'Escape') {
                                          setCarYearsInputShowing(false);
@@ -413,6 +461,9 @@ const CarDefinitions: NextPage = () => {
                                          addCarYear();
                                        }
                                      }}/></TableCell>
+                        <TableCell>
+                          <Button variant={'contained'} onClick={() => addCarYear()}>ADD</Button>
+                        </TableCell>
                       </TableRow>
                     </TableBody>
                   </>
@@ -423,7 +474,7 @@ const CarDefinitions: NextPage = () => {
                 {carYears.length > 0 ? (
                   <TableBody>
                     {carYears.map((x) => {
-                      const bgColor = carYearId === x.id ? '#ccc' : '#fff';
+                      const bgColor = carYearId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
                         <TableRow hover>
@@ -462,25 +513,27 @@ const CarDefinitions: NextPage = () => {
                     return;
                   }
 
-                  setCarTrimsInputShowing(!carYearsInputShowing);
+                  setCarTrimsInputShowing(!carTrimsInputShowing);
                 }}
                   onEdit={() => {}}/>
                 {carTrimsInputShowing ? (
                   <>
                     <TableBody>
                       <TableRow>
-                        <TableCell colSpan={2}>
+                        <TableCell>
                           <TextField id={'namespace'} variant={'standard'}
                                      required inputRef={carTrimRef} autoFocus fullWidth
-                                     helperText={'[Enter] Saves, [ESC] cancels'}
                                      onKeyDown={(ev) => {
                                        if (ev.key === 'Escape') {
                                          setCarTrimsInputShowing(false);
-                                         carTrimRef.current.value = null;
+                                         carTrimRef.current.value = '';
                                        } else if (ev.key === 'Enter') {
                                          addCarTrim();
                                        }
                                      }}/></TableCell>
+                        <TableCell>
+                          <Button variant={'contained'} onClick={() => addCarTrim()}>ADD</Button>
+                        </TableCell>
                       </TableRow>
                     </TableBody>
                   </>
@@ -491,7 +544,7 @@ const CarDefinitions: NextPage = () => {
                 {carTrims.length > 0 ? (
                   <TableBody>
                     {carTrims.map((x) => {
-                      const bgColor = carTrimId === x.id ? '#ccc' : '#fff';
+                      const bgColor = carTrimId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
                         <TableRow hover>
@@ -531,8 +584,7 @@ const CarDefinitions: NextPage = () => {
             <div style={{ width: '50%' }}>
               <Stack direction={'row'}>
                 <Item sx={{ width: '50%' }}>
-                  <TextField label={'MSRP/Base Price'} fullWidth
-                             defaultValue={trimInfoPayload.msrp}
+                  <TextField label={'MSRP/Base Price'} fullWidth defaultValue={trimInfoPayload.msrp}
                              inputProps={{ type: 'number' }}
                              onChange={(e) => trimInfoPayload.msrp = e.target.value}/>
                 </Item>
@@ -540,10 +592,8 @@ const CarDefinitions: NextPage = () => {
                   <FormControl fullWidth>
                     <InputLabel id={'fuel-type-label'}>Fuel Type</InputLabel>
                     <Select labelId={'fuel-type-label'} label={'Fuel Type'}
-                            style={{ textAlign: 'left' }}
-                            onChange={(e) => trimInfoPayload.fuelType = e.target.value}
-                            defaultValue={trimInfoPayload.fuelType}
-                            fullWidth>
+                            style={{ textAlign: 'left' }} defaultValue={trimInfoPayload.fuelType ?? 0} fullWidth
+                            onChange={(e) => trimInfoPayload.fuelType = e.target.value}>
                       <MenuItem value={0}>Regular</MenuItem>
                       <MenuItem value={1}>Mid-Grade</MenuItem>
                       <MenuItem value={2}>Premium</MenuItem>
@@ -563,7 +613,7 @@ const CarDefinitions: NextPage = () => {
                     <InputLabel id={'transmission-label'}>Transmission</InputLabel>
                     <Select labelId={'transmission-label'} label={'Transmission'}
                             style={{ textAlign: 'left' }}
-                            defaultValue={trimInfoPayload.transmission}
+                            defaultValue={trimInfoPayload.transmission ?? 0}
                             onChange={(e) => trimInfoPayload.transmission = e.target.value}
                             fullWidth>
                       <MenuItem value={0}>5 Speed Manual</MenuItem>
@@ -578,11 +628,9 @@ const CarDefinitions: NextPage = () => {
                 <Item sx={{ width: '50%' }}>
                   <FormControl fullWidth>
                     <InputLabel id={'drivetrain-label'}>Drivetrain</InputLabel>
-                    <Select labelId={'drivetrain-label'} label={'Drivetrain'}
-                            style={{ textAlign: 'left' }}
-                            defaultValue={trimInfoPayload.driveTrain}
-                            onChange={(e) => trimInfoPayload.driveTrain = e.target.value}
-                            fullWidth>
+                    <Select labelId={'drivetrain-label'} label={'Drivetrain'} style={{ textAlign: 'left' }}
+                            defaultValue={trimInfoPayload.driveTrain ?? 0} fullWidth
+                            onChange={(e) => trimInfoPayload.driveTrain = e.target.value}>
                       <MenuItem value={0}>Front-Wheel Drive</MenuItem>
                       <MenuItem value={1}>Rear-Wheel Drive</MenuItem>
                       <MenuItem value={2}>4WD</MenuItem>
@@ -596,39 +644,32 @@ const CarDefinitions: NextPage = () => {
             <div style={{ width: '50%' }}>
               <Stack direction={'row'}>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Doors'} fullWidth
-                             defaultValue={trimInfoPayload.doors}
+                  <TextField label={'Doors'} fullWidth defaultValue={trimInfoPayload.doors}
                              onChange={(e) => trimInfoPayload.doors = e.target.value}/>
                 </Item>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Seats'} fullWidth
-                             defaultValue={trimInfoPayload.seats}
+                  <TextField label={'Seats'} fullWidth defaultValue={trimInfoPayload.seats}
                              onChange={(e) => trimInfoPayload.seats = e.target.value}/>
                 </Item>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Rows'} fullWidth
-                             defaultValue={trimInfoPayload.rows}
+                  <TextField label={'Rows'} fullWidth defaultValue={trimInfoPayload.rows}
                              onChange={(e) => trimInfoPayload.rows = e.target.value}/>
                 </Item>
               </Stack>
 
               <Stack direction={'row'}>
                 <Item sx={{ width: '37%' }}>
-                  <TextField label={'Front Tire Size'} fullWidth
-                             defaultValue={trimInfoPayload.frontTire}
+                  <TextField label={'Front Tire Size'} fullWidth defaultValue={trimInfoPayload.frontTire}
                              onChange={(e) => trimInfoPayload.frontTire = e.target.value}/>
                 </Item>
                 <Item sx={{ width: '37%' }}>
-                  <TextField label={'Rear Tire Size'} fullWidth
-                             defaultValue={trimInfoPayload.rearTire}
+                  <TextField label={'Rear Tire Size'} fullWidth defaultValue={trimInfoPayload.rearTire}
                              onChange={(e) => trimInfoPayload.rearTire = e.target.value}/>
                 </Item>
                 <Item sx={{ width: '25%' }}>
-                  <TextField label={'Cargo Area'}
-                             defaultValue={trimInfoPayload.cargoArea}
+                  <TextField label={'Cargo Area'} defaultValue={trimInfoPayload.cargoArea} helperText={'(ft³)'} fullWidth
                              inputProps={{ type: 'number' }}
-                             onChange={(e) => trimInfoPayload.cargoArea = e.target.value}
-                             helperText={'(ft³)'} fullWidth/>
+                             onChange={(e) => trimInfoPayload.cargoArea = e.target.value}/>
                 </Item>
               </Stack>
             </div>
@@ -646,7 +687,7 @@ const CarDefinitions: NextPage = () => {
                       <TableCell sx={{ backgroundColor: '#cff', width: '90%' }}>Name</TableCell>
                     </TableRow>
                   </TableHead>
-                  {StandardEquipmentList.map((x) => (
+                  {StandardEquipmentList.map((x, cnt: number) => (
                     <TableRow hover onClick={() => {
                       const tpi = trimInfoPayload;
 
@@ -655,8 +696,7 @@ const CarDefinitions: NextPage = () => {
                       }
 
                       if (tpi.standardEquipment.includes(x)) {
-                        tpi.standardEquipment = tpi.standardEquipment
-                          .filter((y) => x != y);
+                        tpi.standardEquipment = tpi.standardEquipment.filter((y) => x != y);
                       } else {
                         tpi.standardEquipment.push(x);
                       }
@@ -666,13 +706,9 @@ const CarDefinitions: NextPage = () => {
                       <TableCell>
                         <IconButton>
                           {trimInfoPayload.standardEquipment?.includes(x) ? (
-                            <>
-                              <CheckBoxOutlined sx={{ paddingTop: '2px', color: '#000' }}/>
-                            </>
+                            <CheckBoxOutlined sx={{ paddingTop: '2px', color: '#000' }}/>
                           ) : (
-                            <>
-                              <CheckBoxOutlineBlankOutlined sx={{ paddingTop: '2px', color: '#000' }}/>
-                            </>
+                            <CheckBoxOutlineBlankOutlined sx={{ paddingTop: '2px', color: '#000' }}/>
                           )}
                         </IconButton>
                       </TableCell>
@@ -711,51 +747,27 @@ const CarDefinitions: NextPage = () => {
                                 if (ev.key === 'Escape') {
                                   setCarOptionsInputShowing(false);
                                 } else if (ev.key === 'Enter') {
+                                  addTrimOption();
                                   setCarOptionsInputShowing(false);
                                 }
                               }}/>
                           </TableCell>
                           <TableCell>
                             <TextField
-                              label={'Price'} autoFocus fullWidth variant={'standard'}
+                              label={'Price'} fullWidth variant={'standard'}
                               inputRef={trimInfoOptionPriceRef}
                               onKeyDown={(ev) => {
                                 if (ev.key === 'Escape') {
                                   setCarOptionsInputShowing(false);
                                 } else if (ev.key === 'Enter') {
+                                  addTrimOption();
                                   setCarOptionsInputShowing(false);
                                 }
                               }}/>
                           </TableCell>
                           <TableCell>
                             <Button variant={'contained'}
-                              onClick={() => {
-                                const optionName = trimInfoOptionNameRef.current.value ?? '';
-                                const optionValue = trimInfoOptionPriceRef.current.value ?? '';
-
-                                if (!optionName || !optionValue) {
-                                  errorDialog('Option name and value are required.');
-                                  return;
-                                }
-
-                                const tip = trimInfoPayload;
-
-                                if (!tip.optionList) {
-                                  tip.optionList = [];
-                                }
-
-                                tip.optionList.push({
-                                  name: optionName,
-                                  value: optionValue,
-                                });
-
-                                setTrimInfoPayload(tip);
-
-                                trimInfoOptionNameRef.current.value = '';
-                                trimInfoOptionPriceRef.current.value = '';
-
-                                setCarOptionsInputShowing(false);
-                              }}>ADD</Button>
+                              onClick={() => addTrimOption()}>ADD</Button>
                           </TableCell>
                         </TableRow>
                       </TableBody>
