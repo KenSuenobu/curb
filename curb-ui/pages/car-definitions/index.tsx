@@ -577,7 +577,7 @@ const CarDefinitions: NextPage = () => {
         <>
           <p/>
           <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1em' }}>
-            <Typography sx={{ fontWeight: 'bold' }}><u>Trim Details</u></Typography>
+            <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Trim Details</u></Typography>
           </div>
 
           <div style={{ display: 'flex' }}>
@@ -677,7 +677,7 @@ const CarDefinitions: NextPage = () => {
 
           <div style={{ display: 'flex' }}>
             <div style={{ width: '50%', paddingLeft: '1em' }}>
-              <Typography sx={{ fontWeight: 'bold' }}><u>Standard Equipment</u></Typography>
+              <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Standard Equipment</u></Typography>
 
               <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
                 <Table stickyHeader size={'small'}>
@@ -704,7 +704,7 @@ const CarDefinitions: NextPage = () => {
             </div>
 
             <div style={{ width: '50%', paddingLeft: '1em' }}>
-              <Typography sx={{ fontWeight: 'bold' }}><u>Standard Equipment</u></Typography>
+              <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Optional Equipment</u></Typography>
 
               <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
                 <Table stickyHeader size={'small'}>
