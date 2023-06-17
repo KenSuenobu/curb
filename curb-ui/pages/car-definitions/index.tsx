@@ -10,7 +10,7 @@ import {
   Button,
   Dialog,
   DialogTitle,
-  DialogContent, TextField, DialogActions, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, InputAdornment
+  DialogContent, TextField, DialogActions, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, InputAdornment, Checkbox
 } from '@mui/material';
 import { NextPage } from "next";
 import React, { useEffect, useRef, useState } from "react";
@@ -20,6 +20,7 @@ import axios from 'axios';
 import {AddOutlined, ArrowRightOutlined, CheckBoxOutlineBlankOutlined, CheckBoxOutlined} from '@mui/icons-material';
 import { TableHeader } from '../../components/car-definitions/TableHeader';
 import {ICarMake, ListCarMakes, StandardEquipmentList} from '../../components/database/car-make';
+import CheckboxTableRow from '../../components/common/CheckboxTableRow';
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -71,6 +72,7 @@ const CarDefinitions: NextPage = () => {
   const [carYearId, setCarYearId] = useState(0);
   const [carTrimId, setCarTrimId] = useState(0);
   const [trimInfoPayload, setTrimInfoPayload] = useState({});
+  const [checkedStates, setCheckedStates] = useState([false, false]);
   const carMakeRef = useRef();
   const carModelRef = useRef();
   const carYearRef = useRef();
@@ -683,32 +685,42 @@ const CarDefinitions: NextPage = () => {
                     </TableRow>
                   </TableHead>
                   {StandardEquipmentList.map((x, cnt: number) => (
-                    <TableRow hover onClick={() => {
-                      const tpi = trimInfoPayload;
+                    <>
+                      <CheckboxTableRow value={x} onClick={() => {
+                        const states = checkedStates;
 
-                      if (!tpi.standardEquipment) {
-                        tpi.standardEquipment = [];
-                      }
+                        states[cnt] = !states[cnt];
 
-                      if (tpi.standardEquipment.includes(x)) {
-                        tpi.standardEquipment = tpi.standardEquipment.filter((y) => x != y);
-                      } else {
-                        tpi.standardEquipment.push(x);
-                      }
+                        // Set checked states like this, or it will NOT WORK.
+                        setCheckedStates([...states]);
+                      }} checked={checkedStates[cnt]}/>
+                      {/*<TableRow hover onClick={() => {*/}
+                      {/*  // const tpi = trimInfoPayload;*/}
+                      {/*  //*/}
+                      {/*  // if (!tpi.standardEquipment) {*/}
+                      {/*  //   tpi.standardEquipment = [];*/}
+                      {/*  // }*/}
+                      {/*  //*/}
+                      {/*  // if (tpi.standardEquipment.includes(x)) {*/}
+                      {/*  //   tpi.standardEquipment = tpi.standardEquipment.filter((y) => x != y);*/}
+                      {/*  // } else {*/}
+                      {/*  //   tpi.standardEquipment.push(x);*/}
+                      {/*  // }*/}
+                      {/*  //*/}
+                      {/*  // setTrimInfoPayload(tpi);*/}
+                      {/*  const se = standardEquipment;*/}
 
-                      setTrimInfoPayload(tpi);
-                    }}>
-                      <TableCell>
-                        <IconButton>
-                          {trimInfoPayload.standardEquipment?.includes(x) ? (
-                            <CheckBoxOutlined sx={{ paddingTop: '1px', color: '#000' }}/>
-                          ) : (
-                            <CheckBoxOutlineBlankOutlined sx={{ paddingTop: '1px', color: '#000' }}/>
-                          )}
-                        </IconButton>
-                      </TableCell>
-                      <TableCell sx={{ color: '#000' }}>{x}</TableCell>
-                    </TableRow>
+                      {/*  se[cnt].toggled = !se[cnt].toggled;*/}
+
+                      {/*  console.log(`Toggle: ${se[cnt].toggled}`);*/}
+                      {/*  setStandardEquipment(se);*/}
+                      {/*}}>*/}
+                      {/*  <TableCell>*/}
+                      {/*    <Checkbox checked={x.toggled} onClick={() => x.toggled = !x.toggled}/>*/}
+                      {/*  </TableCell>*/}
+                      {/*  <TableCell sx={{ color: '#000' }}>{x.name}</TableCell>*/}
+                      {/*</TableRow>*/}
+                    </>
                   ))}
                 </Table>
               </TableContainer>
