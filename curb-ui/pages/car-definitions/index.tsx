@@ -72,7 +72,7 @@ const CarDefinitions: NextPage = () => {
   const [carYearId, setCarYearId] = useState(0);
   const [carTrimId, setCarTrimId] = useState(0);
   const [trimInfoPayload, setTrimInfoPayload] = useState({});
-  const [checkedStates, setCheckedStates] = useState([false, false]);
+  const [checkedStates, setCheckedStates] = useState(Array(StandardEquipmentList.length).fill(false));
   const carMakeRef = useRef();
   const carModelRef = useRef();
   const carYearRef = useRef();
@@ -107,9 +107,11 @@ const CarDefinitions: NextPage = () => {
         if (!x.data.id) {
           setCarTrimInfo(undefined);
           setTrimInfoPayload({});
+          setCheckedStates(Array(StandardEquipmentList.length).fill(false));
         } else {
           setCarTrimInfo(x.data);
           setTrimInfoPayload(x.data.data);
+          setCheckedStates(x.data.data.standardEquipment);
         }
       });
   }
@@ -216,6 +218,7 @@ const CarDefinitions: NextPage = () => {
       };
 
     payload.data = trimInfoPayload;
+    payload.data.standardEquipment = checkedStates;
 
     if (carTrimInfo) {
       console.log(`Sending payload: ${JSON.stringify(payload, null, 2)}`);
@@ -694,32 +697,6 @@ const CarDefinitions: NextPage = () => {
                         // Set checked states like this, or it will NOT WORK.
                         setCheckedStates([...states]);
                       }} checked={checkedStates[cnt]}/>
-                      {/*<TableRow hover onClick={() => {*/}
-                      {/*  // const tpi = trimInfoPayload;*/}
-                      {/*  //*/}
-                      {/*  // if (!tpi.standardEquipment) {*/}
-                      {/*  //   tpi.standardEquipment = [];*/}
-                      {/*  // }*/}
-                      {/*  //*/}
-                      {/*  // if (tpi.standardEquipment.includes(x)) {*/}
-                      {/*  //   tpi.standardEquipment = tpi.standardEquipment.filter((y) => x != y);*/}
-                      {/*  // } else {*/}
-                      {/*  //   tpi.standardEquipment.push(x);*/}
-                      {/*  // }*/}
-                      {/*  //*/}
-                      {/*  // setTrimInfoPayload(tpi);*/}
-                      {/*  const se = standardEquipment;*/}
-
-                      {/*  se[cnt].toggled = !se[cnt].toggled;*/}
-
-                      {/*  console.log(`Toggle: ${se[cnt].toggled}`);*/}
-                      {/*  setStandardEquipment(se);*/}
-                      {/*}}>*/}
-                      {/*  <TableCell>*/}
-                      {/*    <Checkbox checked={x.toggled} onClick={() => x.toggled = !x.toggled}/>*/}
-                      {/*  </TableCell>*/}
-                      {/*  <TableCell sx={{ color: '#000' }}>{x.name}</TableCell>*/}
-                      {/*</TableRow>*/}
                     </>
                   ))}
                 </Table>
