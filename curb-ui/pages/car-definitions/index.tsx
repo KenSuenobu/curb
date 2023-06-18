@@ -10,7 +10,7 @@ import {
   Button,
   Dialog,
   DialogTitle,
-  DialogContent, TextField, DialogActions, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, InputAdornment, Checkbox
+  DialogContent, TextField, DialogActions, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, InputAdornment, Checkbox, Snackbar, Alert
 } from '@mui/material';
 import { NextPage } from "next";
 import React, { useEffect, useRef, useState } from "react";
@@ -73,6 +73,7 @@ const CarDefinitions: NextPage = () => {
   const [carTrimId, setCarTrimId] = useState(0);
   const [trimInfoPayload, setTrimInfoPayload] = useState({});
   const [checkedStates, setCheckedStates] = useState(Array(StandardEquipmentList.length).fill(false));
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const carMakeRef = useRef();
   const carModelRef = useRef();
   const carYearRef = useRef();
@@ -111,7 +112,12 @@ const CarDefinitions: NextPage = () => {
         } else {
           setCarTrimInfo(x.data);
           setTrimInfoPayload(x.data.data);
-          setCheckedStates(x.data.data.standardEquipment);
+
+          const equipmentStates = StandardEquipmentList.map((y) => {
+            return (x.data.data.selectedStandardEquipment.includes(y));
+          });
+
+          setCheckedStates(equipmentStates);
         }
       });
   }
@@ -218,7 +224,13 @@ const CarDefinitions: NextPage = () => {
       };
 
     payload.data = trimInfoPayload;
-    payload.data.standardEquipment = checkedStates;
+    payload.data.selectedStandardEquipment = [];
+
+    StandardEquipmentList.forEach((x, position) => {
+      if (checkedStates[position]) {
+        payload.data.selectedStandardEquipment.push(x);
+      }
+    });
 
     if (carTrimInfo) {
       console.log(`Sending payload: ${JSON.stringify(payload, null, 2)}`);
@@ -228,7 +240,6 @@ const CarDefinitions: NextPage = () => {
           console.log(`Edit: ${JSON.stringify(result, null, 2)}`);
           return x.data;
         });
-
     } else {
       console.log(`Sending payload: ${JSON.stringify(payload, null, 2)}`);
 
@@ -241,6 +252,12 @@ const CarDefinitions: NextPage = () => {
       setCarTrimInfo(result);
       setTrimInfoPayload(result.data);
     }
+
+    setSnackbarOpen(true);
+
+    setTimeout(() => {
+      setSnackbarOpen(false);
+    }, 3000);
   }
 
   const addTrimOption = () => {
@@ -284,6 +301,13 @@ const CarDefinitions: NextPage = () => {
     trimInfoOptionPriceRef.current.value = '';
 
     setCarOptionsInputShowing(false);
+  }
+
+  const handleChange = (e) => {
+    setTrimInfoPayload({
+      ...trimInfoPayload,
+      [e.target.name]: e.target.value,
+    });
   }
 
   useEffect(() => ListCarMakes((x) => setCarMakes(x)), []);
@@ -575,6 +599,11 @@ const CarDefinitions: NextPage = () => {
 
       {carTrimId != 0 ? (
         <>
+          <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={snackbarOpen}>
+            <Alert severity={'success'} sx={{ width: '100%' }}>
+              Trim information saved successfully.
+            </Alert>
+          </Snackbar>
           <p/>
           <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1em' }}>
             <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Trim Details</u></Typography>
@@ -585,15 +614,15 @@ const CarDefinitions: NextPage = () => {
               <Stack direction={'row'}>
                 <Item sx={{ width: '50%' }}>
                   <TextField label={'MSRP/Base Price'} fullWidth value={trimInfoPayload.msrp ?? ''}
-                             inputProps={{ type: 'number' }}
-                             onChange={(e) => trimInfoPayload.msrp = e.target.value}/>
+                             inputProps={{ type: 'number' }} name={'msrp'}
+                             onChange={handleChange}/>
                 </Item>
                 <Item sx={{ width: '50%' }}>
                   <FormControl fullWidth>
                     <InputLabel id={'fuel-type-label'}>Fuel Type</InputLabel>
-                    <Select labelId={'fuel-type-label'} label={'Fuel Type'}
+                    <Select labelId={'fuel-type-label'} label={'Fuel Type'} name={'fuelType'}
                             style={{ textAlign: 'left' }} value={trimInfoPayload.fuelType ?? 0} fullWidth
-                            onChange={(e) => trimInfoPayload.fuelType = e.target.value}>
+                            onChange={handleChange}>
                       <MenuItem value={0}>Regular</MenuItem>
                       <MenuItem value={1}>Mid-Grade</MenuItem>
                       <MenuItem value={2}>Premium</MenuItem>
@@ -777,9 +806,8 @@ const CarDefinitions: NextPage = () => {
             </div>
           </div>
 
-          <div sx={{ display: 'flex', width: '100%', textAlign: 'right' }}>
+          <div style={{ display: 'flex', width: '100%', textAlign: 'right', paddingTop: '10px' }}>
             <Button onClick={() => saveCarTrimInfo()}>Save</Button>
-            <Button>Cancel</Button>
           </div>
         </>
       ) : (
