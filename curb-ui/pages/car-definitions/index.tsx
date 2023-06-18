@@ -17,7 +17,14 @@ import React, { useEffect, useRef, useState } from "react";
 import {StackItem } from '../../components/StackItem';
 import {alertDialog, errorDialog} from '../../components/dialogs/ConfirmDialog';
 import axios from 'axios';
-import {AddOutlined, ArrowRightOutlined, CheckBoxOutlineBlankOutlined, CheckBoxOutlined} from '@mui/icons-material';
+import {
+  AddOutlined,
+  ArrowRightOutlined,
+  CheckBoxOutlineBlankOutlined,
+  CheckBoxOutlined, ClearOutlined,
+  DeleteOutline,
+  DeleteOutlined
+} from '@mui/icons-material';
 import { TableHeader } from '../../components/car-definitions/TableHeader';
 import {ICarMake, ListCarMakes, StandardEquipmentList} from '../../components/database/car-make';
 import CheckboxTableRow from '../../components/common/CheckboxTableRow';
@@ -67,6 +74,7 @@ const CarDefinitions: NextPage = () => {
   const [carYearsInputShowing, setCarYearsInputShowing] = useState(false);
   const [carTrimsInputShowing, setCarTrimsInputShowing] = useState(false);
   const [carOptionsInputShowing, setCarOptionsInputShowing] = useState(false);
+  const [carUrlInputShowing, setCarUrlInputShowing] = useState(false);
   const [carMakeId, setCarMakeId] = useState(0);
   const [carModelId, setCarModelId] = useState(0);
   const [carYearId, setCarYearId] = useState(0);
@@ -80,6 +88,8 @@ const CarDefinitions: NextPage = () => {
   const carTrimRef = useRef();
   const trimInfoOptionNameRef = useRef();
   const trimInfoOptionPriceRef = useRef();
+  const trimInfoReviewUrlRef = useRef();
+  const trimInfoReviewUrlSiteRef = useRef();
 
   const loadCarModels = (makeId: number) => {
     axios.get(`/app/car-model/list/${makeId}`)
@@ -301,6 +311,71 @@ const CarDefinitions: NextPage = () => {
     trimInfoOptionPriceRef.current.value = '';
 
     setCarOptionsInputShowing(false);
+  }
+
+  const addCarSite = () => {
+    const carReviewSiteName = trimInfoReviewUrlSiteRef.current.value ?? '';
+    const carReviewUrl = trimInfoReviewUrlRef.current.value ?? '';
+
+    if (!carReviewSiteName || !carReviewUrl) {
+      errorDialog('Car review site name and video URL are required.');
+      return;
+    }
+
+    const tip = trimInfoPayload;
+
+    if (!tip.siteList) {
+      tip.siteList = [];
+    }
+
+    let found = false;
+
+    tip.siteList.forEach((x) => {
+      if (x.url === carReviewUrl) {
+        found = true;
+      }
+    });
+
+    if (found) {
+      errorDialog(`Video URL '${carReviewUrl}' already exists in the list.`);
+      trimInfoReviewUrlSiteRef.current.value = '';
+      trimInfoReviewUrlRef.current.value = '';
+      return;
+    }
+
+    tip.siteList.push({
+      name: carReviewSiteName,
+      url: carReviewUrl,
+    });
+
+    setTrimInfoPayload(tip);
+
+    trimInfoReviewUrlSiteRef.current.value = '';
+    trimInfoReviewUrlRef.current.value = '';
+
+    setCarUrlInputShowing(false);
+  }
+
+  const deleteOption = (x: any) => {
+    const optionList = trimInfoPayload.optionList ?? [];
+
+    optionList = optionList.filter((y) => y.name !== x.name);
+
+    setTrimInfoPayload({
+      ...trimInfoPayload,
+      optionList,
+    });
+  }
+
+  const deleteSite = (x: any) => {
+    const siteList = trimInfoPayload.siteList ?? [];
+
+    siteList = siteList.filter((y) => y.url !== x.url);
+
+    setTrimInfoPayload({
+      ...trimInfoPayload,
+      siteList,
+    });
   }
 
   const handleChange = (e) => {
@@ -643,7 +718,8 @@ const CarDefinitions: NextPage = () => {
                     <Select labelId={'transmission-label'} label={'Transmission'}
                             style={{ textAlign: 'left' }}
                             value={trimInfoPayload.transmission ?? 0}
-                            onChange={(e) => trimInfoPayload.transmission = e.target.value}
+                            name={'transmission'}
+                            onChange={handleChange}
                             fullWidth>
                       <MenuItem value={0}>5 Speed Manual</MenuItem>
                       <MenuItem value={1}>6 Speed Manual</MenuItem>
@@ -658,8 +734,8 @@ const CarDefinitions: NextPage = () => {
                   <FormControl fullWidth>
                     <InputLabel id={'drivetrain-label'}>Drivetrain</InputLabel>
                     <Select labelId={'drivetrain-label'} label={'Drivetrain'} style={{ textAlign: 'left' }}
-                            value={trimInfoPayload.driveTrain ?? 0} fullWidth
-                            onChange={(e) => trimInfoPayload.driveTrain = e.target.value}>
+                            value={trimInfoPayload.driveTrain ?? 0} fullWidth name={'driveTrain'}
+                            onChange={handleChange}>
                       <MenuItem value={0}>Front-Wheel Drive</MenuItem>
                       <MenuItem value={1}>Rear-Wheel Drive</MenuItem>
                       <MenuItem value={2}>4WD</MenuItem>
@@ -673,38 +749,107 @@ const CarDefinitions: NextPage = () => {
             <div style={{ width: '50%' }}>
               <Stack direction={'row'}>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Doors'} fullWidth value={trimInfoPayload.doors ?? ''}
-                             onChange={(e) => trimInfoPayload.doors = e.target.value}/>
+                  <TextField label={'Doors'} fullWidth value={trimInfoPayload.doors ?? ''} name={'doors'}
+                             onChange={handleChange}/>
                 </Item>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Seats'} fullWidth value={trimInfoPayload.seats ?? ''}
-                             onChange={(e) => trimInfoPayload.seats = e.target.value}/>
+                  <TextField label={'Seats'} fullWidth value={trimInfoPayload.seats ?? ''} name={'seats'}
+                             onChange={handleChange}/>
                 </Item>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Rows'} fullWidth value={trimInfoPayload.rows ?? ''}
-                             onChange={(e) => trimInfoPayload.rows = e.target.value}/>
+                  <TextField label={'Rows'} fullWidth value={trimInfoPayload.rows ?? ''} name={'rows'}
+                             onChange={handleChange}/>
                 </Item>
               </Stack>
 
               <Stack direction={'row'}>
                 <Item sx={{ width: '37%' }}>
-                  <TextField label={'Front Tire Size'} fullWidth value={trimInfoPayload.frontTire ?? ''}
-                             onChange={(e) => trimInfoPayload.frontTire = e.target.value}/>
+                  <TextField label={'Front Tire Size'} fullWidth value={trimInfoPayload.frontTire ?? ''} name={'frontTire'}
+                             onChange={handleChange}/>
                 </Item>
                 <Item sx={{ width: '37%' }}>
-                  <TextField label={'Rear Tire Size'} fullWidth value={trimInfoPayload.rearTire ?? ''}
-                             onChange={(e) => trimInfoPayload.rearTire = e.target.value}/>
+                  <TextField label={'Rear Tire Size'} fullWidth value={trimInfoPayload.rearTire ?? ''} name={'rearTire'}
+                             onChange={handleChange}/>
                 </Item>
                 <Item sx={{ width: '25%' }}>
                   <TextField label={'Cargo Area'} value={trimInfoPayload.cargoArea ?? ''} helperText={'(ft³)'} fullWidth
-                             inputProps={{ type: 'number' }}
-                             onChange={(e) => trimInfoPayload.cargoArea = e.target.value}/>
+                             inputProps={{ type: 'number' }} name={'cargoArea'}
+                             onChange={handleChange}/>
                 </Item>
               </Stack>
             </div>
           </div>
 
+          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '0.5em' }}>
+            <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Performance Figures</u></Typography>
+          </div>
+
           <div style={{ display: 'flex' }}>
+            <div style={{ width: '33%' }}>
+              <Stack direction={'row'}>
+                <Item sx={{ width: '100%' }}>
+                  <TextField label={'Horsepower'} fullWidth value={trimInfoPayload.horsepower ?? ''}
+                             inputProps={{ type: 'number' }} name={'horsepower'}
+                             onChange={handleChange}/>
+                </Item>
+              </Stack>
+              <Stack direction={'row'}>
+                <Item sx={{ width: '100%' }}>
+                  <TextField label={'Torque'} fullWidth value={trimInfoPayload.torque ?? ''}
+                             inputProps={{ type: 'number' }} name={'torque'}
+                             onChange={handleChange}/>
+                </Item>
+              </Stack>
+            </div>
+
+            <div style={{ width: '33%' }}>
+              <Stack direction={'row'}>
+                <Item sx={{ width: '100%' }}>
+                  <TextField label={'Top Speed'} fullWidth value={trimInfoPayload.topSpeed ?? ''} name={'topSpeed'}
+                             onChange={handleChange}/>
+                </Item>
+              </Stack>
+
+              <Stack direction={'row'}>
+                <Item sx={{ width: '100%' }}>
+                  <TextField label={'0-60 Time'} fullWidth value={trimInfoPayload.timeToSixty ?? ''} name={'timeToSixty'}
+                             onChange={handleChange}/>
+                </Item>
+              </Stack>
+
+              <Stack direction={'row'}>
+                <Item sx={{ width: '100%' }}>
+                  <TextField label={'Charge Time to 80%'} fullWidth value={trimInfoPayload.chargeToEighty ?? ''} name={'chargeToEighty'}
+                             onChange={handleChange}/>
+                </Item>
+              </Stack>
+            </div>
+
+            <div style={{ width: '33%' }}>
+              <Stack direction={'row'}>
+                <Item sx={{ width: '100%' }}>
+                  <TextField label={'MPG Highway'} fullWidth value={trimInfoPayload.mpgHwy ?? ''} name={'mpgHwy'}
+                             onChange={handleChange}/>
+                </Item>
+              </Stack>
+
+              <Stack direction={'row'}>
+                <Item sx={{ width: '100%' }}>
+                  <TextField label={'MPG City'} fullWidth value={trimInfoPayload.mpgCity ?? ''} name={'mpgCity'}
+                             onChange={handleChange}/>
+                </Item>
+              </Stack>
+
+              <Stack direction={'row'}>
+                <Item sx={{ width: '100%' }}>
+                  <TextField label={'MPG Combined / Range'} fullWidth value={trimInfoPayload.range ?? ''} name={'range'}
+                             onChange={handleChange}/>
+                </Item>
+              </Stack>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', paddingTop: '1em' }}>
             <div style={{ width: '50%', paddingLeft: '1em' }}>
               <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Standard Equipment</u></Typography>
 
@@ -796,13 +941,96 @@ const CarDefinitions: NextPage = () => {
                       <>
                         <TableRow hover>
                           <TableCell>{x.name}</TableCell>
-                          <TableCell colspan={2}>{x.value}</TableCell>
+                          <TableCell>{x.value}</TableCell>
+                          <TableCell>
+                            <IconButton onClick={() => deleteOption(x)}>
+                              <ClearOutlined/>
+                            </IconButton>
+                          </TableCell>
                         </TableRow>
                       </>
                     ))}
                   </TableBody>
                 </Table>
               </TableContainer>
+            </div>
+          </div>
+
+        <div style={{ display: 'flex', paddingTop: '1em' }}>
+          <div style={{ width: '100%', paddingLeft: '1em' }}>
+            <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Car Reviews</u></Typography>
+
+            <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
+              <Table stickyHeader size={'small'}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ backgroundColor: '#cff', width: '35%' }}>Review Site</TableCell>
+                    <TableCell sx={{ backgroundColor: '#cff', width: '55%' }}>Review URL</TableCell>
+                    <TableCell sx={{ backgroundColor: '#cff', width: '10%', textAlign: 'right' }}>
+                      <IconButton size={'small'} onClick={() => setCarUrlInputShowing(!carUrlInputShowing)}>
+                        <AddOutlined/>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                {carUrlInputShowing ? (
+                  <>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>
+                          <TextField
+                            label={'Review Site Name'} autoFocus fullWidth variant={'standard'}
+                            inputRef={trimInfoReviewUrlSiteRef}
+                            onKeyDown={(ev) => {
+                              if (ev.key === 'Escape') {
+                                setCarUrlInputShowing(false);
+                              } else if (ev.key === 'Enter') {
+                                addCarSite();
+                              }
+                            }}/>
+                        </TableCell>
+                        <TableCell>
+                          <TextField
+                            label={'Review Video URL'} fullWidth variant={'standard'}
+                            inputRef={trimInfoReviewUrlRef}
+                            onKeyDown={(ev) => {
+                              if (ev.key === 'Escape') {
+                                setCarUrlInputShowing(false);
+                              } else if (ev.key === 'Enter') {
+                                addCarSite();
+                              }
+                            }}/>
+                        </TableCell>
+                        <TableCell>
+                          <Button variant={'contained'}
+                                  onClick={() => addCarSite()}>ADD</Button>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </>
+                ) : (
+                  <>
+                  </>
+                )}
+                <TableBody>
+                  {trimInfoPayload.siteList?
+                    .sort((a, b) => (a.name > b.name ? 1 : -1))
+                    .map((x) => (
+                    <>
+                    <TableRow hover>
+                    <TableCell>{x.name}</TableCell>
+                    <TableCell>{x.url}</TableCell>
+                    <TableCell>
+                      <IconButton onClick={() => deleteSite(x)}>
+                        <ClearOutlined/>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                </>
+                ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
             </div>
           </div>
 
