@@ -17,7 +17,10 @@ export const StandardEquipmentList = [
   'Ambient Lighting',
   'Android Auto',
   'Apple CarPlay',
+  'Automatic Climate Control',
+  'Automatic Highlights',
   'Automatic Tailgate',
+  'Automatic Windshield Wipers',
   'AUX Input',
   'Backup Camera',
   'Bike Rack',
@@ -34,6 +37,7 @@ export const StandardEquipmentList = [
   'Electronic Parking Brake',
   'Full LED Headlights',
   'Heads-Up Display',
+  'Heated Door Mirrors',
   'Heated Seats',
   'Infinity Glass',
   'Keyless Entry',
@@ -44,6 +48,7 @@ export const StandardEquipmentList = [
   'Moonroof',
   'Multi-Angle Camera',
   'Navigation',
+  'One-Touch Window Controls',
   'Push-Button Start',
   'Rear Air Vents',
   'Remote Control Mobile App',
@@ -54,17 +59,21 @@ export const StandardEquipmentList = [
   'SOS Emergency Services',
   'Standard Audio',
   'Sunroof',
+  'Tire Pressure Monitoring System',
   'Traffic Sign Recognition',
   'Turn Signal Cameras',
+  'Turn Signal Indicator Mirrors',
   'Turo Go Compatible',
   'USB Charger',
   'USB Input',
   'USB-A',
   'USB-C',
+  'Wireless Android Auto',
   'Wireless Charger',
+  'Wireless CarPlay',
 ]
 
-export const ListCarMakes = (callback: ICarMakeCallback) => {
+export const LoadCarMakes = (callback: ICarMakeCallback) => {
   axios.get('/app/car-make/list')
     .then((x) => {
       callback(x.data);

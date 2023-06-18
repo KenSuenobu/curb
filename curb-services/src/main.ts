@@ -28,6 +28,10 @@ async function bootstrap() {
       description: 'Main Documentation and Suggestions',
       url: 'https://www.suenobu.llc/curb/docs/',
     })
+    .addTag('fleet', 'Car Fleet services', {
+      description: 'Main Documentation and Suggestions',
+      url: 'https://www.suenobu.llc/curb/docs/',
+    })
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup(SWAGGER_PATH, app, document);

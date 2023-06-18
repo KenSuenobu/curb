@@ -60,7 +60,8 @@ export default function SideBar(props: SideBarProps) {
               />
             </ListItemButton>
             <Divider />
-            {props.sidebarItems.map((x) => <SideBarMenuGroup label={x.label} key={'1'} items={x.items} />)}
+            {props.sidebarItems.map((x, cnt) =>
+              <SideBarMenuGroup label={x.label.toUpperCase()} key={cnt.toString(10)} items={x.items} />)}
           </FireNav>
         </Paper>
       </ThemeProvider>

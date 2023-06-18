@@ -26,8 +26,9 @@ import {
   DeleteOutlined
 } from '@mui/icons-material';
 import { TableHeader } from '../../components/car-definitions/TableHeader';
-import {ICarMake, ListCarMakes, StandardEquipmentList} from '../../components/database/car-make';
+import {ICarMake, LoadCarMakes, StandardEquipmentList} from '../../components/database/car-make';
 import CheckboxTableRow from '../../components/common/CheckboxTableRow';
+import { ICarModel, LoadCarModels } from '../../components/database/car-model';
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -36,12 +37,6 @@ const Item = styled(Box)(({ theme }) => ({
   textAlign: 'center',
   color: theme.palette.text.secondary,
 }));
-
-interface ICarModel {
-  id?: number;
-  makeId: number;
-  name: string;
-}
 
 interface ICarYear {
   id?: number;
@@ -91,13 +86,6 @@ const CarDefinitions: NextPage = () => {
   const trimInfoReviewUrlRef = useRef();
   const trimInfoReviewUrlSiteRef = useRef();
 
-  const loadCarModels = (makeId: number) => {
-    axios.get(`/app/car-model/list/${makeId}`)
-      .then((x) => {
-        setCarModels(x.data);
-      });
-  }
-
   const loadModelYears = (modelId: number) => {
     axios.get(`/app/car-year/list/${modelId}`)
       .then((x) => {
@@ -146,7 +134,7 @@ const CarDefinitions: NextPage = () => {
 
     axios.post('/app/car-make/create', payload)
       .then((x) => {
-        ListCarMakes((x: ICarMake[]) => setCarMakes(x));
+        LoadCarMakes((x: ICarMake[]) => setCarMakes(x));
       });
 
     setCarMakesInputShowing(false);
@@ -169,7 +157,7 @@ const CarDefinitions: NextPage = () => {
 
     axios.post('/app/car-model/create', payload)
       .then((x) => {
-        loadCarModels(carMakeId);
+        LoadCarModels(carMakeId, (x: ICarModel[]) => setCarModels(x));
       });
 
     setCarModelsInputShowing(false);
@@ -243,21 +231,16 @@ const CarDefinitions: NextPage = () => {
     });
 
     if (carTrimInfo) {
-      console.log(`Sending payload: ${JSON.stringify(payload, null, 2)}`);
-
       const result = axios.put(`/app/car-trim-info/edit/${payload.id}`, payload)
-        .then((x) => {
-          console.log(`Edit: ${JSON.stringify(result, null, 2)}`);
-          return x.data;
-        });
-    } else {
-      console.log(`Sending payload: ${JSON.stringify(payload, null, 2)}`);
+        .then((x) => x.data);
 
+      if (!result) {
+        errorDialog('Unable to save trim information.  Please check your listing.');
+        return;
+      }
+    } else {
       const result = axios.post('/app/car-trim-info/create', payload)
-        .then((x) => {
-          console.log(`Save: ${JSON.stringify(x, null, 2)}`);
-          return x.data;
-        });
+        .then((x) => x.data);
 
       setCarTrimInfo(result);
       setTrimInfoPayload(result.data);
@@ -385,7 +368,7 @@ const CarDefinitions: NextPage = () => {
     });
   }
 
-  useEffect(() => ListCarMakes((x) => setCarMakes(x)), []);
+  useEffect(() => LoadCarMakes((x) => setCarMakes(x)), []);
 
   return (
     <>
@@ -437,7 +420,7 @@ const CarDefinitions: NextPage = () => {
                                 setCarModelId(0);
                                 setCarYearId(0);
                                 setCarTrimId(0);
-                                loadCarModels(x.id);
+                                LoadCarModels(x.id, (y: ICarModel[]) => setCarModels(y));
                                 setCarYears([]);
                                 setCarTrims([]);
                                 setCarTrimInfo(undefined);
@@ -448,7 +431,7 @@ const CarDefinitions: NextPage = () => {
                                 setCarModelId(0);
                                 setCarYearId(0);
                                 setCarTrimId(0);
-                                loadCarModels(x.id);
+                                LoadCarModels(x.id, (y: ICarModel[]) => setCarModels(y));
                                 setCarYears([]);
                                 setCarTrims([]);
                                 setCarTrimInfo(undefined);
@@ -861,7 +844,9 @@ const CarDefinitions: NextPage = () => {
                       <TableCell sx={{ backgroundColor: '#cff', width: '90%' }}>Name</TableCell>
                     </TableRow>
                   </TableHead>
-                  {StandardEquipmentList.map((x, cnt: number) => (
+                  {StandardEquipmentList
+                    .sort((a, b) => (a > b ? 1 : -1))
+                    .map((x, cnt: number) => (
                     <>
                       <CheckboxTableRow value={x} onClick={() => {
                         const states = checkedStates;

@@ -32,16 +32,17 @@ import {
   DatasetOutlined,
   DatasetLinkedOutlined,
   LibraryBooksOutlined,
-  BackupTableOutlined, PeopleOutline, LockOutlined, DataObjectOutlined, DirectionsCarOutlined,
+  BackupTableOutlined, PeopleOutline, LockOutlined, DataObjectOutlined, DirectionsCarOutlined, GarageOutlined,
 } from '@mui/icons-material';
 import CarDefinitions from './car-definitions';
+import Fleet from "./fleet";
 
 const drawerWidth = 240;
 
 const Home: NextPage = () => {
   const [currentPage, setCurrentPage] = React.useState(<></>);
   const carItems: SideBarMenuGroupProps = {
-    label: "CARS",
+    label: 'CARS',
     items: [
       {
         icon: <DirectionsCarOutlined/>,
@@ -50,6 +51,16 @@ const Home: NextPage = () => {
       },
     ],
   };
+  const fleetItems: SideBarMenuGroupProps = {
+    label: 'FLEET',
+    items: [
+      {
+        icon: <GarageOutlined/>,
+        label: 'Fleet',
+        onClick: () => setCurrentPage(<Fleet/>),
+      }
+    ]
+  }
   // const accountsItems: SideBarMenuGroupProps = {
   //   label: "ACCOUNTS",
   //   items: [
@@ -149,7 +160,7 @@ const Home: NextPage = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <SideBar width={260} sidebarItems={[carItems,]} />
+      <SideBar width={260} sidebarItems={[carItems, fleetItems,]} />
       <Box
         component="main"
         sx={{ flexGrow: 1, p: 3, backgroundColor: '#fff'  }}

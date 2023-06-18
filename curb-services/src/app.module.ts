@@ -9,6 +9,8 @@ import { CarTrimService } from './services/car-trim.service';
 import { CarTrimController } from './controllers/car-trim.controller';
 import {CarTrimInfoController} from './controllers/car-trim-info.controller';
 import {CarTrimInfoService} from './services/car-trim-info.service';
+import {FleetController} from './controllers/fleet.controller';
+import {FleetService} from './services/fleet.service';
 
 @Module({
   imports: [],
@@ -18,6 +20,7 @@ import {CarTrimInfoService} from './services/car-trim-info.service';
     CarYearController,
     CarTrimController,
     CarTrimInfoController,
+    FleetController,
   ],
   providers: [
     CarMakeService,
@@ -25,6 +28,7 @@ import {CarTrimInfoService} from './services/car-trim-info.service';
     CarYearService,
     CarTrimService,
     CarTrimInfoService,
+    FleetService,
   ],
 })
 export class AppModule {}

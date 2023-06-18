@@ -65,6 +65,8 @@ CREATE TABLE curb.car_trim_info (
 
 CREATE UNIQUE INDEX idx_car_trim_info_unique ON curb.car_trim_info(trim_id);
 
+---
+
 -- DROP TABLE IF EXISTS curb.address CASCADE;
 --
 -- CREATE TABLE curb.address (
