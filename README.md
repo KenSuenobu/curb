@@ -27,6 +27,8 @@ Phase 1:
   - Car Trim Info
     - Car Trim ID
     - Data (JSONB)
+  - Fleet
+    - Name
 - User Interface:
   - Car make
   - Car model

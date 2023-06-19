@@ -29,14 +29,7 @@ import { TableHeader } from '../../components/car-definitions/TableHeader';
 import {ICarMake, LoadCarMakes, StandardEquipmentList} from '../../components/database/car-make';
 import CheckboxTableRow from '../../components/common/CheckboxTableRow';
 import { ICarModel, LoadCarModels } from '../../components/database/car-model';
-
-const Item = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
+import Item from '../../components/common/Item';
 
 interface ICarYear {
   id?: number;

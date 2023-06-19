@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS curb.fleet_car CASCADE;
 CREATE TABLE curb.fleet_car (
     id SERIAL NOT NULL PRIMARY KEY,
     fleet_id INT NOT NULL REFERENCES curb.fleet(id),
-    car_trim_info_id INT NOT NULL REFERENCES curb.car_trim_info(id),
+    car_trim_id INT NOT NULL REFERENCES curb.car_trim(id),
     data JSONB
 );
 
