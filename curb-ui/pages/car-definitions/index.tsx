@@ -30,18 +30,8 @@ import {ICarMake, LoadCarMakes, StandardEquipmentList} from '../../components/da
 import CheckboxTableRow from '../../components/common/CheckboxTableRow';
 import { ICarModel, LoadCarModels } from '../../components/database/car-model';
 import Item from '../../components/common/Item';
-
-interface ICarYear {
-  id?: number;
-  modelId: number;
-  year: number;
-}
-
-interface ICarTrim {
-  id?: number;
-  yearId: number;
-  name: string;
-}
+import {ICarYear, LoadModelYears} from '../../components/database/car-year';
+import {ICarTrim, LoadCarTrims } from '../../components/database/car-trim';
 
 interface ICarTrimInfo {
   id?: number;
@@ -78,20 +68,6 @@ const CarDefinitions: NextPage = () => {
   const trimInfoOptionPriceRef = useRef();
   const trimInfoReviewUrlRef = useRef();
   const trimInfoReviewUrlSiteRef = useRef();
-
-  const loadModelYears = (modelId: number) => {
-    axios.get(`/app/car-year/list/${modelId}`)
-      .then((x) => {
-        setCarYears(x.data);
-      });
-  }
-
-  const loadCarTrims = (yearId) => {
-    axios.get(`/app/car-trim/list/${yearId}`)
-      .then((x) => {
-        setCarTrims(x.data);
-      });
-  }
 
   const loadCarTrimInfo = (trimId) => {
     axios.get(`/app/car-trim-info/get/${trimId}`)
@@ -175,7 +151,7 @@ const CarDefinitions: NextPage = () => {
 
     axios.post('/app/car-year/create', payload)
       .then((x) => {
-        loadModelYears(carModelId);
+        LoadModelYears(carModelId, (x) => setCarYears(x));
       });
 
     setCarYearsInputShowing(false);
@@ -200,7 +176,7 @@ const CarDefinitions: NextPage = () => {
 
     axios.post('/app/car-trim/create', payload)
       .then((x) => {
-        loadCarTrims(carYearId);
+        LoadCarTrims(carYearId, (y) => setCarTrims(y));
       });
 
     setCarTrimsInputShowing(false);
@@ -488,7 +464,7 @@ const CarDefinitions: NextPage = () => {
                             sx={{ backgroundColor: bgColor, width: '90%' }}
                             onClick={() => {
                               setCarModelId(x.id);
-                              loadModelYears(x.id);
+                              LoadModelYears(x.id, (y) => setCarYears(y));
                               setCarYearId(0);
                               setCarTrimId(0);
                               setCarTrims([]);
@@ -497,7 +473,7 @@ const CarDefinitions: NextPage = () => {
                           <TableCell
                             onClick={() => {
                               setCarModelId(x.id);
-                              loadModelYears(x.id);
+                              LoadModelYears(x.id, (y) => setCarYears(y));
                               setCarYearId(0);
                               setCarTrimId(0);
                               setCarTrims([]);
@@ -564,14 +540,14 @@ const CarDefinitions: NextPage = () => {
                             onClick={() => {
                               setCarYearId(x.id);
                               setCarTrimId(0);
-                              loadCarTrims(x.id);
+                              LoadCarTrims(x.id, (y) => setCarTrims(y));
                               setCarTrimInfo(undefined);
                             }}><Typography>{x.year}</Typography></TableCell>
                           <TableCell
                             onClick={() => {
                               setCarYearId(x.id);
                               setCarTrimId(0);
-                              loadCarTrims(x.id);
+                              LoadCarTrims(x.id, (y) => setCarTrims(y));
                               setCarTrimInfo(undefined);
                             }}
                             sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>

@@ -29,6 +29,10 @@ Phase 1:
     - Data (JSONB)
   - Fleet
     - Name
+  - Fleet Car
+    - Car Fleet ID
+    - Car Trim ID
+    - Data (JSONB)
 - User Interface:
   - Car make
   - Car model

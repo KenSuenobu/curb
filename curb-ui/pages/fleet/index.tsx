@@ -20,6 +20,8 @@ import {errorDialog} from '../../components/dialogs/ConfirmDialog';
 import axios from 'axios';
 import {ICarMake, LoadCarMakes} from '../../components/database/car-make';
 import Item from '../../components/common/Item';
+import {ICarYear, LoadModelYears} from '../../components/database/car-year';
+import { LoadCarTrims } from '../../components/database/car-trim';
 
 const SELECTED_COLOR = '#ccf';
 
@@ -27,8 +29,8 @@ const Fleet = () => {
   const [fleetList, setFleetList] = useState<IFleet[]>([]);
   const [carMakeList, setCarMakeList] = useState<ICarMake[]>([]);
   const [carModelList, setCarModelList] = useState<ICarModel[]>([]);
-  // const [carYearList, setCarYearList] = useState<ICarYear[]>([]);
-  // const [carTrimList, setCarTrimList] = useState<ICarTrim[]>([]);
+  const [carYearList, setCarYearList] = useState<ICarYear[]>([]);
+  const [carTrimList, setCarTrimList] = useState<ICarTrim[]>([]);
   const [fleetInputShowing, setFleetInputShowing] = useState(false);
   const [fleetCarInputShowing, setFleetCarInputShowing] = useState(false);
   const [fleetId, setFleetId] = useState(0);
@@ -138,6 +140,13 @@ const Fleet = () => {
                                  return;
                                }
                                setFleetCarInputShowing(!fleetCarInputShowing);
+                               setCarMakeId(0);
+                               setCarModelId(0);
+                               setCarYearId(0);
+                               setCarTrimId(0);
+                               setCarModelList([]);
+                               setCarYearList([]);
+                               setCarTrimList([]);
                              }}
                              onEdit={() => {}}/>
                 {fleetCarInputShowing ? (
@@ -152,7 +161,12 @@ const Fleet = () => {
                                       style={{ textAlign: 'left' }} fullWidth
                                       onChange={((e) => {
                                         setCarMakeId(e.target.value);
+                                        setCarModelId(0);
+                                        setCarYearId(0);
+                                        setCarTrimId(0);
                                         LoadCarModels(e.target.value, (x) => setCarModelList(x));
+                                        setCarYearList([]);
+                                        setCarTrimList([]);
                                       })}>
                                 {carMakeList.map((x) => <MenuItem value={x.id}>{x.name}</MenuItem>)}
                               </Select>
@@ -162,7 +176,14 @@ const Fleet = () => {
                             <FormControl sx={{ width: '100%' }}>
                               <InputLabel id={'fuel-type-label'}>Car Model</InputLabel>
                               <Select labelId={'fuel-type-label'} label={'Car Model'} name={'carModel'}
-                                      style={{ textAlign: 'left' }} fullWidth>
+                                      style={{ textAlign: 'left' }} fullWidth
+                                      onChange={(e) => {
+                                        setCarModelId(e.target.value);
+                                        setCarYearId(0);
+                                        setCarTrimId(0);
+                                        LoadModelYears(e.target.value, (x) => setCarYearList(x));
+                                        setCarTrimList([]);
+                                      }}>
                                 {carModelList.map((x) => <MenuItem value={x.id}>{x.name}</MenuItem>)}
                               </Select>
                             </FormControl>
@@ -171,8 +192,13 @@ const Fleet = () => {
                             <FormControl sx={{ width: '100%' }}>
                               <InputLabel id={'fuel-type-label'}>Car Year</InputLabel>
                               <Select labelId={'fuel-type-label'} label={'Car Year'} name={'carYear'}
-                                      style={{ textAlign: 'left' }} fullWidth>
-                                {carMakeList.map((x) => <MenuItem value={x.id}>{x.name}</MenuItem>)}
+                                      style={{ textAlign: 'left' }} fullWidth
+                                      onChange={(e) => {
+                                        setCarYearId(e.target.value);
+                                        setCarTrimId(0);
+                                        LoadCarTrims(e.target.value, (x) => setCarTrimList(x));
+                                      }}>
+                                {carYearList.map((x) => <MenuItem value={x.id}>{x.year}</MenuItem>)}
                               </Select>
                             </FormControl>
                           </Item>
@@ -180,14 +206,17 @@ const Fleet = () => {
                             <FormControl sx={{ width: '100%' }}>
                               <InputLabel id={'fuel-type-label'}>Car Trim</InputLabel>
                               <Select labelId={'fuel-type-label'} label={'Car Trim'} name={'carTrim'}
-                                      style={{ textAlign: 'left' }} fullWidth>
-                                {carMakeList.map((x) => <MenuItem value={x.id}>{x.name}</MenuItem>)}
+                                      style={{ textAlign: 'left' }} fullWidth
+                                      onChange={(e) => {
+                                        setCarTrimId(e.target.value);
+                                      }}>
+                                {carTrimList.map((x) => <MenuItem value={x.id}>{x.name}</MenuItem>)}
                               </Select>
                             </FormControl>
                           </Item>
                           <Item>
                             <Button variant={'contained'}
-                            disabled={carTrimId === 0}
+                                    disabled={carTrimId === 0}
                                     onClick={() => addFleet()}>ADD</Button>
                           </Item>
                         </Stack>
