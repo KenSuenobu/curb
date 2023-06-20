@@ -186,7 +186,9 @@ const Fleet = () => {
                             </FormControl>
                           </Item>
                           <Item>
-                            <Button variant={'contained'} onClick={() => addFleet()}>ADD</Button>
+                            <Button variant={'contained'}
+                            disabled={carTrimId === 0}
+                                    onClick={() => addFleet()}>ADD</Button>
                           </Item>
                         </Stack>
                       </TableCell>
