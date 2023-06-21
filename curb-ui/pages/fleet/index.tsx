@@ -3,7 +3,7 @@ import {IFleet, LoadFleet} from '../../components/database/fleet';
 import {
   Alert,
   Button,
-  FormControl, InputLabel, MenuItem,
+  FormControl, IconButton, InputLabel, MenuItem,
   Paper, Select, Snackbar,
   Stack,
   Table,
@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import {TableHeader} from '../../components/car-definitions/TableHeader';
 import {ICarModel, LoadCarModels} from '../../components/database/car-model';
-import {ArrowRightOutlined} from '@mui/icons-material';
+import {ArrowRightOutlined, PreviewOutlined} from '@mui/icons-material';
 import {errorDialog} from '../../components/dialogs/ConfirmDialog';
 import axios from 'axios';
 import {ICarMake, LoadCarMakes} from '../../components/database/car-make';
@@ -369,13 +369,35 @@ const Fleet = () => {
               Car fleet information saved successfully.
             </Alert>
           </Snackbar>
-          <p/>
-          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1em' }}>
+
+          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1.5em' }}>
             <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Fleet Car Detail</u></Typography>
           </div>
 
           <div style={{ display: 'flex' }}>
             <div style={{ width: '100%' }}>
+              <Stack direction={'row'}>
+                <Item sx={{ width: '25%' }}>
+                  <TextField label={'Dealership Name'} fullWidth value={carFleetData.dealershipName ?? ''}
+                             name={'dealershipName'} onChange={handleChange}/>
+                </Item>
+
+                <Item sx={{ width: '25%' }}>
+                  <TextField label={'Dealership Phone'} fullWidth value={carFleetData.dealershipPhone ?? ''}
+                             name={'dealershipPhone'} onChange={handleChange}/>
+                </Item>
+
+                <Item sx={{ width: '25%' }}>
+                  <TextField label={'Dealership State/Province'} fullWidth value={carFleetData.dealershipState ?? ''}
+                             name={'dealershipState'} onChange={handleChange}/>
+                </Item>
+
+                <Item sx={{ width: '25%' }}>
+                  <TextField label={'Dealership Country'} fullWidth value={carFleetData.dealershipCountry ?? ''}
+                             name={'dealershipCountry'} onChange={handleChange}/>
+                </Item>
+              </Stack>
+
               <Stack direction={'row'}>
                 <Item sx={{ width: '33%' }}>
                   <TextField label={'VIN'} fullWidth value={carFleetData.vin ?? ''}
@@ -390,44 +412,88 @@ const Fleet = () => {
 
                 <Item sx={{ width: '33%' }}>
                   <TextField label={'Purchase Date'} fullWidth value={carFleetData.purchaseDate ?? ''}
-                             name={'purchaseData'} onChange={handleChange}/>
+                             name={'purchaseDate'} onChange={handleChange}/>
                 </Item>
               </Stack>
 
               <Stack direction={'row'}>
-                <Item sx={{ width: '33%' }}>
+                <Item sx={{ width: '25%' }}>
                   <TextField label={'License Plate'} fullWidth value={carFleetData.licensePlate ?? ''}
                              name={'licensePlate'}
                              onChange={handleChange}/>
                 </Item>
 
-                <Item sx={{ width: '34%' }}>
+                <Item sx={{ width: '25%' }}>
                   <TextField label={'License Registration State'} fullWidth value={carFleetData.licenseState ?? ''}
                              name={'licenseState'}
                              onChange={handleChange}/>
                 </Item>
 
-                <Item sx={{ width: '33%' }}>
+                <Item sx={{ width: '25%' }}>
                   <TextField label={'License Registration Country'} fullWidth value={carFleetData.licenseCountry ?? ''}
                              name={'licenseCountry'}
                              onChange={handleChange}/>
                 </Item>
-              </Stack>
 
-              <Stack direction={'row'}>
-                <Item sx={{ width: '50%' }}>
-                  <TextField label={'License Expire Month'} fullWidth value={carFleetData.licenseExpireMonth ?? ''}
+                <Item sx={{ width: '17%' }}>
+                  <TextField label={'Expire Month'} fullWidth value={carFleetData.licenseExpireMonth ?? ''}
                              name={'licenseExpireMonth'}
                              onChange={handleChange}/>
                 </Item>
 
-                <Item sx={{ width: '50%' }}>
-                  <TextField label={'License Expire Year'} fullWidth value={carFleetData.licenseExpireYear ?? ''}
+                <Item sx={{ width: '17%' }}>
+                  <TextField label={'Expire Year'} fullWidth value={carFleetData.licenseExpireYear ?? ''}
                              name={'licenseExpireYear'}
                              onChange={handleChange}/>
                 </Item>
               </Stack>
             </div>
+          </div>
+
+          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1.5em' }}>
+            <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Car Listing Details</u></Typography>
+          </div>
+
+          <div style={{ display: 'flex' }}>
+            <div style={{ width: '100%' }}>
+              <Stack direction={'row'}>
+                <Item sx={{ width: '25%' }}>
+                  <TextField label={'Car Nickname'} fullWidth value={carFleetData.listingNickname ?? ''}
+                             name={'listingNickname'} onChange={handleChange}/>
+                </Item>
+
+                <Item sx={{ width: '75%' }}>
+                  <TextField label={'Car Listing URL'} fullWidth value={carFleetData.listingUrl ?? ''}
+                             name={'listingUrl'} onChange={handleChange}/>
+                </Item>
+
+                <Item>
+                  <IconButton>
+                    <PreviewOutlined
+                      onClick={() => {
+                        if (carFleetData.listingUrl) {
+                          window.open(carFleetData.listingUrl);
+                          return;
+                        }
+
+                        errorDialog('No URL has been specified.');
+                      }}/>
+                  </IconButton>
+                </Item>
+              </Stack>
+            </div>
+          </div>
+
+          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1.5em' }}>
+            <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Car Ownership</u></Typography>
+          </div>
+
+          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1.5em' }}>
+            <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Registration Detail</u></Typography>
+          </div>
+
+          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1.5em' }}>
+            <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Insurance Detail</u></Typography>
           </div>
 
           <div style={{ display: 'flex', width: '100%', textAlign: 'right', paddingTop: '10px' }}>
