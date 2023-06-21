@@ -1,4 +1,4 @@
-import {Body, Controller, Get, HttpStatus, Logger, Param, Post} from "@nestjs/common";
+import {Body, Controller, Get, HttpStatus, Logger, Param, Post, Put} from "@nestjs/common";
 import {ApiBody, ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation, ApiTags, ApiUnauthorizedResponse} from "@nestjs/swagger";
@@ -67,6 +67,25 @@ export class FleetController {
   @ApiUnauthorizedResponse()
   async listCarMakes(): Promise<FleetDto[]> {
     return this.service.listFleets();
+  }
+
+  @Put('/save/car')
+  @ApiOperation({
+    summary: 'Saves a FleetCar object',
+    description: 'Saves an existing FleetCar object.'
+  })
+  @ApiBody({
+    description: 'The FleetCar object to create',
+    type: FleetCarDto,
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: Boolean,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async saveCarFleet(@Body() payload: FleetCarDto): Promise<boolean> {
+    return this.service.saveCarFleet(payload);
   }
 
   @Get('/list/:fleetId')

@@ -17,6 +17,11 @@ export class FleetService {
     return dao.create(payload);
   }
 
+  async saveCarFleet(payload: FleetCarDto): Promise<boolean> {
+    const dao = new FleetCarDao(DaoUtils.getDatabase());
+    return dao.edit(payload.id, payload);
+  }
+
   async listFleets(): Promise<FleetDto[]> {
     const dao = new FleetDao(DaoUtils.getDatabase());
     return dao.list();

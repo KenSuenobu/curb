@@ -1,18 +1,21 @@
 import * as pgPromise from 'pg-promise';
+import {DaoUtils} from './dao-utils.dao';
 
 export class BaseDao<T> {
   constructor(readonly db: pgPromise.IDatabase<any>, readonly section: string) { }
 
   async list(): Promise<T[]> {
     const selectStatement = `SELECT * FROM ${this.section}`;
+    const returnResults: T[] = [];
 
-    return this.db.any<T>(selectStatement);
+    return (await this.db.any<T>(selectStatement))
+      .map((x) => DaoUtils.normalizeFields<T>(x));
   }
 
   async getById(id: number): Promise<T> {
     const selectStatement = `SELECT * FROM ${this.section} WHERE id=$1`;
 
-    return this.db.oneOrNone<T>(selectStatement, [id]);
+    return DaoUtils.normalizeFields<T>(this.db.oneOrNone<T>(selectStatement, [id]));
   }
 
   async getByName(name: string): Promise<T> {
