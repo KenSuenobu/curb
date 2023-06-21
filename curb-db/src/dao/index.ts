@@ -4,3 +4,4 @@ export * from './car-trim.dao';
 export * from './car-trim-info.dao';
 export * from './car-year.dao';
 export * from './fleet.dao';
+export * from './fleet-car.dao';

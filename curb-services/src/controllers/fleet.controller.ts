@@ -1,9 +1,9 @@
-import {Body, Controller, Get, HttpStatus, Logger, Post} from "@nestjs/common";
+import {Body, Controller, Get, HttpStatus, Logger, Param, Post} from "@nestjs/common";
 import {ApiBody, ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation, ApiTags, ApiUnauthorizedResponse} from "@nestjs/swagger";
 import {CarMakeService} from "../services/car-make.service";
-import {CarMakeDto, FleetDto} from "curb-db/dist/dto";
+import {CarMakeDto, FleetCarDto, FleetDto} from 'curb-db/dist/dto';
 import {FleetService} from '../services/fleet.service';
 
 @ApiTags('fleet')
@@ -33,6 +33,26 @@ export class FleetController {
     return this.service.createFleet(payload);
   }
 
+  @Post('/create/car')
+  @ApiOperation({
+    summary: 'Create a new Fleet Car object',
+    description: 'Creates a new fleet car association with a fleet',
+  })
+  @ApiBody({
+    description: 'The FleetCar object to create',
+    type: FleetCarDto,
+  })
+  @ApiCreatedResponse({
+    status: HttpStatus.CREATED,
+    type: FleetCarDto,
+  })
+  @ApiConflictResponse()
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async createFleetCar(@Body() payload: FleetCarDto): Promise<FleetCarDto> {
+    return this.service.createFleetCar(payload);
+  }
+
   @Get('/list')
   @ApiOperation({
     summary: 'Lists all Fleet objects',
@@ -47,6 +67,22 @@ export class FleetController {
   @ApiUnauthorizedResponse()
   async listCarMakes(): Promise<FleetDto[]> {
     return this.service.listFleets();
+  }
+
+  @Get('/list/:fleetId')
+  @ApiOperation({
+    summary: 'Lists all FleetCar objects by fleet ID',
+    description: 'Retrieves a list of all of the fleet cars associated with a fleet ID.',
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: FleetCarDto,
+    isArray: true,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async listFleetCars(@Param('fleetId') fleetId: number): Promise<FleetCarDto[]> {
+    return this.service.listFleetCars(fleetId);
   }
 
 }
