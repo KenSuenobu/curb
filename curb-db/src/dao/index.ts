@@ -5,3 +5,4 @@ export * from './car-trim-info.dao';
 export * from './car-year.dao';
 export * from './fleet.dao';
 export * from './fleet-car.dao';
+export * from './fleet-car-loan.dao';
