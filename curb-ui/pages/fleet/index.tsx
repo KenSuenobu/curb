@@ -9,14 +9,14 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
+  TableContainer, TableHead,
   TableRow,
   TextField,
   Typography
 } from '@mui/material';
 import {TableHeader} from '../../components/car-definitions/TableHeader';
 import {ICarModel, LoadCarModels} from '../../components/database/car-model';
-import {ArrowRightOutlined, PreviewOutlined} from '@mui/icons-material';
+import {AddOutlined, ArrowRightOutlined, ClearOutlined, DeleteOutlined, PreviewOutlined} from '@mui/icons-material';
 import {errorDialog} from '../../components/dialogs/ConfirmDialog';
 import axios from 'axios';
 import {ICarMake, LoadCarMakes} from '../../components/database/car-make';
@@ -36,6 +36,8 @@ const Fleet = () => {
   const [carTrimList, setCarTrimList] = useState<ICarTrim[]>([]);
   const [fleetInputShowing, setFleetInputShowing] = useState(false);
   const [fleetCarInputShowing, setFleetCarInputShowing] = useState(false);
+  const [ownershipInputShowing, setOwnershipInputShowing] = useState(false);
+  const [insuranceInputShowing, setInsuranceInputShowing] = useState(false);
   const [fleetId, setFleetId] = useState(0);
   const [fleetCarId, setFleetCarId] = useState(0);
   const [carMakeId, setCarMakeId] = useState(0);
@@ -46,6 +48,12 @@ const Fleet = () => {
   const [carFleetData, setCarFleetData] = useState({});
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const fleetRef = useRef();
+  const ownershipNameRef = useRef();
+  const ownershipPercentageRef = useRef();
+  const ownershipPhoneRef = useRef();
+  const insuranceNameRef = useRef();
+  const insurancePriceRef = useRef();
+  const insuranceScheduleRef = useRef();
 
   const reloadFleet = () => {
     LoadFleet((x: IFleet[]) => setFleetList(x));
@@ -129,6 +137,66 @@ const Fleet = () => {
       ...carFleetData,
       [e.target.name]: e.target.value,
     });
+  }
+
+  const addOwnershipDetail = () => {
+    const ownerName = ownershipNameRef.current.value;
+    const ownerPhone = ownershipPhoneRef.current.value;
+    const ownerPercent = ownershipPercentageRef.current.value;
+
+    if (!ownerName || !ownerPhone || !ownerPercent) {
+      errorDialog('Owner name, phone, and percentage are required fields.');
+      return;
+    }
+
+    const ownership = carFleetData.ownership ?? [];
+
+    ownership.push({
+      name: ownerName,
+      phone: ownerPhone,
+      ownership: ownerPercent,
+    });
+
+    setCarFleetData({
+      ...carFleetData,
+      ownership,
+    });
+
+    ownershipNameRef.current.value = '';
+    ownershipPhoneRef.current.value = '';
+    ownershipPercentageRef.current.value = '';
+
+    setOwnershipInputShowing(false);
+  }
+
+  const addInsuranceDetail = () => {
+    const insuranceName = insuranceNameRef.current.value;
+    const insurancePrice = insurancePriceRef.current.value;
+    const insuranceSchedule = insuranceScheduleRef.current.value;
+
+    if (!insuranceName || !insurancePrice || !insuranceSchedule) {
+      errorDialog('Insurance name, price, and payment schedule rate are required fields.');
+      return;
+    }
+
+    const insurance = carFleetData.insurance ?? [];
+
+    insurance.push({
+      name: insuranceName,
+      price: insurancePrice,
+      schedule: insuranceSchedule,
+    });
+
+    setCarFleetData({
+      ...carFleetData,
+      insurance,
+    });
+
+    insuranceNameRef.current.value = '';
+    insurancePriceRef.current.value = '';
+    insuranceScheduleRef.current.value = '';
+
+    setInsuranceInputShowing(false);
   }
 
   useEffect(() => reloadFleet(), []);
@@ -331,7 +399,11 @@ const Fleet = () => {
                                 setCarModelList([]);
                                 setCarYearList([]);
                                 setCarTrimList([]);
-                              }}><Typography>{x.carTrimId}</Typography></TableCell>
+                              }}>
+                              <Typography>
+                                {x.carYear} {x.makeName} {x.modelName} {x.trimName}: "{x.data.listingNickname ?? 'Unnamed'}"
+                              </Typography>
+                            </TableCell>
                             <TableCell
                               onClick={() => {
                                 setFleetCarId(x.id);
@@ -346,7 +418,11 @@ const Fleet = () => {
                                 setCarYearList([]);
                                 setCarTrimList([]);
                               }}
-                              sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}></TableCell>
+                              sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}>
+                              <IconButton>
+                                <DeleteOutlined/>
+                              </IconButton>
+                            </TableCell>
                           </TableRow>
                         </>
                       )}
@@ -399,20 +475,25 @@ const Fleet = () => {
               </Stack>
 
               <Stack direction={'row'}>
-                <Item sx={{ width: '33%' }}>
+                <Item sx={{ width: '25%' }}>
                   <TextField label={'VIN'} fullWidth value={carFleetData.vin ?? ''}
                              name={'vin'} onChange={handleChange}/>
                 </Item>
 
-                <Item sx={{ width: '34%' }}>
+                <Item sx={{ width: '25%' }}>
                   <TextField label={'Purchase Price'} fullWidth value={carFleetData.purchasePrice ?? ''}
                              inputProps={{ type: 'number' }} name={'purchasePrice'}
                              onChange={handleChange}/>
                 </Item>
 
-                <Item sx={{ width: '33%' }}>
+                <Item sx={{ width: '25%' }}>
                   <TextField label={'Purchase Date'} fullWidth value={carFleetData.purchaseDate ?? ''}
                              name={'purchaseDate'} onChange={handleChange}/>
+                </Item>
+
+                <Item sx={{ width: '25%' }}>
+                  <TextField label={'Color'} fullWidth value={carFleetData.color ?? ''}
+                             name={'color'} onChange={handleChange}/>
                 </Item>
               </Stack>
 
@@ -484,16 +565,174 @@ const Fleet = () => {
             </div>
           </div>
 
-          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1.5em' }}>
-            <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Car Ownership</u></Typography>
+          <div style={{ display: 'flex', paddingTop: '1em' }}>
+            <div style={{ width: '100%', paddingLeft: '1em' }}>
+              <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Car Ownership</u></Typography>
+
+              <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
+                <Table stickyHeader size={'small'}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '35%' }}>Owner Name</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '35%' }}>Contact Phone</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '20%' }}>Percentage</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '10%', textAlign: 'right' }}>
+                        <IconButton size={'small'} onClick={() => setOwnershipInputShowing(!ownershipInputShowing)}>
+                          <AddOutlined/>
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  {ownershipInputShowing ? (
+                    <>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>
+                            <TextField
+                              label={'Owner Name'} autoFocus fullWidth variant={'standard'}
+                              inputRef={ownershipNameRef}
+                              onKeyDown={(ev) => {
+                                if (ev.key === 'Escape') {
+                                  setOwnershipInputShowing(false);
+                                } else if (ev.key === 'Enter') {
+                                  addOwnershipDetail();
+                                }
+                              }}/>
+                          </TableCell>
+                          <TableCell>
+                            <TextField
+                              label={'Contact Phone'} fullWidth variant={'standard'}
+                              inputRef={ownershipPhoneRef}
+                              onKeyDown={(ev) => {
+                                if (ev.key === 'Escape') {
+                                  setOwnershipInputShowing(false);
+                                } else if (ev.key === 'Enter') {
+                                  addOwnershipDetail();
+                                }
+                              }}/>
+                          </TableCell>
+                          <TableCell>
+                            <TextField
+                              label={'Percentage'} fullWidth variant={'standard'}
+                              inputRef={ownershipPercentageRef}
+                              onKeyDown={(ev) => {
+                                if (ev.key === 'Escape') {
+                                  setOwnershipInputShowing(false);
+                                } else if (ev.key === 'Enter') {
+                                  addOwnershipDetail();
+                                }
+                              }}/>
+                          </TableCell>
+                          <TableCell>
+                            <Button variant={'contained'}
+                                    onClick={() => addOwnershipDetail()}>ADD</Button>
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </>
+                  ) : (
+                    <>
+                    </>
+                  )}
+                  {carFleetData.ownership && (
+                    <>
+                      {carFleetData.ownership.map((x) => (
+                        <TableRow hover>
+                          <TableCell>{x.name}</TableCell>
+                          <TableCell>{x.phone}</TableCell>
+                          <TableCell>{x.ownership}%</TableCell>
+                        </TableRow>
+                      ))}
+                    </>
+                  )}
+                </Table>
+              </TableContainer>
+            </div>
           </div>
 
-          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1.5em' }}>
-            <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Registration Detail</u></Typography>
-          </div>
+          <div style={{ display: 'flex', paddingTop: '1em' }}>
+            <div style={{ width: '100%', paddingLeft: '1em' }}>
+              <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Insurance Detail</u></Typography>
 
-          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1.5em' }}>
-            <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Insurance Detail</u></Typography>
+              <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
+                <Table stickyHeader size={'small'}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '35%' }}>Insurance Provider</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '35%' }}>Price</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '20%' }}>Payment Schedule</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '10%', textAlign: 'right' }}>
+                        <IconButton size={'small'} onClick={() => setInsuranceInputShowing(!insuranceInputShowing)}>
+                          <AddOutlined/>
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  {insuranceInputShowing ? (
+                    <>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>
+                            <TextField
+                              label={'Insurance Name'} autoFocus fullWidth variant={'standard'}
+                              inputRef={insuranceNameRef}
+                              onKeyDown={(ev) => {
+                                if (ev.key === 'Escape') {
+                                  setInsuranceInputShowing(false);
+                                } else if (ev.key === 'Enter') {
+                                  addInsuranceDetail();
+                                }
+                              }}/>
+                          </TableCell>
+                          <TableCell>
+                            <TextField
+                              label={'Insurance Payment'} fullWidth variant={'standard'}
+                              inputRef={insurancePriceRef}
+                              onKeyDown={(ev) => {
+                                if (ev.key === 'Escape') {
+                                  setInsuranceInputShowing(false);
+                                } else if (ev.key === 'Enter') {
+                                  addInsuranceDetail();
+                                }
+                              }}/>
+                          </TableCell>
+                          <TableCell>
+                            <TextField
+                              label={'Payment Schedule'} fullWidth variant={'standard'}
+                              inputRef={insuranceScheduleRef}
+                              onKeyDown={(ev) => {
+                                if (ev.key === 'Escape') {
+                                  setInsuranceInputShowing(false);
+                                } else if (ev.key === 'Enter') {
+                                  addInsuranceDetail();
+                                }
+                              }}/>
+                          </TableCell>
+                          <TableCell>
+                            <Button variant={'contained'}
+                                    onClick={() => addInsuranceDetail()}>ADD</Button>
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </>
+                  ) : (
+                    <>
+                    </>
+                  )}
+                  {carFleetData.insurance && (
+                    <>
+                      {carFleetData.insurance.map((x) => (
+                        <TableRow hover>
+                          <TableCell>{x.name}</TableCell>
+                          <TableCell>$ {x.price}</TableCell>
+                          <TableCell>{x.schedule}</TableCell>
+                        </TableRow>
+                      ))}
+                    </>
+                  )}
+                </Table>
+              </TableContainer>
+            </div>
           </div>
 
           <div style={{ display: 'flex', width: '100%', textAlign: 'right', paddingTop: '10px' }}>

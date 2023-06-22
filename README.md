@@ -39,6 +39,7 @@ Phase 1:
   - Car year
   - Car trim
   - Car trim info
+  - Fleet car info
 
 [//]: # (  - Address database)
 

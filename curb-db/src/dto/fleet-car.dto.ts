@@ -1,4 +1,4 @@
-import {ApiProperty} from "@nestjs/swagger";
+import {ApiHideProperty, ApiProperty} from '@nestjs/swagger';
 
 export class FleetCarDto {
   @ApiProperty({
@@ -29,4 +29,16 @@ export class FleetCarDto {
     required: true,
   })
   data: any;
+
+  @ApiHideProperty()
+  trimName: string;
+
+  @ApiHideProperty()
+  carYear: string;
+
+  @ApiHideProperty()
+  modelName: string;
+
+  @ApiHideProperty()
+  makeName: string;
 }

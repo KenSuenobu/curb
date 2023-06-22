@@ -39,6 +39,11 @@ import {
   DirectionsCarOutlined,
   GarageOutlined,
   MoneyOutlined,
+  CalendarMonthOutlined,
+  CalendarTodayOutlined,
+  PersonRemoveOutlined,
+  PersonOffOutlined,
+  LocalAtmOutlined,
 } from '@mui/icons-material';
 import CarDefinitions from './car-definitions';
 import Fleet from "./fleet";
@@ -69,19 +74,54 @@ const Home: NextPage = () => {
         icon: <MoneyOutlined/>,
         label: 'Car Loans',
         onClick: () => setCurrentPage(<></>),
-      }
-    ]
+      },
+    ],
   };
   const tripsItems: SideBarMenuGroupProps = {
     label: 'Trips',
     items: [
       {
-        icon: <DirectionsCarOutlined/>,
-        label: 'Rentals',
+        icon: <CalendarTodayOutlined/>,
+        label: 'Today\'s Trips',
         onClick: () => setCurrentPage(<></>),
-      }
-    ]
-  }
+      },
+      {
+        icon: <DirectionsCarOutlined/>,
+        label: 'Future Trips',
+        onClick: () => setCurrentPage(<></>),
+      },
+      {
+        icon: <CalendarMonthOutlined/>,
+        label: 'Past Trips',
+        onClick: () => setCurrentPage(<></>),
+      },
+    ],
+  };
+  const guestsItems: SideBarMenuGroupProps = {
+    label: 'Guests',
+    items: [
+      {
+        icon: <PersonOutlined/>,
+        label: 'Guests',
+        onClick: () => setCurrentPage(<></>),
+      },
+      {
+        icon: <PersonOffOutlined/>,
+        label: 'Blacklisted Guests',
+        onClick: () => setCurrentPage(<></>),
+      },
+    ],
+  };
+  const financialsItems: SideBarMenuGroupProps = {
+    label: 'Financials',
+    items: [
+      {
+        icon: <LocalAtmOutlined/>,
+        label: 'Monthly Payouts',
+        onClick: () => setCurrentPage(<></>),
+      },
+    ],
+  };
   // const accountsItems: SideBarMenuGroupProps = {
   //   label: "ACCOUNTS",
   //   items: [
@@ -181,7 +221,7 @@ const Home: NextPage = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <SideBar width={260} sidebarItems={[carItems, fleetItems, tripsItems, ]} />
+      <SideBar width={260} sidebarItems={[carItems, fleetItems, tripsItems, guestsItems, financialsItems, ]} />
       <Box
         component="main"
         sx={{ flexGrow: 1, p: 3, backgroundColor: '#fff'  }}
