@@ -27,6 +27,22 @@ import {IFleetCar, LoadFleetCars } from '../../components/database/fleet-car';
 
 const SELECTED_COLOR = '#ccf';
 
+const ColorDatabase = [
+  { label: 'Gray', color: '#888', },
+  { label: 'White', color: '#fff', },
+  { label: 'Black', color: '#000', },
+  { label: 'Red', color: '#f00', },
+  { label: 'Blue', color: '#00f', },
+  { label: 'Green', color: '#0f0', },
+  { label: 'Yellow', color: '#ff0', },
+  { label: 'Silver', color: '#bbb', },
+  { label: 'Beige', color: '#C8AD7F', },
+  { label: 'Brown', color: '#9E6847', },
+  { label: 'Gold', color: '#F5BD02', },
+  { label: 'Burgundy', color: '#800020', },
+  { label: 'Purple', color: '#690FAD', },
+]
+
 const Fleet = () => {
   const [fleetList, setFleetList] = useState<IFleet[]>([]);
   const [fleetCarList, setFleetCarList] = useState<IFleetCar[]>([]);
@@ -492,8 +508,24 @@ const Fleet = () => {
                 </Item>
 
                 <Item sx={{ width: '25%' }}>
-                  <TextField label={'Color'} fullWidth value={carFleetData.color ?? ''}
-                             name={'color'} onChange={handleChange}/>
+                  <FormControl fullWidth>
+                    <InputLabel id={'color-label'}>Color</InputLabel>
+                    <Select labelId={'color-label'} label={'Color'}
+                            style={{ textAlign: 'left' }}
+                            value={carFleetData.color ?? 0}
+                            name={'color'}
+                            onChange={handleChange}
+                            fullWidth>
+                      {ColorDatabase.map((x) => (
+                        <MenuItem value={x.label}>
+                          <Stack direction={'row'}>
+                            <div style={{ width: '24px', backgroundColor: x.color }}>&nbsp;</div>
+                            <div style={{ paddingLeft: '10px' }}><Typography>{x.label}</Typography></div>
+                          </Stack>
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Item>
               </Stack>
 
