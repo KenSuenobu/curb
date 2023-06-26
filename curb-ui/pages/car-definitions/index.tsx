@@ -640,7 +640,7 @@ const CarDefinitions: NextPage = () => {
             <div style={{ width: '50%' }}>
               <Stack direction={'row'}>
                 <Item sx={{ width: '50%' }}>
-                  <TextField label={'MSRP/Base Price'} fullWidth value={trimInfoPayload.msrp ?? ''}
+                  <TextField label={'MSRP/Base Price'} fullWidth value={trimInfoPayload?.msrp ?? ''}
                              inputProps={{ type: 'number' }} name={'msrp'}
                              onChange={handleChange}/>
                 </Item>
@@ -648,7 +648,7 @@ const CarDefinitions: NextPage = () => {
                   <FormControl fullWidth>
                     <InputLabel id={'fuel-type-label'}>Fuel Type</InputLabel>
                     <Select labelId={'fuel-type-label'} label={'Fuel Type'} name={'fuelType'}
-                            style={{ textAlign: 'left' }} value={trimInfoPayload.fuelType ?? 0} fullWidth
+                            style={{ textAlign: 'left' }} value={trimInfoPayload?.fuelType ?? 0} fullWidth
                             onChange={handleChange}>
                       <MenuItem value={0}>Regular</MenuItem>
                       <MenuItem value={1}>Mid-Grade</MenuItem>
@@ -669,7 +669,7 @@ const CarDefinitions: NextPage = () => {
                     <InputLabel id={'transmission-label'}>Transmission</InputLabel>
                     <Select labelId={'transmission-label'} label={'Transmission'}
                             style={{ textAlign: 'left' }}
-                            value={trimInfoPayload.transmission ?? 0}
+                            value={trimInfoPayload?.transmission ?? 0}
                             name={'transmission'}
                             onChange={handleChange}
                             fullWidth>
@@ -686,7 +686,7 @@ const CarDefinitions: NextPage = () => {
                   <FormControl fullWidth>
                     <InputLabel id={'drivetrain-label'}>Drivetrain</InputLabel>
                     <Select labelId={'drivetrain-label'} label={'Drivetrain'} style={{ textAlign: 'left' }}
-                            value={trimInfoPayload.driveTrain ?? 0} fullWidth name={'driveTrain'}
+                            value={trimInfoPayload?.driveTrain ?? 0} fullWidth name={'driveTrain'}
                             onChange={handleChange}>
                       <MenuItem value={0}>Front-Wheel Drive</MenuItem>
                       <MenuItem value={1}>Rear-Wheel Drive</MenuItem>
@@ -701,30 +701,30 @@ const CarDefinitions: NextPage = () => {
             <div style={{ width: '50%' }}>
               <Stack direction={'row'}>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Doors'} fullWidth value={trimInfoPayload.doors ?? ''} name={'doors'}
+                  <TextField label={'Doors'} fullWidth value={trimInfoPayload?.doors ?? ''} name={'doors'}
                              onChange={handleChange}/>
                 </Item>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Seats'} fullWidth value={trimInfoPayload.seats ?? ''} name={'seats'}
+                  <TextField label={'Seats'} fullWidth value={trimInfoPayload?.seats ?? ''} name={'seats'}
                              onChange={handleChange}/>
                 </Item>
                 <Item sx={{ width: '33%' }}>
-                  <TextField label={'Rows'} fullWidth value={trimInfoPayload.rows ?? ''} name={'rows'}
+                  <TextField label={'Rows'} fullWidth value={trimInfoPayload?.rows ?? ''} name={'rows'}
                              onChange={handleChange}/>
                 </Item>
               </Stack>
 
               <Stack direction={'row'}>
                 <Item sx={{ width: '37%' }}>
-                  <TextField label={'Front Tire Size'} fullWidth value={trimInfoPayload.frontTire ?? ''} name={'frontTire'}
+                  <TextField label={'Front Tire Size'} fullWidth value={trimInfoPayload?.frontTire ?? ''} name={'frontTire'}
                              onChange={handleChange}/>
                 </Item>
                 <Item sx={{ width: '37%' }}>
-                  <TextField label={'Rear Tire Size'} fullWidth value={trimInfoPayload.rearTire ?? ''} name={'rearTire'}
+                  <TextField label={'Rear Tire Size'} fullWidth value={trimInfoPayload?.rearTire ?? ''} name={'rearTire'}
                              onChange={handleChange}/>
                 </Item>
                 <Item sx={{ width: '25%' }}>
-                  <TextField label={'Cargo Area'} value={trimInfoPayload.cargoArea ?? ''} helperText={'(ft³)'} fullWidth
+                  <TextField label={'Cargo Area'} value={trimInfoPayload?.cargoArea ?? ''} helperText={'(ft³)'} fullWidth
                              inputProps={{ type: 'number' }} name={'cargoArea'}
                              onChange={handleChange}/>
                 </Item>
@@ -740,14 +740,14 @@ const CarDefinitions: NextPage = () => {
             <div style={{ width: '33%' }}>
               <Stack direction={'row'}>
                 <Item sx={{ width: '100%' }}>
-                  <TextField label={'Horsepower'} fullWidth value={trimInfoPayload.horsepower ?? ''}
+                  <TextField label={'Horsepower'} fullWidth value={trimInfoPayload?.horsepower ?? ''}
                              inputProps={{ type: 'number' }} name={'horsepower'}
                              onChange={handleChange}/>
                 </Item>
               </Stack>
               <Stack direction={'row'}>
                 <Item sx={{ width: '100%' }}>
-                  <TextField label={'Torque'} fullWidth value={trimInfoPayload.torque ?? ''}
+                  <TextField label={'Torque'} fullWidth value={trimInfoPayload?.torque ?? ''}
                              inputProps={{ type: 'number' }} name={'torque'}
                              onChange={handleChange}/>
                 </Item>
@@ -757,21 +757,21 @@ const CarDefinitions: NextPage = () => {
             <div style={{ width: '33%' }}>
               <Stack direction={'row'}>
                 <Item sx={{ width: '100%' }}>
-                  <TextField label={'Top Speed'} fullWidth value={trimInfoPayload.topSpeed ?? ''} name={'topSpeed'}
+                  <TextField label={'Top Speed'} fullWidth value={trimInfoPayload?.topSpeed ?? ''} name={'topSpeed'}
                              onChange={handleChange}/>
                 </Item>
               </Stack>
 
               <Stack direction={'row'}>
                 <Item sx={{ width: '100%' }}>
-                  <TextField label={'0-60 Time'} fullWidth value={trimInfoPayload.timeToSixty ?? ''} name={'timeToSixty'}
+                  <TextField label={'0-60 Time'} fullWidth value={trimInfoPayload?.timeToSixty ?? ''} name={'timeToSixty'}
                              onChange={handleChange}/>
                 </Item>
               </Stack>
 
               <Stack direction={'row'}>
                 <Item sx={{ width: '100%' }}>
-                  <TextField label={'Charge Time to 80%'} fullWidth value={trimInfoPayload.chargeToEighty ?? ''} name={'chargeToEighty'}
+                  <TextField label={'Charge Time to 80%'} fullWidth value={trimInfoPayload?.chargeToEighty ?? ''} name={'chargeToEighty'}
                              onChange={handleChange}/>
                 </Item>
               </Stack>
@@ -780,21 +780,21 @@ const CarDefinitions: NextPage = () => {
             <div style={{ width: '33%' }}>
               <Stack direction={'row'}>
                 <Item sx={{ width: '100%' }}>
-                  <TextField label={'MPG Highway'} fullWidth value={trimInfoPayload.mpgHwy ?? ''} name={'mpgHwy'}
+                  <TextField label={'MPG Highway'} fullWidth value={trimInfoPayload?.mpgHwy ?? ''} name={'mpgHwy'}
                              onChange={handleChange}/>
                 </Item>
               </Stack>
 
               <Stack direction={'row'}>
                 <Item sx={{ width: '100%' }}>
-                  <TextField label={'MPG City'} fullWidth value={trimInfoPayload.mpgCity ?? ''} name={'mpgCity'}
+                  <TextField label={'MPG City'} fullWidth value={trimInfoPayload?.mpgCity ?? ''} name={'mpgCity'}
                              onChange={handleChange}/>
                 </Item>
               </Stack>
 
               <Stack direction={'row'}>
                 <Item sx={{ width: '100%' }}>
-                  <TextField label={'MPG Combined / Range'} fullWidth value={trimInfoPayload.range ?? ''} name={'range'}
+                  <TextField label={'MPG Combined / Range'} fullWidth value={trimInfoPayload?.range ?? ''} name={'range'}
                              onChange={handleChange}/>
                 </Item>
               </Stack>
@@ -889,7 +889,7 @@ const CarDefinitions: NextPage = () => {
                     </>
                   )}
                   <TableBody>
-                    {trimInfoPayload.optionList?
+                    {trimInfoPayload?.optionList?
                       .sort((a, b) => (a.name > b.name ? 1 : -1))
                       .map((x) => (
                       <>
@@ -967,7 +967,7 @@ const CarDefinitions: NextPage = () => {
                   </>
                 )}
                 <TableBody>
-                  {trimInfoPayload.siteList?
+                  {trimInfoPayload?.siteList?
                     .sort((a, b) => (a.name > b.name ? 1 : -1))
                     .map((x) => (
                     <>
