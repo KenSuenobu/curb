@@ -72,7 +72,7 @@ const Home: NextPage = () => {
       },
       {
         icon: <MoneyOutlined/>,
-        label: 'Car Loans',
+        label: 'Fleet Car Loans',
         onClick: () => setCurrentPage(<></>),
       },
     ],
