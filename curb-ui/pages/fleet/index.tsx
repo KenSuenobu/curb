@@ -655,9 +655,9 @@ const Fleet = () => {
                     <>
                       {carFleetData.ownership.map((x) => (
                         <TableRow hover>
-                          <TableCell>{x.name}</TableCell>
-                          <TableCell>{x.phone}</TableCell>
-                          <TableCell>{x.ownership}%</TableCell>
+                          <TableCell sx={{ color: '#000' }}>{x.name}</TableCell>
+                          <TableCell sx={{ color: '#000' }}>{x.phone}</TableCell>
+                          <TableCell sx={{ color: '#000' }}>{x.ownership} %</TableCell>
                         </TableRow>
                       ))}
                     </>
@@ -740,9 +740,9 @@ const Fleet = () => {
                     <>
                       {carFleetData.insurance.map((x) => (
                         <TableRow hover>
-                          <TableCell>{x.name}</TableCell>
-                          <TableCell>$ {x.price}</TableCell>
-                          <TableCell>{x.schedule}</TableCell>
+                          <TableCell sx={{ color: '#000' }}>{x.name}</TableCell>
+                          <TableCell sx={{ color: '#000' }}>$ {x.price}</TableCell>
+                          <TableCell sx={{ color: '#000' }}>{x.schedule}</TableCell>
                         </TableRow>
                       ))}
                     </>
