@@ -33,6 +33,9 @@ Phase 1:
     - Car Fleet ID
     - Car Trim ID
     - Data (JSONB)
+  - Fleet Car Loan
+    - Fleet Car Id
+    - Data (JSONB)
 - User Interface:
   - Car make
   - Car model
@@ -40,6 +43,7 @@ Phase 1:
   - Car trim
   - Car trim info
   - Fleet car info
+  - Fleet car loan info
 
 [//]: # (  - Address database)
 
