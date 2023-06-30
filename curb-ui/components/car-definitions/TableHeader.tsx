@@ -4,8 +4,8 @@ import React from 'react';
 
 export interface ITableHeader {
   header: string;
-  onAdd: () => any;
-  onEdit: () => any;
+  onAdd?: () => any;
+  onEdit?: () => any;
 }
 
 export const TableHeader = (props: ITableHeader) => {
@@ -13,11 +13,13 @@ export const TableHeader = (props: ITableHeader) => {
     <TableHead>
       <TableRow>
         <TableCell sx={{ backgroundColor: '#ddd' }}>{props.header}</TableCell>
-        <TableCell sx={{ backgroundColor: '#ddd', textAlign: 'right', borderRight: '1px solid #aaa' }}>
-          <IconButton onClick={() => props.onAdd()}>
-            <AddOutlined/>
-          </IconButton>
-        </TableCell>
+          <TableCell sx={{ backgroundColor: '#ddd', textAlign: 'right', borderRight: '1px solid #aaa' }}>
+            {props.onAdd && (
+              <IconButton onClick={() => props.onAdd!()}>
+                <AddOutlined/>
+              </IconButton>
+            )}
+          </TableCell>
       </TableRow>
     </TableHead>
   );

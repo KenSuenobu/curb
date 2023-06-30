@@ -5,6 +5,7 @@ import {ApiBody, ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse,
 import {CarMakeService} from "../services/car-make.service";
 import {CarMakeDto, FleetCarDto, FleetDto} from 'curb-db/dist/dto';
 import {FleetService} from '../services/fleet.service';
+import {FleetCarLoanDto} from 'curb-db/dist';
 
 @ApiTags('fleet')
 @Controller('fleet')
@@ -53,6 +54,22 @@ export class FleetController {
     return this.service.createFleetCar(payload);
   }
 
+  @Post('/create/loan')
+  @ApiOperation({
+    summary: 'Create a new Fleet Car Loan object',
+    description: 'Creates a new fleet car loan association with a fleet car',
+  })
+  @ApiBody({
+    description: 'The FleetCarLoan object to create',
+    type: FleetCarLoanDto,
+  })
+  @ApiConflictResponse()
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async createFleetCarLoan(@Body() payload: FleetCarLoanDto): Promise<FleetCarLoanDto> {
+    return this.service.createFleetCarLoan(payload);
+  }
+
   @Get('/list')
   @ApiOperation({
     summary: 'Lists all Fleet objects',
@@ -69,13 +86,28 @@ export class FleetController {
     return this.service.listFleets();
   }
 
+  @Get('/loan/:fleetCarId')
+  @ApiOperation({
+    summary: 'Retrieves a loan by ID',
+    description: 'Retrieves a FleetCarLoan object by its accompanying fleet car ID',
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: FleetCarLoanDto,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async getFleetCarLoan(@Param('fleetCarId') fleetCarId: number): Promise<FleetCarLoanDto> {
+    return this.service.getFleetCarLoan(fleetCarId);
+  }
+
   @Put('/save/car')
   @ApiOperation({
     summary: 'Saves a FleetCar object',
     description: 'Saves an existing FleetCar object.'
   })
   @ApiBody({
-    description: 'The FleetCar object to create',
+    description: 'The FleetCar object to save',
     type: FleetCarDto,
   })
   @ApiOkResponse({
@@ -86,6 +118,25 @@ export class FleetController {
   @ApiUnauthorizedResponse()
   async saveCarFleet(@Body() payload: FleetCarDto): Promise<boolean> {
     return this.service.saveCarFleet(payload);
+  }
+
+  @Put('/save/loan')
+  @ApiOperation({
+    summary: 'Saves a FleetCarLoan object',
+    description: 'Saves an existing FleetCarLoan object.',
+  })
+  @ApiBody({
+    description: 'The FleetCarLoan object to save',
+    type: FleetCarLoanDto,
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: Boolean,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async saveCarFleetLoan(@Body() payload: FleetCarLoanDto): Promise<boolean> {
+    return this.service.saveCarFleetLoan(payload);
   }
 
   @Get('/list/:fleetId')

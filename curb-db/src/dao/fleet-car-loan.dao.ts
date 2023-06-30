@@ -26,6 +26,13 @@ export class FleetCarLoanDao extends BaseDao<FleetCarLoanDto> {
       .map((x) => DaoUtils.normalizeFields<FleetCarLoanDto>(x));
   }
 
+  async getByFleetCarId(fleetCarId: number): Promise<FleetCarLoanDto> {
+    const sqlStatement: string = 'SELECT * FROM curb.fleet_car_loan WHERE fleet_car_id=$1';
+
+    return (await this.db.oneOrNone(sqlStatement, [ fleetCarId, ]))
+      .then((x) => DaoUtils.normalizeFields<FleetCarLoanDto>(x));
+  }
+
   async edit(id: number, payload: FleetCarLoanDto): Promise<boolean> {
     const sqlStatement =
       `UPDATE ${this.section} SET fleet_car_id=$1, data=$2 WHERE id=$3`;

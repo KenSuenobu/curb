@@ -47,6 +47,7 @@ import {
 } from '@mui/icons-material';
 import CarDefinitions from './car-definitions';
 import Fleet from "./fleet";
+import FleetLoans from './fleet-loans';
 
 const drawerWidth = 240;
 
@@ -73,7 +74,7 @@ const Home: NextPage = () => {
       {
         icon: <MoneyOutlined/>,
         label: 'Fleet Car Loans',
-        onClick: () => setCurrentPage(<></>),
+        onClick: () => setCurrentPage(<FleetLoans/>),
       },
     ],
   };
