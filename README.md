@@ -36,6 +36,12 @@ Phase 1:
   - Fleet Car Loan
     - Fleet Car Id
     - Data (JSONB)
+  - Fleet Car Loan Payments
+    - Fleet Car Loan ID
+    - Payment Date
+    - Principal Amount
+    - Interest Amount
+    - Total
 - User Interface:
   - Car make
   - Car model

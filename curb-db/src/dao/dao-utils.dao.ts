@@ -14,8 +14,12 @@ export class DaoUtils {
 
   static toCamelCase = (s) => s.replace(/_(.)/g, (s, c) => c.toUpperCase());
 
-  public static normalizeFields<T>(data: any): T {
+  public static normalizeFields<T>(data: any | undefined | null): T {
     const returnObject: any = {};
+
+    if (!data) {
+      return data;
+    }
 
     for(const key of Object.keys(data)) {
       const newKey = DaoUtils.toCamelCase(key);
