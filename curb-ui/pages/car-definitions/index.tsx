@@ -309,7 +309,7 @@ const CarDefinitions: NextPage = () => {
   }
 
   const deleteOption = (x: any) => {
-    const optionList = trimInfoPayload.optionList ?? [];
+    let optionList = trimInfoPayload.optionList ?? [];
 
     optionList = optionList.filter((y) => y.name !== x.name);
 
@@ -320,7 +320,7 @@ const CarDefinitions: NextPage = () => {
   }
 
   const deleteSite = (x: any) => {
-    const siteList = trimInfoPayload.siteList ?? [];
+    let siteList = trimInfoPayload.siteList ?? [];
 
     siteList = siteList.filter((y) => y.url !== x.url);
 

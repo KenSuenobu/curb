@@ -11,21 +11,6 @@ export class FleetCarLoanDao extends BaseDao<FleetCarLoanDto> {
     super(db, 'curb.fleet_car_loan');
   }
 
-  async listByFleetId(fleetId: number): Promise<FleetCarLoanDto[]> {
-    const sqlStatement: string = 'SELECT a.*, b.name AS trim_name, c.year AS car_year, ' +
-      'd.name AS model_name, e.name AS make_name ' +
-      '  FROM curb.fleet_car_loan a, curb.car_trim b, curb.car_year c, curb.car_model d, curb.car_make e' +
-      ' WHERE b.id=a.car_trim_id ' +
-      '   AND c.id=b.year_id ' +
-      '   AND d.id=c.model_id ' +
-      '   AND e.id=d.make_id ' +
-      '   AND a.fleet_id=$1' +
-      ' ORDER BY car_trim_id';
-
-    return (await this.db.any<FleetCarLoanDto>(sqlStatement, [ fleetId, ]))
-      .map((x) => DaoUtils.normalizeFields<FleetCarLoanDto>(x));
-  }
-
   async getByFleetCarId(fleetCarId: number): Promise<FleetCarLoanDto> {
     const sqlStatement: string = 'SELECT * FROM curb.fleet_car_loan WHERE fleet_car_id=$1';
     const results = await this.db.oneOrNone(sqlStatement, [fleetCarId,]);

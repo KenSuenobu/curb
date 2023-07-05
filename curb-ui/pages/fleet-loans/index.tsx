@@ -5,22 +5,19 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
+  TableContainer, TableHead,
   TableRow,
   TextField,
   Typography
 } from '@mui/material';
 import {TableHeader} from '../../components/car-definitions/TableHeader';
-import {ArrowRightOutlined, DeleteOutlined, PreviewOutlined} from '@mui/icons-material';
+import {AddOutlined, ArrowRightOutlined, DeleteOutlined, PreviewOutlined} from '@mui/icons-material';
 import {errorDialog} from '../../components/dialogs/ConfirmDialog';
 import Item from '../../components/common/Item';
-import {LoadCarModels} from '../../components/database/car-model';
-import {LoadModelYears} from '../../components/database/car-year';
-import {LoadCarTrims} from '../../components/database/car-trim';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {IFleet, LoadFleet} from '../../components/database/fleet';
 import {IFleetCar, LoadFleetCars} from '../../components/database/fleet-car';
-import ColorDatabase from '../../components/common/ColorDatabase';
+import * as moment from 'moment';
 import axios from 'axios';
 
 const SELECTED_COLOR = '#ccf';
@@ -30,9 +27,16 @@ const FleetLoans = () => {
   const [fleetCarList, setFleetCarList] = useState<IFleetCar[]>([]);
   const [fleetId, setFleetId] = useState(0);
   const [fleetCarId, setFleetCarId] = useState(0);
+  const [fleetCarLoanId, setFleetCarLoanId] = useState(0);
   const [fleetLoanData, setFleetLoanData] = useState({});
   const [currentLoanData, setCurrentLoanData] = useState({});
+  const [loanPaymentData, setLoanPaymentData] = useState([]);
+  const [loanPaymentDataShowing, setLoanPaymentDataShowing] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const formDateRef = useRef();
+  const formPrincipalRef = useRef();
+  const formInterestRef = useRef();
+  const formTotalRef = useRef();
 
   const reloadFleet = () => {
     LoadFleet((x: IFleet[]) => setFleetList(x));
@@ -89,6 +93,18 @@ const FleetLoans = () => {
     }
   }
 
+  const loadLoanPayments = (id: number) => {
+    axios.get(`/app/fleet-loan/list/${id}`)
+      .then((x) => {
+        if (!x.data) {
+          setLoanPaymentData([]);
+          return;
+        }
+
+        setLoanPaymentData(x.data);
+      });
+  }
+
   const loadFleetLoan = (id: number) => {
     axios.get(`/app/fleet/loan/${id}`)
       .then((x) => {
@@ -100,6 +116,8 @@ const FleetLoans = () => {
 
         setCurrentLoanData(x.data);
         setFleetLoanData(x.data.data);
+        setFleetCarLoanId(id);
+        loadLoanPayments(id);
       });
   }
 
@@ -108,6 +126,36 @@ const FleetLoans = () => {
       ...fleetLoanData,
       [e.target.name]: e.target.value,
     });
+  }
+
+  const addLoanPayment = () => {
+    const paymentDate = formDateRef.current.value ?? '';
+    const principalAmount = formPrincipalRef.current.value ?? '';
+    const interestAmount = formInterestRef.current.value ?? '';
+    const totalAmount = formTotalRef.current.value ?? '';
+
+    if (paymentDate.length == 0 || principalAmount.length == 0 || interestAmount.length == 0 || totalAmount.length == 0) {
+      errorDialog('Payment date, principal amount, interest amount, and total amount are required.');
+      return;
+    }
+
+    const payload = {
+      fleetCarLoanId,
+      paymentDate,
+      principalAmount,
+      interestAmount,
+      totalAmount,
+    };
+
+    axios.post('/app/fleet-loan/create', payload)
+      .then((x) => {
+        if (x.data) {
+          loadLoanPayments(fleetCarLoanId);
+          return;
+        }
+
+        errorDialog('Unable to create loan payment information');
+      });
   }
 
   useEffect(() => reloadFleet(), []);
@@ -325,6 +373,113 @@ const FleetLoans = () => {
               </Stack>
             </div>
           </div>
+
+          {currentLoanData.fleetCarId && (
+          <div style={{ display: 'flex', paddingTop: '1em' }}>
+            <div style={{ width: '100%', paddingLeft: '1em' }}>
+              <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Payment Detail</u></Typography>
+
+              <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
+                <Table stickyHeader size={'small'}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '10%' }}>#</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '20%' }}>Date</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '20%' }}>Principal</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '20%' }}>Interest</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '20%' }}>Total</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '10%', textAlign: 'right' }}>
+                        <IconButton size={'small'} onClick={() => setLoanPaymentDataShowing(!loanPaymentDataShowing)}>
+                          <AddOutlined/>
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  {loanPaymentDataShowing ? (
+                    <>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell></TableCell>
+                          <TableCell>
+                            <TextField
+                              label={'Payment Date'} autoFocus fullWidth variant={'standard'}
+                              inputRef={formDateRef}
+                              onKeyDown={(ev) => {
+                                if (ev.key === 'Escape') {
+                                  setLoanPaymentDataShowing(false);
+                                }
+                              }}/>
+                          </TableCell>
+                          <TableCell>
+                            <TextField
+                              label={'Principal Payment'} fullWidth variant={'standard'}
+                              inputRef={formPrincipalRef}
+                              onKeyDown={(ev) => {
+                                if (ev.key === 'Escape') {
+                                  setLoanPaymentDataShowing(false);
+                                }
+                              }}/>
+                          </TableCell>
+                          <TableCell>
+                            <TextField
+                              label={'Interest Payment'} fullWidth variant={'standard'}
+                              inputRef={formInterestRef}
+                              onKeyDown={(ev) => {
+                                if (ev.key === 'Escape') {
+                                  setLoanPaymentDataShowing(false);
+                                }
+                              }}/>
+                          </TableCell>
+                          <TableCell>
+                            <TextField
+                              label={'Total Payment'} fullWidth variant={'standard'}
+                              inputRef={formTotalRef}
+                              onKeyDown={(ev) => {
+                                if (ev.key === 'Escape') {
+                                  setLoanPaymentDataShowing(false);
+                                }
+                              }}/>
+                          </TableCell>
+                          <TableCell>
+                            <Button variant={'contained'}
+                                    onClick={() => addLoanPayment()}>ADD</Button>
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </>
+                  ) : (
+                    <>
+                    </>
+                  )}
+                  {loanPaymentData.length > 0 ? (
+                    <>
+                      {loanPaymentData.map((x: any, count) => (
+                        <>
+                          <TableRow sx={{ color: 'black' }} hover>
+                            <TableCell>{loanPaymentData.length - count}</TableCell>
+                            <TableCell>{moment(x.paymentDate).format('MM/DD/YYYY')}</TableCell>
+                            <TableCell>$ {x.principalAmount}</TableCell>
+                            <TableCell>$ {x.interestAmount}</TableCell>
+                            <TableCell colSpan={2}>$ {x.totalAmount}</TableCell>
+                          </TableRow>
+                        </>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      <TableCell colSpan={6}>
+                        <Typography fontWeight={'bold'}>
+                          No payments recorded.
+                        </Typography>
+                      </TableCell>
+                    </>
+                  )}
+                  {console.log(JSON.stringify(loanPaymentData))}
+                </Table>
+              </TableContainer>
+            </div>
+          </div>
+          )}
 
           <div style={{ display: 'flex', width: '100%', textAlign: 'right', paddingTop: '10px' }}>
             <Button onClick={() => saveLoan()}>Save</Button>
