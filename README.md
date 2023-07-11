@@ -13,6 +13,11 @@ track their cars, providing record keeping for each car they host.
 
 Phase 1:
 - Database
+  - User
+    - Username
+    - Password
+    - E-Mail Address
+    - User UUID
   - Car Make
     - Name
   - Car Model

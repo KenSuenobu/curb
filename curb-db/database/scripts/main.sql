@@ -40,7 +40,6 @@ CREATE TABLE curb.group_user (
 
 CREATE UNIQUE INDEX idx_unique_group_user ON curb.group_user(group_id, user_id);
 
-
 ---
 
 DROP TABLE IF EXISTS curb.car_make CASCADE;
