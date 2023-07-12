@@ -35,7 +35,8 @@ DROP INDEX IF EXISTS idx_unique_group_user;
 
 CREATE TABLE curb.group_user (
     group_id INT NOT NULL REFERENCES curb.group(id),
-    user_id INT NOT NULL REFERENCES curb.user(id)
+    user_id INT NOT NULL REFERENCES curb.user(id),
+    is_admin BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE UNIQUE INDEX idx_unique_group_user ON curb.group_user(group_id, user_id);
@@ -201,7 +202,7 @@ INSERT INTO curb.car_model (make_id, name)
             ((SELECT id FROM curb.car_make WHERE name='Audi'), 'e-tron'),
             ((SELECT id FROM curb.car_make WHERE name='Audi'), 'RS'),
             ((SELECT id FROM curb.car_make WHERE name='Audi'), 'Q4'),
-            ((SELECT id FROM curb.car_make WHERE name='Audi'), 'RS 3'),
+            ((SELECT id FROM curb.car_make WHERE name='Audi'), 'RS3'),
             ((SELECT id FROM curb.car_make WHERE name='Audi'), 'S8'),
             ((SELECT id FROM curb.car_make WHERE name='Audi'), 'A8'),
             ((SELECT id FROM curb.car_make WHERE name='Audi'), 'A3'),
@@ -401,6 +402,7 @@ DROP TABLE IF EXISTS curb.fleet_car CASCADE;
 CREATE TABLE curb.fleet_car (
     id SERIAL NOT NULL PRIMARY KEY,
     fleet_id INT NOT NULL REFERENCES curb.fleet(id),
+    owner_id INT NOT NULL REFERENCES curb.user(id),
     car_trim_id INT NOT NULL REFERENCES curb.car_trim(id),
     data JSONB
 );
