@@ -48,7 +48,7 @@ import {
 import CarDefinitions from './car-definitions';
 import Fleet from "./fleet";
 import FleetLoans from './fleet-loans';
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from '@mui/material';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField} from '@mui/material';
 import {useRef} from 'react';
 import {Stack} from '@mui/system';
 import Item from "../components/common/Item";
@@ -57,6 +57,7 @@ import Link from 'next/link';
 import axios from 'axios';
 import {getCookie, setCookie} from 'cookies-next';
 import {useRouter} from 'next/router';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const drawerWidth = 240;
 
@@ -89,46 +90,6 @@ const Home: NextPage = () => {
         icon: <MoneyOutlined/>,
         label: 'Fleet Car Loans',
         onClick: () => setCurrentPage(<FleetLoans/>),
-      },
-    ],
-  };
-  const tripsItems: SideBarMenuGroupProps = {
-    label: 'Trips',
-    items: [
-      {
-        icon: <DirectionsCarOutlined/>,
-        label: 'Trips',
-        onClick: () => setCurrentPage(<></>),
-      },
-      {
-        icon: <CalendarMonthOutlined/>,
-        label: 'Past Trip History',
-        onClick: () => setCurrentPage(<></>),
-      },
-    ],
-  };
-  const tollItems: SideBarMenuGroupProps = {
-    label: 'Tolls',
-    items: [
-      {
-        icon: <TollOutlined/>,
-        label: 'Toll Records',
-        onClick: () => setCurrentPage(<></>),
-      },
-    ],
-  };
-  const guestsItems: SideBarMenuGroupProps = {
-    label: 'Guests',
-    items: [
-      {
-        icon: <PersonOutlined/>,
-        label: 'Guests',
-        onClick: () => setCurrentPage(<></>),
-      },
-      {
-        icon: <PersonOffOutlined/>,
-        label: 'Blacklisted Guests',
-        onClick: () => setCurrentPage(<></>),
       },
     ],
   };
@@ -167,10 +128,10 @@ const Home: NextPage = () => {
     return (
       <>
         <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
-          <div style={{display: 'flex'}}>
+          <div style={{display: 'flex', border: '1px solid #000'}}>
             <div style={{
               backgroundColor: '#66f', textAlign: 'center', paddingTop: '2em', paddingBottom: '2em',
-              paddingLeft: '1em', paddingRight: '1em', width: '300px'
+              paddingLeft: '1em', paddingRight: '1em', width: '300px', borderRight: '1px solid #000'
             }}>
               <Typography variant={'h4'} fontWeight={'bold'}>
                 CURB
@@ -223,29 +184,60 @@ const Home: NextPage = () => {
         </div>
       </>
     );
-  } else {
-    return (
-      <Box sx={{display: "flex"}}>
-        <CssBaseline/>
-        <SideBar width={260} sidebarItems={[
-          carItems,
-          fleetItems,
-          tripsItems,
-          tollItems,
-          guestsItems,
-        ]}/>
-        <Box
-          component="main"
-          sx={{flexGrow: 1, p: 3, backgroundColor: '#fff'}}
-          position={"relative"}
-          left={260}
-          marginRight={"260px"}
-        >
-          {currentPage}
-        </Box>
-      </Box>
-    );
   }
+
+  return (
+    <div style={{ display: 'flex', width: '100%' }}>
+      {/* Side Divider, only contains the sidebar, which is static.*/}
+      <div style={{ width: '260px' }}>
+        <SideBar width={ 260 } sidebarItems={[
+          carItems, fleetItems,
+        ]}/>
+      </div>
+
+      {/* Right side, top portion of the page, contains the top navigation bar. */}
+      <div style={{ position: 'fixed',
+        paddingLeft: '10px',
+        paddingRight: '270px',
+        borderLeft: '1px solid rgb(35, 60, 82)',
+        borderBottom: '1px solid rgb(35, 60, 82)',
+        left: '260px',
+        width: '100%',
+        height: '46px',
+        backgroundColor: 'rgb(5, 30, 52)',
+        color: '#fff' }}>
+        <Stack direction={'row'}>
+          <Item sx={{ width: '90%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'left' }}>
+            <Typography variant={'h6'} fontWeight={'bold'}>
+              {jwt}
+            </Typography>
+          </Item>
+
+          <Item sx={{ width: '10%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'right', paddingTop: '4px' }}>
+            <IconButton>
+              <MenuIcon style={{ color: 'white' }}/>
+            </IconButton>
+          </Item>
+        </Stack>
+      </div>
+
+      {/* Right side main container that displays all relevant content regarding the page that was selected */}
+      <div style={{ position: 'fixed',
+        paddingLeft: '10px',
+        paddingRight: '10px',
+        paddingTop: '10px',
+        left: '260px',
+        top: '47px',
+        width: 'calc(100% - 260px)',
+        height: 'calc(100% - 48px)',
+        backgroundColor: '#fff',
+        color: '#000',
+        overflowY: 'auto',
+      }}>
+        {currentPage}
+      </div>
+    </div>
+  );
 };
 
 export default Home;
