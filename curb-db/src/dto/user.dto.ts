@@ -17,12 +17,12 @@ export class UserDto {
   userId: string;
 
   @ApiProperty({
-    description: 'Username',
+    description: 'E-mail Address',
     nullable: false,
     type: String,
     required: true,
   })
-  username: string;
+  emailAddress: string;
 
   @ApiProperty({
     description: 'Password',
@@ -33,10 +33,17 @@ export class UserDto {
   password: string;
 
   @ApiProperty({
-    description: 'E-mail Address',
+    description: 'Account verified',
     nullable: false,
-    type: String,
+    type: Boolean,
     required: true,
   })
-  emailAddress: string;
+  verified: boolean;
+
+  @ApiProperty({
+    description: 'User Data object',
+    nullable: true,
+    type: Object,
+  })
+  data: any;
 }
