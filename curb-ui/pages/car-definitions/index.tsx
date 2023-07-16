@@ -52,6 +52,7 @@ const CarDefinitions: NextPage = () => {
   const [carYearsInputShowing, setCarYearsInputShowing] = useState(false);
   const [carTrimsInputShowing, setCarTrimsInputShowing] = useState(false);
   const [carOptionsInputShowing, setCarOptionsInputShowing] = useState(false);
+  const [carColorsInputShowing, setCarColorsInputShowing] = useState(false);
   const [carUrlInputShowing, setCarUrlInputShowing] = useState(false);
   const [carMakeId, setCarMakeId] = useState(0);
   const [carModelId, setCarModelId] = useState(0);
@@ -66,6 +67,8 @@ const CarDefinitions: NextPage = () => {
   const carTrimRef = useRef();
   const trimInfoOptionNameRef = useRef();
   const trimInfoOptionPriceRef = useRef();
+  const colorNameRef = useRef();
+  const colorPriceRef = useRef();
   const trimInfoReviewUrlRef = useRef();
   const trimInfoReviewUrlSiteRef = useRef();
 
@@ -265,6 +268,49 @@ const CarDefinitions: NextPage = () => {
     setCarOptionsInputShowing(false);
   }
 
+  const addColorOption = () => {
+    const colorName = colorNameRef.current.value ?? '';
+    const colorValue = colorPriceRef.current.value ?? '';
+
+    if (!colorName || !colorValue) {
+      errorDialog('Color name and value are required.');
+      return;
+    }
+
+    const tip = trimInfoPayload;
+
+    if (!tip.colorList) {
+      tip.colorList = [];
+    }
+
+    let found = false;
+
+    tip.colorList.forEach((x) => {
+      if (x.name === colorName) {
+        found = true;
+      }
+    });
+
+    if (found) {
+      errorDialog(`Color '${colorList}' already exists in the list.`);
+      colorNameRef.current.value = '';
+      colorPriceRef.current.value = '';
+      return;
+    }
+
+    tip.colorList.push({
+      name: colorName,
+      value: colorValue,
+    });
+
+    setTrimInfoPayload(tip);
+
+    colorNameRef.current.value = '';
+    colorPriceRef.current.value = '';
+
+    setCarColorsInputShowing(false);
+  }
+
   const addCarSite = () => {
     const carReviewSiteName = trimInfoReviewUrlSiteRef.current.value ?? '';
     const carReviewUrl = trimInfoReviewUrlRef.current.value ?? '';
@@ -316,6 +362,17 @@ const CarDefinitions: NextPage = () => {
     setTrimInfoPayload({
       ...trimInfoPayload,
       optionList,
+    });
+  }
+
+  const deleteColor = (x: any) => {
+    let colorList = trimInfoPayload.colorList ?? [];
+
+    colorList = colorList.filter((y) => y.name !== x.name);
+
+    setTrimInfoPayload({
+      ...trimInfoPayload,
+      colorList,
     });
   }
 
@@ -632,7 +689,7 @@ const CarDefinitions: NextPage = () => {
             </Alert>
           </Snackbar>
           <p/>
-          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1em' }}>
+          <div style={{ width: '100%', paddingLeft: '0.5em', paddingTop: '1em' }}>
             <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Trim Details</u></Typography>
           </div>
 
@@ -677,7 +734,7 @@ const CarDefinitions: NextPage = () => {
                       <MenuItem value={1}>6 Speed Manual</MenuItem>
                       <MenuItem value={2}>7 Speed Manual</MenuItem>
                       <MenuItem value={3}>Automatic</MenuItem>
-                      <MenuItem value={4}>CVT</MenuItem>
+                      <MenuItem value={4}>CVT / e-CVT</MenuItem>
                       <MenuItem value={5}>Single Speed Drive</MenuItem>
                     </Select>
                   </FormControl>
@@ -715,15 +772,15 @@ const CarDefinitions: NextPage = () => {
               </Stack>
 
               <Stack direction={'row'}>
-                <Item sx={{ width: '37%' }}>
+                <Item sx={{ width: '33%' }}>
                   <TextField label={'Front Tire Size'} fullWidth value={trimInfoPayload?.frontTire ?? ''} name={'frontTire'}
                              onChange={handleChange}/>
                 </Item>
-                <Item sx={{ width: '37%' }}>
+                <Item sx={{ width: '33%' }}>
                   <TextField label={'Rear Tire Size'} fullWidth value={trimInfoPayload?.rearTire ?? ''} name={'rearTire'}
                              onChange={handleChange}/>
                 </Item>
-                <Item sx={{ width: '25%' }}>
+                <Item sx={{ width: '33%' }}>
                   <TextField label={'Cargo Area'} value={trimInfoPayload?.cargoArea ?? ''} helperText={'(ft³)'} fullWidth
                              inputProps={{ type: 'number' }} name={'cargoArea'}
                              onChange={handleChange}/>
@@ -732,7 +789,7 @@ const CarDefinitions: NextPage = () => {
             </div>
           </div>
 
-          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '0.5em' }}>
+          <div style={{ width: '100%', paddingLeft: '0.5em', paddingTop: '0.5em' }}>
             <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Performance Figures</u></Typography>
           </div>
 
@@ -802,7 +859,7 @@ const CarDefinitions: NextPage = () => {
           </div>
 
           <div style={{ display: 'flex', paddingTop: '1em' }}>
-            <div style={{ width: '50%', paddingLeft: '1em' }}>
+            <div style={{ width: '33%', paddingLeft: '0.5em' }}>
               <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Standard Equipment</u></Typography>
 
               <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
@@ -831,7 +888,7 @@ const CarDefinitions: NextPage = () => {
               </TableContainer>
             </div>
 
-            <div style={{ width: '50%', paddingLeft: '1em' }}>
+            <div style={{ width: '33%', paddingLeft: '0.5em' }}>
               <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Optional Equipment</u></Typography>
 
               <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
@@ -908,10 +965,88 @@ const CarDefinitions: NextPage = () => {
                 </Table>
               </TableContainer>
             </div>
+
+            <div style={{ width: '33%', paddingLeft: '0.5em' }}>
+              <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Color Options</u></Typography>
+
+              <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
+                <Table stickyHeader size={'small'}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '65%' }}>Color Name</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '25%' }}>Price</TableCell>
+                      <TableCell sx={{ backgroundColor: '#cff', width: '10%', textAlign: 'right' }}>
+                        <IconButton size={'small'} onClick={() => setCarColorsInputShowing(!carColorsInputShowing)}>
+                          <AddOutlined/>
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  {carColorsInputShowing ? (
+                    <>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>
+                            <TextField
+                              label={'Name'} autoFocus fullWidth variant={'standard'}
+                              inputRef={colorNameRef}
+                              onKeyDown={(ev) => {
+                                if (ev.key === 'Escape') {
+                                  setCarColorsInputShowing(false);
+                                } else if (ev.key === 'Enter') {
+                                  addColorOption();
+                                  setCarColorsInputShowing(false);
+                                }
+                              }}/>
+                          </TableCell>
+                          <TableCell>
+                            <TextField
+                              label={'Price'} fullWidth variant={'standard'}
+                              inputRef={colorPriceRef}
+                              onKeyDown={(ev) => {
+                                if (ev.key === 'Escape') {
+                                  setCarColorsInputShowing(false);
+                                } else if (ev.key === 'Enter') {
+                                  addColorOption();
+                                  setCarColorsInputShowing(false);
+                                }
+                              }}/>
+                          </TableCell>
+                          <TableCell>
+                            <Button variant={'contained'}
+                                    onClick={() => addColorOption()}>ADD</Button>
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </>
+                  ) : (
+                    <>
+                    </>
+                  )}
+                  <TableBody>
+                    {trimInfoPayload?.colorList?
+                      .sort((a, b) => (a.name > b.name ? 1 : -1))
+                      .map((x) => (
+                      <>
+                        <TableRow hover>
+                        <TableCell>{x.name}</TableCell>
+                        <TableCell>{x.value}</TableCell>
+                        <TableCell>
+                          <IconButton onClick={() => deleteColor(x)}>
+                            <ClearOutlined/>
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </div>
+        </div>
 
         <div style={{ display: 'flex', paddingTop: '1em' }}>
-          <div style={{ width: '100%', paddingLeft: '1em' }}>
+          <div style={{ width: '100%', paddingLeft: '0.5em' }}>
             <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Car Reviews</u></Typography>
 
             <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>

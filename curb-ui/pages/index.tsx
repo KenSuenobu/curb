@@ -96,18 +96,13 @@ const Home: NextPage = () => {
     label: 'Trips',
     items: [
       {
-        icon: <CalendarTodayOutlined/>,
-        label: 'Today\'s Trips',
-        onClick: () => setCurrentPage(<></>),
-      },
-      {
         icon: <DirectionsCarOutlined/>,
-        label: 'Future Trips',
+        label: 'Trips',
         onClick: () => setCurrentPage(<></>),
       },
       {
         icon: <CalendarMonthOutlined/>,
-        label: 'Past Trips',
+        label: 'Past Trip History',
         onClick: () => setCurrentPage(<></>),
       },
     ],
@@ -117,7 +112,7 @@ const Home: NextPage = () => {
     items: [
       {
         icon: <TollOutlined/>,
-        label: 'Tolls Received',
+        label: 'Toll Records',
         onClick: () => setCurrentPage(<></>),
       },
     ],
@@ -133,16 +128,6 @@ const Home: NextPage = () => {
       {
         icon: <PersonOffOutlined/>,
         label: 'Blacklisted Guests',
-        onClick: () => setCurrentPage(<></>),
-      },
-    ],
-  };
-  const financialsItems: SideBarMenuGroupProps = {
-    label: 'Financials',
-    items: [
-      {
-        icon: <LocalAtmOutlined/>,
-        label: 'Monthly Payouts',
         onClick: () => setCurrentPage(<></>),
       },
     ],
@@ -248,7 +233,6 @@ const Home: NextPage = () => {
           tripsItems,
           tollItems,
           guestsItems,
-          financialsItems,
         ]}/>
         <Box
           component="main"
