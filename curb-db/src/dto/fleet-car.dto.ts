@@ -16,6 +16,13 @@ export class FleetCarDto {
   fleetId: number;
 
   @ApiProperty({
+    description: 'Owner ID of the `FleetCar` that this car belongs to.',
+    nullable: false,
+    type: Number,
+  })
+  ownerId: number;
+
+  @ApiProperty({
     description: 'ID of the `CarTrim` of the car.',
     nullable: false,
     type: Number,

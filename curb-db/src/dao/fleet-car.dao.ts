@@ -28,12 +28,13 @@ export class FleetCarDao extends BaseDao<FleetCarDto> {
 
   async edit(id: number, payload: FleetCarDto): Promise<boolean> {
     const sqlStatement =
-      `UPDATE ${this.section} SET fleet_id=$1, car_trim_id=$2, data=$3 WHERE id=$4`;
+      `UPDATE ${this.section} SET fleet_id=$1, car_trim_id=$2, owner_id=$3, data=$4 WHERE id=$5`;
 
     return this.db
       .none(sqlStatement, [
         payload.fleetId,
         payload.carTrimId,
+        payload.ownerId,
         payload.data,
         id,
       ])
@@ -46,9 +47,14 @@ export class FleetCarDao extends BaseDao<FleetCarDto> {
 
   async create(payload: FleetCarDto): Promise<FleetCarDto> {
     const sqlStatement =
-      `INSERT INTO ${this.section} (fleet_id, car_trim_id, data) VALUES ($1, $2, $3) RETURNING *`;
+      `INSERT INTO ${this.section} (fleet_id, car_trim_id, owner_id, data) VALUES ($1, $2, $3, $4) RETURNING *`;
 
-    return (await this.db.oneOrNone(sqlStatement, [ payload.fleetId, payload.carTrimId, payload.data, ]))
+    return (await this.db.oneOrNone(sqlStatement, [
+      payload.fleetId,
+      payload.carTrimId,
+      payload.ownerId,
+      payload.data,
+    ]))
       .then((x) => DaoUtils.normalizeFields<FleetCarDto>(x));
   }
 }

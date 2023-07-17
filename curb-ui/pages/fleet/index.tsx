@@ -3,7 +3,7 @@ import {IFleet, LoadFleet} from '../../components/database/fleet';
 import {
   Alert,
   Button,
-  FormControl, IconButton, InputLabel, MenuItem,
+  FormControl, IconButton, InputLabel, LinearProgress, MenuItem,
   Paper, Select, Snackbar,
   Stack,
   Table,
@@ -28,7 +28,11 @@ import ColorDatabase from '../../components/common/ColorDatabase';
 
 const SELECTED_COLOR = '#ccf';
 
-const Fleet = () => {
+export interface IFleetProps {
+  jwt: string;
+}
+
+const Fleet = (props: IFleetProps) => {
   const [fleetList, setFleetList] = useState<IFleet[]>([]);
   const [fleetCarList, setFleetCarList] = useState<IFleetCar[]>([]);
   const [carMakeList, setCarMakeList] = useState<ICarMake[]>([]);
@@ -47,6 +51,7 @@ const Fleet = () => {
   const [carTrimId, setCarTrimId] = useState(0);
   const [fleetCar, setFleetCar] = useState({});
   const [carFleetData, setCarFleetData] = useState({});
+  const [userInfo, setUserInfo] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const fleetRef = useRef();
   const ownershipNameRef = useRef();
@@ -89,6 +94,7 @@ const Fleet = () => {
 
     axios.post('/app/fleet/create/car', {
       fleetId,
+      ownerId: userInfo.id,
       carTrimId,
       data: {},
     }).then((x) => {
@@ -115,6 +121,7 @@ const Fleet = () => {
     const payload = fleetCar;
 
     payload.data = carFleetData;
+    payload.data.ownerId = userInfo.id;
 
     console.log(`Fleet Car: ${JSON.stringify(payload, null, 2)}`);
 
@@ -200,8 +207,26 @@ const Fleet = () => {
     setInsuranceInputShowing(false);
   }
 
+  useEffect(() => {
+    axios.get(`/app/user/login/${props.jwt}`)
+      .then((x) => {
+        setUserInfo(x.data);
+      }).catch((x) => {
+        errorDialog('Unable to retrieve login data; please login again.');
+        return;
+      });
+  }, []);
+
   useEffect(() => reloadFleet(), []);
   useEffect(() => LoadCarMakes((x) => setCarMakeList(x)), []);
+
+  if (!userInfo) {
+    return (
+      <>
+        <LinearProgress fullWidth/>
+      </>
+    );
+  }
 
   return (
     <>
@@ -447,7 +472,7 @@ const Fleet = () => {
             </Alert>
           </Snackbar>
 
-          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1.5em' }}>
+          <div style={{ width: '100%', paddingLeft: '0.5em', paddingTop: '1.5em' }}>
             <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Fleet Car Detail</u></Typography>
           </div>
 
@@ -548,7 +573,7 @@ const Fleet = () => {
             </div>
           </div>
 
-          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1.5em' }}>
+          <div style={{ width: '100%', paddingLeft: '0.5em', paddingTop: '1.5em' }}>
             <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Car Listing Details</u></Typography>
           </div>
 
@@ -583,7 +608,7 @@ const Fleet = () => {
           </div>
 
           <div style={{ display: 'flex', paddingTop: '1em' }}>
-            <div style={{ width: '100%', paddingLeft: '1em' }}>
+            <div style={{ width: '100%', paddingLeft: '0.5em' }}>
               <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Car Ownership</u></Typography>
 
               <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
@@ -668,7 +693,7 @@ const Fleet = () => {
           </div>
 
           <div style={{ display: 'flex', paddingTop: '1em' }}>
-            <div style={{ width: '100%', paddingLeft: '1em' }}>
+            <div style={{ width: '100%', paddingLeft: '0.5em' }}>
               <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Insurance Detail</u></Typography>
 
               <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>

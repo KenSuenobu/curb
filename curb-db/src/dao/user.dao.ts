@@ -1,6 +1,7 @@
 import { BaseDao } from './base.dao';
 import * as pgPromise from 'pg-promise';
-import { UserDto } from 'src/dto';
+import {FleetCarLoanDto, UserDto} from 'src/dto';
+import {DaoUtils} from './dao-utils.dao';
 
 export class UserDao extends BaseDao<UserDto> {
   constructor(readonly db: pgPromise.IDatabase<any>) {
@@ -42,5 +43,12 @@ export class UserDao extends BaseDao<UserDto> {
     return this.db.oneOrNone(sqlStatement, [ emailAddress, password ])
       .then((x) => x.user_id)
       .catch((x) => 'error');
+  }
+
+  async getUserInfo(jwt: string): Promise<UserDto> {
+    const sqlStatement = `SELECT * FROM ${this.section} WHERE user_id=$1`;
+
+    return await this.db.oneOrNone(sqlStatement, [ jwt, ])
+      .then((x) => DaoUtils.normalizeFields<UserDto>(x));
   }
 }
