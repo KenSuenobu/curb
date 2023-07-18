@@ -208,7 +208,7 @@ const Home: NextPage = () => {
       {
         icon: <MoneyOutlined/>,
         label: 'Fleet Car Loans',
-        onClick: () => setCurrentPage(<FleetLoans/>),
+        onClick: () => setCurrentPage(<FleetLoans jwt={jwt}/>),
       },
     ],
   };

@@ -2,15 +2,23 @@ import { Injectable, Logger } from "@nestjs/common";
 import {FleetCarDto, FleetDto} from 'curb-db/dist/dto';
 import {DaoUtils} from "curb-db/dist/dao/dao-utils.dao";
 import {FleetCarDao, FleetDao} from 'curb-db/dist/dao';
-import {FleetCarLoanDao, FleetCarLoanDto} from 'curb-db/dist';
+import {FleetCarLoanDao, FleetCarLoanDto, FleetMembershipDao, FleetMembershipDto} from 'curb-db/dist';
 
 @Injectable()
 export class FleetService {
   private readonly logger = new Logger('fleet.service');
 
-  async createFleet(payload: FleetDto): Promise<FleetDto> {
+  async createFleet(userId: number, payload: FleetDto): Promise<FleetDto> {
     const dao = new FleetDao(DaoUtils.getDatabase());
-    return dao.create(payload);
+    const fleetMembershipDao = new FleetMembershipDao(DaoUtils.getDatabase());
+    const result = await dao.create(payload);
+    const fleetMembershipPayload: FleetMembershipDto = {
+      userId,
+      fleetId: result.id,
+    };
+    const result2 = await fleetMembershipDao.create(fleetMembershipPayload);
+
+    return result;
   }
 
   async createFleetCar(payload: FleetCarDto): Promise<FleetCarDto> {
@@ -20,6 +28,11 @@ export class FleetService {
 
   async createFleetCarLoan(payload: FleetCarLoanDto): Promise<FleetCarLoanDto> {
     const dao = new FleetCarLoanDao(DaoUtils.getDatabase());
+    return dao.create(payload);
+  }
+
+  async assignUserToFleet(payload: FleetMembershipDto): Promise<FleetMembershipDto> {
+    const dao = new FleetMembershipDao(DaoUtils.getDatabase());
     return dao.create(payload);
   }
 
@@ -38,9 +51,9 @@ export class FleetService {
     return dao.getByFleetCarId(fleetCarId);
   }
 
-  async listFleets(): Promise<FleetDto[]> {
-    const dao = new FleetDao(DaoUtils.getDatabase());
-    return dao.list();
+  async listFleetsByUser(userId: number): Promise<FleetDto[]> {
+    const dao = new FleetMembershipDao(DaoUtils.getDatabase());
+    return dao.getFleetsForUser(userId);
   }
 
   async listFleetCars(fleetId: number): Promise<FleetCarDto[]> {

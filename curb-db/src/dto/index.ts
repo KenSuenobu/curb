@@ -6,4 +6,5 @@ export * from './car-trim-info.dto';
 export * from './fleet.dto';
 export * from './fleet-car.dto';
 export * from './fleet-car-loan.dto';
+export * from './fleet-membership.dto';
 export * from './user.dto';

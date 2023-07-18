@@ -6,5 +6,6 @@ export * from './car-year.dao';
 export * from './fleet.dao';
 export * from './fleet-car.dao';
 export * from './fleet-car-loan.dao';
+export * from './fleet-membership.dao';
 export * from './loan-payment.dao';
 export * from './user.dao';

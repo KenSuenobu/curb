@@ -61,8 +61,8 @@ const Fleet = (props: IFleetProps) => {
   const insurancePriceRef = useRef();
   const insuranceScheduleRef = useRef();
 
-  const reloadFleet = () => {
-    LoadFleet((x: IFleet[]) => setFleetList(x));
+  const reloadFleet = (id: number) => {
+    LoadFleet(id, (x: IFleet[]) => setFleetList(x));
   }
 
   const reloadFleetCars = (fId: number) => {
@@ -77,10 +77,10 @@ const Fleet = (props: IFleetProps) => {
       return;
     }
 
-    axios.post('/app/fleet/create', {
+    axios.post(`/app/fleet/create/${userInfo.id}`, {
       name: fleetName,
     }).then((x) => {
-      reloadFleet();
+      reloadFleet(userInfo.id);
       setFleetInputShowing(false);
       fleetRef.current.value = null;
     });
@@ -211,13 +211,13 @@ const Fleet = (props: IFleetProps) => {
     axios.get(`/app/user/login/${props.jwt}`)
       .then((x) => {
         setUserInfo(x.data);
+        reloadFleet(x.data.id);
       }).catch((x) => {
         errorDialog('Unable to retrieve login data; please login again.');
         return;
       });
   }, []);
 
-  useEffect(() => reloadFleet(), []);
   useEffect(() => LoadCarMakes((x) => setCarMakeList(x)), []);
 
   if (!userInfo) {
@@ -275,11 +275,13 @@ const Fleet = (props: IFleetProps) => {
                             sx={{ backgroundColor: bgColor, width: '90%' }}
                             onClick={() => {
                               setFleetId(x.id);
+                              setFleetCarId(0);
                               reloadFleetCars(x.id);
                             }}><Typography>{x.name}</Typography></TableCell>
                           <TableCell
                             onClick={() => {
                               setFleetId(x.id);
+                              setFleetCarId(0);
                               reloadFleetCars(x.id);
                             }}
                             sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>

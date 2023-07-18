@@ -22,7 +22,11 @@ import axios from 'axios';
 
 const SELECTED_COLOR = '#ccf';
 
-const FleetLoans = () => {
+export interface IFleetLoansProps {
+  jwt: string;
+}
+
+const FleetLoans = (props: IFleetLoansProps) => {
   const [fleetList, setFleetList] = useState<IFleet[]>([]);
   const [fleetCarList, setFleetCarList] = useState<IFleetCar[]>([]);
   const [fleetId, setFleetId] = useState(0);
@@ -33,13 +37,25 @@ const FleetLoans = () => {
   const [loanPaymentData, setLoanPaymentData] = useState([]);
   const [loanPaymentDataShowing, setLoanPaymentDataShowing] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
   const formDateRef = useRef();
   const formPrincipalRef = useRef();
   const formInterestRef = useRef();
   const formTotalRef = useRef();
 
-  const reloadFleet = () => {
-    LoadFleet((x: IFleet[]) => setFleetList(x));
+  useEffect(() => {
+    axios.get(`/app/user/login/${props.jwt}`)
+      .then((x) => {
+        setUserInfo(x.data);
+        reloadFleet(x.data.id);
+      }).catch((x) => {
+      errorDialog('Unable to retrieve login data; please login again.');
+      return;
+    });
+  }, []);
+
+  const reloadFleet = (userId: number) => {
+    LoadFleet(userId, (x: IFleet[]) => setFleetList(x));
   }
 
   const reloadFleetCars = (fId: number) => {
@@ -116,8 +132,7 @@ const FleetLoans = () => {
 
         setCurrentLoanData(x.data);
         setFleetLoanData(x.data.data);
-        setFleetCarLoanId(id);
-        loadLoanPayments(id);
+        loadLoanPayments(x.data.id);
       });
   }
 
@@ -140,12 +155,14 @@ const FleetLoans = () => {
     }
 
     const payload = {
-      fleetCarLoanId,
+      fleetCarLoanId: currentLoanData.id,
       paymentDate,
       principalAmount,
       interestAmount,
       totalAmount,
     };
+
+    console.log(`Payload: ${JSON.stringify(payload, null, 2)}`);
 
     axios.post('/app/fleet-loan/create', payload)
       .then((x) => {
@@ -157,8 +174,6 @@ const FleetLoans = () => {
         errorDialog('Unable to create loan payment information');
       });
   }
-
-  useEffect(() => reloadFleet(), []);
 
   return (
     <>
@@ -251,7 +266,7 @@ const FleetLoans = () => {
             </Alert>
           </Snackbar>
 
-          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1.5em' }}>
+          <div style={{ width: '100%', paddingLeft: '0.5em', paddingTop: '1.5em' }}>
             <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Fleet Car Loan Detail</u></Typography>
           </div>
 
@@ -344,7 +359,7 @@ const FleetLoans = () => {
             </div>
           </div>
 
-          <div style={{ width: '100%', paddingLeft: '1em', paddingTop: '1.5em' }}>
+          <div style={{ width: '100%', paddingLeft: '0.5em', paddingTop: '1.5em' }}>
             <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Payment Schedule Information</u></Typography>
           </div>
 
@@ -376,7 +391,7 @@ const FleetLoans = () => {
 
           {currentLoanData.fleetCarId && (
           <div style={{ display: 'flex', paddingTop: '1em' }}>
-            <div style={{ width: '100%', paddingLeft: '1em' }}>
+            <div style={{ width: '100%', paddingLeft: '0.5em' }}>
               <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Payment Detail</u></Typography>
 
               <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
@@ -464,6 +479,16 @@ const FleetLoans = () => {
                           </TableRow>
                         </>
                       ))}
+                      <TableRow sx={{ color: 'white', backgroundColor: 'black' }}>
+                        <TableCell>Total:</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell>$ {loanPaymentData.map((x) => x.principalAmount)
+                          .reduce((acc, cur) => acc + cur)}</TableCell>
+                        <TableCell>$ {loanPaymentData.map((x) => x.interestAmount)
+                          .reduce((acc, cur) => acc + cur)}</TableCell>
+                        <TableCell colSpan={2}>$ {loanPaymentData.map((x) => x.totalAmount)
+                          .reduce((acc, cur) => acc + cur)}</TableCell>
+                      </TableRow>
                     </>
                   ) : (
                     <>
@@ -474,7 +499,6 @@ const FleetLoans = () => {
                       </TableCell>
                     </>
                   )}
-                  {console.log(JSON.stringify(loanPaymentData))}
                 </Table>
               </TableContainer>
             </div>

@@ -5,7 +5,7 @@ import {ApiBody, ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse,
 import {CarMakeService} from "../services/car-make.service";
 import {CarMakeDto, FleetCarDto, FleetDto} from 'curb-db/dist/dto';
 import {FleetService} from '../services/fleet.service';
-import {FleetCarLoanDto} from 'curb-db/dist';
+import {FleetCarLoanDto, FleetMembershipDto} from 'curb-db/dist';
 
 @ApiTags('fleet')
 @Controller('fleet')
@@ -14,7 +14,7 @@ export class FleetController {
 
   constructor(private readonly service: FleetService) {}
 
-  @Post('/create')
+  @Post('/create/:userId')
   @ApiOperation({
     summary: 'Creates a new Fleet object',
     description: 'Creates a new fleet',
@@ -30,8 +30,8 @@ export class FleetController {
   @ApiConflictResponse()
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async createFleet(@Body() payload: FleetDto): Promise<FleetDto> {
-    return this.service.createFleet(payload);
+  async createFleet(@Param('userId') userId: number, @Body() payload: FleetDto): Promise<FleetDto> {
+    return this.service.createFleet(userId, payload);
   }
 
   @Post('/create/car')
@@ -70,7 +70,23 @@ export class FleetController {
     return this.service.createFleetCarLoan(payload);
   }
 
-  @Get('/list')
+  @Post('/create/membership')
+  @ApiOperation({
+    summary: 'Assigns a user to a fleet',
+    description: 'Assigns a user by ID to a fleet by ID',
+  })
+  @ApiBody({
+    description: 'The FleetMembership object to create',
+    type: FleetMembershipDto,
+  })
+  @ApiConflictResponse()
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async assignUserToFleet(@Body() payload: FleetMembershipDto): Promise<FleetMembershipDto> {
+    return this.service.assignUserToFleet(payload);
+  }
+
+  @Get('/list/:userId')
   @ApiOperation({
     summary: 'Lists all Fleet objects',
     description: 'Retrieves a list of all `Fleet` objects.',
@@ -82,8 +98,8 @@ export class FleetController {
   })
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async listCarMakes(): Promise<FleetDto[]> {
-    return this.service.listFleets();
+  async listFleetsByUser(@Param('userId') userId: number): Promise<FleetDto[]> {
+    return this.service.listFleetsByUser(userId);
   }
 
   @Get('/loan/:fleetCarId')
@@ -139,7 +155,7 @@ export class FleetController {
     return this.service.saveCarFleetLoan(payload);
   }
 
-  @Get('/list/:fleetId')
+  @Get('/list/fleet/:fleetId')
   @ApiOperation({
     summary: 'Lists all FleetCar objects by fleet ID',
     description: 'Retrieves a list of all of the fleet cars associated with a fleet ID.',
