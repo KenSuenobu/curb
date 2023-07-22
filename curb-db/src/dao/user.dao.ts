@@ -45,6 +45,14 @@ export class UserDao extends BaseDao<UserDto> {
       .catch((x) => 'error');
   }
 
+  async getByEmail(emailAddress: string): Promise<UserDto | null> {
+    const sqlStatement = `SELECT * FROM ${this.section} WHERE email_address=$1`;
+
+    return this.db.oneOrNone(sqlStatement, [ emailAddress ])
+      .then((x) => DaoUtils.normalizeFields<UserDto>(x))
+      .catch((x) => null);
+  }
+
   async getUserInfo(jwt: string): Promise<UserDto> {
     const sqlStatement = `SELECT * FROM ${this.section} WHERE user_id=$1`;
 

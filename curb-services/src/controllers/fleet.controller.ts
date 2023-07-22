@@ -14,7 +14,7 @@ export class FleetController {
 
   constructor(private readonly service: FleetService) {}
 
-  @Post('/create/:userId')
+  @Post('/create/fleet/:userId')
   @ApiOperation({
     summary: 'Creates a new Fleet object',
     description: 'Creates a new fleet',
@@ -84,6 +84,22 @@ export class FleetController {
   @ApiUnauthorizedResponse()
   async assignUserToFleet(@Body() payload: FleetMembershipDto): Promise<FleetMembershipDto> {
     return this.service.assignUserToFleet(payload);
+  }
+
+  @Put('/membership/:fleetId/:email')
+  @ApiOperation({
+    summary: 'Assigns a member to a fleet',
+    description: 'Assigns a member by e-mail address to a fleet by its ID'
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: FleetDto,
+    isArray: true,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async addEmailToFleet(@Param('fleetId') fleetId: number, @Param('email') email: string): Promise<boolean> {
+    return this.service.addEmailToFleet(fleetId, email);
   }
 
   @Get('/list/:userId')
@@ -169,6 +185,22 @@ export class FleetController {
   @ApiUnauthorizedResponse()
   async listFleetCars(@Param('fleetId') fleetId: number): Promise<FleetCarDto[]> {
     return this.service.listFleetCars(fleetId);
+  }
+
+  @Get('/list/fleet/:fleetId/members')
+  @ApiOperation({
+    summary: 'Lists all members by fleet ID',
+    description: 'Retrieves a list of all members that are a member of Fleet by ID',
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: String,
+    isArray: true,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async listFleetMembers(@Param('fleetId') fleetId: number): Promise<string[]> {
+    return this.service.listFleetMembers(fleetId);
   }
 
 }

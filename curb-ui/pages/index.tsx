@@ -1,20 +1,6 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import AppBar from "@mui/material/AppBar";
-import CssBaseline from "@mui/material/CssBaseline";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { NextPage } from "next";
-import MainAppBar from "../components/MainAppBar";
 import SideBar from "../components/SideBar";
 import { SideBarMenuGroupProps } from "../components/SideBarMenuGroup";
 import {
@@ -43,7 +29,7 @@ import {
   CalendarTodayOutlined,
   PersonRemoveOutlined,
   PersonOffOutlined,
-  LocalAtmOutlined, TollOutlined,
+  LocalAtmOutlined, TollOutlined, PeopleOutlined,
 } from '@mui/icons-material';
 import CarDefinitions from './car-definitions';
 import Fleet from "./fleet";
@@ -68,6 +54,7 @@ import axios from 'axios';
 import {CookieValueTypes, deleteCookie, getCookie, setCookie} from 'cookies-next';
 import {useRouter} from 'next/router';
 import MenuIcon from '@mui/icons-material/Menu';
+import FleetMembership from './fleet-membership';
 
 const drawerWidth = 240;
 
@@ -204,6 +191,11 @@ const Home: NextPage = () => {
         icon: <GarageOutlined/>,
         label: 'Fleet Cars',
         onClick: () => setCurrentPage(<Fleet jwt={jwt}/>),
+      },
+      {
+        icon: <PeopleOutlined/>,
+        label: 'Fleet Membership',
+        onClick: () => setCurrentPage(<FleetMembership jwt={jwt}/>),
       },
       {
         icon: <MoneyOutlined/>,

@@ -77,7 +77,7 @@ const Fleet = (props: IFleetProps) => {
       return;
     }
 
-    axios.post(`/app/fleet/create/${userInfo.id}`, {
+    axios.post(`/app/fleet/create/fleet/${userInfo.id}`, {
       name: fleetName,
     }).then((x) => {
       reloadFleet(userInfo.id);
@@ -122,8 +122,6 @@ const Fleet = (props: IFleetProps) => {
 
     payload.data = carFleetData;
     payload.data.ownerId = userInfo.id;
-
-    console.log(`Fleet Car: ${JSON.stringify(payload, null, 2)}`);
 
     axios.put('/app/fleet/save/car', payload)
       .then((x) => {

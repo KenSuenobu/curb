@@ -1,9 +1,10 @@
 import {Logger} from '@nestjs/common';
 import * as pgPromise from 'pg-promise';
-import {FleetCarDto, FleetCarLoanDto, FleetDto, FleetMembershipDto} from '../dto';
+import {FleetCarDto, FleetCarLoanDto, FleetDto, FleetMembershipDto, UserDto} from '../dto';
 import {DaoUtils} from './dao-utils.dao';
 import {BaseDao} from './base.dao';
 import {FleetDao} from './fleet.dao';
+import {UserDao} from './user.dao';
 
 export class FleetMembershipDao extends BaseDao<FleetMembershipDto> {
   private readonly logger = new Logger('fleet-membership.service');
@@ -46,6 +47,32 @@ export class FleetMembershipDao extends BaseDao<FleetMembershipDto> {
 
     return (await this.db.manyOrNone(sqlStatement, [ id ]))
       .map((x) => DaoUtils.normalizeFields<FleetDto>(x));
+  }
+
+  async getUsersForFleet(id: number): Promise<string[]> {
+    const sqlStatement =
+      `SELECT a.email_address FROM curb.user a, curb.fleet_membership b where b.fleet_id = $1 AND a.id = b.user_id`;
+
+    return (await this.db.manyOrNone(sqlStatement, [ id ]))
+      .map((x) => x.email_address);
+  }
+
+  async addEmailToFleet(fleetId: number, email: string): Promise<boolean> {
+    const userDao = new UserDao(this.db);
+    const userInfo = await userDao.getByEmail(email);
+
+    if (email && userInfo) {
+      const payload: FleetMembershipDto = {
+        userId: userInfo.id,
+        fleetId,
+      };
+
+      return await this.create(payload)
+        .then((x) => true)
+        .catch((x) => false);
+    }
+
+    return false;
   }
 
 }

@@ -36,6 +36,11 @@ export class FleetService {
     return dao.create(payload);
   }
 
+  async addEmailToFleet(fleetId: number, email: string): Promise<boolean> {
+    const dao = new FleetMembershipDao(DaoUtils.getDatabase());
+    return dao.addEmailToFleet(fleetId, email);
+  }
+
   async saveCarFleet(payload: FleetCarDto): Promise<boolean> {
     const dao = new FleetCarDao(DaoUtils.getDatabase());
     return dao.edit(payload.id, payload);
@@ -59,5 +64,10 @@ export class FleetService {
   async listFleetCars(fleetId: number): Promise<FleetCarDto[]> {
     const dao = new FleetCarDao(DaoUtils.getDatabase());
     return dao.listByFleetId(fleetId);
+  }
+
+  async listFleetMembers(fleetId: number): Promise<string[]> {
+    const dao = new FleetMembershipDao(DaoUtils.getDatabase());
+    return dao.getUsersForFleet(fleetId);
   }
 }
