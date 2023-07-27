@@ -58,6 +58,9 @@ Phase 1:
     - Middle Name
     - Last Name
     - Additional Data
+  - Delivery Address
+    - Name
+    - Additional Data
 - User Interface:
   - Car make
   - Car model
@@ -69,6 +72,7 @@ Phase 1:
   - Fleet Membership
   - Guests
   - Blacklisted Guests
+  - Delivery Addresses
 
 [//]: # (  - Address database)
 

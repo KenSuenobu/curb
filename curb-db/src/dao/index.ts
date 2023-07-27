@@ -3,6 +3,7 @@ export * from './car-model.dao';
 export * from './car-trim.dao';
 export * from './car-trim-info.dao';
 export * from './car-year.dao';
+export * from './delivery-address.dao';
 export * from './fleet.dao';
 export * from './fleet-car.dao';
 export * from './fleet-car-loan.dao';
