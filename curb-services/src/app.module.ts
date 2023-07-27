@@ -15,6 +15,8 @@ import {FleetLoanController} from './controllers/fleet-loan.controller';
 import {FleetLoanService} from './services/fleet-loan.service';
 import {UserController} from './controllers/user.controller';
 import {UserService} from './services/user.service';
+import {GuestController} from './controllers/guest.controller';
+import {GuestService} from './services/guest.service';
 
 @Module({
   imports: [],
@@ -26,6 +28,7 @@ import {UserService} from './services/user.service';
     CarTrimInfoController,
     FleetController,
     FleetLoanController,
+    GuestController,
     UserController,
   ],
   providers: [
@@ -36,6 +39,7 @@ import {UserService} from './services/user.service';
     CarTrimInfoService,
     FleetService,
     FleetLoanService,
+    GuestService,
     UserService,
   ],
 })

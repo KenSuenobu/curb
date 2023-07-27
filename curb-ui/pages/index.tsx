@@ -55,6 +55,7 @@ import {CookieValueTypes, deleteCookie, getCookie, setCookie} from 'cookies-next
 import {useRouter} from 'next/router';
 import MenuIcon from '@mui/icons-material/Menu';
 import FleetMembership from './fleet-membership';
+import Guests from "./guest";
 
 const drawerWidth = 240;
 
@@ -193,17 +194,32 @@ const Home: NextPage = () => {
         onClick: () => setCurrentPage(<Fleet jwt={jwt}/>),
       },
       {
-        icon: <PeopleOutlined/>,
-        label: 'Fleet Membership',
-        onClick: () => setCurrentPage(<FleetMembership jwt={jwt}/>),
-      },
-      {
         icon: <MoneyOutlined/>,
         label: 'Fleet Car Loans',
         onClick: () => setCurrentPage(<FleetLoans jwt={jwt}/>),
       },
+      {
+        icon: <PeopleOutlined/>,
+        label: 'Fleet Membership',
+        onClick: () => setCurrentPage(<FleetMembership jwt={jwt}/>),
+      },
     ],
   };
+  const guestItems: SideBarMenuGroupProps = {
+    label: 'Guests',
+    items: [
+      {
+        icon: <PeopleOutlined/>,
+        label: 'Guests',
+        onClick: () => setCurrentPage(<Guests jwt={jwt} blacklisted={false}/>),
+      },
+      {
+        icon: <PersonOffOutlined/>,
+        label: 'Blacklisted Guests',
+        onClick: () => setCurrentPage(<Guests jwt={jwt} blacklisted={true}/>),
+      },
+    ],
+  }
 
   const handleMenu = (e) => {
     setAnchorEl(e);
@@ -237,7 +253,7 @@ const Home: NextPage = () => {
          {/* Side Divider, only contains the sidebar, which is static.*/}
          <div style={{ width: '260px' }}>
            <SideBar width={ 260 } sidebarItems={[
-             carItems, fleetItems,
+             carItems, fleetItems, guestItems,
            ]} onHomeClicked={() => handleHomeClicked()}/>
          </div>
 

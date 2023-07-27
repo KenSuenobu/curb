@@ -47,6 +47,17 @@ Phase 1:
     - Principal Amount
     - Interest Amount
     - Total
+  - Fleet Membership
+    - Fleet Id
+    - User Id
+  - Guest
+    - Guest ID
+    - Guest ID Source (Turo, getAround, Uber, etc.)
+    - Blacklisted boolean flag
+    - First Name
+    - Middle Name
+    - Last Name
+    - Additional Data
 - User Interface:
   - Car make
   - Car model
@@ -55,6 +66,9 @@ Phase 1:
   - Car trim info
   - Fleet car info
   - Fleet car loan info
+  - Fleet Membership
+  - Guests
+  - Blacklisted Guests
 
 [//]: # (  - Address database)
 

@@ -15,13 +15,15 @@ export class BaseDao<T> {
   async getById(id: number): Promise<T> {
     const selectStatement = `SELECT * FROM ${this.section} WHERE id=$1`;
 
-    return DaoUtils.normalizeFields<T>(this.db.oneOrNone<T>(selectStatement, [id]));
+    return this.db.oneOrNone<T>(selectStatement, [id])
+      .then((x) => DaoUtils.normalizeFields<T>(x));
   }
 
   async getByName(name: string): Promise<T> {
     const selectStatement = `SELECT * FROM ${this.section} WHERE name=$1 LIMIT 1`;
 
-    return this.db.oneOrNone<T>(selectStatement, [name]);
+    return this.db.oneOrNone(selectStatement, [name])
+      .then((x) => DaoUtils.normalizeFields<T>(x));
   }
 
   async deleteById(id: number): Promise<Boolean> {
