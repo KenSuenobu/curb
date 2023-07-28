@@ -1,16 +1,12 @@
 import {
-  Box,
   Paper,
   Stack,
-  styled,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent, TextField, DialogActions, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, InputAdornment, Checkbox, Snackbar, Alert
+  TextField, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, Snackbar, Alert
 } from '@mui/material';
 import { NextPage } from 'next';
 import React, { useEffect, useRef, useState } from 'react';
@@ -18,10 +14,7 @@ import axios from 'axios';
 import {
   AddOutlined,
   ArrowRightOutlined,
-  CheckBoxOutlineBlankOutlined,
-  CheckBoxOutlined, ClearOutlined,
-  DeleteOutline,
-  DeleteOutlined
+  ClearOutlined,
 } from '@mui/icons-material';
 import {ICarModel, LoadCarModels } from '@/components/database/car-model';
 import {ICarMake, LoadCarMakes, StandardEquipmentList } from '@/components/database/car-make';

@@ -1,63 +1,8 @@
-// import * as React from "react";
-// import Typography from "@mui/material/Typography";
-// import { NextPage } from "next";
-// import SideBar from "../components/SideBar";
-// import { SideBarMenuGroupProps } from "../components/SideBarMenuGroup";
-// import {
-//   ClassOutlined,
-//   FormatListBulletedOutlined,
-//   GroupsOutlined,
-//   PersonOutlined,
-//   ReorderOutlined,
-//   RuleOutlined,
-//   TypeSpecimenOutlined,
-//   ViewListOutlined,
-//   PublicOutlined,
-//   WorkspacesOutlined,
-//   Grid3x3Outlined,
-//   DatasetOutlined,
-//   DatasetLinkedOutlined,
-//   LibraryBooksOutlined,
-//   BackupTableOutlined,
-//   PeopleOutline,
-//   LockOutlined,
-//   DataObjectOutlined,
-//   DirectionsCarOutlined,
-//   GarageOutlined,
-//   MoneyOutlined,
-//   CalendarMonthOutlined,
-//   CalendarTodayOutlined,
-//   PersonRemoveOutlined,
-//   PersonOffOutlined,
-//   LocalAtmOutlined, TollOutlined, PeopleOutlined,
-// } from '@mui/icons-material';
-// import CarDefinitions from './car-definitions';
-// import Fleet from "./fleet";
-// import FleetLoans from './fleet-loans';
-// import {
-//   Button,
-//   Dialog,
-//   DialogActions,
-//   DialogContent,
-//   DialogTitle,
-//   IconButton, LinearProgress,
-//   Menu,
-//   MenuItem,
-//   TextField
-// } from '@mui/material';
-// import {useEffect, useRef, useState} from 'react';
-// import {Stack} from '@mui/system';
-// import Item from "../components/common/Item";
-// import {errorDialog} from '../../curb-ui/src/components/dialogs/ConfirmDialog';
-// import Link from 'next/link';
-// import {useRouter} from 'next/router';
-// import FleetMembership from './fleet-membership';
-// import Guests from "./guest";
-
 'use client';
 
 import {NextPage} from 'next';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import React, {useEffect, useRef, useState} from 'react';
 import {CookieValueTypes, deleteCookie, getCookie, setCookie} from 'cookies-next';
 import SideBar from '@/components/SideBar';
@@ -74,6 +19,10 @@ import {
 } from '@mui/icons-material';
 import { SideBarMenuGroupProps } from '@/components/SideBarMenuGroup';
 import CarDefinitions from '@/pages/car-definitions/index';
+import Fleet from '@/pages/fleet/index';
+import FleetLoans from '@/pages/fleet-loans/index';
+import FleetMembership from '@/pages/fleet-membership/index';
+import Guests from '@/pages/guest/index';
 
 const drawerWidth = 240;
 
@@ -84,6 +33,7 @@ const Home: NextPage = () => {
   const [checkingJwt, setCheckingJwt] = useState(true);
   const [currentPage, setCurrentPage] = useState(<></>);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setJwt(getCookie('jwt'));
@@ -207,20 +157,17 @@ const Home: NextPage = () => {
       {
         icon: <GarageOutlined/>,
         label: 'Fleet Cars',
-        // onClick: () => setCurrentPage(<Fleet jwt={jwt}/>),
-        onClick: () => setCurrentPage(<></>),
+        onClick: () => setCurrentPage(<Fleet jwt={jwt}/>),
       },
       {
         icon: <MoneyOutlined/>,
         label: 'Fleet Car Loans',
-        // onClick: () => setCurrentPage(<FleetLoans jwt={jwt}/>),
-        onClick: () => setCurrentPage(<></>),
+        onClick: () => setCurrentPage(<FleetLoans jwt={jwt}/>),
       },
       {
         icon: <PeopleOutlined/>,
         label: 'Fleet Membership',
-        // onClick: () => setCurrentPage(<FleetMembership jwt={jwt}/>),
-        onClick: () => setCurrentPage(<></>),
+        onClick: () => setCurrentPage(<FleetMembership jwt={jwt}/>),
       },
     ],
   };
@@ -230,14 +177,12 @@ const Home: NextPage = () => {
       {
         icon: <PeopleOutlined/>,
         label: 'Guests',
-        // onClick: () => setCurrentPage(<Guests jwt={jwt} blacklisted={false}/>),
-        onClick: () => setCurrentPage(<></>),
+        onClick: () => setCurrentPage(<Guests jwt={jwt} blacklisted={false}/>),
       },
       {
         icon: <PersonOffOutlined/>,
         label: 'Blacklisted Guests',
-        // onClick: () => setCurrentPage(<Guests jwt={jwt} blacklisted={true}/>),
-        onClick: () => setCurrentPage(<></>),
+        onClick: () => setCurrentPage(<Guests jwt={jwt} blacklisted={true}/>),
       },
     ],
   }

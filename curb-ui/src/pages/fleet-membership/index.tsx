@@ -1,11 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import {errorDialog} from '../../../curb-ui/src/components/dialogs/ConfirmDialog';
-import {LoadCarMakes} from '../../components/database/car-make';
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  Button, FormControl, IconButton, InputLabel,
-  LinearProgress, MenuItem,
-  Paper, Select, Stack,
+  Button, IconButton,
+  LinearProgress,
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -14,13 +12,10 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import {IFleet, LoadFleet} from '../../components/database/fleet';
-import {TableHeader} from '../../components/car-definitions/TableHeader';
 import {ArrowRightOutlined, DeleteOutlined} from '@mui/icons-material';
-import Item from '../../components/common/Item';
-import {LoadCarModels} from '../../components/database/car-model';
-import {LoadModelYears} from '../../components/database/car-year';
-import {LoadCarTrims} from '../../components/database/car-trim';
+import { LoadFleet } from '@/components/database/fleet';
+import { errorDialog } from '@/components/dialogs/ConfirmDialog';
+import { TableHeader } from '@/components/car-definitions/TableHeader';
 
 const SELECTED_COLOR = '#ccf';
 

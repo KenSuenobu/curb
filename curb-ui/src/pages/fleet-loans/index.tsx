@@ -1,7 +1,9 @@
+import moment from 'moment';
+import axios from 'axios';
 import {
   Alert,
-  Button, FormControl, IconButton, InputLabel, MenuItem,
-  Paper, Select, Snackbar, Stack,
+  Button, IconButton,
+  Paper, Snackbar, Stack,
   Table,
   TableBody,
   TableCell,
@@ -10,15 +12,13 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import {TableHeader} from '../../components/car-definitions/TableHeader';
 import {AddOutlined, ArrowRightOutlined, DeleteOutlined, PreviewOutlined} from '@mui/icons-material';
-import {errorDialog} from '../../../curb-ui/src/components/dialogs/ConfirmDialog';
-import Item from '../../components/common/Item';
 import React, {useEffect, useRef, useState} from 'react';
-import {IFleet, LoadFleet} from '../../components/database/fleet';
-import {IFleetCar, LoadFleetCars} from '../../components/database/fleet-car';
-import * as moment from 'moment';
-import axios from 'axios';
+import { errorDialog } from '@/components/dialogs/ConfirmDialog';
+import {IFleet, LoadFleet } from '@/components/database/fleet';
+import {IFleetCar, LoadFleetCars } from '@/components/database/fleet-car';
+import { TableHeader } from '@/components/car-definitions/TableHeader';
+import Item from '@/components/common/Item';
 
 const SELECTED_COLOR = '#ccf';
 

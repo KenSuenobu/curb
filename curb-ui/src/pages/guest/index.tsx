@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {errorDialog} from '../../../curb-ui/src/components/dialogs/ConfirmDialog';
+import React, {useEffect, useState} from 'react';
 import {
   Alert,
   Button,
-  Checkbox, FormControl,
-  FormControlLabel, InputLabel, MenuItem,
+  FormControl,
+  InputLabel, MenuItem,
   Paper, Select,
   Snackbar,
   Stack,
@@ -17,9 +16,10 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import {TableHeader} from '../../components/car-definitions/TableHeader';
 import {ArrowRightOutlined} from '@mui/icons-material';
-import Item from '../../components/common/Item';
+import { errorDialog } from '@/components/dialogs/ConfirmDialog';
+import { TableHeader } from '@/components/car-definitions/TableHeader';
+import Item from '@/components/common/Item';
 
 const SELECTED_COLOR = '#ccf';
 
