@@ -6,7 +6,18 @@ import { useRouter } from 'next/navigation';
 import React, {useEffect, useRef, useState} from 'react';
 import {CookieValueTypes, deleteCookie, getCookie, setCookie} from 'cookies-next';
 import SideBar from '@/components/SideBar';
-import {IconButton, Stack, Typography, LinearProgress, Menu, MenuItem, TextField, Button} from '@mui/material';
+import {
+  IconButton,
+  Stack,
+  Typography,
+  LinearProgress,
+  Menu,
+  MenuItem,
+  TextField,
+  Button,
+  Dialog,
+  DialogTitle, DialogContent, DialogContentText, DialogActions
+} from '@mui/material';
 import Item from '@/components/common/Item';
 import MenuIcon from '@mui/icons-material/Menu';
 import { errorDialog } from '@/components/dialogs/ConfirmDialog';
@@ -33,6 +44,8 @@ const Home: NextPage = () => {
   const [checkingJwt, setCheckingJwt] = useState(true);
   const [currentPage, setCurrentPage] = useState(<></>);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [loginShowing, setLoginShowing] = useState(false);
+  const [logoutShowing, setLogoutShowing] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -66,6 +79,8 @@ const Home: NextPage = () => {
           return;
         }
 
+        setLoginShowing(true);
+
         setCookie('jwt', result, {
           path: '/'
         });
@@ -81,6 +96,12 @@ const Home: NextPage = () => {
   if (!jwt) {
     return (
       <>
+        <Dialog open={loginShowing}>
+          <DialogContent>
+            <DialogContentText>Stand by, logging you in.</DialogContentText>
+          </DialogContent>
+        </Dialog>
+
         <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
           <div style={{display: 'flex', border: '1px solid #000'}}>
             <div style={{
@@ -196,6 +217,8 @@ const Home: NextPage = () => {
   }
 
   const handleLogout = () => {
+    setLogoutShowing(true);
+
     deleteCookie('jwt', {
       path: '/'
     });
@@ -215,6 +238,12 @@ const Home: NextPage = () => {
 
   return (
     <>
+      <Dialog open={logoutShowing}>
+        <DialogContent>
+          <DialogContentText>Stand by, logging you out.</DialogContentText>
+        </DialogContent>
+      </Dialog>
+
       <div style={{ display: 'flex', width: '100%' }}>
         {/* Side Divider, only contains the sidebar, which is static.*/}
         <div style={{ width: '260px' }}>
