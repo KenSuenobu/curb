@@ -9,6 +9,14 @@ export class DeliveryAddressDto {
   id?: number;
 
   @ApiProperty({
+    description: 'Fleet ID associated with the address',
+    nullable: false,
+    type: Number,
+    required: true,
+  })
+  fleetId: number;
+
+  @ApiProperty({
     description: 'Name of the Delivery Location',
     nullable: false,
     type: String,

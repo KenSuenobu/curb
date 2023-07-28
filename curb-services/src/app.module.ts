@@ -17,10 +17,13 @@ import {UserController} from './controllers/user.controller';
 import {UserService} from './services/user.service';
 import {GuestController} from './controllers/guest.controller';
 import {GuestService} from './services/guest.service';
+import {AddressController} from './controllers/address.controller';
+import {AddressService} from './services/address.service';
 
 @Module({
   imports: [],
   controllers: [
+    AddressController,
     CarMakeController,
     CarModelController,
     CarYearController,
@@ -32,6 +35,7 @@ import {GuestService} from './services/guest.service';
     UserController,
   ],
   providers: [
+    AddressService,
     CarMakeService,
     CarModelService,
     CarYearService,

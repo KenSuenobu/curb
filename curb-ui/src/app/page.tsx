@@ -23,13 +23,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { errorDialog } from '@/components/dialogs/ConfirmDialog';
 import {
   DirectionsCarOutlined,
-  GarageOutlined,
+  GarageOutlined, HouseOutlined,
   MoneyOutlined,
   PeopleOutlined,
   PersonOffOutlined
 } from '@mui/icons-material';
 import { SideBarMenuGroupProps } from '@/components/SideBarMenuGroup';
 import CarDefinitions from '@/pages/car-definitions/index';
+import DeliveryAddress from '@/pages/delivery-address/index';
 import Fleet from '@/pages/fleet/index';
 import FleetLoans from '@/pages/fleet-loans/index';
 import FleetMembership from '@/pages/fleet-membership/index';
@@ -179,6 +180,11 @@ const Home: NextPage = () => {
         icon: <GarageOutlined/>,
         label: 'Fleet Cars',
         onClick: () => setCurrentPage(<Fleet jwt={jwt}/>),
+      },
+      {
+        icon: <HouseOutlined/>,
+        label: 'Delivery Addresses',
+        onClick: () => setCurrentPage(<DeliveryAddress jwt={jwt}/>),
       },
       {
         icon: <MoneyOutlined/>,
