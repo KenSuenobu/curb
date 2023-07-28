@@ -48,7 +48,7 @@ import {
 import {useEffect, useRef, useState} from 'react';
 import {Stack} from '@mui/system';
 import Item from "../components/common/Item";
-import {errorDialog} from '../components/dialogs/ConfirmDialog';
+import {errorDialog} from '../../curb-ui/src/components/dialogs/ConfirmDialog';
 import Link from 'next/link';
 import axios from 'axios';
 import {CookieValueTypes, deleteCookie, getCookie, setCookie} from 'cookies-next';

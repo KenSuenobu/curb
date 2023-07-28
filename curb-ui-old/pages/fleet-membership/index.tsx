@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import {errorDialog} from '../../components/dialogs/ConfirmDialog';
+import {errorDialog} from '../../../curb-ui/src/components/dialogs/ConfirmDialog';
 import {LoadCarMakes} from '../../components/database/car-make';
 import {
   Button, FormControl, IconButton, InputLabel,

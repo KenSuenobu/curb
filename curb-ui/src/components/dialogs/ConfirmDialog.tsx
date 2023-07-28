@@ -1,5 +1,7 @@
 // Created with assistance from the following video tutorial: https://www.youtube.com/watch?v=-fnLEO4e-3Y
 
+'use client';
+
 import { create } from 'zustand';
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
 

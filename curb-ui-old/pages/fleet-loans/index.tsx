@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import {TableHeader} from '../../components/car-definitions/TableHeader';
 import {AddOutlined, ArrowRightOutlined, DeleteOutlined, PreviewOutlined} from '@mui/icons-material';
-import {errorDialog} from '../../components/dialogs/ConfirmDialog';
+import {errorDialog} from '../../../curb-ui/src/components/dialogs/ConfirmDialog';
 import Item from '../../components/common/Item';
 import React, {useEffect, useRef, useState} from 'react';
 import {IFleet, LoadFleet} from '../../components/database/fleet';

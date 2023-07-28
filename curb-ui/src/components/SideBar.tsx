@@ -7,10 +7,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import SideBarMenuGroup, { SideBarMenuGroupProps } from './SideBarMenuGroup';
-import SideBarMenuItem from './SideBarMenuItem';
-import {HomeMiniOutlined} from '@mui/icons-material';
-import {alertDialog} from '../../curb-ui/src/components/dialogs/ConfirmDialog';
-import { useRouter } from 'next/router';
 
 const FireNav = styled(List)<{ component?: React.ElementType }>({
   "& .MuiListItemButton-root": {
@@ -33,8 +29,6 @@ export interface SideBarProps {
 }
 
 export default function SideBar(props: SideBarProps) {
-  const router = useRouter();
-
   return (
     <Box sx={{ display: "flex" }} position={"fixed"} top={0} height={"100%"}>
       <ThemeProvider

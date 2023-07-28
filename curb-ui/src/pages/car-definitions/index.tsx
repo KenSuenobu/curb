@@ -12,10 +12,8 @@ import {
   DialogTitle,
   DialogContent, TextField, DialogActions, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, InputAdornment, Checkbox, Snackbar, Alert
 } from '@mui/material';
-import { NextPage } from "next";
-import React, { useEffect, useRef, useState } from "react";
-import {StackItem } from '../../components/StackItem';
-import {alertDialog, errorDialog} from '../../../curb-ui/src/components/dialogs/ConfirmDialog';
+import { NextPage } from 'next';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import {
   AddOutlined,
@@ -25,13 +23,14 @@ import {
   DeleteOutline,
   DeleteOutlined
 } from '@mui/icons-material';
-import { TableHeader } from '../../components/car-definitions/TableHeader';
-import {ICarMake, LoadCarMakes, StandardEquipmentList} from '../../components/database/car-make';
-import CheckboxTableRow from '../../components/common/CheckboxTableRow';
-import { ICarModel, LoadCarModels } from '../../components/database/car-model';
-import Item from '../../components/common/Item';
-import {ICarYear, LoadModelYears} from '../../components/database/car-year';
-import {ICarTrim, LoadCarTrims } from '../../components/database/car-trim';
+import {ICarModel, LoadCarModels } from '@/components/database/car-model';
+import {ICarMake, LoadCarMakes, StandardEquipmentList } from '@/components/database/car-make';
+import { errorDialog } from '@/components/dialogs/ConfirmDialog';
+import {ICarYear, LoadModelYears } from '@/components/database/car-year';
+import { ICarTrim, LoadCarTrims } from '@/components/database/car-trim';
+import { TableHeader } from '@/components/car-definitions/TableHeader';
+import Item from '@/components/common/Item';
+import CheckboxTableRow from '@/components/common/CheckboxTableRow';
 
 interface ICarTrimInfo {
   id?: number;
