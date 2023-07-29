@@ -83,7 +83,7 @@ const FleetMembership = (props: IFleetMembershipProps) => {
         errorDialog('Unable to retrieve login data; please login again.');
         return;
       });
-  }, []);
+  }, [props.jwt]);
 
   if (!userInfo) {
     return (

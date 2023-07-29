@@ -53,7 +53,7 @@ const DeliveryAddress = (props: IDeliveryAddressProps) => {
         errorDialog('Unable to retrieve login data; please login again.');
         return;
       });
-  }, []);
+  }, [props.jwt]);
 
   const reloadDeliveryAddresses = (fleetId: number) => {
     axios.get(`/app/address/delivery/list/${fleetId}`)

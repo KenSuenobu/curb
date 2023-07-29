@@ -63,7 +63,7 @@ const Guests = (props: IGuestProps) => {
         errorDialog('Unable to retrieve login data; please login again.');
         return;
       });
-  }, []);
+  }, [props.jwt]);
 
   const reloadGuestList = () => {
     axios.get(`/app/guest/list/${props.blacklisted}`)
@@ -160,7 +160,7 @@ const Guests = (props: IGuestProps) => {
     }
   }
 
-  useEffect(() => reloadGuestList(), []);
+  useEffect(() => reloadGuestList());
 
   return (
     <>
@@ -276,7 +276,7 @@ const Guests = (props: IGuestProps) => {
       </div>
 
       <div style={{ width: '100%', paddingLeft: '0.5em', paddingTop: '1.5em' }}>
-        <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Driver's License Detail</u></Typography>
+        <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Driver&apos;s License Detail</u></Typography>
       </div>
 
       <div style={{ display: 'flex' }}>

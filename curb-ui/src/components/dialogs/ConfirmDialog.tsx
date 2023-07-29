@@ -112,7 +112,7 @@ const ConfirmDialog: React.FC = () => {
         <DialogContentText>{message}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        {dialogButtons(dialogType, close, onSubmit)}
+        {dialogButtons(dialogType, close, onSubmit!)}
       </DialogActions>
     </Dialog>
   );

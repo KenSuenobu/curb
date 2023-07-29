@@ -52,7 +52,7 @@ const FleetLoans = (props: IFleetLoansProps) => {
       errorDialog('Unable to retrieve login data; please login again.');
       return;
     });
-  }, []);
+  }, [props.jwt]);
 
   const reloadFleet = (userId: number) => {
     LoadFleet(userId, (x: IFleet[]) => setFleetList(x));
@@ -240,7 +240,7 @@ const FleetLoans = (props: IFleetLoansProps) => {
                                 loadFleetLoan(x.id);
                               }}>
                               <Typography>
-                                {x.carYear} {x.makeName} {x.modelName} {x.trimName}: "{x.data.listingNickname ?? 'Unnamed'}"
+                                {x.carYear} {x.makeName} {x.modelName} {x.trimName}: &quot;{x.data.listingNickname ?? 'Unnamed'}&quot;
                               </Typography>
                             </TableCell>
                           </TableRow>

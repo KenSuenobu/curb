@@ -22,11 +22,12 @@ import Item from '@/components/common/Item';
 import MenuIcon from '@mui/icons-material/Menu';
 import { errorDialog } from '@/components/dialogs/ConfirmDialog';
 import {
+  CalendarMonthOutlined,
   DirectionsCarOutlined,
   GarageOutlined, HouseOutlined,
   MoneyOutlined,
   PeopleOutlined,
-  PersonOffOutlined
+  PersonOffOutlined, ScheduleOutlined, UpcomingOutlined, ViewWeekOutlined
 } from '@mui/icons-material';
 import { SideBarMenuGroupProps } from '@/components/SideBarMenuGroup';
 import CarDefinitions from '@/pages/car-definitions/index';
@@ -63,8 +64,8 @@ const Home: NextPage = () => {
   }
 
   const onLogin = async () => {
-    const username = usernameRef.current.value;
-    const password = passwordRef.current.value;
+    const username = usernameRef.current;
+    const password = passwordRef.current;
 
     if (username.length === 0 || password.length === 0) {
       errorDialog('Username and password fields are required to login.');
@@ -179,22 +180,22 @@ const Home: NextPage = () => {
       {
         icon: <GarageOutlined/>,
         label: 'Fleet Cars',
-        onClick: () => setCurrentPage(<Fleet jwt={jwt}/>),
+        onClick: () => setCurrentPage(<Fleet jwt={jwt as string}/>),
       },
       {
         icon: <HouseOutlined/>,
         label: 'Delivery Addresses',
-        onClick: () => setCurrentPage(<DeliveryAddress jwt={jwt}/>),
+        onClick: () => setCurrentPage(<DeliveryAddress jwt={jwt as string}/>),
       },
       {
         icon: <MoneyOutlined/>,
         label: 'Fleet Car Loans',
-        onClick: () => setCurrentPage(<FleetLoans jwt={jwt}/>),
+        onClick: () => setCurrentPage(<FleetLoans jwt={jwt as string}/>),
       },
       {
         icon: <PeopleOutlined/>,
         label: 'Fleet Membership',
-        onClick: () => setCurrentPage(<FleetMembership jwt={jwt}/>),
+        onClick: () => setCurrentPage(<FleetMembership jwt={jwt as string}/>),
       },
     ],
   };
@@ -204,17 +205,37 @@ const Home: NextPage = () => {
       {
         icon: <PeopleOutlined/>,
         label: 'Guests',
-        onClick: () => setCurrentPage(<Guests jwt={jwt} blacklisted={false}/>),
+        onClick: () => setCurrentPage(<Guests jwt={jwt as string} blacklisted={false}/>),
       },
       {
         icon: <PersonOffOutlined/>,
         label: 'Blacklisted Guests',
-        onClick: () => setCurrentPage(<Guests jwt={jwt} blacklisted={true}/>),
+        onClick: () => setCurrentPage(<Guests jwt={jwt as string} blacklisted={true}/>),
+      },
+    ],
+  }
+  const tripItems: SideBarMenuGroupProps = {
+    label: 'Trips',
+    items: [
+      {
+        icon: <CalendarMonthOutlined/>,
+        label: 'Trip Entry',
+        onClick: () => setCurrentPage(<></>),
+      },
+      {
+        icon: <UpcomingOutlined/>,
+        label: 'Upcoming Trips',
+        onClick: () => setCurrentPage(<></>),
+      },
+      {
+        icon: <ScheduleOutlined/>,
+        label: 'Past Trips',
+        onClick: () => setCurrentPage(<></>),
       },
     ],
   }
 
-  const handleMenu = (e) => {
+  const handleMenu = (e: any) => {
     setAnchorEl(e);
   }
 
@@ -254,7 +275,7 @@ const Home: NextPage = () => {
         {/* Side Divider, only contains the sidebar, which is static.*/}
         <div style={{ width: '260px' }}>
           <SideBar width={ 260 } sidebarItems={[
-            carItems, fleetItems, guestItems,
+            carItems, fleetItems, guestItems, tripItems,
           ]} onHomeClicked={() => handleHomeClicked()}/>
         </div>
 

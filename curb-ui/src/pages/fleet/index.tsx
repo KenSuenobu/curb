@@ -214,7 +214,7 @@ const Fleet = (props: IFleetProps) => {
         errorDialog(`Unable to retrieve login data; please login again: ${x}`);
         return;
       });
-  }, []);
+  }, [props.jwt]);
 
   useEffect(() => LoadCarMakes((x) => setCarMakeList(x)), []);
 
@@ -338,7 +338,7 @@ const Fleet = (props: IFleetProps) => {
                                         setCarTrimList([]);
                                         setCarFleetData({});
                                       })}>
-                                {carMakeList.map((x) => <MenuItem value={x.id}>{x.name}</MenuItem>)}
+                                {carMakeList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}
                               </Select>
                             </FormControl>
                           </Item>
@@ -356,7 +356,7 @@ const Fleet = (props: IFleetProps) => {
                                         setCarTrimList([]);
                                         setCarFleetData({});
                                       }}>
-                                {carModelList.map((x) => <MenuItem value={x.id}>{x.name}</MenuItem>)}
+                                {carModelList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}
                               </Select>
                             </FormControl>
                           </Item>
@@ -372,7 +372,7 @@ const Fleet = (props: IFleetProps) => {
                                         LoadCarTrims(e.target.value, (x) => setCarTrimList(x));
                                         setCarFleetData({});
                                       }}>
-                                {carYearList.map((x) => <MenuItem value={x.id}>{x.year}</MenuItem>)}
+                                {carYearList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.year}</MenuItem>)}
                               </Select>
                             </FormControl>
                           </Item>
@@ -386,7 +386,7 @@ const Fleet = (props: IFleetProps) => {
                                         setFleetCarId(0);
                                         setCarFleetData({});
                                       }}>
-                                {carTrimList.map((x) => <MenuItem value={x.id}>{x.name}</MenuItem>)}
+                                {carTrimList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}
                               </Select>
                             </FormControl>
                           </Item>
@@ -427,7 +427,7 @@ const Fleet = (props: IFleetProps) => {
                                 setCarTrimList([]);
                               }}>
                               <Typography>
-                                {x.carYear} {x.makeName} {x.modelName} {x.trimName}: "{x.data.listingNickname ?? 'Unnamed'}"
+                                {x.carYear} {x.makeName} {x.modelName} {x.trimName}: &quot;{x.data.listingNickname ?? 'Unnamed'}&quot;
                               </Typography>
                             </TableCell>
                             <TableCell
@@ -526,8 +526,8 @@ const Fleet = (props: IFleetProps) => {
                             name={'color'}
                             onChange={handleChange}
                             fullWidth>
-                      {ColorDatabase.map((x) => (
-                        <MenuItem value={x.label}>
+                      {ColorDatabase.map((x, counter) => (
+                        <MenuItem value={x.label} key={counter}>
                           <Stack direction={'row'}>
                             <div style={{ width: '24px', backgroundColor: x.color }}>&nbsp;</div>
                             <div style={{ paddingLeft: '10px' }}><Typography>{x.label}</Typography></div>
@@ -678,8 +678,8 @@ const Fleet = (props: IFleetProps) => {
                   )}
                   {carFleetData.ownership && (
                     <>
-                      {carFleetData.ownership.map((x) => (
-                        <TableRow hover>
+                      {carFleetData.ownership.map((x, counter) => (
+                        <TableRow hover key={counter}>
                           <TableCell sx={{ color: '#000' }}>{x.name}</TableCell>
                           <TableCell sx={{ color: '#000' }}>{x.phone}</TableCell>
                           <TableCell sx={{ color: '#000' }}>{x.ownership} %</TableCell>
@@ -763,8 +763,8 @@ const Fleet = (props: IFleetProps) => {
                   )}
                   {carFleetData.insurance && (
                     <>
-                      {carFleetData.insurance.map((x) => (
-                        <TableRow hover>
+                      {carFleetData.insurance.map((x, counter) => (
+                        <TableRow hover key={counter}>
                           <TableCell sx={{ color: '#000' }}>{x.name}</TableCell>
                           <TableCell sx={{ color: '#000' }}>$ {x.price}</TableCell>
                           <TableCell sx={{ color: '#000' }}>{x.schedule}</TableCell>

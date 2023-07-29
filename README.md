@@ -60,7 +60,18 @@ Phase 1:
     - Additional Data
   - Delivery Address
     - Name
+    - Fleet ID
     - Additional Data
+  - Trip
+    - Fleet Car ID
+    - Guest ID
+    - Delivery Address ID
+    - External Trip ID
+    - External Trip Record URL
+    - Start Time
+    - End Time
+    - Mileage
+    - Earnings
 - User Interface:
   - Car make
   - Car model

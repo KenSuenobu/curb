@@ -50,21 +50,21 @@ const CarDefinitions: NextPage = () => {
   const [carModelId, setCarModelId] = useState(0);
   const [carYearId, setCarYearId] = useState(0);
   const [carTrimId, setCarTrimId] = useState(0);
-  const [trimInfoPayload, setTrimInfoPayload] = useState({});
+  const [trimInfoPayload, setTrimInfoPayload] = useState<any>({});
   const [checkedStates, setCheckedStates] = useState(Array(StandardEquipmentList.length).fill(false));
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const carMakeRef = useRef();
-  const carModelRef = useRef();
-  const carYearRef = useRef();
-  const carTrimRef = useRef();
-  const trimInfoOptionNameRef = useRef();
-  const trimInfoOptionPriceRef = useRef();
-  const colorNameRef = useRef();
-  const colorPriceRef = useRef();
-  const trimInfoReviewUrlRef = useRef();
-  const trimInfoReviewUrlSiteRef = useRef();
+  const carMakeRef = useRef('');
+  const carModelRef = useRef('');
+  const carYearRef = useRef('');
+  const carTrimRef = useRef('');
+  const trimInfoOptionNameRef = useRef('');
+  const trimInfoOptionPriceRef = useRef('');
+  const colorNameRef = useRef('');
+  const colorPriceRef = useRef('');
+  const trimInfoReviewUrlRef = useRef('');
+  const trimInfoReviewUrlSiteRef = useRef('');
 
-  const loadCarTrimInfo = (trimId) => {
+  const loadCarTrimInfo = (trimId: string) => {
     axios.get(`/app/car-trim-info/get/${trimId}`)
       .then((x) => {
         if (!x.data.id) {
@@ -85,7 +85,7 @@ const CarDefinitions: NextPage = () => {
   }
 
   const addCarMake = () => {
-    const carMake = carMakeRef.current.value;
+    const carMake = carMakeRef.current;
 
     if (carMake.length === 0) {
       errorDialog('Car Make is required.');
@@ -103,11 +103,11 @@ const CarDefinitions: NextPage = () => {
 
     setCarMakesInputShowing(false);
 
-    carMakeRef.current.value = '';
+    carMakeRef.current = '';
   }
 
   const addCarModel = () => {
-    const carModel = carModelRef.current.value;
+    const carModel = carModelRef.current;
 
     if (carModel.length === 0) {
       errorDialog('Car Model is required.');
@@ -121,16 +121,16 @@ const CarDefinitions: NextPage = () => {
 
     axios.post('/app/car-model/create', payload)
       .then((x) => {
-        LoadCarModels(carMakeId, (x: ICarModel[]) => setCarModels(x));
+        LoadCarModels(carMakeId, (x: ICarModel[]) => setCarModels(x as never[]));
       });
 
     setCarModelsInputShowing(false);
 
-    carModelRef.current.value = '';
+    carModelRef.current = '';
   }
 
   const addCarYear = () => {
-    const carYear = carYearRef.current.value;
+    const carYear = carYearRef.current;
 
     if (carYear.length === 0) {
       errorDialog('Car Year is required.');
@@ -146,16 +146,16 @@ const CarDefinitions: NextPage = () => {
 
     axios.post('/app/car-year/create', payload)
       .then((x) => {
-        LoadModelYears(carModelId, (x) => setCarYears(x));
+        LoadModelYears(carModelId, (x) => setCarYears(x as never[]));
       });
 
     setCarYearsInputShowing(false);
 
-    carYearRef.current.value = '';
+    carYearRef.current = '';
   }
 
   const addCarTrim = () => {
-    const carTrim = carTrimRef.current.value;
+    const carTrim = carTrimRef.current;
 
     if (carTrim.length === 0) {
       errorDialog('Car Trim level is required.');
@@ -171,18 +171,19 @@ const CarDefinitions: NextPage = () => {
 
     axios.post('/app/car-trim/create', payload)
       .then((x) => {
-        LoadCarTrims(carYearId, (y) => setCarTrims(y));
+        LoadCarTrims(carYearId, (y) => setCarTrims(y as never[]));
       });
 
     setCarTrimsInputShowing(false);
 
-    carTrimRef.current.value = '';
+    carTrimRef.current = '';
   }
 
   const saveCarTrimInfo = () => {
     const payload: ICarTrimInfo = carTrimInfo ? carTrimInfo :
       {
         trimId: carTrimId,
+        data: trimInfoPayload,
       };
 
     payload.data = trimInfoPayload;
@@ -203,11 +204,11 @@ const CarDefinitions: NextPage = () => {
         return;
       }
     } else {
-      const result = axios.post('/app/car-trim-info/create', payload)
-        .then((x) => x.data);
-
-      setCarTrimInfo(result);
-      setTrimInfoPayload(result.data);
+      axios.post('/app/car-trim-info/create', payload)
+        .then((x) => {
+          setCarTrimInfo(x.data);
+          setTrimInfoPayload(x.data.data);
+        });
     }
 
     setSnackbarOpen(true);
@@ -218,15 +219,15 @@ const CarDefinitions: NextPage = () => {
   }
 
   const addTrimOption = () => {
-    const optionName = trimInfoOptionNameRef.current.value ?? '';
-    const optionValue = trimInfoOptionPriceRef.current.value ?? '';
+    const optionName = trimInfoOptionNameRef.current ?? '';
+    const optionValue = trimInfoOptionPriceRef.current ?? '';
 
     if (!optionName || !optionValue) {
       errorDialog('Option name and value are required.');
       return;
     }
 
-    const tip = trimInfoPayload;
+    const tip: any = trimInfoPayload;
 
     if (!tip.optionList) {
       tip.optionList = [];
@@ -234,7 +235,7 @@ const CarDefinitions: NextPage = () => {
 
     let found = false;
 
-    tip.optionList.forEach((x) => {
+    tip.optionList.forEach((x: any) => {
       if (x.name === optionName) {
         found = true;
       }
@@ -242,8 +243,8 @@ const CarDefinitions: NextPage = () => {
 
     if (found) {
       errorDialog(`Option '${optionName}' already exists in the list.`);
-      trimInfoOptionNameRef.current.value = '';
-      trimInfoOptionPriceRef.current.value = '';
+      trimInfoOptionNameRef.current = '';
+      trimInfoOptionPriceRef.current = '';
       return;
     }
 
@@ -254,22 +255,22 @@ const CarDefinitions: NextPage = () => {
 
     setTrimInfoPayload(tip);
 
-    trimInfoOptionNameRef.current.value = '';
-    trimInfoOptionPriceRef.current.value = '';
+    trimInfoOptionNameRef.current = '';
+    trimInfoOptionPriceRef.current = '';
 
     setCarOptionsInputShowing(false);
   }
 
   const addColorOption = () => {
-    const colorName = colorNameRef.current.value ?? '';
-    const colorValue = colorPriceRef.current.value ?? '';
+    const colorName = colorNameRef.current ?? '';
+    const colorValue = colorPriceRef.current ?? '';
 
     if (!colorName || !colorValue) {
       errorDialog('Color name and value are required.');
       return;
     }
 
-    const tip = trimInfoPayload;
+    const tip: any = trimInfoPayload;
 
     if (!tip.colorList) {
       tip.colorList = [];
@@ -277,16 +278,16 @@ const CarDefinitions: NextPage = () => {
 
     let found = false;
 
-    tip.colorList.forEach((x) => {
+    tip.colorList.forEach((x: any) => {
       if (x.name === colorName) {
         found = true;
       }
     });
 
     if (found) {
-      errorDialog(`Color '${colorList}' already exists in the list.`);
-      colorNameRef.current.value = '';
-      colorPriceRef.current.value = '';
+      errorDialog(`Color '${colorValue}' already exists in the list.`);
+      colorNameRef.current = '';
+      colorPriceRef.current = '';
       return;
     }
 
@@ -297,22 +298,22 @@ const CarDefinitions: NextPage = () => {
 
     setTrimInfoPayload(tip);
 
-    colorNameRef.current.value = '';
-    colorPriceRef.current.value = '';
+    colorNameRef.current = '';
+    colorPriceRef.current = '';
 
     setCarColorsInputShowing(false);
   }
 
   const addCarSite = () => {
-    const carReviewSiteName = trimInfoReviewUrlSiteRef.current.value ?? '';
-    const carReviewUrl = trimInfoReviewUrlRef.current.value ?? '';
+    const carReviewSiteName = trimInfoReviewUrlSiteRef.current ?? '';
+    const carReviewUrl = trimInfoReviewUrlRef.current ?? '';
 
     if (!carReviewSiteName || !carReviewUrl) {
       errorDialog('Car review site name and video URL are required.');
       return;
     }
 
-    const tip = trimInfoPayload;
+    const tip: any = trimInfoPayload;
 
     if (!tip.siteList) {
       tip.siteList = [];
@@ -320,7 +321,7 @@ const CarDefinitions: NextPage = () => {
 
     let found = false;
 
-    tip.siteList.forEach((x) => {
+    tip.siteList.forEach((x: any) => {
       if (x.url === carReviewUrl) {
         found = true;
       }
@@ -328,8 +329,8 @@ const CarDefinitions: NextPage = () => {
 
     if (found) {
       errorDialog(`Video URL '${carReviewUrl}' already exists in the list.`);
-      trimInfoReviewUrlSiteRef.current.value = '';
-      trimInfoReviewUrlRef.current.value = '';
+      trimInfoReviewUrlSiteRef.current = '';
+      trimInfoReviewUrlRef.current = '';
       return;
     }
 
@@ -340,8 +341,8 @@ const CarDefinitions: NextPage = () => {
 
     setTrimInfoPayload(tip);
 
-    trimInfoReviewUrlSiteRef.current.value = '';
-    trimInfoReviewUrlRef.current.value = '';
+    trimInfoReviewUrlSiteRef.current = '';
+    trimInfoReviewUrlRef.current = '';
 
     setCarUrlInputShowing(false);
   }
@@ -349,7 +350,7 @@ const CarDefinitions: NextPage = () => {
   const deleteOption = (x: any) => {
     let optionList = trimInfoPayload.optionList ?? [];
 
-    optionList = optionList.filter((y) => y.name !== x.name);
+    optionList = optionList.filter((y: any) => y.name !== x.name);
 
     setTrimInfoPayload({
       ...trimInfoPayload,
@@ -360,7 +361,7 @@ const CarDefinitions: NextPage = () => {
   const deleteColor = (x: any) => {
     let colorList = trimInfoPayload.colorList ?? [];
 
-    colorList = colorList.filter((y) => y.name !== x.name);
+    colorList = colorList.filter((y: any) => y.name !== x.name);
 
     setTrimInfoPayload({
       ...trimInfoPayload,
@@ -371,7 +372,7 @@ const CarDefinitions: NextPage = () => {
   const deleteSite = (x: any) => {
     let siteList = trimInfoPayload.siteList ?? [];
 
-    siteList = siteList.filter((y) => y.url !== x.url);
+    siteList = siteList.filter((y: any) => y.url !== x.url);
 
     setTrimInfoPayload({
       ...trimInfoPayload,
@@ -379,7 +380,7 @@ const CarDefinitions: NextPage = () => {
     });
   }
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setTrimInfoPayload({
       ...trimInfoPayload,
       [e.target.name]: e.target.value,
@@ -408,7 +409,7 @@ const CarDefinitions: NextPage = () => {
                             onKeyDown={(ev) => {
                               if (ev.key === 'Escape') {
                                 setCarMakesInputShowing(false);
-                                carMakeRef.current.value = '';
+                                carMakeRef.current = '';
                               } else if (ev.key === 'Enter') {
                                 addCarMake();
                               }
@@ -488,7 +489,7 @@ const CarDefinitions: NextPage = () => {
                                    onKeyDown={(ev) => {
                                      if (ev.key === 'Escape') {
                                        setCarModelsInputShowing(false);
-                                       carModelRef.current.value = null;
+                                       carModelRef.current = '';
                                      } else if (ev.key === 'Enter') {
                                        addCarModel();
                                      }
@@ -504,11 +505,11 @@ const CarDefinitions: NextPage = () => {
                 )}
                 {carModels.length > 0 ? (
                   <TableBody>
-                    {carModels.map((x) => {
+                    {carModels.map((x, counter) => {
                       const bgColor = carModelId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
-                        <TableRow hover sx={{ cursor: 'pointer' }}>
+                        <TableRow hover sx={{ cursor: 'pointer' }} key={counter}>
                           <TableCell
                             sx={{ backgroundColor: bgColor, width: '90%' }}
                             onClick={() => {
@@ -562,7 +563,7 @@ const CarDefinitions: NextPage = () => {
                                      onKeyDown={(ev) => {
                                        if (ev.key === 'Escape') {
                                          setCarYearsInputShowing(false);
-                                         carYearRef.current.value = null;
+                                         carYearRef.current = '';
                                        } else if (ev.key === 'Enter') {
                                          addCarYear();
                                        }
@@ -579,11 +580,11 @@ const CarDefinitions: NextPage = () => {
                 )}
                 {carYears.length > 0 ? (
                   <TableBody>
-                    {carYears.map((x) => {
+                    {carYears.map((x, counter) => {
                       const bgColor = carYearId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
-                        <TableRow hover sx={{ cursor: 'pointer' }}>
+                        <TableRow hover sx={{ cursor: 'pointer' }} key={counter}>
                           <TableCell
                             sx={{ backgroundColor: bgColor, width: '90%' }}
                             onClick={() => {
@@ -632,7 +633,7 @@ const CarDefinitions: NextPage = () => {
                                      onKeyDown={(ev) => {
                                        if (ev.key === 'Escape') {
                                          setCarTrimsInputShowing(false);
-                                         carTrimRef.current.value = '';
+                                         carTrimRef.current = '';
                                        } else if (ev.key === 'Enter') {
                                          addCarTrim();
                                        }
@@ -649,11 +650,11 @@ const CarDefinitions: NextPage = () => {
                 )}
                 {carTrims.length > 0 ? (
                   <TableBody>
-                    {carTrims.map((x) => {
+                    {carTrims.map((x, counter) => {
                       const bgColor = carTrimId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
-                        <TableRow hover sx={{ cursor: 'pointer' }}>
+                        <TableRow hover sx={{ cursor: 'pointer' }} key={counter}>
                           <TableCell colSpan={2}
                             sx={{ backgroundColor: bgColor, width: '90%' }}
                             onClick={() => {
@@ -938,7 +939,7 @@ const CarDefinitions: NextPage = () => {
                     </>
                   )}
                   <TableBody>
-                    {trimInfoPayload?.optionList?
+                    {trimInfoPayload?.optionList
                       .sort((a, b) => (a.name > b.name ? 1 : -1))
                       .map((x) => (
                       <>
@@ -1016,7 +1017,7 @@ const CarDefinitions: NextPage = () => {
                     </>
                   )}
                   <TableBody>
-                    {trimInfoPayload?.colorList?
+                    {trimInfoPayload?.colorList
                       .sort((a, b) => (a.name > b.name ? 1 : -1))
                       .map((x) => (
                       <>
@@ -1094,7 +1095,7 @@ const CarDefinitions: NextPage = () => {
                   </>
                 )}
                 <TableBody>
-                  {trimInfoPayload?.siteList?
+                  {trimInfoPayload?.siteList
                     .sort((a, b) => (a.name > b.name ? 1 : -1))
                     .map((x) => (
                     <>
