@@ -69,7 +69,6 @@ const Guests = (props: IGuestProps) => {
     axios.get(`/app/guest/list/${props.blacklisted}`)
       .then((x) => {
         setGuestList(x.data);
-        console.log(`Guest List: ${JSON.stringify(x.data, null, 2)}`);
       })
       .catch((x) => {
         setGuestList([]);
@@ -90,14 +89,14 @@ const Guests = (props: IGuestProps) => {
     });
   }
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setGuestData({
       ...guestData,
       [e.target.name]: e.target.value,
     });
   }
 
-  const handleDataChange = (e) => {
+  const handleDataChange = (e: any) => {
     const data = guestData.data;
 
     data[e.target.name] = e.target.value;
@@ -160,7 +159,9 @@ const Guests = (props: IGuestProps) => {
     }
   }
 
-  useEffect(() => reloadGuestList());
+  useEffect(() => {
+    reloadGuestList();
+  }, [props.blacklisted]);
 
   return (
     <>
@@ -184,7 +185,7 @@ const Guests = (props: IGuestProps) => {
                 )}
                 {guestList.length > 0 ? (
                   <TableBody>
-                    {guestList.map((x) => {
+                    {guestList.map((x: any) => {
                       const bgColor = guestData.id === x.id ? SELECTED_COLOR : '#fff';
 
                       return (

@@ -32,16 +32,16 @@ const FleetLoans = (props: IFleetLoansProps) => {
   const [fleetId, setFleetId] = useState(0);
   const [fleetCarId, setFleetCarId] = useState(0);
   const [fleetCarLoanId, setFleetCarLoanId] = useState(0);
-  const [fleetLoanData, setFleetLoanData] = useState({});
-  const [currentLoanData, setCurrentLoanData] = useState({});
+  const [fleetLoanData, setFleetLoanData] = useState<any>({});
+  const [currentLoanData, setCurrentLoanData] = useState<any>({});
   const [loanPaymentData, setLoanPaymentData] = useState([]);
   const [loanPaymentDataShowing, setLoanPaymentDataShowing] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
-  const formDateRef = useRef();
-  const formPrincipalRef = useRef();
-  const formInterestRef = useRef();
-  const formTotalRef = useRef();
+  const formDateRef = useRef('');
+  const formPrincipalRef = useRef('');
+  const formInterestRef = useRef('');
+  const formTotalRef = useRef('');
 
   useEffect(() => {
     axios.get(`/app/user/login/${props.jwt}`)
@@ -68,7 +68,7 @@ const FleetLoans = (props: IFleetLoansProps) => {
       return;
     }
 
-    const payload = currentLoanData;
+    const payload: any = currentLoanData;
 
     payload.data = fleetLoanData;
 
@@ -136,7 +136,7 @@ const FleetLoans = (props: IFleetLoansProps) => {
       });
   }
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setFleetLoanData({
       ...fleetLoanData,
       [e.target.name]: e.target.value,
@@ -144,17 +144,17 @@ const FleetLoans = (props: IFleetLoansProps) => {
   }
 
   const addLoanPayment = () => {
-    const paymentDate = formDateRef.current.value ?? '';
-    const principalAmount = formPrincipalRef.current.value ?? '';
-    const interestAmount = formInterestRef.current.value ?? '';
-    const totalAmount = formTotalRef.current.value ?? '';
+    const paymentDate = formDateRef.current ?? '';
+    const principalAmount = formPrincipalRef.current ?? '';
+    const interestAmount = formInterestRef.current ?? '';
+    const totalAmount = formTotalRef.current ?? '';
 
     if (paymentDate.length == 0 || principalAmount.length == 0 || interestAmount.length == 0 || totalAmount.length == 0) {
       errorDialog('Payment date, principal amount, interest amount, and total amount are required.');
       return;
     }
 
-    const payload = {
+    const payload: any = {
       fleetCarLoanId: currentLoanData.id,
       paymentDate,
       principalAmount,
@@ -194,16 +194,16 @@ const FleetLoans = (props: IFleetLoansProps) => {
                             <TableCell
                               sx={{ backgroundColor: bgColor, width: '90%' }}
                               onClick={() => {
-                                setFleetId(x.id);
+                                setFleetId(x.id!);
                                 setFleetCarId(0);
-                                reloadFleetCars(x.id);
+                                reloadFleetCars(x.id!);
                                 setFleetLoanData({});
                               }}><Typography>{x.name}</Typography></TableCell>
                             <TableCell
                               onClick={() => {
-                                setFleetId(x.id);
+                                setFleetId(x.id!);
                                 setFleetCarId(0);
-                                reloadFleetCars(x.id);
+                                reloadFleetCars(x.id!);
                                 setFleetLoanData({});
                               }}
                               sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
@@ -226,7 +226,7 @@ const FleetLoans = (props: IFleetLoansProps) => {
                 <TableHeader header={'Fleet Car'}/>
                 {fleetCarList.length > 0 ? (
                   <TableBody>
-                    {fleetCarList.map((x) => {
+                    {fleetCarList.map((x: any) => {
                       const bgColor = fleetCarId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
@@ -236,8 +236,8 @@ const FleetLoans = (props: IFleetLoansProps) => {
                               colSpan={2}
                               sx={{ backgroundColor: bgColor, width: '90%' }}
                               onClick={() => {
-                                setFleetCarId(x.id);
-                                loadFleetLoan(x.id);
+                                setFleetCarId(x.id!);
+                                loadFleetLoan(x.id!);
                               }}>
                               <Typography>
                                 {x.carYear} {x.makeName} {x.modelName} {x.trimName}: &quot;{x.data.listingNickname ?? 'Unnamed'}&quot;
@@ -482,11 +482,11 @@ const FleetLoans = (props: IFleetLoansProps) => {
                       <TableRow sx={{ color: 'white', backgroundColor: 'black' }}>
                         <TableCell>Total:</TableCell>
                         <TableCell></TableCell>
-                        <TableCell>$ {loanPaymentData.map((x) => x.principalAmount)
+                        <TableCell>$ {loanPaymentData.map((x: any) => x.principalAmount)
                           .reduce((acc, cur) => acc + cur)}</TableCell>
-                        <TableCell>$ {loanPaymentData.map((x) => x.interestAmount)
+                        <TableCell>$ {loanPaymentData.map((x: any) => x.interestAmount)
                           .reduce((acc, cur) => acc + cur)}</TableCell>
-                        <TableCell colSpan={2}>$ {loanPaymentData.map((x) => x.totalAmount)
+                        <TableCell colSpan={2}>$ {loanPaymentData.map((x: any) => x.totalAmount)
                           .reduce((acc, cur) => acc + cur)}</TableCell>
                       </TableRow>
                     </>

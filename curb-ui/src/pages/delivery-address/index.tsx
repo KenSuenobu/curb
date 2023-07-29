@@ -71,14 +71,14 @@ const DeliveryAddress = (props: IDeliveryAddressProps) => {
   }
 
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setAddressData({
       ...addressData,
       [e.target.name]: e.target.value,
     });
   }
 
-  const handleDataChange = (e) => {
+  const handleDataChange = (e: any) => {
     const data = addressData.data;
 
     data[e.target.name] = e.target.value;
@@ -168,15 +168,15 @@ const DeliveryAddress = (props: IDeliveryAddressProps) => {
                             <TableCell
                               sx={{ backgroundColor: bgColor, width: '90%' }}
                               onClick={() => {
-                                setFleetId(x.id);
+                                setFleetId(x.id!);
                                 clearForm();
-                                reloadDeliveryAddresses(x.id);
+                                reloadDeliveryAddresses(x.id!);
                               }}><Typography>{x.name}</Typography></TableCell>
                             <TableCell
                               onClick={() => {
-                                setFleetId(x.id);
+                                setFleetId(x.id!);
                                 clearForm();
-                                reloadDeliveryAddresses(x.id);
+                                reloadDeliveryAddresses(x.id!);
                               }}
                               sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
                           </TableRow>
@@ -198,7 +198,7 @@ const DeliveryAddress = (props: IDeliveryAddressProps) => {
                 <TableHeader header={'Delivery Address'}/>
                 {addressList.length > 0 ? (
                   <TableBody>
-                    {addressList.map((x) => {
+                    {addressList.map((x: any) => {
                       const bgColor = addressData.id === x.id ? SELECTED_COLOR : '#fff';
 
                       return (

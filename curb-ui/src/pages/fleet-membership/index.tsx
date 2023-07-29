@@ -13,7 +13,7 @@ import {
   Typography
 } from '@mui/material';
 import {ArrowRightOutlined, DeleteOutlined} from '@mui/icons-material';
-import { LoadFleet } from '@/components/database/fleet';
+import {IFleet, LoadFleet} from '@/components/database/fleet';
 import { errorDialog } from '@/components/dialogs/ConfirmDialog';
 import { TableHeader } from '@/components/car-definitions/TableHeader';
 
@@ -33,7 +33,7 @@ const FleetMembership = (props: IFleetMembershipProps) => {
   const fleetMemberRef = useRef('');
 
   const reloadFleet = (id: number) => {
-    LoadFleet(id, (x: IFleet[]) => setFleetList(x));
+    LoadFleet(id, (x: IFleet[]) => setFleetList(x as never[]));
   }
 
   const reloadFleetMembership = (id: number) => {
@@ -48,7 +48,7 @@ const FleetMembership = (props: IFleetMembershipProps) => {
   }
 
   const addFleetMember = () => {
-    const fleetMember = fleetMemberRef.current.value;
+    const fleetMember = fleetMemberRef.current;
 
     if (fleetMember.length == 0) {
       errorDialog('Missing e-mail address.');
@@ -60,11 +60,11 @@ const FleetMembership = (props: IFleetMembershipProps) => {
         if (x.data === true) {
           reloadFleetMembership(fleetId);
           setAddFleetMemberShowing(false);
-          fleetMemberRef.current.value = '';
+          fleetMemberRef.current = '';
         } else {
           errorDialog(`Could not add ${fleetMember} to the fleet: account may not exist, or may not yet have been verified.`);
           setAddFleetMemberShowing(false);
-          fleetMemberRef.current.value = '';
+          fleetMemberRef.current = '';
           return;
         }
       })
@@ -88,7 +88,7 @@ const FleetMembership = (props: IFleetMembershipProps) => {
   if (!userInfo) {
     return (
       <>
-        <LinearProgress fullWidth/>
+        <LinearProgress/>
       </>
     );
   }
@@ -112,15 +112,15 @@ const FleetMembership = (props: IFleetMembershipProps) => {
                             <TableCell
                               sx={{ backgroundColor: bgColor, width: '90%' }}
                               onClick={() => {
-                                setFleetId(x.id);
+                                setFleetId(x.id!);
                                 setFleetMemberEmail('');
-                                reloadFleetMembership(x.id);
+                                reloadFleetMembership(x.id!);
                               }}><Typography>{x.name}</Typography></TableCell>
                             <TableCell
                               onClick={() => {
-                                setFleetId(x.id);
+                                setFleetId(x.id!);
                                 setFleetMemberEmail('');
-                                reloadFleetMembership(x.id);
+                                reloadFleetMembership(x.id!);
                               }}
                               sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
                           </TableRow>
@@ -153,7 +153,7 @@ const FleetMembership = (props: IFleetMembershipProps) => {
                                      onKeyDown={(ev) => {
                                        if (ev.key === 'Escape') {
                                          setAddFleetMemberShowing(false);
-                                         fleetMemberRef.current.value = '';
+                                         fleetMemberRef.current = '';
                                        } else if (ev.key === 'Enter') {
                                          addFleetMember();
                                        }

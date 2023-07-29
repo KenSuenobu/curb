@@ -36,6 +36,7 @@ import Fleet from '@/pages/fleet/index';
 import FleetLoans from '@/pages/fleet-loans/index';
 import FleetMembership from '@/pages/fleet-membership/index';
 import Guests from '@/pages/guest/index';
+import Trip from '@/pages/trip/index';
 
 const drawerWidth = 240;
 
@@ -220,7 +221,7 @@ const Home: NextPage = () => {
       {
         icon: <CalendarMonthOutlined/>,
         label: 'Trip Entry',
-        onClick: () => setCurrentPage(<></>),
+        onClick: () => setCurrentPage(<Trip jwt={jwt as string}/>),
       },
       {
         icon: <UpcomingOutlined/>,

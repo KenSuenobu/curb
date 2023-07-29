@@ -17,8 +17,8 @@ import {AddOutlined, ArrowRightOutlined, ClearOutlined, DeleteOutlined, PreviewO
 import axios from 'axios';
 import { IFleetCar, LoadFleetCars } from '@/components/database/fleet-car';
 import {IFleet, LoadFleet} from '@/components/database/fleet';
-import {ICarMake, ICarMake, LoadCarMakes } from '@/components/database/car-make';
-import {ICarYear, ICarYear, LoadModelYears } from '@/components/database/car-year';
+import {ICarMake, LoadCarMakes } from '@/components/database/car-make';
+import {ICarYear, LoadModelYears } from '@/components/database/car-year';
 import { ICarModel, LoadCarModels } from '@/components/database/car-model';
 import {ICarTrim, LoadCarTrims} from '@/components/database/car-trim';
 import { errorDialog } from '@/components/dialogs/ConfirmDialog';
@@ -49,17 +49,17 @@ const Fleet = (props: IFleetProps) => {
   const [carModelId, setCarModelId] = useState(0);
   const [carYearId, setCarYearId] = useState(0);
   const [carTrimId, setCarTrimId] = useState(0);
-  const [fleetCar, setFleetCar] = useState({});
-  const [carFleetData, setCarFleetData] = useState({});
-  const [userInfo, setUserInfo] = useState(null);
+  const [fleetCar, setFleetCar] = useState<any>({});
+  const [carFleetData, setCarFleetData] = useState<any>({});
+  const [userInfo, setUserInfo] = useState<any>(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const fleetRef = useRef();
-  const ownershipNameRef = useRef();
-  const ownershipPercentageRef = useRef();
-  const ownershipPhoneRef = useRef();
-  const insuranceNameRef = useRef();
-  const insurancePriceRef = useRef();
-  const insuranceScheduleRef = useRef();
+  const fleetRef = useRef('');
+  const ownershipNameRef = useRef('');
+  const ownershipPercentageRef = useRef('');
+  const ownershipPhoneRef = useRef('');
+  const insuranceNameRef = useRef('');
+  const insurancePriceRef = useRef('');
+  const insuranceScheduleRef = useRef('');
 
   const reloadFleet = (id: number) => {
     LoadFleet(id, (x: IFleet[]) => setFleetList(x));
@@ -70,20 +70,22 @@ const Fleet = (props: IFleetProps) => {
   }
 
   const addFleet = () => {
-    const fleetName = fleetRef.current.value.trim();
+    const fleetName = fleetRef.current.trim();
 
     if (fleetName.length === 0) {
       errorDialog('Fleet name is required.');
       return;
     }
 
-    axios.post(`/app/fleet/create/fleet/${userInfo.id}`, {
-      name: fleetName,
-    }).then((x) => {
-      reloadFleet(userInfo.id);
-      setFleetInputShowing(false);
-      fleetRef.current.value = null;
-    });
+    if (userInfo) {
+      axios.post(`/app/fleet/create/fleet/${userInfo.id}`, {
+        name: fleetName,
+      }).then((x) => {
+        reloadFleet(userInfo.id);
+        setFleetInputShowing(false);
+        fleetRef.current = '';
+      });
+    }
   }
 
   const addFleetCar = () => {
@@ -118,7 +120,7 @@ const Fleet = (props: IFleetProps) => {
       return;
     }
 
-    const payload = fleetCar;
+    const payload: any = fleetCar;
 
     payload.data = carFleetData;
     payload.data.ownerId = userInfo.id;
@@ -138,7 +140,7 @@ const Fleet = (props: IFleetProps) => {
       });
   }
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setCarFleetData({
       ...carFleetData,
       [e.target.name]: e.target.value,
@@ -146,16 +148,16 @@ const Fleet = (props: IFleetProps) => {
   }
 
   const addOwnershipDetail = () => {
-    const ownerName = ownershipNameRef.current.value;
-    const ownerPhone = ownershipPhoneRef.current.value;
-    const ownerPercent = ownershipPercentageRef.current.value;
+    const ownerName = ownershipNameRef.current;
+    const ownerPhone = ownershipPhoneRef.current;
+    const ownerPercent = ownershipPercentageRef.current;
 
     if (!ownerName || !ownerPhone || !ownerPercent) {
       errorDialog('Owner name, phone, and percentage are required fields.');
       return;
     }
 
-    const ownership = carFleetData.ownership ?? [];
+    const ownership: any[] = carFleetData.ownership ?? [];
 
     ownership.push({
       name: ownerName,
@@ -168,24 +170,24 @@ const Fleet = (props: IFleetProps) => {
       ownership,
     });
 
-    ownershipNameRef.current.value = '';
-    ownershipPhoneRef.current.value = '';
-    ownershipPercentageRef.current.value = '';
+    ownershipNameRef.current = '';
+    ownershipPhoneRef.current = '';
+    ownershipPercentageRef.current = '';
 
     setOwnershipInputShowing(false);
   }
 
   const addInsuranceDetail = () => {
-    const insuranceName = insuranceNameRef.current.value;
-    const insurancePrice = insurancePriceRef.current.value;
-    const insuranceSchedule = insuranceScheduleRef.current.value;
+    const insuranceName = insuranceNameRef.current;
+    const insurancePrice = insurancePriceRef.current;
+    const insuranceSchedule = insuranceScheduleRef.current;
 
     if (!insuranceName || !insurancePrice || !insuranceSchedule) {
       errorDialog('Insurance name, price, and payment schedule rate are required fields.');
       return;
     }
 
-    const insurance = carFleetData.insurance ?? [];
+    const insurance: any[] = carFleetData.insurance ?? [];
 
     insurance.push({
       name: insuranceName,
@@ -198,9 +200,9 @@ const Fleet = (props: IFleetProps) => {
       insurance,
     });
 
-    insuranceNameRef.current.value = '';
-    insurancePriceRef.current.value = '';
-    insuranceScheduleRef.current.value = '';
+    insuranceNameRef.current = '';
+    insurancePriceRef.current = '';
+    insuranceScheduleRef.current = '';
 
     setInsuranceInputShowing(false);
   }
@@ -221,7 +223,7 @@ const Fleet = (props: IFleetProps) => {
   if (!userInfo) {
     return (
       <>
-        <LinearProgress fullWidth/>
+        <LinearProgress/>
       </>
     );
   }
@@ -246,7 +248,7 @@ const Fleet = (props: IFleetProps) => {
                                      onKeyDown={(ev) => {
                                        if (ev.key === 'Escape') {
                                          setFleetInputShowing(false);
-                                         fleetRef.current.value = '';
+                                         fleetRef.current = '';
                                        } else if (ev.key === 'Enter') {
                                          addFleet();
                                        }
@@ -272,15 +274,15 @@ const Fleet = (props: IFleetProps) => {
                           <TableCell
                             sx={{ backgroundColor: bgColor, width: '90%' }}
                             onClick={() => {
-                              setFleetId(x.id);
+                              setFleetId(x.id!);
                               setFleetCarId(0);
-                              reloadFleetCars(x.id);
+                              reloadFleetCars(x.id!);
                             }}><Typography>{x.name}</Typography></TableCell>
                           <TableCell
                             onClick={() => {
-                              setFleetId(x.id);
+                              setFleetId(x.id!);
                               setFleetCarId(0);
-                              reloadFleetCars(x.id);
+                              reloadFleetCars(x.id!);
                             }}
                             sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
                         </TableRow>
@@ -320,20 +322,20 @@ const Fleet = (props: IFleetProps) => {
                 {fleetCarInputShowing ? (
                   <TableBody>
                     <TableRow>
-                      <TableCell colspan={2}>
+                      <TableCell colSpan={2}>
                         <Stack direction={'row'}>
                           <Item sx={{ width: '25%' }}>
                             <FormControl sx={{ width: '100%' }}>
                               <InputLabel id={'fuel-type-label'}>Car Make</InputLabel>
                               <Select labelId={'fuel-type-label'} label={'Car Make'} name={'carMake'}
                                       style={{ textAlign: 'left' }} fullWidth
-                                      onChange={((e) => {
+                                      onChange={((e: any) => {
                                         setCarMakeId(e.target.value);
                                         setCarModelId(0);
                                         setCarYearId(0);
                                         setCarTrimId(0);
                                         setFleetCarId(0);
-                                        LoadCarModels(e.target.value, (x) => setCarModelList(x));
+                                        LoadCarModels(e.target.value, (x) => setCarModelList(x as never[]));
                                         setCarYearList([]);
                                         setCarTrimList([]);
                                         setCarFleetData({});
@@ -347,12 +349,12 @@ const Fleet = (props: IFleetProps) => {
                               <InputLabel id={'fuel-type-label'}>Car Model</InputLabel>
                               <Select labelId={'fuel-type-label'} label={'Car Model'} name={'carModel'}
                                       style={{ textAlign: 'left' }} fullWidth
-                                      onChange={(e) => {
+                                      onChange={(e: any) => {
                                         setCarModelId(e.target.value);
                                         setCarYearId(0);
                                         setCarTrimId(0);
                                         setFleetCarId(0);
-                                        LoadModelYears(e.target.value, (x) => setCarYearList(x));
+                                        LoadModelYears(e.target.value, (x) => setCarYearList(x as never[]));
                                         setCarTrimList([]);
                                         setCarFleetData({});
                                       }}>
@@ -365,7 +367,7 @@ const Fleet = (props: IFleetProps) => {
                               <InputLabel id={'fuel-type-label'}>Car Year</InputLabel>
                               <Select labelId={'fuel-type-label'} label={'Car Year'} name={'carYear'}
                                       style={{ textAlign: 'left' }} fullWidth
-                                      onChange={(e) => {
+                                      onChange={(e: any) => {
                                         setCarYearId(e.target.value);
                                         setCarTrimId(0);
                                         setFleetCarId(0);
@@ -381,7 +383,7 @@ const Fleet = (props: IFleetProps) => {
                               <InputLabel id={'fuel-type-label'}>Car Trim</InputLabel>
                               <Select labelId={'fuel-type-label'} label={'Car Trim'} name={'carTrim'}
                                       style={{ textAlign: 'left' }} fullWidth
-                                      onChange={(e) => {
+                                      onChange={(e: any) => {
                                         setCarTrimId(e.target.value);
                                         setFleetCarId(0);
                                         setCarFleetData({});
@@ -405,7 +407,7 @@ const Fleet = (props: IFleetProps) => {
                 )}
                 {fleetCarList.length > 0 ? (
                   <TableBody>
-                    {fleetCarList.map((x) => {
+                    {fleetCarList.map((x: any) => {
                       const bgColor = fleetCarId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
@@ -414,7 +416,7 @@ const Fleet = (props: IFleetProps) => {
                             <TableCell
                               sx={{ backgroundColor: bgColor, width: '90%' }}
                               onClick={() => {
-                                setFleetCarId(x.id);
+                                setFleetCarId(x.id!);
                                 setFleetCarInputShowing(false);
                                 setFleetCar(x);
                                 setCarFleetData(x.data);
@@ -432,7 +434,7 @@ const Fleet = (props: IFleetProps) => {
                             </TableCell>
                             <TableCell
                               onClick={() => {
-                                setFleetCarId(x.id);
+                                setFleetCarId(x.id!);
                                 setFleetCarInputShowing(false);
                                 setFleetCar(x);
                                 setCarFleetData(x.data);
@@ -678,7 +680,7 @@ const Fleet = (props: IFleetProps) => {
                   )}
                   {carFleetData.ownership && (
                     <>
-                      {carFleetData.ownership.map((x, counter) => (
+                      {carFleetData.ownership.map((x: any, counter: number) => (
                         <TableRow hover key={counter}>
                           <TableCell sx={{ color: '#000' }}>{x.name}</TableCell>
                           <TableCell sx={{ color: '#000' }}>{x.phone}</TableCell>
@@ -763,7 +765,7 @@ const Fleet = (props: IFleetProps) => {
                   )}
                   {carFleetData.insurance && (
                     <>
-                      {carFleetData.insurance.map((x, counter) => (
+                      {carFleetData.insurance.map((x: any, counter: number) => (
                         <TableRow hover key={counter}>
                           <TableCell sx={{ color: '#000' }}>{x.name}</TableCell>
                           <TableCell sx={{ color: '#000' }}>$ {x.price}</TableCell>

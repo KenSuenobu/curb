@@ -435,22 +435,22 @@ const CarDefinitions: NextPage = () => {
                             <TableCell
                               sx={{ backgroundColor: bgColor, width: '90%' }}
                               onClick={() => {
-                                setCarMakeId(x.id);
+                                setCarMakeId(x.id!);
                                 setCarModelId(0);
                                 setCarYearId(0);
                                 setCarTrimId(0);
-                                LoadCarModels(x.id, (y: ICarModel[]) => setCarModels(y));
+                                LoadCarModels(x.id!, (y: ICarModel[]) => setCarModels(y as never[]));
                                 setCarYears([]);
                                 setCarTrims([]);
                                 setCarTrimInfo(undefined);
                               }}><Typography>{x.name}</Typography></TableCell>
                             <TableCell
                               onClick={() => {
-                                setCarMakeId(x.id);
+                                setCarMakeId(x.id!);
                                 setCarModelId(0);
                                 setCarYearId(0);
                                 setCarTrimId(0);
-                                LoadCarModels(x.id, (y: ICarModel[]) => setCarModels(y));
+                                LoadCarModels(x.id!, (y: ICarModel[]) => setCarModels(y as never[]));
                                 setCarYears([]);
                                 setCarTrims([]);
                                 setCarTrimInfo(undefined);
@@ -505,7 +505,7 @@ const CarDefinitions: NextPage = () => {
                 )}
                 {carModels.length > 0 ? (
                   <TableBody>
-                    {carModels.map((x, counter) => {
+                    {carModels.map((x: any, counter) => {
                       const bgColor = carModelId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
@@ -514,7 +514,7 @@ const CarDefinitions: NextPage = () => {
                             sx={{ backgroundColor: bgColor, width: '90%' }}
                             onClick={() => {
                               setCarModelId(x.id);
-                              LoadModelYears(x.id, (y) => setCarYears(y));
+                              LoadModelYears(x.id, (y) => setCarYears(y as never[]));
                               setCarYearId(0);
                               setCarTrimId(0);
                               setCarTrims([]);
@@ -523,7 +523,7 @@ const CarDefinitions: NextPage = () => {
                           <TableCell
                             onClick={() => {
                               setCarModelId(x.id);
-                              LoadModelYears(x.id, (y) => setCarYears(y));
+                              LoadModelYears(x.id, (y) => setCarYears(y as never[]));
                               setCarYearId(0);
                               setCarTrimId(0);
                               setCarTrims([]);
@@ -580,7 +580,7 @@ const CarDefinitions: NextPage = () => {
                 )}
                 {carYears.length > 0 ? (
                   <TableBody>
-                    {carYears.map((x, counter) => {
+                    {carYears.map((x: any, counter) => {
                       const bgColor = carYearId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
@@ -590,14 +590,14 @@ const CarDefinitions: NextPage = () => {
                             onClick={() => {
                               setCarYearId(x.id);
                               setCarTrimId(0);
-                              LoadCarTrims(x.id, (y) => setCarTrims(y));
+                              LoadCarTrims(x.id, (y) => setCarTrims(y as never[]));
                               setCarTrimInfo(undefined);
                             }}><Typography>{x.year}</Typography></TableCell>
                           <TableCell
                             onClick={() => {
                               setCarYearId(x.id);
                               setCarTrimId(0);
-                              LoadCarTrims(x.id, (y) => setCarTrims(y));
+                              LoadCarTrims(x.id, (y) => setCarTrims(y as never[]));
                               setCarTrimInfo(undefined);
                             }}
                             sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>
@@ -650,7 +650,7 @@ const CarDefinitions: NextPage = () => {
                 )}
                 {carTrims.length > 0 ? (
                   <TableBody>
-                    {carTrims.map((x, counter) => {
+                    {carTrims.map((x: any, counter) => {
                       const bgColor = carTrimId === x.id ? SELECTED_COLOR : '#fff';
 
                       return (
@@ -940,8 +940,8 @@ const CarDefinitions: NextPage = () => {
                   )}
                   <TableBody>
                     {trimInfoPayload?.optionList
-                      .sort((a, b) => (a.name > b.name ? 1 : -1))
-                      .map((x) => (
+                      .sort((a: any, b: any) => (a.name > b.name ? 1 : -1))
+                      .map((x: any) => (
                       <>
                         <TableRow hover>
                           <TableCell>{x.name}</TableCell>
@@ -1018,8 +1018,8 @@ const CarDefinitions: NextPage = () => {
                   )}
                   <TableBody>
                     {trimInfoPayload?.colorList
-                      .sort((a, b) => (a.name > b.name ? 1 : -1))
-                      .map((x) => (
+                      .sort((a: any, b: any) => (a.name > b.name ? 1 : -1))
+                      .map((x: any) => (
                       <>
                         <TableRow hover>
                         <TableCell>{x.name}</TableCell>
@@ -1096,8 +1096,8 @@ const CarDefinitions: NextPage = () => {
                 )}
                 <TableBody>
                   {trimInfoPayload?.siteList
-                    .sort((a, b) => (a.name > b.name ? 1 : -1))
-                    .map((x) => (
+                    .sort((a: any, b: any) => (a.name > b.name ? 1 : -1))
+                    .map((x: any) => (
                     <>
                     <TableRow hover>
                     <TableCell>{x.name}</TableCell>
