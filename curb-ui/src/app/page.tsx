@@ -311,7 +311,7 @@ const Home: NextPage = () => {
           <Stack direction={'row'}>
             <Item sx={{ width: '90%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'left' }}>
               <Typography variant={'h6'} fontWeight={'bold'}>
-                {userInfo.emailAddress}
+                {userInfo?.emailAddress ?? 'Loading ...'}
               </Typography>
             </Item>
 
