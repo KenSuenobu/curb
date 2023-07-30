@@ -26,6 +26,11 @@ export class GuestService {
       });
   }
 
+  async listAllGuests(): Promise<GuestDto[]> {
+    const dao = new GuestDao(DaoUtils.getDatabase());
+    return dao.listAll();
+  }
+
   async listGuests(blacklisted: boolean): Promise<GuestDto[]> {
     const dao = new GuestDao(DaoUtils.getDatabase());
     return dao.list(blacklisted);

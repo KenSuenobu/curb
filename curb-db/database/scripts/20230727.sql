@@ -9,8 +9,8 @@ CREATE TABLE curb.trip (
     delivery_address_id INT NOT NULL REFERENCES curb.delivery_address(id),
     trip_id VARCHAR(80) NOT NULL,
     trip_url VARCHAR(255) NOT NULL,
-    start_time TIMESTAMP NOT NULL,
-    end_time TIMESTAMP NOT NULL,
+    start_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    end_time TIMESTAMP WITH TIME ZONE NOT NULL,
     mileage INT NOT NULL DEFAULT 0,
     earnings FLOAT NOT NULL DEFAULT 0
 );

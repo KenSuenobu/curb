@@ -9,9 +9,37 @@ export class TripDao extends BaseDao<TripDto> {
   }
 
   override async list(): Promise<TripDto[]> {
-    const selectStatement = `SELECT * FROM ${this.section} ORDER BY end_time ASC`;
+    const selectStatement = `SELECT * FROM ${this.section} ORDER BY end_time DESC`;
 
     return (await this.db.any(selectStatement))
+      .map((x) => DaoUtils.normalizeFields<TripDto>(x));
+  }
+
+  async listUpcoming(): Promise<TripDto[]> {
+    const selectStatement = `SELECT * FROM ${this.section} WHERE start_time >= NOW() ORDER BY end_time DESC`;
+
+    return (await this.db.any(selectStatement))
+      .map((x) => DaoUtils.normalizeFields<TripDto>(x));
+  }
+
+  async listPast(): Promise<TripDto[]> {
+    const selectStatement = `SELECT * FROM ${this.section} WHERE end_time <= NOW() ORDER BY end_time DESC`;
+
+    return (await this.db.any(selectStatement))
+      .map((x) => DaoUtils.normalizeFields<TripDto>(x));
+  }
+
+  async listCurrent(): Promise<TripDto[]> {
+    const selectStatement = `SELECT * FROM ${this.section} WHERE start_time <= NOW() AND end_time >= NOW() ORDER BY end_time DESC`;
+
+    return (await this.db.any(selectStatement))
+      .map((x) => DaoUtils.normalizeFields<TripDto>(x));
+  }
+
+  async listByFleetCarId(fleetCarId: number): Promise<TripDto[]> {
+    const selectStatement = `SELECT * FROM ${this.section} WHERE fleet_car_id=$1 ORDER BY end_time DESC`;
+
+    return (await this.db.any(selectStatement, [ fleetCarId ]))
       .map((x) => DaoUtils.normalizeFields<TripDto>(x));
   }
 

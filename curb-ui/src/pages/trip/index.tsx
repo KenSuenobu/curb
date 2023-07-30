@@ -10,10 +10,11 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
+  TableContainer, TableHead,
   TableRow,
   TextField,
-  Typography
+  Typography,
+  Link
 } from '@mui/material';
 import {TableHeader} from '@/components/car-definitions/TableHeader';
 import {ArrowRightOutlined} from '@mui/icons-material';
@@ -53,6 +54,7 @@ const Trip = (props: ITripProps) => {
   const [fleetCarId, setFleetCarId] = useState(0);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [guestList, setGuestList] = useState<any[]>([]);
+  const [tripList, setTripList] = useState<any[]>([]);
   const [tripData, setTripData] = useState<ITrip>({
     id: 0,
     fleetCarId: 0,
@@ -74,6 +76,15 @@ const Trip = (props: ITripProps) => {
     LoadFleetCars(fId, (x: IFleetCar[]) => setFleetCarList(x));
   }
 
+  const reloadTrips = (fId: number) => {
+    axios.get(`/app/trip/list/car/${fId}`)
+      .then((x) => setTripList(x.data as never[]))
+      .catch((x) => {
+        setTripList([]);
+        console.log(`Unable to retrieve trip list: ${x}`, x);
+      });
+  }
+
   const reloadDeliveryAddresses = (fleetId: number) => {
     axios.get(`/app/address/delivery/list/${fleetId}`)
       .then((x) => {
@@ -84,6 +95,9 @@ const Trip = (props: ITripProps) => {
         return;
       });
   }
+
+  const deliveryAddressById = (id: number) => addressList.find((x) => x.id === id);
+  const guestById = (id: number) => guestList.find((x) => x.id === id);
 
   const handleChange = (e: any) => {
     setTripData({
@@ -102,24 +116,9 @@ const Trip = (props: ITripProps) => {
         return;
       });
 
-    axios.get('/app/guest/list/false')
+    axios.get('/app/guest/list-all')
       .then((x) => {
-        const currentList: any[] = guestList;
-
-        currentList.push(...x.data);
-        setGuestList(currentList);
-      })
-      .catch((x) => {
-        setGuestList([]);
-        console.log(`Unable to get guest list: ${x}`, x);
-      });
-
-    axios.get('/app/guest/list/true')
-      .then((x) => {
-        const currentList: any[] = guestList;
-
-        currentList.push(...x.data);
-        setGuestList(currentList);
+        setGuestList(x.data);
       })
       .catch((x) => {
         setGuestList([]);
@@ -143,6 +142,23 @@ const Trip = (props: ITripProps) => {
 
     setFleetId(0);
     setFleetCarId(0);
+    setFleetCarList([]);
+    setTripList([]);
+  }
+
+  const clearOnlyForm = () => {
+    setTripData({
+      id: 0,
+      fleetCarId: fleetCarId,
+      guestId: 0,
+      deliveryAddressId: 0,
+      tripId: '',
+      tripUrl: '',
+      startTime: new Date(),
+      endTime: new Date(),
+      mileage: 0,
+      earnings: 0,
+    });
   }
 
   const saveTrip = () => {
@@ -165,7 +181,14 @@ const Trip = (props: ITripProps) => {
 
     axios.post('/app/trip/create', payload)
       .then((x) => {
-        console.log(`Result: ${x.data}`);
+        setSnackbarOpen(true);
+
+        setTimeout(() => {
+          setSnackbarOpen(false);
+        }, 3000);
+
+        clearOnlyForm();
+        reloadTrips(fleetCarId);
       })
       .catch((x) => {
         errorDialog(`Unable to create trip: ${x}`);
@@ -235,6 +258,11 @@ const Trip = (props: ITripProps) => {
                               sx={{ backgroundColor: bgColor, width: '90%' }}
                               onClick={() => {
                                 setFleetCarId(x.id!);
+                                setTripData({
+                                  ...tripData,
+                                  fleetCarId: x.id!,
+                                });
+                                reloadTrips(x.id!);
                               }}>
                               <Typography>
                                 {x.carYear} {x.makeName} {x.modelName} {x.trimName}: &quot;{x.data.listingNickname ?? 'Unnamed'}&quot;
@@ -259,7 +287,7 @@ const Trip = (props: ITripProps) => {
         <>
           <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={snackbarOpen}>
             <Alert severity={'success'} sx={{ width: '100%' }}>
-              Fleet record saved successfully.
+              Trip record saved successfully.
             </Alert>
           </Snackbar>
 
@@ -278,7 +306,11 @@ const Trip = (props: ITripProps) => {
                         onChange={handleChange}
                         fullWidth>
                   {guestList.map((x, counter) => (
-                    <MenuItem value={x.id} key={counter}>{x.lastName}, {x.firstName} {x.middleName}</MenuItem>
+                    <MenuItem value={x.id} key={counter}>
+                      <Typography style={{ color: (x.blacklisted ? 'red' : 'black') }}>
+                        {x.lastName}, {x.firstName} {x.middleName}
+                      </Typography>
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -356,9 +388,45 @@ const Trip = (props: ITripProps) => {
             </Item>
           </Stack>
 
-          <pre>
-          {JSON.stringify(tripData, null, 2)}
-          </pre>
+          <TableContainer component={Paper}>
+            <Table size={'small'}>
+              <TableHead>
+                <TableRow style={{ backgroundColor: '#000' }}>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Guest</TableCell>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Delivery Address</TableCell>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Start Time</TableCell>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>End Time</TableCell>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Trip</TableCell>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Mileage</TableCell>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Earnings</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tripList.map((row, counter) => (
+                  <TableRow hover key={counter} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>
+                      <Typography style={{ color: (guestById(row.guestId).blacklisted ? 'red' : 'black') }}>
+                        {guestById(row.guestId).lastName}, {guestById(row.guestId).firstName}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>{deliveryAddressById(row.deliveryAddressId).name ?? 'N/A'}</TableCell>
+                    <TableCell>{moment(row.startTime).format('ddd, MMM D YYYY; LT')}</TableCell>
+                    <TableCell>{moment(row.endTime).format('ddd, MMM D YYYY; LT')}</TableCell>
+                    <TableCell><Link href={row.tripUrl}>{row.tripId}</Link></TableCell>
+                    <TableCell>{row.mileage}</TableCell>
+                    <TableCell>$ {row.earnings.toFixed(2)}</TableCell>
+                  </TableRow>
+                ))}
+                {tripList.length === 0 && (
+                  <>
+                  <TableRow hover key={0} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell colSpan={7} style={{ textAlign: 'center' }}>No current trips recorded.</TableCell>
+                  </TableRow>
+                  </>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </>
       )}
     </>

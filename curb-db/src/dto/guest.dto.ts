@@ -22,6 +22,14 @@ export class GuestDao extends BaseDao<GuestDto> {
       .map((x) => DaoUtils.normalizeFields<GuestDto>(x));
   }
 
+  async listAll(): Promise<GuestDto[]> {
+    const selectStatement = `SELECT id, guest_id, guest_id_source, blacklisted, first_name, middle_name, last_name ` +
+      `FROM ${this.section} ORDER BY last_name ASC`;
+
+    return (await this.db.any(selectStatement))
+      .map((x) => DaoUtils.normalizeFields<GuestDto>(x));
+  }
+
   async edit(id: number, payload: GuestDto): Promise<Boolean> {
     const sqlStatement =
       `UPDATE ${this.section} SET guest_id=$1, guest_id_source=$2, blacklisted=$3, first_name=$4, middle_name=$5, last_name=$6, data=$7 WHERE id=$8`;

@@ -84,6 +84,10 @@ Phase 1:
   - Guests
   - Blacklisted Guests
   - Delivery Addresses
+  - Trip Entry
+  - Current Trips
+  - Upcoming Trips
+  - Past Trips
 
 [//]: # (  - Address database)
 

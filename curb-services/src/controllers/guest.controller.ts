@@ -73,6 +73,22 @@ export class GuestController {
     return this.service.listGuests(blacklisted);
   }
 
+  @Get('/list-all')
+  @ApiOperation({
+    summary: 'Lists all guests',
+    description: 'Lists all guests regardless of blacklisted status',
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: String,
+    isArray: true,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async listAllGuests(): Promise<GuestDto[]> {
+    return this.service.listAllGuests();
+  }
+
   @Get('/get/:id')
   @ApiOperation({
     summary: 'Gets the data for a user by ID',

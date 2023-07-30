@@ -15,4 +15,24 @@ export class TripService {
     return dao.edit(payload.id, payload);
   }
 
+  async getUpcomingTrips(): Promise<TripDto[]> {
+    const dao = new TripDao(DaoUtils.getDatabase());
+    return dao.listUpcoming();
+  }
+
+  async getPastTrips(): Promise<TripDto[]> {
+    const dao = new TripDao(DaoUtils.getDatabase());
+    return dao.listPast();
+  }
+
+  async getCurrentTrips(): Promise<TripDto[]> {
+    const dao = new TripDao(DaoUtils.getDatabase());
+    return dao.listCurrent();
+  }
+
+  async getTripsForFleetCarId(fleetCarId: number): Promise<TripDto[]> {
+    const dao = new TripDao(DaoUtils.getDatabase());
+    return dao.listByFleetCarId(fleetCarId);
+  }
+
 }

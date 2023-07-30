@@ -27,7 +27,7 @@ import {
   GarageOutlined, HouseOutlined,
   MoneyOutlined,
   PeopleOutlined,
-  PersonOffOutlined, ScheduleOutlined, UpcomingOutlined, ViewWeekOutlined
+  PersonOffOutlined, ScheduleOutlined, TodayOutlined, UpcomingOutlined, ViewWeekOutlined
 } from '@mui/icons-material';
 import { SideBarMenuGroupProps } from '@/components/SideBarMenuGroup';
 import CarDefinitions from '@/pages/car-definitions/index';
@@ -37,6 +37,7 @@ import FleetLoans from '@/pages/fleet-loans/index';
 import FleetMembership from '@/pages/fleet-membership/index';
 import Guests from '@/pages/guest/index';
 import Trip from '@/pages/trip/index';
+import TripsList, {ITripType} from '@/pages/trip/list';
 
 const drawerWidth = 240;
 
@@ -65,8 +66,8 @@ const Home: NextPage = () => {
   }
 
   const onLogin = async () => {
-    const username = usernameRef.current;
-    const password = passwordRef.current;
+    const username = usernameRef.current.value;
+    const password = passwordRef.current.value;
 
     if (username.length === 0 || password.length === 0) {
       errorDialog('Username and password fields are required to login.');
@@ -224,14 +225,19 @@ const Home: NextPage = () => {
         onClick: () => setCurrentPage(<Trip jwt={jwt as string}/>),
       },
       {
+        icon: <TodayOutlined/>,
+        label: 'Current Trips',
+        onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.CURRENT}/>),
+      },
+      {
         icon: <UpcomingOutlined/>,
         label: 'Upcoming Trips',
-        onClick: () => setCurrentPage(<></>),
+        onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.UPCOMING}/>),
       },
       {
         icon: <ScheduleOutlined/>,
         label: 'Past Trips',
-        onClick: () => setCurrentPage(<></>),
+        onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.PAST}/>),
       },
     ],
   }
