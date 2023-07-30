@@ -51,10 +51,21 @@ const Home: NextPage = () => {
   const [loginShowing, setLoginShowing] = useState(false);
   const [logoutShowing, setLogoutShowing] = useState(false);
   const router = useRouter();
+  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
-    setJwt(getCookie('jwt'));
+    const jwtCookie = getCookie('jwt');
+
+    setJwt(jwtCookie);
     setCheckingJwt(false);
+
+    axios.get(`/app/user/login/${jwtCookie}`)
+      .then((x) => {
+        setUserInfo(x.data);
+      }).catch((x) => {
+      errorDialog('Unable to retrieve login data; please login again.');
+      return;
+    });
   }, [checkingJwt]);
 
   if (checkingJwt) {
@@ -300,7 +311,7 @@ const Home: NextPage = () => {
           <Stack direction={'row'}>
             <Item sx={{ width: '90%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'left' }}>
               <Typography variant={'h6'} fontWeight={'bold'}>
-                {jwt}
+                {userInfo.emailAddress}
               </Typography>
             </Item>
 
