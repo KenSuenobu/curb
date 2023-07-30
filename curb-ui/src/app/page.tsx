@@ -38,6 +38,7 @@ import FleetMembership from '@/pages/fleet-membership/index';
 import Guests from '@/pages/guest/index';
 import Trip from '@/pages/trip/index';
 import TripsList, {ITripType} from '@/pages/trip/list';
+import Dashboard from '@/pages/dashboard';
 
 const drawerWidth = 240;
 
@@ -272,13 +273,7 @@ const Home: NextPage = () => {
   }
 
   const handleHomeClicked = () => {
-    setCurrentPage(
-      <>
-        <Typography>
-          Home
-        </Typography>
-      </>
-    );
+    setCurrentPage(<Dashboard/>);
   }
 
   return (

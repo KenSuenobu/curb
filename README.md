@@ -103,20 +103,6 @@ Phase 1:
 
 [//]: # (    - Country)
 
-[//]: # (  - Phone database)
-
-[//]: # (    - Phone number)
-
-[//]: # (    - Country of number)
-
-[//]: # (    - Phone number type:)
-
-[//]: # (      - Physical)
-
-[//]: # (      - Cell Phone)
-
-[//]: # (      - Fax)
-
 [//]: # (  - Contact database)
 
 [//]: # (    - First name)
@@ -166,26 +152,6 @@ Phase 1:
 [//]: # (    - Registration State/Province)
 
 [//]: # (    - Registered Contact)
-
-[//]: # (  - Cars database)
-
-[//]: # (    - URL to car listing on Turo or hosted site)
-
-[//]: # (    - Nickname)
-
-[//]: # (    - Car year)
-
-[//]: # (    - Car make)
-
-[//]: # (    - Car model)
-
-[//]: # (  - Car Owners database)
-
-[//]: # (    - Car ID)
-
-[//]: # (    - Contact ID)
-
-[//]: # (    - Percentage)
 
 [//]: # (  - Car Storage database)
 
@@ -304,18 +270,6 @@ Phase 1:
 [//]: # (    - Photo record)
 
 [//]: # (    - URL to user info on rental site)
-
-[//]: # (  - Trip database)
-
-[//]: # (    - Car ID)
-
-[//]: # (    - Start time of rent)
-
-[//]: # (    - End time of rent)
-
-[//]: # (    - Total Mileage)
-
-[//]: # (    - Total payout)
 
 [//]: # (  - Trip Photos database)
 

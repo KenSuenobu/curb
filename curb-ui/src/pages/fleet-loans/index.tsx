@@ -473,9 +473,9 @@ const FleetLoans = (props: IFleetLoansProps) => {
                           <TableRow sx={{ color: 'black' }} hover>
                             <TableCell>{loanPaymentData.length - count}</TableCell>
                             <TableCell>{moment(x.paymentDate).format('MM/DD/YYYY')}</TableCell>
-                            <TableCell>$ {x.principalAmount}</TableCell>
-                            <TableCell>$ {x.interestAmount}</TableCell>
-                            <TableCell colSpan={2}>$ {x.totalAmount}</TableCell>
+                            <TableCell>$ {x.principalAmount.toFixed(2)}</TableCell>
+                            <TableCell>$ {x.interestAmount.toFixed(2)}</TableCell>
+                            <TableCell colSpan={2}>$ {x.totalAmount.toFixed(2)}</TableCell>
                           </TableRow>
                         </>
                       ))}
@@ -483,11 +483,11 @@ const FleetLoans = (props: IFleetLoansProps) => {
                         <TableCell>Total:</TableCell>
                         <TableCell></TableCell>
                         <TableCell>$ {loanPaymentData.map((x: any) => x.principalAmount)
-                          .reduce((acc, cur) => acc + cur)}</TableCell>
+                          .reduce((acc, cur) => acc + cur).toFixed(2)}</TableCell>
                         <TableCell>$ {loanPaymentData.map((x: any) => x.interestAmount)
-                          .reduce((acc, cur) => acc + cur)}</TableCell>
+                          .reduce((acc, cur) => acc + cur).toFixed(2)}</TableCell>
                         <TableCell colSpan={2}>$ {loanPaymentData.map((x: any) => x.totalAmount)
-                          .reduce((acc, cur) => acc + cur)}</TableCell>
+                          .reduce((acc, cur) => acc + cur).toFixed(2)}</TableCell>
                       </TableRow>
                     </>
                   ) : (
