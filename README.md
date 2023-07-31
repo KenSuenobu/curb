@@ -72,6 +72,12 @@ Phase 1:
     - End Time
     - Mileage
     - Earnings
+  - Toll
+    - Toll ID
+    - Trip ID
+    - Toll Time
+    - Toll Location
+    - Toll Amount
 - User Interface:
   - Car make
   - Car model
@@ -88,6 +94,8 @@ Phase 1:
   - Current Trips
   - Upcoming Trips
   - Past Trips
+  - Toll Entry
+  - Toll List
 
 [//]: # (  - Address database)
 
