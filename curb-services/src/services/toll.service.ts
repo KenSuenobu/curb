@@ -26,4 +26,9 @@ export class TollService {
     return dao.list();
   }
 
+  async listByTripId(tripId: number): Promise<TollDto[]> {
+    const dao = new TollDao(DaoUtils.getDatabase());
+    return dao.listByTripId(tripId);
+  }
+
 }

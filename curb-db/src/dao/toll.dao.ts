@@ -49,4 +49,11 @@ export class TollDao extends BaseDao<TollDto> {
       .map((x) => DaoUtils.normalizeFields<TollDto>(x));
   }
 
+  async listByTripId(tripId: number): Promise<TollDto[]> {
+    const sqlStatement = `SELECT * FROM ${this.section} WHERE trip_id=$1 ORDER BY toll_time DESC`;
+
+    return (await this.db.any(sqlStatement, [ tripId, ]))
+      .map((x) => DaoUtils.normalizeFields<TollDto>(x));
+  }
+
 }

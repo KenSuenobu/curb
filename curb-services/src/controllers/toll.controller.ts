@@ -6,7 +6,7 @@ import {
   ApiOperation,
   ApiTags, ApiUnauthorizedResponse
 } from '@nestjs/swagger';
-import {Body, Controller, Get, HttpStatus, Logger, Post, Put} from '@nestjs/common';
+import {Body, Controller, Get, HttpStatus, Logger, Param, Post, Put} from '@nestjs/common';
 import {TollService} from '../services/toll.service';
 import {GuestDto, TollDto} from 'curb-db/dist';
 
@@ -71,6 +71,22 @@ export class TollController {
   @ApiUnauthorizedResponse()
   async list(): Promise<TollDto[]> {
     return this.service.list();
+  }
+
+  @Get('/list/:tripId')
+  @ApiOperation({
+    summary: 'Lists tolls by trip ID',
+    description: 'Gets a list of existing toll charges by trip ID',
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: TollDto,
+    isArray: true,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async listByTripId(@Param('tripId') tripId: number): Promise<TollDto[]> {
+    return this.service.listByTripId(tripId);
   }
 
 }

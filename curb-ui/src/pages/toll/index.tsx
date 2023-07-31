@@ -3,10 +3,10 @@ import {
   FormControl,
   IconButton,
   InputLabel,
-  MenuItem,
+  MenuItem, Paper,
   Select,
   Snackbar,
-  Stack, TableCell,
+  Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   TextField,
   Typography
 } from '@mui/material';
@@ -29,6 +29,7 @@ const Toll = (props: ITollProps) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [fleetCarData, setFleetCarData] = useState<any>({});
   const [tripLookupData, setTripLookupData] = useState<any>(null);
+  const [pastTripData, setPastTripData] = useState<any>([]);
   const [tripData, setTripData] = useState<any>({});
 
   useEffect(() => {
@@ -41,6 +42,18 @@ const Toll = (props: ITollProps) => {
       });
   }, [props.jwt]);
 
+  const reloadPastTrips = (tripId: number) => {
+    axios.get(`/app/toll/list/${tripId}`)
+      .then((x) => {
+        console.log(`Data: ${x.data}`);
+        setPastTripData(x.data);
+      })
+      .catch((x) => {
+        errorDialog('Unable to retrieve list of previous trips');
+        setPastTripData([]);
+      });
+  }
+
   const handleChange = (e: any) => {
     setTripData({
       ...tripData,
@@ -52,6 +65,7 @@ const Toll = (props: ITollProps) => {
     setTripData({});
     setFleetCarData({});
     setTripLookupData(null);
+    setPastTripData([]);
   }
 
   const searchForLicensePlate = () => {
@@ -77,6 +91,8 @@ const Toll = (props: ITollProps) => {
 
             if (x.data) {
               tripData.tripId = x.data.id;
+
+              reloadPastTrips(x.data.id);
             } else {
               errorDialog('No trip was found for the toll time specified.');
             }
@@ -135,6 +151,33 @@ const Toll = (props: ITollProps) => {
         <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Toll Detail</u></Typography>
       </div>
 
+      {(tripLookupData || fleetCarData.length > 0) && (
+        <Stack direction={'row'}>
+          <Item sx={{ width: '100%', textAlign: 'left' }}>
+            {fleetCarData.length > 0 && (
+              <>
+                <b>Fleet Car:</b> {fleetCarData[0].carYear} {fleetCarData[0].makeName} {fleetCarData[0].modelName} {fleetCarData[0].trimName}
+              </>
+            )}
+            {tripLookupData && (
+              <>
+                <br/>
+                <b>Trip:</b> {moment(tripLookupData.startTime).format('ddd, MMM D YYYY; LT')} to {
+                  moment(tripLookupData.endTime).format('ddd, MMM D YYYY; LT')}
+              </>
+            )}
+            {!tripLookupData && fleetCarData.length > 0 && (
+              <>
+                <br/>
+                <b>No trip was found for the date specified.</b>
+              </>
+            )}
+          </Item>
+        </Stack>
+      )}
+
+      <p/>
+
       <Stack direction={'row'}>
         <Item sx={{ width: '25%' }}>
           <TextField label={'License Plate'} fullWidth value={tripData.licensePlate ?? ''}
@@ -158,26 +201,6 @@ const Toll = (props: ITollProps) => {
             <SearchOutlined/>
           </IconButton>
         </Item>
-
-        <Item sx={{ width: '50%', textAlign: 'left' }}>
-          {fleetCarData.length > 0 && (
-            <>
-              <b>Fleet Car:</b> {fleetCarData[0].carYear} {fleetCarData[0].makeName} {fleetCarData[0].modelName} {fleetCarData[0].trimName}
-            </>
-          )}
-          {tripLookupData && (
-            <>
-              <br/>
-              <b>Trip:</b> {moment(tripLookupData.startTime).format('ddd, MMM D YYYY; LT')} to {moment(tripLookupData.endTime).format('ddd, MMM D YYYY; LT')}
-            </>
-          )}
-          {!tripLookupData && fleetCarData.length > 0 && (
-            <>
-              <br/>
-              <b>No trip was found for the date specified.</b>
-            </>
-          )}
-        </Item>
       </Stack>
 
       <Stack direction={'row'}>
@@ -199,9 +222,36 @@ const Toll = (props: ITollProps) => {
         </Item>
       </Stack>
 
-      <pre>
-        {JSON.stringify(tripData, null, 2)}
-      </pre>
+      <TableContainer component={Paper}>
+        <Table size={'small'}>
+          <TableHead>
+            <TableRow style={{ backgroundColor: '#000' }}>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Toll #</TableCell>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Toll Time</TableCell>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Location</TableCell>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Amount</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {pastTripData.map((row, counter) => (
+              <TableRow hover key={counter} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell>{pastTripData.length - counter}</TableCell>
+                <TableCell>{moment(row.tollTime).format('ddd, MMM D YYYY; LT')}</TableCell>
+                <TableCell>{row.tollLocation}</TableCell>
+                <TableCell>$ {row.tollAmount.toFixed(2)}</TableCell>
+              </TableRow>
+            ))}
+            {pastTripData.length === 0 && (
+              <>
+                <TableRow hover key={0} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell colSpan={4} style={{ textAlign: 'center' }}>No current trips recorded.</TableCell>
+                </TableRow>
+              </>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
     </>
   );
 }
