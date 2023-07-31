@@ -27,7 +27,7 @@ import {
   GarageOutlined, HouseOutlined,
   MoneyOutlined,
   PeopleOutlined,
-  PersonOffOutlined, ScheduleOutlined, TodayOutlined, UpcomingOutlined, ViewWeekOutlined
+  PersonOffOutlined, ScheduleOutlined, TodayOutlined, TollOutlined, UpcomingOutlined, ViewWeekOutlined
 } from '@mui/icons-material';
 import { SideBarMenuGroupProps } from '@/components/SideBarMenuGroup';
 import CarDefinitions from '@/pages/car-definitions/index';
@@ -38,6 +38,8 @@ import FleetMembership from '@/pages/fleet-membership/index';
 import Guests from '@/pages/guest/index';
 import Trip from '@/pages/trip/index';
 import TripsList, {ITripType} from '@/pages/trip/list';
+import Toll from '@/pages/toll/index';
+import TollList from '@/pages/toll/list';
 import Dashboard from '@/pages/dashboard';
 
 const drawerWidth = 240;
@@ -253,6 +255,21 @@ const Home: NextPage = () => {
       },
     ],
   }
+  const tollItems: SideBarMenuGroupProps = {
+    label: 'Tolls',
+    items: [
+      {
+        icon: <TollOutlined/>,
+        label: 'Toll Entry',
+        onClick: () => setCurrentPage(<Toll jwt={jwt as string}/>),
+      },
+      {
+        icon: <MoneyOutlined/>,
+        label: 'Trip Tolls',
+        onClick: () => setCurrentPage(<TollList jwt={jwt as string}/>),
+      },
+    ],
+  }
 
   const handleMenu = (e: any) => {
     setAnchorEl(e);
@@ -288,7 +305,7 @@ const Home: NextPage = () => {
         {/* Side Divider, only contains the sidebar, which is static.*/}
         <div style={{ width: '260px' }}>
           <SideBar width={ 260 } sidebarItems={[
-            carItems, fleetItems, guestItems, tripItems,
+            carItems, fleetItems, guestItems, tripItems, tollItems,
           ]} onHomeClicked={() => handleHomeClicked()}/>
         </div>
 

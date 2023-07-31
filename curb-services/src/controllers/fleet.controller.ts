@@ -133,6 +133,22 @@ export class FleetController {
     return this.service.getFleetCarLoan(fleetCarId);
   }
 
+  @Get('/find/fleet-car/:key/:value')
+  @ApiOperation({
+    summary: 'Searches for a Fleet Car by key/value',
+    description: 'Searches for a Fleet Car by its key and value',
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: FleetCarDto,
+    isArray: true,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async find(@Param('key') key: string, @Param('value') value: string): Promise<FleetCarDto[]> {
+    return this.service.find(key, value);
+  }
+
   @Put('/save/car')
   @ApiOperation({
     summary: 'Saves a FleetCar object',

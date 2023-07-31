@@ -80,4 +80,16 @@ export class TripDao extends BaseDao<TripDto> {
       payload.earnings,
     ]);
   }
+
+  async find(fleetCarId: number, tripDate: Date): Promise<TripDto> {
+    const sqlStatement =
+      `SELECT * FROM ${this.section} WHERE fleet_car_id=$1 AND (start_time <= $2 AND end_time >= $2)`;
+    const result = (await this.db.oneOrNone(sqlStatement, [ fleetCarId, tripDate ]));
+
+    if (result) {
+      return DaoUtils.normalizeFields<TripDto>(result);
+    }
+
+    return null;
+  }
 }

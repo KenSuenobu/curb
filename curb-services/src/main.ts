@@ -44,6 +44,10 @@ async function bootstrap() {
       description: 'Main Documentation and Suggestions',
       url: 'http://www.suenobu.llc/curb/docs',
     })
+    .addTag('toll', 'Car Toll services', {
+      description: 'Main Documentation and Suggestions',
+      url: 'http://www.suenobu.llc/curb/docs',
+    })
     .addTag('trip', 'Car Trip services', {
       description: 'Main Documentation and Suggestions',
       url: 'http://www.suenobu.llc/curb/docs',

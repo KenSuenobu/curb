@@ -10,5 +10,6 @@ export * from './fleet-car-loan.dao';
 export * from './fleet-membership.dao';
 export * from './guest.dao';
 export * from './loan-payment.dao';
+export * from './toll.dao';
 export * from './trip.dao';
 export * from './user.dao';

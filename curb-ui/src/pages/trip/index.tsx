@@ -406,7 +406,7 @@ const Trip = (props: ITripProps) => {
                   <TableRow hover key={counter} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell>
                       <Typography style={{ color: (guestById(row.guestId).blacklisted ? 'red' : 'black') }}>
-                        {guestById(row.guestId).lastName}, {guestById(row.guestId).firstName}
+                        {guestById(row.guestId).lastName.charAt(0)}., {guestById(row.guestId).firstName}
                       </Typography>
                     </TableCell>
                     <TableCell>{deliveryAddressById(row.deliveryAddressId).name ?? 'N/A'}</TableCell>

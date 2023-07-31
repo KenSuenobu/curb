@@ -35,4 +35,9 @@ export class TripService {
     return dao.listByFleetCarId(fleetCarId);
   }
 
+  async find(payload: any): Promise<TripDto> {
+    const dao = new TripDao(DaoUtils.getDatabase());
+    return dao.find(payload.fleetCarId, payload.tripTime);
+  }
+
 }

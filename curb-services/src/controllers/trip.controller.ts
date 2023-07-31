@@ -121,4 +121,19 @@ export class TripController {
     return this.service.getTripsForFleetCarId(fleetCarId);
   }
 
+  @Post('/find')
+  @ApiOperation({
+    summary: 'Searches for a trip',
+    description: 'Searches for a trip by fleet car ID and trip date',
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: TripDto,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async find(@Body() payload: any): Promise<TripDto> {
+    return this.service.find(payload);
+  }
+
 }

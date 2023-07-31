@@ -21,6 +21,8 @@ import {AddressController} from './controllers/address.controller';
 import {AddressService} from './services/address.service';
 import {TripController} from './controllers/trip.controller';
 import {TripService} from './services/trip.service';
+import {TollController} from './controllers/toll.controller';
+import {TollService} from './services/toll.service';
 
 @Module({
   imports: [],
@@ -34,6 +36,7 @@ import {TripService} from './services/trip.service';
     FleetController,
     FleetLoanController,
     GuestController,
+    TollController,
     TripController,
     UserController,
   ],
@@ -47,6 +50,7 @@ import {TripService} from './services/trip.service';
     FleetService,
     FleetLoanService,
     GuestService,
+    TollService,
     TripService,
     UserService,
   ],

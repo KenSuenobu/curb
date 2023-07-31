@@ -93,7 +93,11 @@ const TripsList = (props: ITripsListProps) => {
           <TableBody>
             {tripList.map((row, counter) => (
               <TableRow hover key={counter} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell>{guestById(row.guestId).lastName}, {guestById(row.guestId).firstName}</TableCell>
+                <TableCell>
+                  <Typography style={{ color: (guestById(row.guestId).blacklisted ? 'red' : 'black') }}>
+                    {guestById(row.guestId).lastName}, {guestById(row.guestId).firstName}
+                  </Typography>
+                </TableCell>
                 <TableCell>{deliveryAddressById(row.deliveryAddressId)?.name ?? 'N/A'}</TableCell>
                 <TableCell>{moment(row.startTime).format('ddd, MMM D YYYY; LT')}</TableCell>
                 <TableCell>{moment(row.endTime).format('ddd, MMM D YYYY; LT')}</TableCell>
