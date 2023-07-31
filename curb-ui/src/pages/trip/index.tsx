@@ -326,7 +326,7 @@ const Trip = (props: ITripProps) => {
                         onChange={handleChange}
                         fullWidth>
                   {addressList.map((x, counter) => (
-                    <MenuItem value={x.id}>{x.name}</MenuItem>
+                    <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>
                   ))}
                 </Select>
               </FormControl>

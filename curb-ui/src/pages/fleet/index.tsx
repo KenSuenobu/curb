@@ -542,20 +542,26 @@ const Fleet = (props: IFleetProps) => {
               </Stack>
 
               <Stack direction={'row'}>
-                <Item sx={{ width: '25%' }}>
+                <Item sx={{ width: '20%' }}>
                   <TextField label={'License Plate'} fullWidth value={carFleetData.licensePlate ?? ''}
                              name={'licensePlate'}
                              onChange={handleChange}/>
                 </Item>
 
-                <Item sx={{ width: '25%' }}>
-                  <TextField label={'License Registration State'} fullWidth value={carFleetData.licenseState ?? ''}
+                <Item sx={{ width: '20%' }}>
+                  <TextField label={'Transponder ID'} fullWidth value={carFleetData.transponderId ?? ''}
+                             name={'transponderId'}
+                             onChange={handleChange}/>
+                </Item>
+
+                <Item sx={{ width: '20%' }}>
+                  <TextField label={'License State'} fullWidth value={carFleetData.licenseState ?? ''}
                              name={'licenseState'}
                              onChange={handleChange}/>
                 </Item>
 
                 <Item sx={{ width: '25%' }}>
-                  <TextField label={'License Registration Country'} fullWidth value={carFleetData.licenseCountry ?? ''}
+                  <TextField label={'License Country'} fullWidth value={carFleetData.licenseCountry ?? ''}
                              name={'licenseCountry'}
                              onChange={handleChange}/>
                 </Item>

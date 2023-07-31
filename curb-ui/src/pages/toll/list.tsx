@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios/index';
+import axios from 'axios';
 import {errorDialog} from '@/components/dialogs/ConfirmDialog';
 import {Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from '@mui/material';
 import Paper from '@mui/material/Paper';
