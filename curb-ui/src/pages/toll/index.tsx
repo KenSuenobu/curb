@@ -70,42 +70,81 @@ const Toll = (props: ITollProps) => {
 
   const searchForLicensePlate = () => {
     const licensePlate = tripData.licensePlate ?? '';
+    const transponderId = tripData.transponderId ?? '';
 
-    if (licensePlate.length === 0) {
-      errorDialog('You must enter a license plate number');
+    if (licensePlate.length === 0 && transponderId.length === 0) {
+      errorDialog('You must enter a license plate number or transponder ID');
       return;
     }
 
-    axios.get(`/app/fleet/find/fleet-car/licensePlate/${licensePlate}`)
-      .then((x) => {
-        setFleetCarData(x.data);
+    if (licensePlate.length > 0 && transponderId.length > 0) {
+      errorDialog('You cannot search by both a license plate number and transponder ID');
+      return;
+    }
 
-        const payload = {
-          fleetCarId: x.data[0].id,
-          tripTime: tripData.tollTime,
-        };
+    if (licensePlate) {
+      axios.get(`/app/fleet/find/fleet-car/licensePlate/${licensePlate}`)
+        .then((x) => {
+          setFleetCarData(x.data);
 
-        axios.post('/app/trip/find', payload)
-          .then((x) => {
-            setTripLookupData(x.data);
+          const payload = {
+            fleetCarId: x.data[0].id,
+            tripTime: tripData.tollTime,
+          };
 
-            if (x.data) {
-              tripData.tripId = x.data.id;
+          axios.post('/app/trip/find', payload)
+            .then((x) => {
+              setTripLookupData(x.data);
 
-              reloadPastTrips(x.data.id);
-            } else {
-              errorDialog('No trip was found for the toll time specified.');
-            }
-          })
-          .catch((x) => {
-            errorDialog('No trip matches the toll date.');
-            return;
-          });
-      })
-      .catch((x) => {
-        errorDialog('Fleet car cannot be found by the license plate provided.');
-        return;
-      });
+              if (x.data) {
+                tripData.tripId = x.data.id;
+
+                reloadPastTrips(x.data.id);
+              } else {
+                errorDialog('No trip was found for the toll time specified.');
+              }
+            })
+            .catch((x) => {
+              errorDialog('No trip matches the toll date.');
+              return;
+            });
+        })
+        .catch((x) => {
+          errorDialog('Fleet car cannot be found by the license plate provided.');
+          return;
+        });
+    } else if (transponderId) {
+      axios.get(`/app/fleet/find/fleet-car/transponderId/${transponderId}`)
+        .then((x) => {
+          setFleetCarData(x.data);
+
+          const payload = {
+            fleetCarId: x.data[0].id,
+            tripTime: tripData.tollTime,
+          };
+
+          axios.post('/app/trip/find', payload)
+            .then((x) => {
+              setTripLookupData(x.data);
+
+              if (x.data) {
+                tripData.tripId = x.data.id;
+
+                reloadPastTrips(x.data.id);
+              } else {
+                errorDialog('No trip was found for the toll time specified.');
+              }
+            })
+            .catch((x) => {
+              errorDialog('No trip matches the toll date.');
+              return;
+            });
+        })
+        .catch((x) => {
+          errorDialog('Fleet car cannot be found by the license plate provided.');
+          return;
+        });
+    }
   }
 
   const saveToll = () => {
@@ -154,24 +193,26 @@ const Toll = (props: ITollProps) => {
       {(tripLookupData || fleetCarData.length > 0) && (
         <Stack direction={'row'}>
           <Item sx={{ width: '100%', textAlign: 'left' }}>
-            {fleetCarData.length > 0 && (
-              <>
-                <b>Fleet Car:</b> {fleetCarData[0].carYear} {fleetCarData[0].makeName} {fleetCarData[0].modelName} {fleetCarData[0].trimName}
-              </>
-            )}
-            {tripLookupData && (
-              <>
-                <br/>
-                <b>Trip:</b> {moment(tripLookupData.startTime).format('ddd, MMM D YYYY; LT')} to {
-                  moment(tripLookupData.endTime).format('ddd, MMM D YYYY; LT')}
-              </>
-            )}
-            {!tripLookupData && fleetCarData.length > 0 && (
-              <>
-                <br/>
-                <b>No trip was found for the date specified.</b>
-              </>
-            )}
+            <Typography>
+              {fleetCarData.length > 0 && (
+                <>
+                  <b>Fleet Car:</b> {fleetCarData[0].carYear} {fleetCarData[0].makeName} {fleetCarData[0].modelName} {fleetCarData[0].trimName} ({fleetCarData[0].data.licensePlate})
+                </>
+              )}
+              {tripLookupData && (
+                <>
+                  <br/>
+                  <b>Trip:</b> {moment(tripLookupData.startTime).format('ddd, MMM D YYYY; LT')} to {
+                    moment(tripLookupData.endTime).format('ddd, MMM D YYYY; LT')}
+                </>
+              )}
+              {!tripLookupData && fleetCarData.length > 0 && (
+                <>
+                  <br/>
+                  <b>No trip was found for the date specified.</b>
+                </>
+              )}
+            </Typography>
           </Item>
         </Stack>
       )}
@@ -182,6 +223,11 @@ const Toll = (props: ITollProps) => {
         <Item sx={{ width: '25%' }}>
           <TextField label={'License Plate'} fullWidth value={tripData.licensePlate ?? ''}
                      name={'licensePlate'} onChange={handleChange}/>
+        </Item>
+
+        <Item sx={{ width: '25%' }}>
+          <TextField label={'Transponder ID'} fullWidth value={tripData.transponderId ?? ''}
+                     name={'transponderId'} onChange={handleChange}/>
         </Item>
 
         <Item sx={{ width: '25%', textAlign: 'left' }}>
