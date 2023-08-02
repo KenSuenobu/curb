@@ -944,3 +944,81 @@ CREATE TABLE curb.loan_payment (
     interest_amount FLOAT NOT NULL,
     total_amount FLOAT NOT NULL
 );
+
+---
+
+DROP TABLE IF EXISTS curb.fleet_membership;
+DROP INDEX IF EXISTS idx_fleet_membership_unique;
+
+CREATE TABLE curb.fleet_membership (
+    id SERIAL NOT NULL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES curb.user(id) ON DELETE CASCADE,
+    fleet_id INT NOT NULL REFERENCES curb.fleet(id) ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX idx_fleet_membership_unique ON curb.fleet_membership(user_id, fleet_id);
+
+---
+
+DROP TABLE IF EXISTS curb.guest;
+DROP INDEX IF EXISTS idx_curb_guest_name_dl;
+
+CREATE TABLE curb.guest (
+    id SERIAL NOT NULL PRIMARY KEY,
+    guest_id VARCHAR(200) NOT NULL,
+    guest_id_source VARCHAR(80) NOT NULL,
+    blacklisted BOOLEAN NOT NULL DEFAULT false,
+    first_name VARCHAR(80) NOT NULL,
+    middle_name VARCHAR(80),
+    last_name VARCHAR(80) NOT NULL,
+    data JSON
+);
+
+CREATE UNIQUE INDEX idx_curb_guest_name_dl ON curb.guest(guest_id, first_name, last_name);
+
+---
+
+DROP TABLE IF EXISTS curb.delivery_address CASCADE;
+DROP INDEX IF EXISTS idx_delivery_address_name CASCADE;
+
+CREATE TABLE curb.delivery_address (
+    id SERIAL NOT NULL PRIMARY KEY,
+    fleet_id INT NOT NULL REFERENCES curb.fleet(id),
+    name VARCHAR(255) NOT NULL,
+    data JSON
+);
+
+CREATE UNIQUE INDEX idx_delivery_address_name ON curb.delivery_address(name, fleet_id);
+
+---
+
+DROP TABLE IF EXISTS curb.trip;
+
+CREATE TABLE curb.trip (
+    id SERIAL NOT NULL PRIMARY KEY,
+    fleet_car_id INT NOT NULL REFERENCES curb.fleet_car(id),
+    guest_id INT NOT NULL REFERENCES curb.guest(id),
+    delivery_address_id INT NOT NULL REFERENCES curb.delivery_address(id),
+    trip_id VARCHAR(80) NOT NULL,
+    trip_url VARCHAR(255) NOT NULL,
+    start_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    end_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    mileage INT NOT NULL DEFAULT 0,
+    earnings FLOAT NOT NULL DEFAULT 0
+);
+
+---
+
+DROP TABLE IF EXISTS curb.toll;
+DROP INDEX IF EXISTS idx_toll_trip_time;
+
+CREATE TABLE curb.toll (
+    id SERIAL NOT NULL PRIMARY KEY,
+    trip_id INT NOT NULL REFERENCES curb.trip(id),
+    toll_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    toll_location TEXT NOT NULL,
+    toll_amount FLOAT NOT NULL DEFAULT 0.00
+);
+
+CREATE UNIQUE INDEX idx_toll_trip_time ON curb.toll(trip_id, toll_time);
+
