@@ -2,8 +2,8 @@ import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
-  Button,
-  FormControl,
+  Button, Checkbox,
+  FormControl, FormControlLabel,
   InputLabel, MenuItem,
   Paper, Select,
   Snackbar,
@@ -107,6 +107,17 @@ const Guests = (props: IGuestProps) => {
     });
   }
 
+  const handleCheckbox = (e: any) => {
+    const data = guestData.data;
+
+    data.incomplete = e.target.checked;
+
+    setGuestData({
+      ...guestData,
+      data,
+    });
+  }
+
   const getGuest = (id: number) => {
     console.log(`Retrieve: ${id}`);
     axios.get(`/app/guest/get/${id}`)
@@ -132,10 +143,12 @@ const Guests = (props: IGuestProps) => {
       return;
     }
 
-    if (!guestData.data.address1 || !guestData.data.city || !guestData.data.stateProvince ||
-      !guestData.data.zipcode || !guestData.data.country) {
-      errorDialog('Address information is incomplete.');
-      return;
+    if (!guestData.data.incomplete) {
+      if (!guestData.data.address1 || !guestData.data.city || !guestData.data.stateProvince ||
+        !guestData.data.zipcode || !guestData.data.country) {
+        errorDialog('Address information is incomplete.');
+        return;
+      }
     }
 
     if (payload.id !== 0) {
@@ -279,6 +292,12 @@ const Guests = (props: IGuestProps) => {
       <div style={{ width: '100%', paddingLeft: '0.5em', paddingTop: '1.5em' }}>
         <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Driver&apos;s License Detail</u></Typography>
       </div>
+
+      <Stack direction={'row'}>
+        <Item sx={{ width: '100%', textAlign: 'left' }}>
+          <FormControlLabel control={<Checkbox name={'incomplete'} checked={guestData.data.incomplete ?? false} onChange={handleCheckbox}/>} label={'Info not yet provided'}/>
+        </Item>
+      </Stack>
 
       <div style={{ display: 'flex' }}>
         <div style={{ width: '50%' }}>
