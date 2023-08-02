@@ -43,6 +43,27 @@ export class TripDao extends BaseDao<TripDto> {
       .map((x) => DaoUtils.normalizeFields<TripDto>(x));
   }
 
+  async getNextTripForFleetCarId(fleetCarId: number): Promise<TripDto | null> {
+    const selectStatement = `SELECT * FROM ${this.section} WHERE fleet_car_id=$1 AND start_time >= NOW() ORDER BY start_time ASC LIMIT 1`;
+
+    return await this.db.oneOrNone(selectStatement, [ fleetCarId ])
+      .then((x) => x ? DaoUtils.normalizeFields<TripDto>(x) : null);
+  }
+
+  async summationByFleetCarId(fleetCarId: number): Promise<number> {
+    const selectStatement = `SELECT SUM(earnings) as total_earnings FROM ${this.section} WHERE fleet_car_id=$1`;
+
+    return await this.db.oneOrNone(selectStatement, [ fleetCarId ])
+      .then((x) => x ? x['total_earnings'] : 0.00);
+  }
+
+  async totalTripsForFleetCarId(fleetCarId: number): Promise<number> {
+    const selectStatement = `SELECT COUNT(*) AS trip_total FROM ${this.section} WHERE fleet_car_id=$1`;
+
+    return await this.db.oneOrNone(selectStatement, [ fleetCarId ])
+      .then((x) => x ? x['trip_total'] : 0);
+  }
+
   async edit(id: number, payload: TripDto): Promise<boolean> {
     const sqlStatement =
       `UPDATE ${this.section} SET id=$1, fleet_car_id=$2, guest_id=$3, delivery_address_id=$4, trip_id=$5, trip_url=$6, start_time=$7, end_time=$8, mileage=$9, earnings=$10 WHERE id=$11`;

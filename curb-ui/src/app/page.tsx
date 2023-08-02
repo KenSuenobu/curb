@@ -290,7 +290,7 @@ const Home: NextPage = () => {
   }
 
   const handleHomeClicked = () => {
-    setCurrentPage(<Dashboard/>);
+    setCurrentPage(<Dashboard jwt={jwt as string}/>);
   }
 
   return (

@@ -18,6 +18,13 @@ export class LoanPaymentDao  extends BaseDao<LoanPaymentDto> {
       .map((x) => DaoUtils.normalizeFields<LoanPaymentDto>(x));
   }
 
+  async summationByFleetCarId(fleetCarId: number): Promise<number> {
+    const sqlStatement = `SELECT SUM(b.total_amount) AS total_amount FROM curb.fleet_car_loan a, curb.loan_payment b WHERE a.fleet_car_id=$1 AND b.fleet_car_loan_id=a.id`;
+
+    return await this.db.oneOrNone(sqlStatement, [ fleetCarId ])
+      .then((x) => x ? x['total_amount'] : 0.00);
+  }
+
   async edit(id: number, payload: LoanPaymentDto): Promise<boolean> {
     const sqlStatement =
       `UPDATE ${this.section} SET fleet_car_loan_id=$1, payment_date=$2, principal_amount=$3, interest_amount=$4, total_amount=$5 WHERE id=$6`;
@@ -50,7 +57,7 @@ export class LoanPaymentDao  extends BaseDao<LoanPaymentDto> {
       payload.interestAmount,
       payload.totalAmount,
     ]))
-      .then((x) => DaoUtils.normalizeFields<LoanPaymentDto>(x));
+    .then((x) => DaoUtils.normalizeFields<LoanPaymentDto>(x));
   }
 
 }
