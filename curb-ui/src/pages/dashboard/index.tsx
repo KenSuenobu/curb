@@ -3,6 +3,7 @@ import axios from 'axios';
 import {errorDialog} from '@/components/dialogs/ConfirmDialog';
 import {Paper, Stack, TextField, Typography} from '@mui/material';
 import Item from '@/components/common/Item';
+import moment from 'moment';
 
 export interface IDashboardProperties {
   jwt: string;
@@ -69,25 +70,26 @@ const Dashboard = (props: IDashboardProperties) => {
                     <p/>
                     <Stack direction={'row'}>
                       <Item sx={{ width: '50%', textAlign: 'left', padding: '0px' }}>
-                        Gross: $ {parseFloat(y.grossTotal ?? '0.00').toFixed(2)}<br/>
-                        Loans: $ {parseFloat(y.loanTotal ?? '0.00').toFixed(2)}
+                        <Typography color={'black'}>
+                          Gross: $ {parseFloat(y.grossTotal ?? '0.00').toFixed(2)}<br/>
+                          Loans: $ {parseFloat(y.loanTotal ?? '0.00').toFixed(2)}
+                        </Typography>
                       </Item>
 
                       <Item sx={{ width: '50%', textAlign: 'right', padding: '0px' }}>
-                        Profit: $ {parseFloat(y.grossTotal ?? '0.00').toFixed(2) - parseFloat(y.loanTotal ?? '0.00').toFixed(2)}
+                        <Typography color={'black'}>
+                          Profit: $ {(parseFloat(y.grossTotal ?? '0.00').toFixed(2) - parseFloat(y.loanTotal ?? '0.00').toFixed(2)).toFixed(2)}
+                        </Typography>
                       </Item>
                     </Stack>
 
                     {y.nextTrip && (
                       <>
-                        Next Trip: {y.nextTrip}
-                        Delivery: Home
+                        <p/>
+                        Next Trip: {moment(y.nextTrip).format('ddd, MMM D YYYY; LT')}<br/>
                       </>
                     )}
-                    <p/>
                     Total Trips: {y.tripsCount}<br/>
-                    Total Upcoming Trips: 2<br/>
-                    Current Status: Rented<br/>
                     <p/>
                     Graph - Performance per month<br/>
                     Graph - Trips per month<br/>

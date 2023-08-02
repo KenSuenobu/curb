@@ -96,6 +96,7 @@ Phase 1:
   - Past Trips
   - Toll Entry
   - Toll List
+  - Dashboard
 
 [//]: # (  - Address database)
 
