@@ -5,7 +5,7 @@ import {ApiBody, ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse,
 import {CarMakeService} from "../services/car-make.service";
 import {CarMakeDto, FleetCarDto, FleetDto} from 'curb-db/dist/dto';
 import {FleetService} from '../services/fleet.service';
-import {FleetCarLoanDto, FleetMembershipDto} from 'curb-db/dist';
+import {FleetCarLoanDto, FleetCarMaintenanceDto, FleetMembershipDto} from 'curb-db/dist';
 
 @ApiTags('fleet')
 @Controller('fleet')
@@ -84,6 +84,38 @@ export class FleetController {
   @ApiUnauthorizedResponse()
   async assignUserToFleet(@Body() payload: FleetMembershipDto): Promise<FleetMembershipDto> {
     return this.service.assignUserToFleet(payload);
+  }
+
+  @Post('/create/maintenance')
+  @ApiOperation({
+    summary: 'Adds a maintenance record to a fleet',
+    description: 'Adds a maintenance record',
+  })
+  @ApiBody({
+    description: 'The FleetCarMaintenance object to create',
+    type: FleetCarMaintenanceDto,
+  })
+  @ApiConflictResponse()
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async createMaintenanceRecord(@Body() payload: FleetCarMaintenanceDto): Promise<FleetCarMaintenanceDto> {
+    return this.service.createMaintenanceRecord(payload);
+  }
+
+  @Put('/save/maintenance')
+  @ApiOperation({
+    summary: 'Saves changes to a maintenance record',
+    description: 'Saves changes to a FleetCarMaintenance record object',
+  })
+  @ApiBody({
+    description: 'The FleetCarMaintenance object to save',
+    type: FleetCarMaintenanceDto,
+  })
+  @ApiConflictResponse()
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async saveMaintenanceRecord(@Body() payload: FleetCarMaintenanceDto): Promise<boolean> {
+    return this.service.saveMaintenanceRecord(payload);
   }
 
   @Put('/membership/:fleetId/:email')
@@ -217,6 +249,22 @@ export class FleetController {
   @ApiUnauthorizedResponse()
   async listFleetMembers(@Param('fleetId') fleetId: number): Promise<string[]> {
     return this.service.listFleetMembers(fleetId);
+  }
+
+  @Get('/list/maintenance/:fleetCarId')
+  @ApiOperation({
+    summary: 'List all maintenance by fleet car id',
+    description: 'Lists all maintenance records by a fleetCarId',
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: FleetCarMaintenanceDto,
+    isArray: true,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async listMaintenanceForFleetCarId(@Param('fleetCarId') fleetCarId: number): Promise<FleetCarMaintenanceDto[]> {
+    return this.service.listMaintenanceForFleetCarId(fleetCarId);
   }
 
 }

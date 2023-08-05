@@ -22,7 +22,7 @@ import Item from '@/components/common/Item';
 import MenuIcon from '@mui/icons-material/Menu';
 import { errorDialog } from '@/components/dialogs/ConfirmDialog';
 import {
-  CalendarMonthOutlined,
+  CalendarMonthOutlined, CarCrashOutlined,
   DirectionsCarOutlined,
   GarageOutlined, HouseOutlined,
   MoneyOutlined,
@@ -41,6 +41,7 @@ import TripsList, {ITripType} from '@/pages/trip/list';
 import Toll from '@/pages/toll/index';
 import TollList from '@/pages/toll/list';
 import Dashboard from '@/pages/dashboard';
+import FleetCarMaintenance from '@/pages/fleet-car-maintenance';
 
 const drawerWidth = 240;
 
@@ -199,14 +200,19 @@ const Home: NextPage = () => {
         onClick: () => setCurrentPage(<Fleet jwt={jwt as string}/>),
       },
       {
-        icon: <HouseOutlined/>,
-        label: 'Delivery Addresses',
-        onClick: () => setCurrentPage(<DeliveryAddress jwt={jwt as string}/>),
+        icon: <CarCrashOutlined/>,
+        label: 'Fleet Car Maintenance',
+        onClick: () => setCurrentPage(<FleetCarMaintenance jwt={jwt as string}/>),
       },
       {
         icon: <MoneyOutlined/>,
         label: 'Fleet Car Loans',
         onClick: () => setCurrentPage(<FleetLoans jwt={jwt as string}/>),
+      },
+      {
+        icon: <HouseOutlined/>,
+        label: 'Delivery Addresses',
+        onClick: () => setCurrentPage(<DeliveryAddress jwt={jwt as string}/>),
       },
       {
         icon: <PeopleOutlined/>,

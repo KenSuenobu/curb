@@ -7,6 +7,7 @@ export * from './delivery-address.dto';
 export * from './fleet.dto';
 export * from './fleet-car.dto';
 export * from './fleet-car-loan.dto';
+export * from './fleet-car-maintenance.dto';
 export * from './fleet-membership.dto';
 export * from './guest.dto';
 export * from './loan-payment.dto';

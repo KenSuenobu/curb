@@ -7,6 +7,7 @@ export * from './delivery-address.dao';
 export * from './fleet.dao';
 export * from './fleet-car.dao';
 export * from './fleet-car-loan.dao';
+export * from './fleet-car-maintenance.dao';
 export * from './fleet-membership.dao';
 export * from './guest.dao';
 export * from './loan-payment.dao';
