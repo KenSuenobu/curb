@@ -85,7 +85,7 @@ const CarDefinitions: NextPage = () => {
   }
 
   const addCarMake = () => {
-    const carMake = carMakeRef.current;
+    const carMake = carMakeRef.current.value;
 
     if (carMake.length === 0) {
       errorDialog('Car Make is required.');
@@ -103,11 +103,11 @@ const CarDefinitions: NextPage = () => {
 
     setCarMakesInputShowing(false);
 
-    carMakeRef.current = '';
+    carMakeRef.current.value = '';
   }
 
   const addCarModel = () => {
-    const carModel = carModelRef.current;
+    const carModel = carModelRef.current.value;
 
     if (carModel.length === 0) {
       errorDialog('Car Model is required.');
@@ -126,11 +126,11 @@ const CarDefinitions: NextPage = () => {
 
     setCarModelsInputShowing(false);
 
-    carModelRef.current = '';
+    carModelRef.current.value = '';
   }
 
   const addCarYear = () => {
-    const carYear = carYearRef.current;
+    const carYear = carYearRef.current.value;
 
     if (carYear.length === 0) {
       errorDialog('Car Year is required.');
@@ -151,11 +151,11 @@ const CarDefinitions: NextPage = () => {
 
     setCarYearsInputShowing(false);
 
-    carYearRef.current = '';
+    carYearRef.current.value = '';
   }
 
   const addCarTrim = () => {
-    const carTrim = carTrimRef.current;
+    const carTrim = carTrimRef.current.value;
 
     if (carTrim.length === 0) {
       errorDialog('Car Trim level is required.');
@@ -176,7 +176,7 @@ const CarDefinitions: NextPage = () => {
 
     setCarTrimsInputShowing(false);
 
-    carTrimRef.current = '';
+    carTrimRef.current.value = '';
   }
 
   const saveCarTrimInfo = () => {
@@ -243,8 +243,8 @@ const CarDefinitions: NextPage = () => {
 
     if (found) {
       errorDialog(`Option '${optionName}' already exists in the list.`);
-      trimInfoOptionNameRef.current = '';
-      trimInfoOptionPriceRef.current = '';
+      trimInfoOptionNameRef.current.value = '';
+      trimInfoOptionPriceRef.current.value = '';
       return;
     }
 
@@ -255,8 +255,8 @@ const CarDefinitions: NextPage = () => {
 
     setTrimInfoPayload(tip);
 
-    trimInfoOptionNameRef.current = '';
-    trimInfoOptionPriceRef.current = '';
+    trimInfoOptionNameRef.current.value = '';
+    trimInfoOptionPriceRef.current.value = '';
 
     setCarOptionsInputShowing(false);
   }
@@ -286,8 +286,8 @@ const CarDefinitions: NextPage = () => {
 
     if (found) {
       errorDialog(`Color '${colorValue}' already exists in the list.`);
-      colorNameRef.current = '';
-      colorPriceRef.current = '';
+      colorNameRef.current.value = '';
+      colorPriceRef.current.value = '';
       return;
     }
 
@@ -298,8 +298,8 @@ const CarDefinitions: NextPage = () => {
 
     setTrimInfoPayload(tip);
 
-    colorNameRef.current = '';
-    colorPriceRef.current = '';
+    colorNameRef.current.value = '';
+    colorPriceRef.current.value = '';
 
     setCarColorsInputShowing(false);
   }
@@ -329,8 +329,8 @@ const CarDefinitions: NextPage = () => {
 
     if (found) {
       errorDialog(`Video URL '${carReviewUrl}' already exists in the list.`);
-      trimInfoReviewUrlSiteRef.current = '';
-      trimInfoReviewUrlRef.current = '';
+      trimInfoReviewUrlSiteRef.current.value = '';
+      trimInfoReviewUrlRef.current.value = '';
       return;
     }
 
@@ -341,8 +341,8 @@ const CarDefinitions: NextPage = () => {
 
     setTrimInfoPayload(tip);
 
-    trimInfoReviewUrlSiteRef.current = '';
-    trimInfoReviewUrlRef.current = '';
+    trimInfoReviewUrlSiteRef.current.value = '';
+    trimInfoReviewUrlRef.current.value = '';
 
     setCarUrlInputShowing(false);
   }
@@ -409,7 +409,7 @@ const CarDefinitions: NextPage = () => {
                             onKeyDown={(ev) => {
                               if (ev.key === 'Escape') {
                                 setCarMakesInputShowing(false);
-                                carMakeRef.current = '';
+                                carMakeRef.current.value = '';
                               } else if (ev.key === 'Enter') {
                                 addCarMake();
                               }
@@ -489,7 +489,7 @@ const CarDefinitions: NextPage = () => {
                                    onKeyDown={(ev) => {
                                      if (ev.key === 'Escape') {
                                        setCarModelsInputShowing(false);
-                                       carModelRef.current = '';
+                                       carModelRef.current.value = '';
                                      } else if (ev.key === 'Enter') {
                                        addCarModel();
                                      }
@@ -563,7 +563,7 @@ const CarDefinitions: NextPage = () => {
                                      onKeyDown={(ev) => {
                                        if (ev.key === 'Escape') {
                                          setCarYearsInputShowing(false);
-                                         carYearRef.current = '';
+                                         carYearRef.current.value = '';
                                        } else if (ev.key === 'Enter') {
                                          addCarYear();
                                        }
@@ -633,7 +633,7 @@ const CarDefinitions: NextPage = () => {
                                      onKeyDown={(ev) => {
                                        if (ev.key === 'Escape') {
                                          setCarTrimsInputShowing(false);
-                                         carTrimRef.current = '';
+                                         carTrimRef.current.value = '';
                                        } else if (ev.key === 'Enter') {
                                          addCarTrim();
                                        }
@@ -939,7 +939,7 @@ const CarDefinitions: NextPage = () => {
                     </>
                   )}
                   <TableBody>
-                    {trimInfoPayload?.optionList
+                    {(trimInfoPayload?.optionList ? trimInfoPayload.optionList : [])
                       .sort((a: any, b: any) => (a.name > b.name ? 1 : -1))
                       .map((x: any) => (
                       <>
@@ -1017,7 +1017,7 @@ const CarDefinitions: NextPage = () => {
                     </>
                   )}
                   <TableBody>
-                    {trimInfoPayload?.colorList
+                    {(trimInfoPayload?.colorList ? trimInfoPayload.colorList : [])
                       .sort((a: any, b: any) => (a.name > b.name ? 1 : -1))
                       .map((x: any) => (
                       <>
@@ -1095,7 +1095,7 @@ const CarDefinitions: NextPage = () => {
                   </>
                 )}
                 <TableBody>
-                  {trimInfoPayload?.siteList
+                  {(trimInfoPayload?.siteList ? trimInfoPayload.siteList : [])
                     .sort((a: any, b: any) => (a.name > b.name ? 1 : -1))
                     .map((x: any) => (
                     <>
