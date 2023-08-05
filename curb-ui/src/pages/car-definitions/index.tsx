@@ -219,8 +219,8 @@ const CarDefinitions: NextPage = () => {
   }
 
   const addTrimOption = () => {
-    const optionName = trimInfoOptionNameRef.current ?? '';
-    const optionValue = trimInfoOptionPriceRef.current ?? '';
+    const optionName = trimInfoOptionNameRef.current.value ?? '';
+    const optionValue = trimInfoOptionPriceRef.current.value ?? '';
 
     if (!optionName || !optionValue) {
       errorDialog('Option name and value are required.');
@@ -262,8 +262,8 @@ const CarDefinitions: NextPage = () => {
   }
 
   const addColorOption = () => {
-    const colorName = colorNameRef.current ?? '';
-    const colorValue = colorPriceRef.current ?? '';
+    const colorName = colorNameRef.current.value ?? '';
+    const colorValue = colorPriceRef.current.value ?? '';
 
     if (!colorName || !colorValue) {
       errorDialog('Color name and value are required.');
@@ -305,8 +305,8 @@ const CarDefinitions: NextPage = () => {
   }
 
   const addCarSite = () => {
-    const carReviewSiteName = trimInfoReviewUrlSiteRef.current ?? '';
-    const carReviewUrl = trimInfoReviewUrlRef.current ?? '';
+    const carReviewSiteName = trimInfoReviewUrlSiteRef.current.value ?? '';
+    const carReviewUrl = trimInfoReviewUrlRef.current.value ?? '';
 
     if (!carReviewSiteName || !carReviewUrl) {
       errorDialog('Car review site name and video URL are required.');
