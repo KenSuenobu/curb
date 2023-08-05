@@ -70,7 +70,7 @@ const Fleet = (props: IFleetProps) => {
   }
 
   const addFleet = () => {
-    const fleetName = fleetRef.current.trim();
+    const fleetName = fleetRef.current.value.trim();
 
     if (fleetName.length === 0) {
       errorDialog('Fleet name is required.');
@@ -83,7 +83,7 @@ const Fleet = (props: IFleetProps) => {
       }).then((x) => {
         reloadFleet(userInfo.id);
         setFleetInputShowing(false);
-        fleetRef.current = '';
+        fleetRef.current.value = '';
       });
     }
   }
@@ -148,9 +148,9 @@ const Fleet = (props: IFleetProps) => {
   }
 
   const addOwnershipDetail = () => {
-    const ownerName = ownershipNameRef.current;
-    const ownerPhone = ownershipPhoneRef.current;
-    const ownerPercent = ownershipPercentageRef.current;
+    const ownerName = ownershipNameRef.current.value;
+    const ownerPhone = ownershipPhoneRef.current.value;
+    const ownerPercent = ownershipPercentageRef.current.value;
 
     if (!ownerName || !ownerPhone || !ownerPercent) {
       errorDialog('Owner name, phone, and percentage are required fields.');
@@ -170,17 +170,17 @@ const Fleet = (props: IFleetProps) => {
       ownership,
     });
 
-    ownershipNameRef.current = '';
-    ownershipPhoneRef.current = '';
-    ownershipPercentageRef.current = '';
+    ownershipNameRef.current.value = '';
+    ownershipPhoneRef.current.value = '';
+    ownershipPercentageRef.current.value = '';
 
     setOwnershipInputShowing(false);
   }
 
   const addInsuranceDetail = () => {
-    const insuranceName = insuranceNameRef.current;
-    const insurancePrice = insurancePriceRef.current;
-    const insuranceSchedule = insuranceScheduleRef.current;
+    const insuranceName = insuranceNameRef.current.value;
+    const insurancePrice = insurancePriceRef.current.value;
+    const insuranceSchedule = insuranceScheduleRef.current.value;
 
     if (!insuranceName || !insurancePrice || !insuranceSchedule) {
       errorDialog('Insurance name, price, and payment schedule rate are required fields.');
@@ -200,9 +200,9 @@ const Fleet = (props: IFleetProps) => {
       insurance,
     });
 
-    insuranceNameRef.current = '';
-    insurancePriceRef.current = '';
-    insuranceScheduleRef.current = '';
+    insuranceNameRef.current.value = '';
+    insurancePriceRef.current.value = '';
+    insuranceScheduleRef.current.value = '';
 
     setInsuranceInputShowing(false);
   }
@@ -248,7 +248,7 @@ const Fleet = (props: IFleetProps) => {
                                      onKeyDown={(ev) => {
                                        if (ev.key === 'Escape') {
                                          setFleetInputShowing(false);
-                                         fleetRef.current = '';
+                                         fleetRef.current.value = '';
                                        } else if (ev.key === 'Enter') {
                                          addFleet();
                                        }
@@ -507,6 +507,21 @@ const Fleet = (props: IFleetProps) => {
                   <TextField label={'VIN'} fullWidth value={carFleetData.vin ?? ''}
                              name={'vin'} onChange={handleChange}/>
                 </Item>
+
+                <Item>
+                  <IconButton>
+                    <PreviewOutlined
+                      onClick={() => {
+                        if (carFleetData.vin) {
+                          window.open(`https://www.nhtsa.gov/recalls?vin=${carFleetData.vin}#vin`);
+                          return;
+                        }
+
+                        errorDialog('You need to provide a VIN number for this car');
+                      }}/>
+                  </IconButton>
+                </Item>
+
 
                 <Item sx={{ width: '25%' }}>
                   <TextField label={'Purchase Price'} fullWidth value={carFleetData.purchasePrice ?? ''}

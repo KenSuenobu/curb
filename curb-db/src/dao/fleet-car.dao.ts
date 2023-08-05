@@ -67,12 +67,12 @@ export class FleetCarDao extends BaseDao<FleetCarDto> {
     const sqlStatement =
       `INSERT INTO ${this.section} (fleet_id, car_trim_id, owner_id, data) VALUES ($1, $2, $3, $4) RETURNING *`;
 
-    return (await this.db.oneOrNone(sqlStatement, [
+    return await this.db.oneOrNone(sqlStatement, [
       payload.fleetId,
       payload.carTrimId,
       payload.ownerId,
       payload.data,
-    ]))
-      .then((x) => DaoUtils.normalizeFields<FleetCarDto>(x));
+    ])
+    .then((x) => DaoUtils.normalizeFields<FleetCarDto>(x));
   }
 }
