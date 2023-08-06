@@ -50,13 +50,13 @@ export class LoanPaymentDao  extends BaseDao<LoanPaymentDto> {
       `INSERT INTO ${this.section} (fleet_car_loan_id, payment_date, principal_amount, interest_amount, total_amount) ` +
       'VALUES ($1, $2, $3, $4, $5) RETURNING *';
 
-    return (await this.db.oneOrNone(sqlStatement, [
+    return await this.db.oneOrNone(sqlStatement, [
       payload.fleetCarLoanId,
       payload.paymentDate,
       payload.principalAmount,
       payload.interestAmount,
       payload.totalAmount,
-    ]))
+    ])
     .then((x) => DaoUtils.normalizeFields<LoanPaymentDto>(x));
   }
 

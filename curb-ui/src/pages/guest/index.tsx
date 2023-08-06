@@ -138,11 +138,6 @@ const Guests = (props: IGuestProps) => {
       return;
     }
 
-    if (guestData.guestId.length === 0) {
-      errorDialog('Guest ID is required.');
-      return;
-    }
-
     if (!guestData.data.incomplete) {
       if (!guestData.data.address1 || !guestData.data.city || !guestData.data.stateProvince ||
         !guestData.data.zipcode || !guestData.data.country) {
@@ -208,7 +203,7 @@ const Guests = (props: IGuestProps) => {
                               sx={{ backgroundColor: bgColor, width: '90%' }}
                               onClick={() => {
                                 getGuest(x.id);
-                              }}><Typography>{x.lastName}, {x.firstName} {x.middleName}: ID {x.guestId}</Typography></TableCell>
+                              }}><Typography>{x.lastName}, {x.firstName} {x.middleName}</Typography></TableCell>
                             <TableCell
                               onClick={() => {
                                 getGuest(x.id);
@@ -259,12 +254,7 @@ const Guests = (props: IGuestProps) => {
           </Stack>
 
           <Stack direction={'row'}>
-            <Item sx={{ width: '25%' }}>
-              <TextField label={'Guest ID'} fullWidth value={guestData.guestId ?? ''}
-                         name={'guestId'} onChange={handleChange}/>
-            </Item>
-
-            <Item sx={{ width: '25%' }}>
+            <Item sx={{ width: '33%' }}>
               <FormControl fullWidth>
                 <InputLabel id={'source-label'}>Guest ID Source</InputLabel>
                 <Select labelId={'source-label'} label={'guestIdSource'}
@@ -281,7 +271,7 @@ const Guests = (props: IGuestProps) => {
               </FormControl>
             </Item>
 
-            <Item sx={{ width: '50%' }}>
+            <Item sx={{ width: '67%' }}>
               <TextField label={'Guest URL'} fullWidth value={guestData.data.url ?? ''}
                          name={'url'} onChange={handleDataChange}/>
             </Item>

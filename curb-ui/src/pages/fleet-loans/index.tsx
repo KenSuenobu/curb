@@ -144,10 +144,10 @@ const FleetLoans = (props: IFleetLoansProps) => {
   }
 
   const addLoanPayment = () => {
-    const paymentDate = formDateRef.current ?? '';
-    const principalAmount = formPrincipalRef.current ?? '';
-    const interestAmount = formInterestRef.current ?? '';
-    const totalAmount = formTotalRef.current ?? '';
+    const paymentDate = formDateRef.current.value ?? '';
+    const principalAmount = formPrincipalRef.current.value ?? '';
+    const interestAmount = formInterestRef.current.value ?? '';
+    const totalAmount = formTotalRef.current.value ?? '';
 
     if (paymentDate.length == 0 || principalAmount.length == 0 || interestAmount.length == 0 || totalAmount.length == 0) {
       errorDialog('Payment date, principal amount, interest amount, and total amount are required.');
@@ -162,12 +162,15 @@ const FleetLoans = (props: IFleetLoansProps) => {
       totalAmount,
     };
 
-    console.log(`Payload: ${JSON.stringify(payload, null, 2)}`);
-
     axios.post('/app/fleet-loan/create', payload)
       .then((x) => {
         if (x.data) {
-          loadLoanPayments(fleetCarLoanId);
+          formDateRef.current.value = '';
+          formPrincipalRef.current.value = '';
+          formInterestRef.current.value = '';
+          formTotalRef.current.value = '';
+
+          loadLoanPayments(currentLoanData.id);
           return;
         }
 
@@ -367,11 +370,6 @@ const FleetLoans = (props: IFleetLoansProps) => {
             <div style={{ width: '100%' }}>
               <Stack direction={'row'}>
                 <Item sx={{ width: '20%' }}>
-                  <TextField label={'Original Balance'} fullWidth value={fleetLoanData.originalBalance ?? ''}
-                             name={'originalBalance'} onChange={handleChange}/>
-                </Item>
-
-                <Item sx={{ width: '20%' }}>
                   <FormControl fullWidth>
                     <InputLabel id={'source-label'}>Loan Type</InputLabel>
                     <Select labelId={'source-label'} label={'loanType'}
@@ -382,33 +380,38 @@ const FleetLoans = (props: IFleetLoansProps) => {
                             fullWidth>
                       <MenuItem value={'Loan'}>Loan</MenuItem>
                       <MenuItem value={'Lease'}>Lease</MenuItem>
-                      <MenuItem value={'Purchased'}>Purchased</MenuItem>
+                      <MenuItem value={'Owned'}>Owned</MenuItem>
                     </Select>
                   </FormControl>
                 </Item>
 
                 <Item sx={{ width: '20%' }}>
+                  <TextField label={'Original Balance'} fullWidth value={fleetLoanData.originalBalance ?? ''}
+                             name={'originalBalance'} onChange={handleChange}/>
+                </Item>
+
+                <Item sx={{ width: '20%' }}>
                   <TextField label={'Monthly Payment'} fullWidth value={fleetLoanData.monthlyPayment ?? ''}
                              name={'monthlyPayment'} onChange={handleChange}
-                             disabled={fleetLoanData.loanType === 'Purchased'}/>
+                             disabled={fleetLoanData.loanType === 'Owned'}/>
                 </Item>
 
                 <Item sx={{ width: '20%' }}>
                   <TextField label={'Payment Term'} fullWidth value={fleetLoanData.paymentTerm ?? ''}
                              name={'paymentTerm'} onChange={handleChange}
-                             disabled={fleetLoanData.loanType === 'Purchased'}/>
+                             disabled={fleetLoanData.loanType === 'Owned'}/>
                 </Item>
 
                 <Item sx={{ width: '20%' }}>
                   <TextField label={'APR %'} fullWidth value={fleetLoanData.apr ?? ''}
                              name={'apr'} onChange={handleChange}
-                             disabled={fleetLoanData.loanType === 'Purchased'}/>
+                             disabled={fleetLoanData.loanType === 'Owned'}/>
                 </Item>
               </Stack>
             </div>
           </div>
 
-          {(currentLoanData.fleetCarId && fleetLoanData.loanType != 'Purchased') && (
+          {(currentLoanData.fleetCarId && fleetLoanData.loanType != 'Owned') && (
           <div style={{ display: 'flex', paddingTop: '1em' }}>
             <div style={{ width: '100%', paddingLeft: '0.5em' }}>
               <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Payment Detail</u></Typography>

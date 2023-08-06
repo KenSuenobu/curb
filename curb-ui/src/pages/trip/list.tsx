@@ -109,7 +109,7 @@ const TripsList = (props: ITripsListProps) => {
             {tripList.length === 0 && (
               <>
                 <TableRow hover key={0} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell colSpan={7} style={{ textAlign: 'center' }}>No current trips recorded.</TableCell>
+                  <TableCell colSpan={7} style={{ textAlign: 'center' }}>No trips recorded.</TableCell>
                 </TableRow>
               </>
             )}
