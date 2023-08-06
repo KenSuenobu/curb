@@ -627,6 +627,42 @@ const Fleet = (props: IFleetProps) => {
                   </IconButton>
                 </Item>
               </Stack>
+
+              <Stack direction={'row'}>
+                <Item sx={{ width: '25%' }}>
+                  <FormControl fullWidth>
+                    <InputLabel id={'source-label'}>Tracking Site</InputLabel>
+                    <Select labelId={'source-label'} label={'trackingSite'}
+                            style={{ textAlign: 'left' }}
+                            value={carFleetData.trackingSite ?? 0}
+                            name={'trackingSite'}
+                            onChange={handleChange}
+                            fullWidth>
+                      <MenuItem value={'Bouncie'}>Bouncie</MenuItem>
+                      <MenuItem value={'Other'}>Other</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Item>
+
+                <Item sx={{ width: '75%' }}>
+                  <TextField label={'Car Tracker URL'} fullWidth value={carFleetData.trackingUrl ?? ''}
+                             name={'trackingUrl'} onChange={handleChange}/>
+                </Item>
+
+                <Item>
+                  <IconButton>
+                    <PreviewOutlined
+                      onClick={() => {
+                        if (carFleetData.trackingUrl) {
+                          window.open(carFleetData.trackingUrl);
+                          return;
+                        }
+
+                        errorDialog('No tracker URL was specified.');
+                      }}/>
+                  </IconButton>
+                </Item>
+              </Stack>
             </div>
           </div>
 
