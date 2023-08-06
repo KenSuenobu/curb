@@ -372,21 +372,6 @@ const FleetLoans = (props: IFleetLoansProps) => {
                 </Item>
 
                 <Item sx={{ width: '20%' }}>
-                  <TextField label={'Monthly Payment'} fullWidth value={fleetLoanData.monthlyPayment ?? ''}
-                             name={'monthlyPayment'} onChange={handleChange}/>
-                </Item>
-
-                <Item sx={{ width: '20%' }}>
-                  <TextField label={'Payment Term'} fullWidth value={fleetLoanData.paymentTerm ?? ''}
-                             name={'paymentTerm'} onChange={handleChange}/>
-                </Item>
-
-                <Item sx={{ width: '20%' }}>
-                  <TextField label={'APR %'} fullWidth value={fleetLoanData.apr ?? ''}
-                             name={'apr'} onChange={handleChange}/>
-                </Item>
-
-                <Item sx={{ width: '20%' }}>
                   <FormControl fullWidth>
                     <InputLabel id={'source-label'}>Loan Type</InputLabel>
                     <Select labelId={'source-label'} label={'loanType'}
@@ -401,11 +386,29 @@ const FleetLoans = (props: IFleetLoansProps) => {
                     </Select>
                   </FormControl>
                 </Item>
+
+                <Item sx={{ width: '20%' }}>
+                  <TextField label={'Monthly Payment'} fullWidth value={fleetLoanData.monthlyPayment ?? ''}
+                             name={'monthlyPayment'} onChange={handleChange}
+                             disabled={fleetLoanData.loanType === 'Purchased'}/>
+                </Item>
+
+                <Item sx={{ width: '20%' }}>
+                  <TextField label={'Payment Term'} fullWidth value={fleetLoanData.paymentTerm ?? ''}
+                             name={'paymentTerm'} onChange={handleChange}
+                             disabled={fleetLoanData.loanType === 'Purchased'}/>
+                </Item>
+
+                <Item sx={{ width: '20%' }}>
+                  <TextField label={'APR %'} fullWidth value={fleetLoanData.apr ?? ''}
+                             name={'apr'} onChange={handleChange}
+                             disabled={fleetLoanData.loanType === 'Purchased'}/>
+                </Item>
               </Stack>
             </div>
           </div>
 
-          {currentLoanData.fleetCarId && (
+          {(currentLoanData.fleetCarId && fleetLoanData.loanType != 'Purchased') && (
           <div style={{ display: 'flex', paddingTop: '1em' }}>
             <div style={{ width: '100%', paddingLeft: '0.5em' }}>
               <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Payment Detail</u></Typography>
