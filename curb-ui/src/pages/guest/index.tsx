@@ -257,7 +257,7 @@ const Guests = (props: IGuestProps) => {
             <Item sx={{ width: '33%' }}>
               <FormControl fullWidth>
                 <InputLabel id={'source-label'}>Guest ID Source</InputLabel>
-                <Select labelId={'source-label'} label={'guestIdSource'}
+                <Select labelId={'source-label'} label={'Guest ID Source'}
                         style={{ textAlign: 'left' }}
                         value={guestData.guestIdSource ?? 0}
                         name={'guestIdSource'}
