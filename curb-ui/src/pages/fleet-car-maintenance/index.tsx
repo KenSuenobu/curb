@@ -9,7 +9,7 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
+  TableContainer, TableHead,
   TableRow,
   TextField,
   Typography
@@ -241,9 +241,33 @@ const FleetCarMaintenance = (props: IFleetCarMaintenance) => {
             </Item>
           </Stack>
 
-          <pre>
-            {JSON.stringify(fleetMaintenanceList, null, 2)}
-          </pre>
+          <TableContainer component={Paper}>
+            <Table size={'small'}>
+              <TableHead>
+                <TableRow style={{ backgroundColor: '#000' }}>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Date</TableCell>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Notes</TableCell>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Cost</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {fleetMaintenanceList.map((row, counter) => (
+                  <TableRow hover key={counter} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>{moment(row.maintenanceTime).format('MM/DD/YYYY; LT')}</TableCell>
+                    <TableCell><b>{row.maintenanceType}:</b> {row.note}</TableCell>
+                    <TableCell>${row.cost.toFixed(2)}</TableCell>
+                  </TableRow>
+                ))}
+                {fleetMaintenanceList.length === 0 && (
+                  <>
+                    <TableRow hover key={0} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell colSpan={3} style={{ textAlign: 'center' }}>No maintenance records.</TableCell>
+                    </TableRow>
+                  </>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </>
       )}
     </>
