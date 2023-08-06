@@ -60,12 +60,10 @@ const FleetCarMaintenance = (props: IFleetCarMaintenance) => {
     LoadFleetCars(fId, (x: IFleetCar[]) => setFleetCarList(x));
   }
 
-  const reloadMaintenance = () => {
-    if (fleetCarId) {
-      axios.get(`/app/fleet/list/maintenance/${fleetCarId}`)
-        .then((x) => setFleetMaintenanceList(x.data))
-        .catch((x) => setFleetMaintenanceList([]));
-    }
+  const reloadMaintenance = (fId: number) => {
+    axios.get(`/app/fleet/list/maintenance/${fId}`)
+      .then((x) => setFleetMaintenanceList(x.data))
+      .catch((x) => setFleetMaintenanceList([]));
   }
 
   const handleChange = (e: any) => {
@@ -91,14 +89,14 @@ const FleetCarMaintenance = (props: IFleetCarMaintenance) => {
 
     if (payload.id) {
       axios.put('/app/fleet/save/maintenance', payload)
-        .then((x) => reloadMaintenance())
+        .then((x) => reloadMaintenance(fleetCarId))
         .catch((x) => {
           errorDialog(`Unable to save maintenance record: ${x}`);
           return;
         });
     } else {
       axios.post('/app/fleet/create/maintenance', payload)
-        .then((x) => reloadMaintenance())
+        .then((x) => reloadMaintenance(fleetCarId))
         .catch((x) => {
           errorDialog(`Unable to create maintenance record: ${x}`);
           return;
@@ -166,7 +164,7 @@ const FleetCarMaintenance = (props: IFleetCarMaintenance) => {
                               sx={{ backgroundColor: bgColor, width: '90%' }}
                               onClick={() => {
                                 setFleetCarId(x.id!);
-                                reloadMaintenance();
+                                reloadMaintenance(x.id!);
                               }}>
                               <Typography>
                                 {x.carYear} {x.makeName} {x.modelName} {x.trimName}: &quot;{x.data.listingNickname ?? 'Unnamed'}&quot;
@@ -246,7 +244,6 @@ const FleetCarMaintenance = (props: IFleetCarMaintenance) => {
           <pre>
             {JSON.stringify(fleetMaintenanceList, null, 2)}
           </pre>
-
         </>
       )}
     </>
