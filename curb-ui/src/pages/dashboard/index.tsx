@@ -102,7 +102,7 @@ const Dashboard = (props: IDashboardProperties) => {
         "October", "November", "December"],
     },
     title: {
-      text: 'Total Revenue per Month',
+      text: 'Total Trips per Month',
     },
     legend: {
       text: 'Month',
@@ -144,20 +144,48 @@ const Dashboard = (props: IDashboardProperties) => {
   if (dashboardData.length > 0) {
     const earnings = dashboardData[0].earnings;
     const trips = dashboardData[0].trips;
+    let highestEarnings = 0.00;
+    let highestEarningsMonth = 0;
+    let highestTrips = 0;
+    let highestTripsMonth = 0;
 
     for(const earning of earnings) {
       const monthPosition = parseInt(earning.month);
       const total = earning.earnings_total.toFixed(2);
 
       totalsChart.series[0].data[monthPosition - 1] = total;
+
+      if (total > highestEarnings) {
+        highestEarnings = total;
+        highestEarningsMonth = monthPosition - 1;
+      }
     }
+
+    totalsChart.series[0].data[highestEarningsMonth] = {
+      value: highestEarnings,
+      itemStyle: {
+        color: '#00aa00',
+      },
+    };
 
     for(const trip of trips) {
       const monthPosition = parseInt(trip.month);
       const total = parseInt(trip.total_trips);
 
       tripsChart.series[0].data[monthPosition - 1] = total;
+
+      if (total > highestTrips) {
+        highestTrips = total;
+        highestTripsMonth = monthPosition - 1;
+      }
     }
+
+    tripsChart.series[0].data[highestTripsMonth] = {
+      value: highestTrips,
+      itemStyle: {
+        color: '#00aa00',
+      },
+    };
   }
 
   return (
@@ -170,54 +198,183 @@ const Dashboard = (props: IDashboardProperties) => {
         return (
           <>
             <Stack direction={'row'} style={{ padding: '5px', paddingBottom: '15px' }}>
-              {x.map((y) => (
-                <>
-                  {/* Card */}
-                  <Paper sx={{ width: '50%',
-                    textAlign: 'left',
-                    border: '1px solid #ccc',
-                    padding: '4px',
-                    paddingLeft: '6px' }}>
-                    <Typography variant={'h4'} fontWeight={'bold'}>
-                      {y.makeName}
-                    </Typography>
-                    <Typography>
-                      {y.carYear} {y.modelName} {y.trimName} "{y.data.listingNickname}"<br/>
-                      {y.milesTotal} total miles
-                    </Typography>
-                    <p/>
-                    <Stack direction={'row'}>
-                      <Item sx={{ width: '50%', textAlign: 'left', padding: '0px' }}>
-                        <Typography color={'black'}>
-                          Gross: $ {parseFloat(y.grossTotal ?? '0.00').toFixed(2)}<br/>
-                          Loans: $ {parseFloat(y.loanTotal ?? '0.00').toFixed(2)}
-                        </Typography>
-                      </Item>
+              {x.map((y) => {
+                const cardTotalsChart = {
+                  grid: { top: 60, right: 40, bottom: 20, left: 40 },
+                  xAxis: {
+                    type: 'category',
+                    data: ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+                      "October", "November", "December"],
+                  },
+                  title: {
+                    text: 'Total Net',
+                  },
+                  legend: {
+                    text: 'Month',
+                  },
+                  yAxis: {
+                    type: 'value',
+                  },
+                  series: [
+                    {
+                      data: [
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                      ],
+                      type: 'bar',
+                      smooth: true,
+                      areaStyle: {
+                        opacity: 0.8,
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                          {
+                            offset: 0,
+                            color: 'rgb(0, 142, 255)'
+                          },
+                          {
+                            offset: 1,
+                            color: 'rgb(0, 40, 92)'
+                          }
+                        ]),
+                      },
+                      showBackground: true,
+                      backgroundStyle: {
+                        color: 'rgba(180, 180, 180, 0.2)'
+                      }
+                    },
+                  ],
+                  tooltip: {
+                    trigger: 'axis',
+                  },
+                };
 
-                      <Item sx={{ width: '50%', textAlign: 'right', padding: '0px' }}>
-                        <Typography color={'black'}>
-                          Profit: $ {(parseFloat(y.grossTotal ?? '0.00').toFixed(2) - parseFloat(y.loanTotal ?? '0.00').toFixed(2)).toFixed(2)}
-                        </Typography>
-                      </Item>
-                    </Stack>
+                const cardTripsChart = {
+                  grid: { top: 60, right: 40, bottom: 20, left: 40 },
+                  xAxis: {
+                    type: 'category',
+                    data: ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+                      "October", "November", "December"],
+                  },
+                  title: {
+                    text: 'Total Trips',
+                  },
+                  legend: {
+                    text: 'Month',
+                  },
+                  yAxis: {
+                    type: 'value',
+                  },
+                  series: [
+                    {
+                      data: [
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                      ],
+                      type: 'bar',
+                      smooth: true,
+                      areaStyle: {
+                        opacity: 0.8,
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                          {
+                            offset: 0,
+                            color: 'rgb(0, 142, 255)'
+                          },
+                          {
+                            offset: 1,
+                            color: 'rgb(0, 40, 92)'
+                          }
+                        ]),
+                      },
+                      showBackground: true,
+                      backgroundStyle: {
+                        color: 'rgba(180, 180, 180, 0.2)'
+                      }
+                    },
+                  ],
+                  tooltip: {
+                    trigger: 'axis',
+                  },
+                };
 
-                    {y.nextTrip && (
-                      <>
-                        <p/>
-                        Next Trip: {moment(y.nextTrip).format('ddd, MMM D YYYY; LT')}<br/>
-                      </>
-                    )}
-                    Total Trips: {y.tripsCount}<br/>
-                    <p/>
-                    Graph - Performance per month<br/>
-                    Graph - Trips per month<br/>
-                    Graph - Days/Month occupied<br/>
-                  </Paper>
+                for(const earning of y.tripCarEarnings) {
+                  const monthPosition = parseInt(earning.month);
+                  const total = earning.earnings_total.toFixed(2);
 
-                  {/* Padding */}
-                  <Item sx={{ width: '1%' }}></Item>
-                </>
-              ))}
+                  cardTotalsChart.series[0].data[monthPosition - 1] = total;
+                }
+
+                for(const trip of y.tripCarTrips) {
+                  const monthPosition = parseInt(trip.month);
+                  const total = trip.total_trips;
+
+                  cardTripsChart.series[0].data[monthPosition - 1] = total;
+                }
+
+                return (
+                  <>
+                    {/* Card */}
+                    <Paper sx={{ width: '50%',
+                      textAlign: 'left',
+                      border: '1px solid #ccc',
+                      padding: '4px',
+                      paddingLeft: '6px' }}>
+                      <Typography variant={'h4'} fontWeight={'bold'}>
+                        {y.makeName}
+                      </Typography>
+                      <Typography>
+                        {y.carYear} {y.modelName} {y.trimName} "{y.data.listingNickname}"<br/>
+                        {y.milesTotal} total miles
+                      </Typography>
+                      <p/>
+                      <Stack direction={'row'}>
+                        <Item sx={{ width: '50%', textAlign: 'left', padding: '0px' }}>
+                          <Typography color={'black'}>
+                            Gross: $ {parseFloat(y.grossTotal ?? '0.00').toFixed(2)}<br/>
+                            Loans: $ {parseFloat(y.loanTotal ?? '0.00').toFixed(2)}
+                          </Typography>
+                        </Item>
+
+                        <Item sx={{ width: '50%', textAlign: 'right', padding: '0px' }}>
+                          <Typography color={'black'}>
+                            Profit: $ {(parseFloat(y.grossTotal ?? '0.00').toFixed(2) - parseFloat(y.loanTotal ?? '0.00').toFixed(2)).toFixed(2)}
+                          </Typography>
+                        </Item>
+                      </Stack>
+
+                      {y.nextTrip && (
+                        <>
+                          <p/>
+                          Next Trip: {moment(y.nextTrip).format('ddd, MMM D YYYY; LT')}<br/>
+                        </>
+                      )}
+                      Total Trips: {y.tripsCount}<br/>
+                      <p/>
+                      Graph - Trips per month<br/>
+                      Graph - Days/Month occupied<br/>
+
+                      <Stack direction={'row'}>
+                        <Item sx={{ width: '50%' }}>
+                          <Paper sx={{ width: '100%', padding: '1em' }}>
+                            <ReactEcharts
+                              option={cardTotalsChart}
+                              style={{ width: '100%', height: '200px' }}
+                            />
+                          </Paper>
+                        </Item>
+
+                        <Item sx={{ width: '50%' }}>
+                          <Paper sx={{ width: '100%', padding: '1em' }}>
+                            <ReactEcharts
+                              option={cardTripsChart}
+                              style={{ width: '100%', height: '200px' }}
+                            />
+                          </Paper>
+                        </Item>
+                      </Stack>
+                    </Paper>
+
+                    {/* Padding */}
+                    <Item sx={{ width: '1%' }}></Item>
+                  </>
+                );
+              })}
             </Stack>
           </>
         );
