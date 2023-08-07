@@ -402,21 +402,39 @@ const Trip = (props: ITripProps) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tripList.map((row, counter) => (
-                  <TableRow hover key={counter} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell>
-                      <Typography style={{ color: (guestById(row.guestId).blacklisted ? 'red' : 'black') }}>
-                        {guestById(row.guestId).lastName.charAt(0)}., {guestById(row.guestId).firstName}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>{deliveryAddressById(row.deliveryAddressId).name ?? 'N/A'}</TableCell>
-                    <TableCell>{moment(row.startTime).format('ddd, MMM D YYYY; LT')}</TableCell>
-                    <TableCell>{moment(row.endTime).format('ddd, MMM D YYYY; LT')}</TableCell>
-                    <TableCell><Link href={row.tripUrl}>{row.tripId}</Link></TableCell>
-                    <TableCell>{row.mileage}</TableCell>
-                    <TableCell>$ {row.earnings.toFixed(2)}</TableCell>
-                  </TableRow>
-                ))}
+                {tripList.map((row, counter) => {
+                  const now = moment();
+                  const startTime = moment(row.startTime);
+                  const endTime = moment(row.endTime);
+                  let bgColor = '#fff';
+
+                  if (startTime <= now && endTime >= now) {
+                    bgColor = '#ccc';
+                  } else if (startTime >= now) {
+                    bgColor = '#cfc';
+                  } else if (startTime <= now) {
+                    bgColor = '#fcc';
+                  }
+
+                  return (
+                    <TableRow hover key={counter} sx={{
+                      '&:last-child td, &:last-child th': { border: 0 },
+                      backgroundColor: bgColor
+                    }}>
+                      <TableCell>
+                        <Typography style={{ color: (guestById(row.guestId).blacklisted ? 'red' : 'black') }}>
+                          {guestById(row.guestId).lastName.charAt(0)}., {guestById(row.guestId).firstName}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>{deliveryAddressById(row.deliveryAddressId).name ?? 'N/A'}</TableCell>
+                      <TableCell>{moment(row.startTime).format('ddd, MMM D YYYY; LT')}</TableCell>
+                      <TableCell>{moment(row.endTime).format('ddd, MMM D YYYY; LT')}</TableCell>
+                      <TableCell><Link href={row.tripUrl}>{row.tripId}</Link></TableCell>
+                      <TableCell>{row.mileage}</TableCell>
+                      <TableCell>$ {row.earnings.toFixed(2)}</TableCell>
+                    </TableRow>
+                  );
+                })}
                 {tripList.length === 0 && (
                   <>
                   <TableRow hover key={0} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>

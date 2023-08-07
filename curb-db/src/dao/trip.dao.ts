@@ -57,6 +57,25 @@ export class TripDao extends BaseDao<TripDto> {
       .then((x) => x ? x['total_earnings'] : 0.00);
   }
 
+  async totalMilesForFleetCarId(fleetCarId: number): Promise<number> {
+    const sqlStatement = `SELECT SUM(mileage) AS total_mileage FROM ${this.section} WHERE fleet_car_id=$1`;
+
+    return await this.db.oneOrNone(sqlStatement, [ fleetCarId ])
+      .then((x) => x ? x['total_mileage'] : 0);
+  }
+
+  async totalEarningsPerMonth(): Promise<any[]> {
+    const sqlStatement = `SELECT SUM(earnings) AS earnings_total, EXTRACT(MONTH FROM start_time) AS month FROM ${this.section} GROUP BY EXTRACT(MONTH FROM start_time) ORDER BY month`;
+
+    return await this.db.many(sqlStatement);
+  }
+
+  async totalTripsPerMonth(): Promise<any[]> {
+    const sqlStatement = `SELECT COUNT(*) AS total_trips, EXTRACT(MONTH FROM start_time) AS month FROM ${this.section} GROUP BY EXTRACT(MONTH FROM start_time) ORDER BY month`;
+
+    return await this.db.many(sqlStatement);
+  }
+
   async totalTripsForFleetCarId(fleetCarId: number): Promise<number> {
     const selectStatement = `SELECT COUNT(*) AS trip_total FROM ${this.section} WHERE fleet_car_id=$1`;
 

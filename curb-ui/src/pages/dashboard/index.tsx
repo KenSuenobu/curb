@@ -4,6 +4,8 @@ import {errorDialog} from '@/components/dialogs/ConfirmDialog';
 import {Paper, Stack, TextField, Typography} from '@mui/material';
 import Item from '@/components/common/Item';
 import moment from 'moment';
+import ReactEcharts from 'echarts-for-react';
+import * as echarts from 'echarts';
 
 export interface IDashboardProperties {
   jwt: string;
@@ -33,13 +35,128 @@ const Dashboard = (props: IDashboardProperties) => {
     });
   }, [props.jwt]);
 
-  const rows = Math.round(dashboardData.length / 3);
+  const rows = Math.round(dashboardData.length / 2);
   const dashboardRows: any[] = [];
 
-  for (let i = 0; i < rows; i++) {
+  for (let i = 0; i < rows + 1; i++) {
     dashboardRows.push([]);
-    for (let col = 0; col < 3; col++) {
-      dashboardRows[i].push(dashboardData[(i * 3) + col]);
+    for (let col = 0; col < 2; col++) {
+      if (dashboardData[(i * 2) + col]) {
+        dashboardRows[i].push(dashboardData[(i * 2) + col]);
+      }
+    }
+  }
+
+  const totalsChart = {
+    grid: { top: 60, right: 40, bottom: 20, left: 40 },
+    xAxis: {
+      type: 'category',
+      data: ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+        "October", "November", "December"],
+    },
+    title: {
+      text: 'Total Revenue per Month',
+    },
+    legend: {
+      text: 'Month',
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: [
+      {
+        data: [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
+        type: 'bar',
+        smooth: true,
+        areaStyle: {
+          opacity: 0.8,
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: 'rgb(0, 142, 255)'
+            },
+            {
+              offset: 1,
+              color: 'rgb(0, 40, 92)'
+            }
+          ]),
+        },
+        showBackground: true,
+        backgroundStyle: {
+          color: 'rgba(180, 180, 180, 0.2)'
+        }
+      },
+    ],
+    tooltip: {
+      trigger: 'axis',
+    },
+  };
+
+  const tripsChart = {
+    grid: { top: 60, right: 40, bottom: 20, left: 40 },
+    xAxis: {
+      type: 'category',
+      data: ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+        "October", "November", "December"],
+    },
+    title: {
+      text: 'Total Revenue per Month',
+    },
+    legend: {
+      text: 'Month',
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: [
+      {
+        data: [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
+        type: 'bar',
+        smooth: true,
+        areaStyle: {
+          opacity: 0.8,
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: 'rgb(0, 142, 255)'
+            },
+            {
+              offset: 1,
+              color: 'rgb(0, 40, 92)'
+            }
+          ]),
+        },
+        showBackground: true,
+        backgroundStyle: {
+          color: 'rgba(180, 180, 180, 0.2)'
+        }
+      },
+    ],
+    tooltip: {
+      trigger: 'axis',
+    },
+  };
+
+  if (dashboardData.length > 0) {
+    const earnings = dashboardData[0].earnings;
+    const trips = dashboardData[0].trips;
+
+    for(const earning of earnings) {
+      const monthPosition = parseInt(earning.month);
+      const total = earning.earnings_total.toFixed(2);
+
+      totalsChart.series[0].data[monthPosition - 1] = total;
+    }
+
+    for(const trip of trips) {
+      const monthPosition = parseInt(trip.month);
+      const total = parseInt(trip.total_trips);
+
+      tripsChart.series[0].data[monthPosition - 1] = total;
     }
   }
 
@@ -56,7 +173,7 @@ const Dashboard = (props: IDashboardProperties) => {
               {x.map((y) => (
                 <>
                   {/* Card */}
-                  <Paper sx={{ width: '33%',
+                  <Paper sx={{ width: '50%',
                     textAlign: 'left',
                     border: '1px solid #ccc',
                     padding: '4px',
@@ -65,7 +182,8 @@ const Dashboard = (props: IDashboardProperties) => {
                       {y.makeName}
                     </Typography>
                     <Typography>
-                      {y.carYear} {y.modelName} {y.trimName} "{y.data.listingNickname}"
+                      {y.carYear} {y.modelName} {y.trimName} "{y.data.listingNickname}"<br/>
+                      {y.milesTotal} total miles
                     </Typography>
                     <p/>
                     <Stack direction={'row'}>
@@ -104,6 +222,28 @@ const Dashboard = (props: IDashboardProperties) => {
           </>
         );
       })}
+
+      {dashboardData.length > 0 && (
+        <Stack direction={'row'}>
+          <Item sx={{ width: '33%' }}>
+            <Paper sx={{ width: '100%', padding: '1em' }}>
+              <ReactEcharts
+                option={totalsChart}
+                style={{ width: '100%', height: '240px' }}
+              />
+            </Paper>
+          </Item>
+
+          <Item sx={{ width: '34%' }}>
+            <Paper sx={{ width: '100%', padding: '1em' }}>
+              <ReactEcharts
+                option={tripsChart}
+                style={{ width: '100%', height: '240px' }}
+              />
+            </Paper>
+          </Item>
+        </Stack>
+      )}
     </>
   );
 }
