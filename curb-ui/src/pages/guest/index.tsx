@@ -16,7 +16,7 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import {ArrowRightOutlined} from '@mui/icons-material';
+import {ArrowRightOutlined, ReportProblemOutlined} from '@mui/icons-material';
 import {confirmDialog, errorDialog} from '@/components/dialogs/ConfirmDialog';
 import { TableHeader } from '@/components/car-definitions/TableHeader';
 import Item from '@/components/common/Item';
@@ -42,8 +42,7 @@ export interface IGuestProps {
 const Guests = (props: IGuestProps) => {
   const [userInfo, setUserInfo] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [formShowing, setFormShowing] = useState(false);
-  const [guestList, setGuestList] = useState([]);
+  const [guestList, setGuestList] = useState<any[]>([]);
   const [guestData, setGuestData] = useState<IGuest>({
     id: 0,
     guestId: '',
@@ -220,10 +219,21 @@ const Guests = (props: IGuestProps) => {
                         <>
                           <TableRow hover sx={{ cursor: 'pointer' }}>
                             <TableCell
-                              sx={{ backgroundColor: bgColor, width: '90%' }}
+                              sx={{ backgroundColor: bgColor, width: '90%', padding: '2px' }}
                               onClick={() => {
                                 getGuest(x.id);
-                              }}><Typography>{x.lastName}, {x.firstName} {x.middleName}</Typography></TableCell>
+                              }}><Stack direction={'row'}>
+                                {x.incomplete === true && (
+                                  <Item sx={{ backgroundColor: bgColor }}>
+                                    <ReportProblemOutlined style={{ color: 'red', paddingBottom: '1px' }}/>
+                                  </Item>
+                                )}
+                                <Item sx={{ backgroundColor: bgColor }}>
+                                  <Typography>{x.lastName}, {x.firstName} {x.middleName}</Typography>
+                                </Item>
+                              </Stack>
+                            </TableCell>
+
                             <TableCell
                               onClick={() => {
                                 getGuest(x.id);

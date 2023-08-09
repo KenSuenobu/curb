@@ -15,7 +15,7 @@ export class GuestDao extends BaseDao<GuestDto> {
   }
 
   override async list(blacklisted: boolean = false): Promise<GuestDto[]> {
-    const selectStatement = `SELECT id, guest_id, guest_id_source, blacklisted, first_name, middle_name, last_name ` +
+    const selectStatement = `SELECT id, guest_id, guest_id_source, blacklisted, first_name, middle_name, last_name, data->'incomplete' AS incomplete ` +
       `FROM ${this.section} WHERE blacklisted=$1 ORDER BY last_name ASC`;
 
     return (await this.db.any(selectStatement, [ blacklisted ]))
@@ -23,7 +23,7 @@ export class GuestDao extends BaseDao<GuestDto> {
   }
 
   async listAll(): Promise<GuestDto[]> {
-    const selectStatement = `SELECT id, guest_id, guest_id_source, blacklisted, first_name, middle_name, last_name ` +
+    const selectStatement = `SELECT id, guest_id, guest_id_source, blacklisted, first_name, middle_name, last_name, data->'incomplete' AS incomplete ` +
       `FROM ${this.section} ORDER BY last_name ASC`;
 
     return (await this.db.any(selectStatement))

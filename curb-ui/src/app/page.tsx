@@ -2,7 +2,6 @@
 
 import {NextPage} from 'next';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
 import React, {useEffect, useRef, useState} from 'react';
 import {CookieValueTypes, deleteCookie, getCookie, setCookie} from 'cookies-next';
 import SideBar from '@/components/SideBar';
@@ -55,7 +54,6 @@ const Home: NextPage = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [loginShowing, setLoginShowing] = useState(false);
   const [logoutShowing, setLogoutShowing] = useState(false);
-  const router = useRouter();
   const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {

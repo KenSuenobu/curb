@@ -65,4 +65,11 @@ export class GuestDto {
   })
   data: any;
 
+  @ApiProperty({
+    description: 'Incomplete flag from data',
+    nullable: true,
+    type: Boolean,
+  })
+  incomplete?: boolean;
+
 }
