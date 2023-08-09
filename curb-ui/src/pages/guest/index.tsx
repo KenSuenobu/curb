@@ -90,15 +90,19 @@ const Guests = (props: IGuestProps) => {
   }
 
   const whitelistClicked = () => {
-    confirmDialog('Are you sure you wish to whitelist this guest?', () => {
-      saveGuest(false);
-    });
+    if (guestData.id) {
+      confirmDialog('Are you sure you wish to whitelist this guest?', () => {
+        saveGuest(false);
+      });
+    }
   }
 
   const blacklistClicked = () => {
-    confirmDialog('Are you sure you wish to blacklist this guest?', () => {
-      saveGuest(true);
-    });
+    if (guestData.id) {
+      confirmDialog('Are you sure you wish to blacklist this guest?', () => {
+        saveGuest(true);
+      });
+    }
   }
 
   const handleChange = (e: any) => {
@@ -392,10 +396,12 @@ const Guests = (props: IGuestProps) => {
       <Stack direction={'row'}>
         <Item sx={{ width: '50%', textAlign: 'left' }}>
           {(props.blacklisted) && (
-            <Button color={'error'} onClick={() => whitelistClicked()}>Whitelist this guest</Button>
+            <Button color={'error'} disabled={!guestData.id}
+                    onClick={() => whitelistClicked()}>Whitelist this guest</Button>
           )}
           {(!props.blacklisted) && (
-            <Button color={'error'} onClick={() => blacklistClicked()}>Blacklist this guest</Button>
+            <Button color={'error'} disabled={!guestData.id}
+                    onClick={() => blacklistClicked()}>Blacklist this guest</Button>
           )}
         </Item>
 
