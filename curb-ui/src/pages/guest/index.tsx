@@ -17,7 +17,7 @@ import {
   Typography
 } from '@mui/material';
 import {ArrowRightOutlined} from '@mui/icons-material';
-import { errorDialog } from '@/components/dialogs/ConfirmDialog';
+import {confirmDialog, errorDialog} from '@/components/dialogs/ConfirmDialog';
 import { TableHeader } from '@/components/car-definitions/TableHeader';
 import Item from '@/components/common/Item';
 
@@ -89,6 +89,18 @@ const Guests = (props: IGuestProps) => {
     });
   }
 
+  const whitelistClicked = () => {
+    confirmDialog('Are you sure you wish to whitelist this guest?', () => {
+      saveGuest(false);
+    });
+  }
+
+  const blacklistClicked = () => {
+    confirmDialog('Are you sure you wish to blacklist this guest?', () => {
+      saveGuest(true);
+    });
+  }
+
   const handleChange = (e: any) => {
     setGuestData({
       ...guestData,
@@ -130,7 +142,7 @@ const Guests = (props: IGuestProps) => {
       });
   }
 
-  const saveGuest = () => {
+  const saveGuest = (blacklisted?: boolean) => {
     const payload = guestData;
 
     if (guestData.firstName.length === 0 || guestData.lastName.length === 0) {
@@ -144,6 +156,10 @@ const Guests = (props: IGuestProps) => {
         errorDialog('Address information is incomplete.');
         return;
       }
+    }
+
+    if (blacklisted) {
+      payload.blacklisted = blacklisted;
     }
 
     if (payload.id !== 0) {
@@ -374,7 +390,16 @@ const Guests = (props: IGuestProps) => {
       </div>
 
       <Stack direction={'row'}>
-        <Item sx={{ width: '100%', textAlign: 'right' }}>
+        <Item sx={{ width: '50%', textAlign: 'left' }}>
+          {(props.blacklisted) && (
+            <Button color={'error'} onClick={() => whitelistClicked()}>Whitelist this guest</Button>
+          )}
+          {(!props.blacklisted) && (
+            <Button color={'error'} onClick={() => blacklistClicked()}>Blacklist this guest</Button>
+          )}
+        </Item>
+
+        <Item sx={{ width: '50%', textAlign: 'right' }}>
           <Button color={'error'} onClick={() => clearForm()}>Clear Form</Button>
           <Button onClick={() => saveGuest()}>{guestData.id === 0 ? 'Save' : 'Save Changes'}</Button>
         </Item>
