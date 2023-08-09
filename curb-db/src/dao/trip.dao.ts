@@ -2,8 +2,11 @@ import * as pgPromise from 'pg-promise';
 import {DaoUtils} from '../dao/dao-utils.dao';
 import {BaseDao} from './base.dao';
 import {TripDto} from '../dto';
+import {Logger} from '@nestjs/common';
 
 export class TripDao extends BaseDao<TripDto> {
+  private readonly logger = new Logger('trip.service');
+
   constructor(readonly db: pgPromise.IDatabase<any>) {
     super(db, 'curb.trip');
   }
@@ -13,6 +16,17 @@ export class TripDao extends BaseDao<TripDto> {
 
     return (await this.db.any(selectStatement))
       .map((x) => DaoUtils.normalizeFields<TripDto>(x));
+  }
+
+  override async deleteById(id: number): Promise<boolean> {
+    const sqlStatement = `DELETE FROM ${this.section} WHERE id=$1`;
+
+    return await this.db.none(sqlStatement, [ id ])
+      .then((x) => true)
+      .catch((x) => {
+        this.logger.error(`Unable to delete by ID ${id}`, x);
+        return false;
+      });
   }
 
   async listUpcoming(): Promise<TripDto[]> {

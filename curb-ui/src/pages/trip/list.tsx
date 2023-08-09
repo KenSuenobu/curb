@@ -1,4 +1,5 @@
 import {
+  IconButton,
   LinearProgress,
   Link,
   Table,
@@ -13,7 +14,8 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import Paper from '@mui/material/Paper';
 import moment from 'moment/moment';
-import {errorDialog} from '@/components/dialogs/ConfirmDialog';
+import {alertDialog, confirmDialog, errorDialog} from '@/components/dialogs/ConfirmDialog';
+import {DeleteOutlined} from '@mui/icons-material';
 
 export enum ITripType {
   CURRENT,
@@ -39,7 +41,7 @@ const TripsList = (props: ITripsListProps) => {
     tripLabel = 'Past Trips';
   }
 
-  useEffect(() => {
+  const refreshTripList = () => {
     if (props.tripType === ITripType.CURRENT) {
       axios.get('/app/trip/list/current')
         .then((x) => setTripList(x.data));
@@ -50,6 +52,10 @@ const TripsList = (props: ITripsListProps) => {
       axios.get('/app/trip/list/past')
         .then((x) => setTripList(x.data));
     }
+  }
+
+  useEffect(() => {
+    refreshTripList();
 
     axios.get('/app/guest/list-all')
       .then((x) => {
@@ -61,7 +67,18 @@ const TripsList = (props: ITripsListProps) => {
       });
   }, [props.tripType]);
 
-  const deliveryAddressById = (id: number) => undefined;
+  const deleteTrip = (id: number) => {
+    confirmDialog('Do you really wish to delete this trip?', () => {
+      axios.delete(`/app/trip/${id}`)
+        .then((x) => {
+          refreshTripList();
+        })
+        .catch((x) => {
+          errorDialog(`Failed to delete the trip: ${x}`);
+        });
+    });
+  }
+
   const guestById = (id: number) => guestList.find((x) => x.id === id);
 
   if (guestList.length === 0) {
@@ -89,6 +106,7 @@ const TripsList = (props: ITripsListProps) => {
               <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Trip</TableCell>
               <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Mileage</TableCell>
               <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Earnings</TableCell>
+              <TableCell/>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -105,6 +123,11 @@ const TripsList = (props: ITripsListProps) => {
                 <TableCell><Link href={row.tripUrl}>{row.tripId}</Link></TableCell>
                 <TableCell>{row.mileage}</TableCell>
                 <TableCell>$ {row.earnings.toFixed(2)}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => deleteTrip(row.id)}>
+                    <DeleteOutlined/>
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
             {tripList.length === 0 && (
