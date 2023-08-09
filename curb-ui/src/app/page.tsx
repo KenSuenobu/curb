@@ -42,6 +42,7 @@ import Toll from '@/pages/toll/index';
 import TollList from '@/pages/toll/list';
 import Dashboard from '@/pages/dashboard';
 import FleetCarMaintenance from '@/pages/fleet-car-maintenance';
+import PasswordTextField from '@/components/common/PasswordTextField';
 
 const drawerWidth = 240;
 
@@ -161,7 +162,7 @@ const Home: NextPage = () => {
                     </Typography>
                   </Item>
                 </Stack>
-                <TextField fullWidth inputRef={passwordRef}/>
+                <PasswordTextField fullWidth inputRef={passwordRef}/>
               </Typography>
               <br/>
               <Button variant={'contained'}
@@ -337,8 +338,10 @@ const Home: NextPage = () => {
               <IconButton onClick={handleMenu}>
                 <MenuIcon style={{ color: 'white' }}/>
               </IconButton>
-              <Menu id={'menu-appbar'} anchorEl={anchorEl} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                    keepMounted transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+              <Menu id={'menu-appbar'} anchorEl={anchorEl}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    keepMounted
                     open={Boolean(anchorEl)} onClose={handleClose}>
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
