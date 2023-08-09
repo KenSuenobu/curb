@@ -25,6 +25,7 @@ import { errorDialog } from '@/components/dialogs/ConfirmDialog';
 import { TableHeader } from '@/components/car-definitions/TableHeader';
 import ColorDatabase from '@/components/common/ColorDatabase';
 import Item from '@/components/common/Item';
+import UrlTextField from '@/components/common/UrlTextField';
 
 const SELECTED_COLOR = '#ccf';
 
@@ -504,24 +505,17 @@ const Fleet = (props: IFleetProps) => {
 
               <Stack direction={'row'}>
                 <Item sx={{ width: '25%' }}>
-                  <TextField label={'VIN'} fullWidth value={carFleetData.vin ?? ''}
-                             name={'vin'} onChange={handleChange}/>
+                  <UrlTextField label={'VIN'} fullWidth value={carFleetData.vin ?? ''}
+                             name={'vin'} onChange={handleChange}
+                             onUrlClick={() => {
+                               if (carFleetData.vin) {
+                                 window.open(`https://www.nhtsa.gov/recalls?vin=${carFleetData.vin}#vin`);
+                                 return;
+                               }
+
+                               errorDialog('You need to provide a VIN number for this car');
+                             }}/>
                 </Item>
-
-                <Item>
-                  <IconButton>
-                    <PreviewOutlined
-                      onClick={() => {
-                        if (carFleetData.vin) {
-                          window.open(`https://www.nhtsa.gov/recalls?vin=${carFleetData.vin}#vin`);
-                          return;
-                        }
-
-                        errorDialog('You need to provide a VIN number for this car');
-                      }}/>
-                  </IconButton>
-                </Item>
-
 
                 <Item sx={{ width: '25%' }}>
                   <TextField label={'Purchase Price'} fullWidth value={carFleetData.purchasePrice ?? ''}
@@ -609,22 +603,16 @@ const Fleet = (props: IFleetProps) => {
                 </Item>
 
                 <Item sx={{ width: '75%' }}>
-                  <TextField label={'Car Listing URL'} fullWidth value={carFleetData.listingUrl ?? ''}
-                             name={'listingUrl'} onChange={handleChange}/>
-                </Item>
+                  <UrlTextField label={'Car Listing URL'} fullWidth value={carFleetData.listingUrl ?? ''}
+                             name={'listingUrl'} onChange={handleChange}
+                             onUrlClick={() => {
+                               if (carFleetData.listingUrl) {
+                                 window.open(carFleetData.listingUrl);
+                                 return;
+                               }
 
-                <Item>
-                  <IconButton>
-                    <PreviewOutlined
-                      onClick={() => {
-                        if (carFleetData.listingUrl) {
-                          window.open(carFleetData.listingUrl);
-                          return;
-                        }
-
-                        errorDialog('No URL has been specified.');
-                      }}/>
-                  </IconButton>
+                               errorDialog('No URL has been specified.');
+                             }}/>
                 </Item>
               </Stack>
 
@@ -645,22 +633,16 @@ const Fleet = (props: IFleetProps) => {
                 </Item>
 
                 <Item sx={{ width: '75%' }}>
-                  <TextField label={'Car Tracker URL'} fullWidth value={carFleetData.trackingUrl ?? ''}
-                             name={'trackingUrl'} onChange={handleChange}/>
-                </Item>
+                  <UrlTextField label={'Car Tracker URL'} fullWidth value={carFleetData.trackingUrl ?? ''}
+                             name={'trackingUrl'} onChange={handleChange}
+                             onUrlClick={() => {
+                               if (carFleetData.trackingUrl) {
+                                 window.open(carFleetData.trackingUrl);
+                                 return;
+                               }
 
-                <Item>
-                  <IconButton>
-                    <PreviewOutlined
-                      onClick={() => {
-                        if (carFleetData.trackingUrl) {
-                          window.open(carFleetData.trackingUrl);
-                          return;
-                        }
-
-                        errorDialog('No tracker URL was specified.');
-                      }}/>
-                  </IconButton>
+                               errorDialog('No tracker URL was specified.');
+                             }}/>
                 </Item>
               </Stack>
             </div>

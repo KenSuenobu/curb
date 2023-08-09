@@ -19,6 +19,7 @@ import {IFleet, LoadFleet } from '@/components/database/fleet';
 import {IFleetCar, LoadFleetCars } from '@/components/database/fleet-car';
 import { TableHeader } from '@/components/car-definitions/TableHeader';
 import Item from '@/components/common/Item';
+import UrlTextField from '@/components/common/UrlTextField';
 
 const SELECTED_COLOR = '#ccf';
 
@@ -341,22 +342,16 @@ const FleetLoans = (props: IFleetLoansProps) => {
 
               <Stack direction={'row'}>
                 <Item sx={{ width: '100%' }}>
-                  <TextField label={'Lien Holder Payment URL'} fullWidth value={fleetLoanData.paymentUrl ?? ''}
-                             name={'paymentUrl'} onChange={handleChange}/>
-                </Item>
+                  <UrlTextField label={'Lien Holder Payment URL'} fullWidth value={fleetLoanData.paymentUrl ?? ''}
+                             name={'paymentUrl'} onChange={handleChange}
+                             onUrlClick={() => {
+                               if (fleetLoanData.paymentUrl) {
+                                 window.open(fleetLoanData.paymentUrl);
+                                 return;
+                               }
 
-                <Item>
-                  <IconButton>
-                    <PreviewOutlined
-                      onClick={() => {
-                        if (fleetLoanData.paymentUrl) {
-                          window.open(fleetLoanData.paymentUrl);
-                          return;
-                        }
-
-                        errorDialog('No URL has been specified.');
-                      }}/>
-                  </IconButton>
+                               errorDialog('No URL has been specified.');
+                             }}/>
                 </Item>
               </Stack>
             </div>
