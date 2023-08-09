@@ -198,17 +198,13 @@ const Guests = (props: IGuestProps) => {
             <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>
               <Table stickyHeader size={'small'}>
                 {props.blacklisted ? (
-                  <>
-                    <TableHeader header={'Blacklisted Guests'}
-                                 onAdd={() => clearForm()}
-                                 onEdit={() => {}}/>
-                  </>
+                  <TableHeader header={'Blacklisted Guests'}
+                               onAdd={() => clearForm()}
+                               onEdit={() => {}}/>
                 ) : (
-                  <>
-                    <TableHeader header={'Guests'}
-                                 onAdd={() => clearForm()}
-                                 onEdit={() => {}}/>
-                  </>
+                  <TableHeader header={'Guests'}
+                               onAdd={() => clearForm()}
+                               onEdit={() => {}}/>
                 )}
                 {guestList.length > 0 ? (
                   <TableBody>
