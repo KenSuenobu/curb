@@ -13,6 +13,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import Paper from '@mui/material/Paper';
 import moment from 'moment/moment';
+import {errorDialog} from '@/components/dialogs/ConfirmDialog';
 
 export enum ITripType {
   CURRENT,
@@ -98,7 +99,7 @@ const TripsList = (props: ITripsListProps) => {
                     {guestById(row.guestId).lastName}, {guestById(row.guestId).firstName}
                   </Typography>
                 </TableCell>
-                <TableCell>{deliveryAddressById(row.deliveryAddressId)?.name ?? 'N/A'}</TableCell>
+                <TableCell>{row.locationName ?? 'N/A'}</TableCell>
                 <TableCell>{moment(row.startTime).format('ddd, MMM D YYYY; LT')}</TableCell>
                 <TableCell>{moment(row.endTime).format('ddd, MMM D YYYY; LT')}</TableCell>
                 <TableCell><Link href={row.tripUrl}>{row.tripId}</Link></TableCell>

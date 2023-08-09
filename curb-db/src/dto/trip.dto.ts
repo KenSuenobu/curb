@@ -80,4 +80,10 @@ export class TripDto {
   })
   earnings: number;
 
+  @ApiProperty({
+    description: 'Name of the location where the trip took place',
+    type: String,
+  })
+  locationName?: string;
+
 }

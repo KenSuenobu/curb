@@ -9,28 +9,28 @@ export class TripDao extends BaseDao<TripDto> {
   }
 
   override async list(): Promise<TripDto[]> {
-    const selectStatement = `SELECT * FROM ${this.section} ORDER BY end_time DESC`;
+    const selectStatement = `SELECT a.*, b.name AS location_name FROM ${this.section} a, curb.delivery_address b WHERE b.id=a.delivery_address_id ORDER BY a.end_time DESC`;
 
     return (await this.db.any(selectStatement))
       .map((x) => DaoUtils.normalizeFields<TripDto>(x));
   }
 
   async listUpcoming(): Promise<TripDto[]> {
-    const selectStatement = `SELECT * FROM ${this.section} WHERE start_time >= NOW() ORDER BY end_time DESC`;
+    const selectStatement = `SELECT a.*, b.name AS location_name FROM ${this.section} a, curb.delivery_address b WHERE a.start_time >= NOW() AND b.id=a.delivery_address_id ORDER BY a.end_time DESC`;
 
     return (await this.db.any(selectStatement))
       .map((x) => DaoUtils.normalizeFields<TripDto>(x));
   }
 
   async listPast(): Promise<TripDto[]> {
-    const selectStatement = `SELECT * FROM ${this.section} WHERE end_time <= NOW() ORDER BY end_time DESC`;
+    const selectStatement = `SELECT a.*, b.name AS location_name FROM ${this.section} a, curb.delivery_address b WHERE a.end_time <= NOW() AND b.id=a.delivery_address_id ORDER BY a.end_time DESC`;
 
     return (await this.db.any(selectStatement))
       .map((x) => DaoUtils.normalizeFields<TripDto>(x));
   }
 
   async listCurrent(): Promise<TripDto[]> {
-    const selectStatement = `SELECT * FROM ${this.section} WHERE start_time <= NOW() AND end_time >= NOW() ORDER BY end_time DESC`;
+    const selectStatement = `SELECT a.*, b.name AS location_name FROM ${this.section} a, curb.delivery_address b WHERE (a.end_time >= NOW() AND a.start_time <= NOW()) AND b.id=a.delivery_address_id ORDER BY a.end_time DESC`
 
     return (await this.db.any(selectStatement))
       .map((x) => DaoUtils.normalizeFields<TripDto>(x));

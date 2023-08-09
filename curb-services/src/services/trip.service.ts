@@ -40,4 +40,9 @@ export class TripService {
     return dao.find(payload.fleetCarId, payload.tripTime);
   }
 
+  async delete(tripId: number): Promise<boolean> {
+    const dao = new TripDao(DaoUtils.getDatabase());
+    return dao.deleteById(tripId);
+  }
+
 }

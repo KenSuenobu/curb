@@ -6,7 +6,7 @@ import {
   ApiOperation,
   ApiTags, ApiUnauthorizedResponse
 } from '@nestjs/swagger';
-import {Body, Controller, Get, HttpStatus, Logger, Param, Post, Put} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpStatus, Logger, Param, Post, Put} from '@nestjs/common';
 import {TripService} from '../services/trip.service';
 import {TripDto} from 'curb-db/dist';
 
@@ -134,6 +134,21 @@ export class TripController {
   @ApiUnauthorizedResponse()
   async find(@Body() payload: any): Promise<TripDto> {
     return this.service.find(payload);
+  }
+
+  @Delete('/:tripId')
+  @ApiOperation({
+    summary: 'Deletes a trip by ID',
+    description: 'Deletes a trip by its trip ID',
+  })
+  @ApiOkResponse({
+    status: HttpStatus.ACCEPTED,
+    type: Boolean,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async delete(@Param('tripId') tripId: number): Promise<boolean> {
+    return this.service.delete(tripId);
   }
 
 }

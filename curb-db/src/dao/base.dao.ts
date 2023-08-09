@@ -26,7 +26,7 @@ export class BaseDao<T> {
       .then((x) => DaoUtils.normalizeFields<T>(x));
   }
 
-  async deleteById(id: number): Promise<Boolean> {
+  async deleteById(id: number): Promise<boolean> {
     const deleteStatement = `UPDATE ${this.section} SET enabled=false, delete_date=NOW() WHERE id=$1`;
 
     return this.db.none(deleteStatement, [id]).then(() => true);
