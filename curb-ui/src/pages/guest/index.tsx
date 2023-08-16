@@ -3,23 +3,24 @@ import React, {useEffect, useState} from 'react';
 import {
   Alert,
   Button, Checkbox,
-  FormControl, FormControlLabel,
-  InputLabel, MenuItem,
+  FormControl, FormControlLabel, IconButton,
+  InputLabel, Link, MenuItem,
   Paper, Select,
   Snackbar,
   Stack,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
+  TableContainer, TableHead,
   TableRow,
   TextField,
   Typography
 } from '@mui/material';
-import {ArrowRightOutlined, ReportProblemOutlined} from '@mui/icons-material';
+import {ArrowRightOutlined, DeleteOutlined, ReportProblemOutlined} from '@mui/icons-material';
 import {confirmDialog, errorDialog} from '@/components/dialogs/ConfirmDialog';
 import { TableHeader } from '@/components/car-definitions/TableHeader';
 import Item from '@/components/common/Item';
+import moment from 'moment';
 
 const SELECTED_COLOR = '#ccf';
 
@@ -43,6 +44,7 @@ const Guests = (props: IGuestProps) => {
   const [userInfo, setUserInfo] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [guestList, setGuestList] = useState<any[]>([]);
+  const [guestTrips, setGuestTrips] = useState<any[]>([]);
   const [guestData, setGuestData] = useState<IGuest>({
     id: 0,
     guestId: '',
@@ -134,14 +136,20 @@ const Guests = (props: IGuestProps) => {
   }
 
   const getGuest = (id: number) => {
-    console.log(`Retrieve: ${id}`);
     axios.get(`/app/guest/get/${id}`)
       .then((x) => {
         setGuestData(x.data);
-        console.log(`Data: ${JSON.stringify(x.data, null, 2)}`);
       })
       .catch((x) => {
         errorDialog(`Unable to retrieve guest: ${x}`);
+      });
+
+    axios.get(`/app/trip/list/guest/${id}`)
+      .then((x) => {
+        setGuestTrips(x.data);
+      })
+      .catch((x) => {
+        errorDialog(`Unable to retrieve guest trips: ${x}`);
       });
   }
 
@@ -416,6 +424,46 @@ const Guests = (props: IGuestProps) => {
           <Button onClick={() => saveGuest()}>{guestData.id === 0 ? 'Save' : 'Save Changes'}</Button>
         </Item>
       </Stack>
+
+      <TableContainer component={Paper}>
+        <Table size={'small'}>
+          <TableHead>
+            <TableRow style={{ backgroundColor: '#000' }}>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Guest</TableCell>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Delivery Address</TableCell>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Start Time</TableCell>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>End Time</TableCell>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Trip</TableCell>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Mileage</TableCell>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Earnings</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {guestTrips.map((row, counter) => (
+              <TableRow hover key={counter} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell>
+                  <Typography>
+                    {guestData.lastName}, {guestData.firstName}
+                  </Typography>
+                </TableCell>
+                <TableCell>{row.locationName ?? 'N/A'}</TableCell>
+                <TableCell>{moment(row.startTime).format('ddd, MMM D YYYY; LT')}</TableCell>
+                <TableCell>{moment(row.endTime).format('ddd, MMM D YYYY; LT')}</TableCell>
+                <TableCell><Link href={row.tripUrl}>{row.tripId}</Link></TableCell>
+                <TableCell>{row.mileage}</TableCell>
+                <TableCell>$ {row.earnings.toFixed(2)}</TableCell>
+              </TableRow>
+            ))}
+            {guestTrips.length === 0 && (
+              <>
+                <TableRow hover key={0} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell colSpan={6} style={{ textAlign: 'center' }}>No trips recorded.</TableCell>
+                </TableRow>
+              </>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 }

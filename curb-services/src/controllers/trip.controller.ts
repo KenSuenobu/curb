@@ -105,6 +105,22 @@ export class TripController {
     return this.service.getCurrentTrips();
   }
 
+  @Get('/list/guest/:guestId')
+  @ApiOperation({
+    summary: 'Retrieves trips by guest ID',
+    description: 'Retrieves a list of trips on a per-guest basis',
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: TripDto,
+    isArray: true,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async getTripsForGuestId(@Param('guestId') guestId: number): Promise<TripDto[]> {
+    return this.service.getTripsForGuestId(guestId);
+  }
+
   @Get('/list/car/:fleetCarId')
   @ApiOperation({
     summary: 'Retrieves trips by fleet car ID',

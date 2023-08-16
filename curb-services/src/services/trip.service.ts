@@ -30,6 +30,11 @@ export class TripService {
     return dao.listCurrent();
   }
 
+  async getTripsForGuestId(guestId: number): Promise<TripDto[]> {
+    const dao = new TripDao(DaoUtils.getDatabase());
+    return dao.listByGuestId(guestId);
+  }
+
   async getTripsForFleetCarId(fleetCarId: number): Promise<TripDto[]> {
     const dao = new TripDao(DaoUtils.getDatabase());
     return dao.listByFleetCarId(fleetCarId);
