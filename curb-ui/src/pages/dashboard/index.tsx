@@ -369,7 +369,15 @@ const Dashboard = (props: IDashboardProperties) => {
                       {y.nextTrip && (
                         <>
                           <p/>
-                          Next Trip: {moment(y.nextTrip).format('ddd, MMM D YYYY; LT')}<br/>
+                          Next Trip: {moment(y.nextTrip).format('ddd, MMM D YYYY; LT')}
+                          <br/>
+                        </>
+                      )}
+                      {!y.nextTrip && (
+                        <>
+                          <p/>
+                          No upcoming trips.
+                          <br/>
                         </>
                       )}
                       Total Trips: {y.tripsCount}<br/>
