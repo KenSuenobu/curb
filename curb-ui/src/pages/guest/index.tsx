@@ -457,7 +457,7 @@ const Guests = (props: IGuestProps) => {
             {guestTrips.length === 0 && (
               <>
                 <TableRow hover key={0} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell colSpan={6} style={{ textAlign: 'center' }}>No trips recorded.</TableCell>
+                  <TableCell colSpan={7} style={{ textAlign: 'center' }}>No trips recorded.</TableCell>
                 </TableRow>
               </>
             )}
