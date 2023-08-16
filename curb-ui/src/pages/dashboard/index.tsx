@@ -427,7 +427,7 @@ const Dashboard = (props: IDashboardProperties) => {
             <Paper sx={{ width: '100%' }}>
               <Stack direction={'row'}>
                 <Item sx={{ width: '50%', color: 'black', textAlign: 'right', borderBottom: '1px solid #eee' }}>
-                  <Typography variant={'h5'}>
+                  <Typography variant={'h5'} fontWeight={'bold'}>
                     Total Profit:
                   </Typography>
                 </Item>
@@ -440,7 +440,7 @@ const Dashboard = (props: IDashboardProperties) => {
 
               <Stack direction={'row'}>
                 <Item sx={{ width: '50%', color: 'black', textAlign: 'right' }}>
-                  <Typography variant={'h5'}>
+                  <Typography variant={'h5'} fontWeight={'bold'}>
                     Total Trips:
                   </Typography>
                 </Item>
