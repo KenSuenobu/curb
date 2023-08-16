@@ -26,6 +26,7 @@ const Dashboard = (props: IDashboardProperties) => {
   const [dashboardData, setDashboardData] = useState<any[]>([]);
   const [totalProfit, setTotalProfit] = useState<string>('0.00');
   const [totalTrips, setTotalTrips] = useState<number>(0);
+  const [totalGross, setTotalGross] = useState<string>('0.00');
 
   const reloadDashboard = () => {
     axios.get(`/app/dashboard/list/${props.jwt}`)
@@ -33,14 +34,17 @@ const Dashboard = (props: IDashboardProperties) => {
         setDashboardData(x.data);
         let total = 0.00;
         let trips: number = 0;
+        let gross = 0.00;
 
         for(const trip of x.data) {
           total += trip.grossTotal - trip.loanTotal;
           trips += parseInt(trip.tripsCount);
+          gross += trip.grossTotal;
         }
 
         setTotalProfit(total.toFixed(2));
         setTotalTrips(trips);
+        setTotalGross(gross.toFixed(2));
       })
       .catch((x) => {
         errorDialog('Unable to load dashboard');
@@ -428,12 +432,38 @@ const Dashboard = (props: IDashboardProperties) => {
               <Stack direction={'row'}>
                 <Item sx={{ width: '50%', color: 'black', textAlign: 'right', borderBottom: '1px solid #eee' }}>
                   <Typography variant={'h5'} fontWeight={'bold'}>
+                    Total Gross:
+                  </Typography>
+                </Item>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'left', paddingLeft: '1em', borderBottom: '1px solid #eee' }}>
+                  <Typography variant={'h5'}>
+                    $ {totalGross}
+                  </Typography>
+                </Item>
+              </Stack>
+
+              <Stack direction={'row'}>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'right', borderBottom: '1px solid #eee' }}>
+                  <Typography variant={'h5'} fontWeight={'bold'}>
                     Total Profit:
                   </Typography>
                 </Item>
                 <Item sx={{ width: '50%', color: 'black', textAlign: 'left', paddingLeft: '1em', borderBottom: '1px solid #eee' }}>
                   <Typography variant={'h5'}>
                     $ {totalProfit}
+                  </Typography>
+                </Item>
+              </Stack>
+
+              <Stack direction={'row'}>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'right', borderBottom: '1px solid #eee' }}>
+                  <Typography variant={'h5'} fontWeight={'bold'}>
+                    Total Loss:
+                  </Typography>
+                </Item>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'left', paddingLeft: '1em', borderBottom: '1px solid #eee' }}>
+                  <Typography variant={'h5'}>
+                    $ {(parseFloat(totalGross) - parseFloat(totalProfit)).toFixed(2)}
                   </Typography>
                 </Item>
               </Stack>
