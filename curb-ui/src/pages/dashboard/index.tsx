@@ -1,7 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {errorDialog} from '@/components/dialogs/ConfirmDialog';
-import {Paper, Stack, TextField, Typography} from '@mui/material';
+import {
+  Paper,
+  Stack,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography
+} from '@mui/material';
 import Item from '@/components/common/Item';
 import moment from 'moment';
 import ReactEcharts from 'echarts-for-react';
@@ -14,10 +24,24 @@ export interface IDashboardProperties {
 const Dashboard = (props: IDashboardProperties) => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [dashboardData, setDashboardData] = useState<any[]>([]);
+  const [totalProfit, setTotalProfit] = useState<string>('0.00');
+  const [totalTrips, setTotalTrips] = useState<number>(0);
 
   const reloadDashboard = () => {
     axios.get(`/app/dashboard/list/${props.jwt}`)
-      .then((x) => setDashboardData(x.data))
+      .then((x) => {
+        setDashboardData(x.data);
+        let total = 0.00;
+        let trips: number = 0;
+
+        for(const trip of x.data) {
+          total += trip.grossTotal - trip.loanTotal;
+          trips += parseInt(trip.tripsCount);
+        }
+
+        setTotalProfit(total.toFixed(2));
+        setTotalTrips(trips);
+      })
       .catch((x) => {
         errorDialog('Unable to load dashboard');
         setDashboardData([]);
@@ -30,9 +54,9 @@ const Dashboard = (props: IDashboardProperties) => {
         setUserInfo(x.data);
         reloadDashboard();
       }).catch((x) => {
-      errorDialog(`Unable to retrieve login data; please login again: ${x}`);
-      return;
-    });
+        errorDialog(`Unable to retrieve login data; please login again: ${x}`);
+        return;
+      });
   }, [props.jwt]);
 
   const rows = Math.round(dashboardData.length / 2);
@@ -396,6 +420,36 @@ const Dashboard = (props: IDashboardProperties) => {
                 option={tripsChart}
                 style={{ width: '100%', height: '240px' }}
               />
+            </Paper>
+          </Item>
+
+          <Item sx={{ width: '33%' }}>
+            <Paper sx={{ width: '100%' }}>
+              <Stack direction={'row'}>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'right', borderBottom: '1px solid #eee' }}>
+                  <Typography variant={'h5'}>
+                    Total Profit:
+                  </Typography>
+                </Item>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'left', paddingLeft: '1em', borderBottom: '1px solid #eee' }}>
+                  <Typography variant={'h5'}>
+                    $ {totalProfit}
+                  </Typography>
+                </Item>
+              </Stack>
+
+              <Stack direction={'row'}>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'right' }}>
+                  <Typography variant={'h5'}>
+                    Total Trips:
+                  </Typography>
+                </Item>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'left', paddingLeft: '1em' }}>
+                  <Typography variant={'h5'}>
+                    {totalTrips}
+                  </Typography>
+                </Item>
+              </Stack>
             </Paper>
           </Item>
         </Stack>
