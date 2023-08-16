@@ -1,7 +1,9 @@
 import {DaoUtils} from 'curb-db/dist/dao/dao-utils.dao';
 import {FleetCarDao, FleetDao, FleetMembershipDao, LoanPaymentDao, TripDao, UserDao} from 'curb-db/dist';
+import {Logger} from '@nestjs/common';
 
 export class DashboardService {
+  private readonly logger = new Logger('dashboard.service');
 
   async list(userId: string) : Promise<any[]> {
     const userDao = new UserDao(DaoUtils.getDatabase());

@@ -320,7 +320,7 @@ const Dashboard = (props: IDashboardProperties) => {
                       </Typography>
                       <Typography>
                         {y.carYear} {y.modelName} {y.trimName} "{y.data.listingNickname}"<br/>
-                        {y.milesTotal} total miles
+                        {y.milesTotal ?? 0} total miles
                       </Typography>
                       <p/>
                       <Stack direction={'row'}>
