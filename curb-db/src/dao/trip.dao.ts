@@ -30,7 +30,7 @@ export class TripDao extends BaseDao<TripDto> {
   }
 
   async listUpcoming(): Promise<TripDto[]> {
-    const selectStatement = `SELECT a.*, b.name AS location_name FROM ${this.section} a, curb.delivery_address b WHERE a.start_time >= NOW() AND b.id=a.delivery_address_id ORDER BY a.end_time DESC`;
+    const selectStatement = `SELECT a.*, b.name AS location_name FROM ${this.section} a, curb.delivery_address b WHERE a.start_time >= NOW() AND b.id=a.delivery_address_id ORDER BY a.end_time ASC`;
 
     return (await this.db.any(selectStatement))
       .map((x) => DaoUtils.normalizeFields<TripDto>(x));

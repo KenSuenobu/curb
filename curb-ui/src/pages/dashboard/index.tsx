@@ -346,7 +346,6 @@ const Dashboard = (props: IDashboardProperties) => {
                       )}
                       Total Trips: {y.tripsCount}<br/>
                       <p/>
-                      Graph - Trips per month<br/>
                       Graph - Days/Month occupied<br/>
 
                       <Stack direction={'row'}>
