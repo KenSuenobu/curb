@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Alert,
   Button, Checkbox,
@@ -45,6 +45,8 @@ const Guests = (props: IGuestProps) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [guestList, setGuestList] = useState<any[]>([]);
   const [guestTrips, setGuestTrips] = useState<any[]>([]);
+  const [notesShowing, setNotesShowing] = useState<boolean>(false);
+  const noteRef = useRef<HTMLInputElement>();
   const [guestData, setGuestData] = useState<IGuest>({
     id: 0,
     guestId: '',
@@ -192,6 +194,29 @@ const Guests = (props: IGuestProps) => {
           errorDialog(`Unable to add guest: ${x}`);
         });
     }
+  }
+
+  const addNote = () => {
+    const notes = guestData.data.notes ?? [];
+    const noteMessage = noteRef.current?.value;
+    const data = guestData.data;
+
+    if (!noteMessage) {
+      errorDialog('Note is required.');
+      return;
+    }
+
+    notes.push(noteMessage);
+
+    data['notes'] = notes;
+
+    setGuestData({
+      ...guestData,
+      data,
+    });
+
+    setNotesShowing(false);
+    noteRef.current.value = null;
   }
 
   useEffect(() => {
@@ -406,6 +431,50 @@ const Guests = (props: IGuestProps) => {
           </Stack>
         </div>
       </div>
+
+      <p/>
+
+      <TableContainer sx={{ borderBottom: '1px solid #ccc', width: '100%' }}>
+        <Table stickyHeader size={'small'}>
+          <TableHeader header={'Guest Notes'}
+                       onAdd={() => setNotesShowing(!notesShowing)}
+                       onEdit={() => {}}/>
+          <TableBody>
+          {notesShowing && (
+            <TableRow>
+              <TableCell colSpan={2}>
+                <Stack direction={'row'}>
+                  <Item sx={{ width: '100%' }}>
+                    <TextField label={'Note'} fullWidth inputRef={noteRef}/>
+                  </Item>
+
+                  <Item sx={{ textAlign: 'right' }}>
+                    <Button style={{ padding: '1em' }}
+                            onClick={() => addNote()}
+                            variant={'contained'}>
+                      Add
+                    </Button>
+                  </Item>
+                </Stack>
+              </TableCell>
+            </TableRow>
+          )}
+          {guestData.data.notes ? guestData.data.notes.map((x: any) => (
+            <>
+              <TableRow>
+                <TableCell colSpan={2}>
+                  <Typography color={'black'}>
+                    {x}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </>
+          )) : <></>}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <p/>
 
       <Stack direction={'row'}>
         <Item sx={{ width: '50%', textAlign: 'left' }}>
