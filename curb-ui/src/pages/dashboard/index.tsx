@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {errorDialog} from '@/components/dialogs/ConfirmDialog';
 import {
+  CircularProgress, IconButton,
   Paper,
   Stack,
   TableBody,
@@ -16,6 +17,7 @@ import Item from '@/components/common/Item';
 import moment from 'moment';
 import ReactEcharts from 'echarts-for-react';
 import * as echarts from 'echarts';
+import {RefreshOutlined} from '@mui/icons-material';
 
 export interface IDashboardProperties {
   jwt: string;
@@ -24,11 +26,15 @@ export interface IDashboardProperties {
 const Dashboard = (props: IDashboardProperties) => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [dashboardData, setDashboardData] = useState<any[]>([]);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(true);
   const [totalProfit, setTotalProfit] = useState<string>('0.00');
   const [totalTrips, setTotalTrips] = useState<number>(0);
   const [totalGross, setTotalGross] = useState<string>('0.00');
 
   const reloadDashboard = () => {
+    setDashboardData([]);
+    setIsRefreshing(true);
+
     axios.get(`/app/dashboard/list/${props.jwt}`)
       .then((x) => {
         setDashboardData(x.data);
@@ -45,10 +51,12 @@ const Dashboard = (props: IDashboardProperties) => {
         setTotalProfit(total.toFixed(2));
         setTotalTrips(trips);
         setTotalGross(gross.toFixed(2));
+        setIsRefreshing(false);
       })
       .catch((x) => {
         errorDialog('Unable to load dashboard');
         setDashboardData([]);
+        setIsRefreshing(false);
       });
   }
 
@@ -218,11 +226,24 @@ const Dashboard = (props: IDashboardProperties) => {
 
   return (
     <>
-      <div style={{ width: '100%', paddingLeft: '0.5em', paddingTop: '1.5em' }}>
-        <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Dashboard</u></Typography>
+      <div style={{ width: '100%' }}>
+        <Stack direction={'row'}>
+          <Item sx={{ width: '50%', textAlign: 'left' }}>
+            <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Dashboard</u></Typography>
+          </Item>
+
+          <Item sx={{ width: '50%', textAlign: 'right' }}>
+            <IconButton onClick={() => reloadDashboard()} disabled={isRefreshing}>
+              <RefreshOutlined/>
+            </IconButton>
+          </Item>
+        </Stack>
       </div>
 
-      {dashboardRows.map((x) => {
+      {dashboardRows.length === 0 && (
+        <CircularProgress/>
+      )}
+      {dashboardRows.length > 0 && dashboardRows.map((x) => {
         return (
           <>
             <Stack direction={'row'} style={{ padding: '5px', paddingBottom: '15px' }}>
