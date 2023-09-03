@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {errorDialog} from '@/components/dialogs/ConfirmDialog';
+import {alertDialog, errorDialog} from '@/components/dialogs/ConfirmDialog';
 import {
   CircularProgress, IconButton,
   Paper,
@@ -17,7 +17,7 @@ import Item from '@/components/common/Item';
 import moment from 'moment';
 import ReactEcharts from 'echarts-for-react';
 import * as echarts from 'echarts';
-import {RefreshOutlined} from '@mui/icons-material';
+import {LocationSearchingOutlined, RefreshOutlined} from '@mui/icons-material';
 
 export interface IDashboardProperties {
   jwt: string;
@@ -81,6 +81,10 @@ const Dashboard = (props: IDashboardProperties) => {
         dashboardRows[i].push(dashboardData[(i * 2) + col]);
       }
     }
+  }
+
+  const openTracker = (url: string) => {
+    window.open(url, '_blank');
   }
 
   const totalsChart = {
@@ -364,13 +368,25 @@ const Dashboard = (props: IDashboardProperties) => {
                       border: '1px solid #ccc',
                       padding: '4px',
                       paddingLeft: '6px' }}>
-                      <Typography variant={'h4'} fontWeight={'bold'}>
-                        {y.makeName}
-                      </Typography>
-                      <Typography>
-                        {y.carYear} {y.modelName} {y.trimName} "{y.data.listingNickname}"<br/>
-                        {y.milesTotal ?? 0} total miles
-                      </Typography>
+                      <Stack direction={'row'}>
+                        <Item sx={{ width: '80%', textAlign: 'left', padding: '0px' }}>
+                          <Typography variant={'h4'} fontWeight={'bold'} color={'black'}>
+                            {y.makeName}
+                          </Typography>
+                          <Typography color={'black'}>
+                            {y.carYear} {y.modelName} {y.trimName} "{y.data.listingNickname}"<br/>
+                            {y.milesTotal ?? 0} total miles
+                          </Typography>
+                        </Item>
+
+                        <Item sx={{ width: '20%', textAlign: 'right' }}>
+                          {y.trackingUrl && (
+                            <IconButton onClick={() => openTracker(y.trackingUrl)}>
+                              <LocationSearchingOutlined/>
+                            </IconButton>
+                          )}
+                        </Item>
+                      </Stack>
                       <p/>
                       <Stack direction={'row'}>
                         <Item sx={{ width: '50%', textAlign: 'left', padding: '0px' }}>
@@ -387,23 +403,30 @@ const Dashboard = (props: IDashboardProperties) => {
                         </Item>
                       </Stack>
 
-                      {y.nextTrip && (
-                        <>
-                          <p/>
-                          Next Trip: {moment(y.nextTrip).format('ddd, MMM D YYYY; LT')}
-                          <br/>
-                        </>
-                      )}
-                      {!y.nextTrip && (
-                        <>
-                          <p/>
-                          No upcoming trips.
-                          <br/>
-                        </>
-                      )}
-                      Total Trips: {y.tripsCount}<br/>
                       <p/>
-                      Graph - Days/Month occupied<br/>
+
+                      <Stack direction={'row'}>
+                        <Item sx={{ width: '75%', textAlign: 'left', padding: '0px' }}>
+                          <Typography color={'black'}>
+                            {y.nextTrip && (
+                              <>
+                                Next Trip: {moment(y.nextTrip).format('ddd, MMM D YYYY; LT')}
+                              </>
+                            )}
+                            {!y.nextTrip && (
+                              <>
+                                No upcoming trips.
+                              </>
+                            )}
+                          </Typography>
+                        </Item>
+
+                        <Item sx={{ width: '25%', textAlign: 'right', padding: '0px' }}>
+                          <Typography color={'black'}>
+                            Total Trips: {y.tripsCount}
+                          </Typography>
+                        </Item>
+                      </Stack>
 
                       <Stack direction={'row'}>
                         <Item sx={{ width: '50%' }}>
