@@ -38,6 +38,7 @@ export class DashboardService {
           tripsCount: totalNumberOfTrips,
           tripCarEarnings: totalEarnings,
           tripCarTrips: totalTrips,
+          listingUrl: fleetCar.data.listingUrl,
           trackingUrl: fleetCar.data.trackingUrl ?? '',
           earnings,
           trips,

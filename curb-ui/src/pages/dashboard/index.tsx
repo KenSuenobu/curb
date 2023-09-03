@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {alertDialog, errorDialog} from '@/components/dialogs/ConfirmDialog';
 import {
-  CircularProgress, IconButton,
+  CircularProgress, IconButton, Link,
   Paper,
   Stack,
   TableBody,
@@ -373,8 +373,11 @@ const Dashboard = (props: IDashboardProperties) => {
                           <Typography variant={'h4'} fontWeight={'bold'} color={'black'}>
                             {y.makeName}
                           </Typography>
+
                           <Typography color={'black'}>
-                            {y.carYear} {y.modelName} {y.trimName} "{y.data.listingNickname}"<br/>
+                            <Link onClick={() => window.open(y.listingUrl, '_blank')}>
+                              {y.carYear} {y.modelName} {y.trimName} "{y.data.listingNickname}"<br/>
+                            </Link>
                             {y.milesTotal ?? 0} total miles
                           </Typography>
                         </Item>
