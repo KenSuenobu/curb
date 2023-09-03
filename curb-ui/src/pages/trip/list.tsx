@@ -1,7 +1,7 @@
 import {
   IconButton,
   LinearProgress,
-  Link,
+  Link, Stack,
   Table,
   TableBody,
   TableCell,
@@ -15,7 +15,7 @@ import axios from 'axios';
 import Paper from '@mui/material/Paper';
 import moment from 'moment/moment';
 import {alertDialog, confirmDialog, errorDialog} from '@/components/dialogs/ConfirmDialog';
-import {DeleteOutlined} from '@mui/icons-material';
+import {DeleteOutlined, EditCalendarOutlined, EditOutlined} from '@mui/icons-material';
 
 export enum ITripType {
   CURRENT,
@@ -111,22 +111,29 @@ const TripsList = (props: ITripsListProps) => {
           </TableHead>
           <TableBody>
             {tripList.map((row, counter) => (
-              <TableRow hover key={counter} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+              <TableRow key={counter}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        style={{ backgroundColor: (guestById(row.guestId).blacklisted ? 'red' : 'white') }}>
                 <TableCell>
-                  <Typography style={{ color: (guestById(row.guestId).blacklisted ? 'red' : 'black') }}>
+                  <Typography style={{ color: 'black' }}>
                     {guestById(row.guestId).lastName}, {guestById(row.guestId).firstName}
                   </Typography>
                 </TableCell>
                 <TableCell>{row.locationName ?? 'N/A'}</TableCell>
-                <TableCell>{moment(row.startTime).format('ddd, MMM D YYYY; LT')}</TableCell>
-                <TableCell>{moment(row.endTime).format('ddd, MMM D YYYY; LT')}</TableCell>
+                <TableCell>{moment(row.startTime).format('MM/DD/YYYY; LT')}</TableCell>
+                <TableCell>{moment(row.endTime).format('MM/DD/YYYY; LT')}</TableCell>
                 <TableCell><Link href={row.tripUrl}>{row.tripId}</Link></TableCell>
                 <TableCell>{row.mileage}</TableCell>
                 <TableCell>$ {row.earnings.toFixed(2)}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => deleteTrip(row.id)}>
-                    <DeleteOutlined/>
-                  </IconButton>
+                  <Stack direction={'row'}>
+                    <IconButton onClick={() => {}}>
+                      <EditCalendarOutlined/>
+                    </IconButton>
+                    <IconButton onClick={() => deleteTrip(row.id)}>
+                      <DeleteOutlined/>
+                    </IconButton>
+                  </Stack>
                 </TableCell>
               </TableRow>
             ))}
