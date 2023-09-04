@@ -86,4 +86,6 @@ export class TripDto {
   })
   locationName?: string;
 
+  nickname?: string;
+
 }

@@ -99,10 +99,10 @@ const TripsList = (props: ITripsListProps) => {
         <Table size={'small'}>
           <TableHead>
             <TableRow style={{ backgroundColor: '#000' }}>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Vehicle</TableCell>
               <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Guest</TableCell>
               <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Delivery Address</TableCell>
-              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Start Time</TableCell>
-              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>End Time</TableCell>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Trip Time</TableCell>
               <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Trip</TableCell>
               <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Mileage</TableCell>
               <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Earnings</TableCell>
@@ -115,13 +115,16 @@ const TripsList = (props: ITripsListProps) => {
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         style={{ backgroundColor: (guestById(row.guestId).blacklisted ? 'red' : 'white') }}>
                 <TableCell>
-                  <Typography style={{ color: 'black' }}>
-                    {guestById(row.guestId).lastName}, {guestById(row.guestId).firstName}
-                  </Typography>
+                  {row.nickname}
+                </TableCell>
+                <TableCell>
+                  {guestById(row.guestId).lastName}, {guestById(row.guestId).firstName}
                 </TableCell>
                 <TableCell>{row.locationName ?? 'N/A'}</TableCell>
-                <TableCell>{moment(row.startTime).format('MM/DD/YYYY; LT')}</TableCell>
-                <TableCell>{moment(row.endTime).format('MM/DD/YYYY; LT')}</TableCell>
+                <TableCell>
+                  {moment(row.startTime).format('MM/DD/YYYY; LT')}<br/>
+                  {moment(row.endTime).format('MM/DD/YYYY; LT')}
+                </TableCell>
                 <TableCell><Link href={row.tripUrl}>{row.tripId}</Link></TableCell>
                 <TableCell>{row.mileage}</TableCell>
                 <TableCell>$ {row.earnings.toFixed(2)}</TableCell>
