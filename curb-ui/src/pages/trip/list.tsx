@@ -101,9 +101,9 @@ const TripsList = (props: ITripsListProps) => {
             <TableRow style={{ backgroundColor: '#000' }}>
               <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Vehicle</TableCell>
               <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Guest</TableCell>
-              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Delivery Address</TableCell>
-              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Trip Time</TableCell>
-              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Trip</TableCell>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Address</TableCell>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Time</TableCell>
+              <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Trip ID</TableCell>
               <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Mileage</TableCell>
               <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>Earnings</TableCell>
               <TableCell/>
@@ -122,8 +122,8 @@ const TripsList = (props: ITripsListProps) => {
                 </TableCell>
                 <TableCell>{row.locationName ?? 'N/A'}</TableCell>
                 <TableCell>
-                  {moment(row.startTime).format('MM/DD/YYYY; LT')}<br/>
-                  {moment(row.endTime).format('MM/DD/YYYY; LT')}
+                  {moment(row.startTime).format('MM/DD/YY; LT')}<br/>
+                  {moment(row.endTime).format('MM/DD/YY; LT')}
                 </TableCell>
                 <TableCell><Link href={row.tripUrl}>{row.tripId}</Link></TableCell>
                 <TableCell>{row.mileage}</TableCell>
