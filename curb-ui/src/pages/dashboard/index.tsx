@@ -378,7 +378,7 @@ const Dashboard = (props: IDashboardProperties) => {
                             <Link onClick={() => window.open(y.listingUrl, '_blank')}>
                               {y.carYear} {y.modelName} {y.trimName} "{y.data.listingNickname}"<br/>
                             </Link>
-                            {y.milesTotal ?? 0} total miles
+                            {y.milesTotal ?? 0} total miles @ $0.655: $ {parseFloat(y.milesTotal * 0.655).toFixed(2)}
                           </Typography>
                         </Item>
 
@@ -407,7 +407,7 @@ const Dashboard = (props: IDashboardProperties) => {
 
                         <Item sx={{ width: '50%', textAlign: 'right', padding: '0px' }}>
                           <Typography color={'black'}>
-                            Profit: $ {(parseFloat(y.grossTotal ?? '0.00').toFixed(2) - parseFloat(y.loanTotal ?? '0.00').toFixed(2)).toFixed(2)}
+                            Profit: $ {(parseFloat(y.grossTotal ?? '0.00').toFixed(2) - parseFloat(y.loanTotal ?? '0.00').toFixed(2)).toFixed(2)}<br/>
                           </Typography>
                         </Item>
                       </Stack>
