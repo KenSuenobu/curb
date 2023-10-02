@@ -1,5 +1,13 @@
 import {DaoUtils} from 'curb-db/dist/dao/dao-utils.dao';
-import {FleetCarDao, FleetDao, FleetMembershipDao, LoanPaymentDao, TripDao, UserDao} from 'curb-db/dist';
+import {
+  FleetCarDao,
+  FleetCarLoanDao,
+  FleetDao,
+  FleetMembershipDao,
+  LoanPaymentDao,
+  TripDao,
+  UserDao
+} from 'curb-db/dist';
 import {Logger} from '@nestjs/common';
 
 export class DashboardService {
@@ -12,6 +20,7 @@ export class DashboardService {
     const fleets = await fleetMembershipDao.getFleetsForUser(userInfo.id);
     const fleetCars: any[] = [];
     const fleetCarsDao = new FleetCarDao(DaoUtils.getDatabase());
+    const fleetCarLoanDao = new FleetCarLoanDao(DaoUtils.getDatabase());
     const tripDao = new TripDao(DaoUtils.getDatabase());
     const loanPaymentDao = new LoanPaymentDao(DaoUtils.getDatabase());
     const earnings = await tripDao.totalEarningsPerMonth();
@@ -28,6 +37,7 @@ export class DashboardService {
         const totalTrips = await tripDao.totalTripsPerMonthByFleetCarId(fleetCar.id);
         const nextTrip = await tripDao.getNextTripForFleetCarId(fleetCar.id);
         const totalNumberOfTrips = await tripDao.totalTripsForFleetCarId(fleetCar.id);
+        const carLoan = await fleetCarLoanDao.getByFleetCarId(fleetCar.id);
 
         fleetCars.push({
           ...fleetCar,
@@ -40,6 +50,7 @@ export class DashboardService {
           tripCarTrips: totalTrips,
           listingUrl: fleetCar.data.listingUrl,
           trackingUrl: fleetCar.data.trackingUrl ?? '',
+          carLoan: carLoan.data,
           earnings,
           trips,
         });

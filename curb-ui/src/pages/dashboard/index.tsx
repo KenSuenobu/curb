@@ -395,7 +395,11 @@ const Dashboard = (props: IDashboardProperties) => {
                         <Item sx={{ width: '50%', textAlign: 'left', padding: '0px' }}>
                           <Typography color={'black'}>
                             Gross: $ {parseFloat(y.grossTotal ?? '0.00').toFixed(2)}<br/>
-                            Loans: $ {parseFloat(y.loanTotal ?? '0.00').toFixed(2)}
+                            Loans: $ {parseFloat(y.loanTotal ?? '0.00').toFixed(2)} {y.carLoan.paymentDueDate && (
+                              <>
+                                <Link href={y.carLoan.paymentUrl} target={'_blank'}>(Due: {y.carLoan.paymentDueDate.replaceAll(/[^0-9]/g, '')})</Link>
+                              </>
+                          )}
                           </Typography>
                         </Item>
 
