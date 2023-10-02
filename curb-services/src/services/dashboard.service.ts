@@ -2,8 +2,8 @@ import {DaoUtils} from 'curb-db/dist/dao/dao-utils.dao';
 import {
   FleetCarDao,
   FleetCarLoanDao,
-  FleetDao,
   FleetMembershipDao,
+  GuestDao,
   LoanPaymentDao,
   TripDao,
   UserDao
@@ -22,6 +22,7 @@ export class DashboardService {
     const fleetCarsDao = new FleetCarDao(DaoUtils.getDatabase());
     const fleetCarLoanDao = new FleetCarLoanDao(DaoUtils.getDatabase());
     const tripDao = new TripDao(DaoUtils.getDatabase());
+    const guestDao = new GuestDao(DaoUtils.getDatabase());
     const loanPaymentDao = new LoanPaymentDao(DaoUtils.getDatabase());
     const earnings = await tripDao.totalEarningsPerMonth();
     const trips = await tripDao.totalTripsPerMonth();
@@ -38,6 +39,8 @@ export class DashboardService {
         const nextTrip = await tripDao.getNextTripForFleetCarId(fleetCar.id);
         const totalNumberOfTrips = await tripDao.totalTripsForFleetCarId(fleetCar.id);
         const carLoan = await fleetCarLoanDao.getByFleetCarId(fleetCar.id);
+        const currentTrip = await tripDao.getCurrentByFleetCarId(fleetCar.id);
+        const currentTripGuest = currentTrip ? await guestDao.getById(currentTrip.guestId) : {};
 
         fleetCars.push({
           ...fleetCar,
@@ -51,6 +54,8 @@ export class DashboardService {
           listingUrl: fleetCar.data.listingUrl,
           trackingUrl: fleetCar.data.trackingUrl ?? '',
           carLoan: carLoan.data,
+          currentTrip,
+          currentTripGuest,
           earnings,
           trips,
         });

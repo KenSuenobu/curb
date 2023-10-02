@@ -397,7 +397,9 @@ const Dashboard = (props: IDashboardProperties) => {
                             Gross: $ {parseFloat(y.grossTotal ?? '0.00').toFixed(2)}<br/>
                             Loans: $ {parseFloat(y.loanTotal ?? '0.00').toFixed(2)} {y.carLoan.paymentDueDate && (
                               <>
-                                <Link href={y.carLoan.paymentUrl} target={'_blank'}>(Due: {y.carLoan.paymentDueDate.replaceAll(/[^0-9]/g, '')})</Link>
+                                <Link href={y.carLoan.paymentUrl} target={'_blank'}>
+                                  (Due: {y.carLoan.paymentDueDate.replaceAll(/[^0-9]/g, '')})
+                                </Link>
                               </>
                           )}
                           </Typography>
@@ -415,14 +417,23 @@ const Dashboard = (props: IDashboardProperties) => {
                       <Stack direction={'row'}>
                         <Item sx={{ width: '75%', textAlign: 'left', padding: '0px' }}>
                           <Typography color={'black'}>
-                            {y.nextTrip && (
+                            {!y.currentTrip && y.nextTrip && (
                               <>
-                                Next Trip: {moment(y.nextTrip).format('ddd, MMM D YYYY; LT')}
+                                Next: {moment(y.nextTrip).format('ddd, MMM D YYYY; LT')}
+                                <br/>
                               </>
                             )}
-                            {!y.nextTrip && (
+                            {!y.nextTrip && !y.currentTrip && (
                               <>
                                 No upcoming trips.
+                              </>
+                            )}
+                            {y.currentTrip && (
+                              <>
+                                Current: <Link href={y.currentTrip.tripUrl} target={'_blank'}>
+                                  {y.currentTripGuest.firstName} {y.currentTripGuest.lastName}
+                                  , ends {moment(y.currentTrip.endTime).format('MM/DD/YYYY; LT')}
+                                </Link>
                               </>
                             )}
                           </Typography>
