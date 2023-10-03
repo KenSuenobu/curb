@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {alertDialog, errorDialog} from '@/components/dialogs/ConfirmDialog';
 import {
-  CircularProgress, IconButton, Link,
+  CircularProgress, IconButton, LinearProgress, Link,
   Paper,
   Stack,
   TableBody,
@@ -244,8 +244,8 @@ const Dashboard = (props: IDashboardProperties) => {
         </Stack>
       </div>
 
-      {dashboardRows.length === 0 && (
-        <CircularProgress/>
+      {isRefreshing && (
+        <LinearProgress/>
       )}
       {dashboardRows.length > 0 && dashboardRows.map((x) => {
         return (
