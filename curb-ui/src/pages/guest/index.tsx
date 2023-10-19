@@ -344,7 +344,7 @@ const Guests = (props: IGuestProps) => {
 
       <Stack direction={'row'}>
         <Item sx={{ width: '100%', textAlign: 'left' }}>
-          <FormControlLabel control={<Checkbox name={'incomplete'} checked={guestData.data.incomplete ?? false} onChange={handleCheckbox}/>} label={'Info not yet provided'}/>
+          <FormControlLabel control={<Checkbox name={'incomplete'} checked={guestData.data.incomplete ?? false} onChange={handleCheckbox}/>} label={'Info not yet provided / not necessary'}/>
         </Item>
       </Stack>
 
