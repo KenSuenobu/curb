@@ -4,9 +4,7 @@
   "private": true,
   "workspaces": [
     "curb-db",
-    "curb-services"
-  ],
-  "scripts": {},
-  "devDependencies": {},
-  "dependencies": {}
+    "curb-services",
+    "curb-ui-new"
+  ]
 }
