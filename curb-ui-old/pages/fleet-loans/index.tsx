@@ -14,12 +14,12 @@ import {
 } from '@mui/material';
 import {AddOutlined, ArrowRightOutlined, DeleteOutlined, PreviewOutlined} from '@mui/icons-material';
 import React, {useEffect, useRef, useState} from 'react';
-import { errorDialog } from '@/components/dialogs/ConfirmDialog';
-import {IFleet, LoadFleet } from '@/components/database/fleet';
-import {IFleetCar, LoadFleetCars } from '@/components/database/fleet-car';
-import { TableHeader } from '@/components/car-definitions/TableHeader';
-import Item from '@/components/common/Item';
-import UrlTextField from '@/components/common/UrlTextField';
+import { errorDialog } from 'curb-ui/src/components/dialogs/ConfirmDialog';
+import {IFleet, LoadFleet } from 'curb-ui/src/components/database/fleet';
+import {IFleetCar, LoadFleetCars } from 'curb-ui/src/components/database/fleet-car';
+import { TableHeader } from 'curb-ui/src/components/car-definitions/TableHeader';
+import Item from 'curb-ui/src/components/common/Item';
+import UrlTextField from 'curb-ui/src/components/common/UrlTextField';
 
 const SELECTED_COLOR = '#ccf';
 

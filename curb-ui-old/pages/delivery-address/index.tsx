@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {errorDialog} from '@/components/dialogs/ConfirmDialog';
-import {IFleet, LoadFleet} from '@/components/database/fleet';
+import {errorDialog} from 'curb-ui/src/components/dialogs/ConfirmDialog';
+import {IFleet, LoadFleet} from 'curb-ui/src/components/database/fleet';
 import {
   Alert, Button,
   Paper, Snackbar,
@@ -14,9 +14,9 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import {TableHeader} from '@/components/car-definitions/TableHeader';
+import {TableHeader} from 'curb-ui/src/components/car-definitions/TableHeader';
 import {ArrowRightOutlined} from '@mui/icons-material';
-import Item from '@/components/common/Item';
+import Item from 'curb-ui/src/components/common/Item';
 
 const SELECTED_COLOR = '#ccf';
 

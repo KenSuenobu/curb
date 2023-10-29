@@ -13,9 +13,9 @@ import {
   Typography
 } from '@mui/material';
 import {ArrowRightOutlined, DeleteOutlined} from '@mui/icons-material';
-import {IFleet, LoadFleet} from '@/components/database/fleet';
-import { errorDialog } from '@/components/dialogs/ConfirmDialog';
-import { TableHeader } from '@/components/car-definitions/TableHeader';
+import {IFleet, LoadFleet} from 'curb-ui/src/components/database/fleet';
+import { errorDialog } from 'curb-ui/src/components/dialogs/ConfirmDialog';
+import { TableHeader } from 'curb-ui/src/components/car-definitions/TableHeader';
 
 const SELECTED_COLOR = '#ccf';
 

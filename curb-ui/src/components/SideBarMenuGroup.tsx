@@ -4,6 +4,7 @@ import ListItemText from '@mui/material/ListItemText';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import SideBarMenuItem, { SideBarMenuItemProps } from './SideBarMenuItem';
 import * as React from 'react';
+import {KeyboardAltOutlined, KeyboardArrowDownOutlined, MoveDownOutlined} from '@mui/icons-material';
 
 export interface SideBarMenuGroupProps {
   label: string;
@@ -41,7 +42,7 @@ export default function SideBarMenuGroup(props: SideBarMenuGroupProps) {
           }}
           sx={{ my: 0 }}
         />
-        <KeyboardArrowDown
+        <KeyboardArrowDownOutlined
           sx={{
             mr: -1,
             opacity: 1,

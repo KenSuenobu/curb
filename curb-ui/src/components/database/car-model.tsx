@@ -9,7 +9,7 @@ export interface ICarModel {
 export type ICarModelCallback = (payload: ICarModel[]) => void;
 
 export const LoadCarModels = (makeId: number, callback: ICarModelCallback) => {
-  axios.get(`/app/car-model/list/${makeId}`)
+  axios.get(`/curb/car-model/list/${makeId}`)
     .then((x) => {
       callback(x.data);
     });

@@ -17,9 +17,9 @@ import {
   Typography
 } from '@mui/material';
 import {ArrowRightOutlined, DeleteOutlined, ReportProblemOutlined} from '@mui/icons-material';
-import {confirmDialog, errorDialog} from '@/components/dialogs/ConfirmDialog';
-import { TableHeader } from '@/components/car-definitions/TableHeader';
-import Item from '@/components/common/Item';
+import {confirmDialog, errorDialog} from 'curb-ui/src/components/dialogs/ConfirmDialog';
+import { TableHeader } from 'curb-ui/src/components/car-definitions/TableHeader';
+import Item from 'curb-ui/src/components/common/Item';
 import moment from 'moment';
 
 const SELECTED_COLOR = '#ccf';

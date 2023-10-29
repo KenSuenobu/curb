@@ -11,13 +11,13 @@ import {
   Typography
 } from '@mui/material';
 import React, {useEffect, useState} from 'react';
-import Item from '@/components/common/Item';
+import Item from 'curb-ui/src/components/common/Item';
 import {SearchOutlined} from '@mui/icons-material';
 import moment from 'moment';
 import {LocalizationProvider} from '@mui/x-date-pickers';
 import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment';
 import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
-import {errorDialog} from '@/components/dialogs/ConfirmDialog';
+import {errorDialog} from 'curb-ui/src/components/dialogs/ConfirmDialog';
 import axios from 'axios';
 
 export interface ITollProps {

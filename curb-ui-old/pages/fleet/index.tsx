@@ -15,17 +15,17 @@ import {
 } from '@mui/material';
 import {AddOutlined, ArrowRightOutlined, ClearOutlined, DeleteOutlined, PreviewOutlined} from '@mui/icons-material';
 import axios from 'axios';
-import { IFleetCar, LoadFleetCars } from '@/components/database/fleet-car';
-import {IFleet, LoadFleet} from '@/components/database/fleet';
-import {ICarMake, LoadCarMakes } from '@/components/database/car-make';
-import {ICarYear, LoadModelYears } from '@/components/database/car-year';
-import { ICarModel, LoadCarModels } from '@/components/database/car-model';
-import {ICarTrim, LoadCarTrims} from '@/components/database/car-trim';
-import { errorDialog } from '@/components/dialogs/ConfirmDialog';
-import { TableHeader } from '@/components/car-definitions/TableHeader';
-import ColorDatabase from '@/components/common/ColorDatabase';
-import Item from '@/components/common/Item';
-import UrlTextField from '@/components/common/UrlTextField';
+import { IFleetCar, LoadFleetCars } from 'curb-ui/src/components/database/fleet-car';
+import {IFleet, LoadFleet} from 'curb-ui/src/components/database/fleet';
+import {ICarMake, LoadCarMakes } from 'curb-ui/src/components/database/car-make';
+import {ICarYear, LoadModelYears } from 'curb-ui/src/components/database/car-year';
+import { ICarModel, LoadCarModels } from 'curb-ui/src/components/database/car-model';
+import {ICarTrim, LoadCarTrims} from 'curb-ui/src/components/database/car-trim';
+import { errorDialog } from 'curb-ui/src/components/dialogs/ConfirmDialog';
+import { TableHeader } from 'curb-ui/src/components/car-definitions/TableHeader';
+import ColorDatabase from 'curb-ui/src/components/common/ColorDatabase';
+import Item from 'curb-ui/src/components/common/Item';
+import UrlTextField from 'curb-ui/src/components/common/UrlTextField';
 
 const SELECTED_COLOR = '#ccf';
 

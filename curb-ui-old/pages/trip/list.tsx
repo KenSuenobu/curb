@@ -14,7 +14,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import Paper from '@mui/material/Paper';
 import moment from 'moment/moment';
-import {alertDialog, confirmDialog, errorDialog} from '@/components/dialogs/ConfirmDialog';
+import {alertDialog, confirmDialog, errorDialog} from 'curb-ui/src/components/dialogs/ConfirmDialog';
 import {DeleteOutlined, EditCalendarOutlined, EditOutlined} from '@mui/icons-material';
 
 export enum ITripType {

@@ -74,7 +74,7 @@ export const StandardEquipmentList = [
 ]
 
 export const LoadCarMakes = (callback: ICarMakeCallback) => {
-  axios.get('/app/car-make/list')
+  axios.get('/curb/car-make/list')
     .then((x) => {
       callback(x.data);
     });

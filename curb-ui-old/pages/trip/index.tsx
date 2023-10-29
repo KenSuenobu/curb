@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {errorDialog} from '@/components/dialogs/ConfirmDialog';
-import {IFleet, LoadFleet} from '@/components/database/fleet';
-import {IFleetCar, LoadFleetCars} from '@/components/database/fleet-car';
+import {errorDialog} from 'curb-ui/src/components/dialogs/ConfirmDialog';
+import {IFleet, LoadFleet} from 'curb-ui/src/components/database/fleet';
+import {IFleetCar, LoadFleetCars} from 'curb-ui/src/components/database/fleet-car';
 import {
   Alert,
   Button, FormControl, InputLabel, MenuItem, Select,
@@ -16,13 +16,13 @@ import {
   Typography,
   Link
 } from '@mui/material';
-import {TableHeader} from '@/components/car-definitions/TableHeader';
+import {TableHeader} from 'curb-ui/src/components/car-definitions/TableHeader';
 import {ArrowRightOutlined} from '@mui/icons-material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import Paper from '@mui/material/Paper';
-import Item from '@/components/common/Item';
-import ColorDatabase from '@/components/common/ColorDatabase';
+import Item from 'curb-ui/src/components/common/Item';
+import ColorDatabase from 'curb-ui/src/components/common/ColorDatabase';
 import {LocalizationProvider} from '@mui/x-date-pickers';
 import moment from 'moment';
 

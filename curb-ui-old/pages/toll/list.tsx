@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {errorDialog} from '@/components/dialogs/ConfirmDialog';
+import {errorDialog} from 'curb-ui/src/components/dialogs/ConfirmDialog';
 import {Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from '@mui/material';
 import Paper from '@mui/material/Paper';
 import moment from 'moment';

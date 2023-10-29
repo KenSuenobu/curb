@@ -9,7 +9,7 @@ export interface ICarTrim {
 export type ICarTrimCallback = (payload: ICarTrim[]) => void;
 
 export const LoadCarTrims = (yearId: number, callback: ICarTrimCallback) => {
-  axios.get(`/app/car-trim/list/${yearId}`)
+  axios.get(`/curb/car-trim/list/${yearId}`)
     .then((x) => {
       callback(x.data);
     });

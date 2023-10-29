@@ -10,6 +10,7 @@ export interface SideBarMenuItemProps {
   icon: JSX.Element;
   label: string;
   onClick: () => any;
+  url: string;
   disabled?: boolean;
 }
 

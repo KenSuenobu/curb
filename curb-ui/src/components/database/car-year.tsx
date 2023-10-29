@@ -9,7 +9,7 @@ export interface ICarYear {
 export type ICarYearCallback = (payload: ICarYear[]) => void;
 
 export const LoadModelYears = (modelId: number, callback: ICarYearCallback) => {
-  axios.get(`/app/car-year/list/${modelId}`)
+  axios.get(`/curb/car-year/list/${modelId}`)
     .then((x) => {
       callback(x.data);
     });

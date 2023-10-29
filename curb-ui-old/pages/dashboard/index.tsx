@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {alertDialog, errorDialog} from '@/components/dialogs/ConfirmDialog';
+import {alertDialog, errorDialog} from 'curb-ui/src/components/dialogs/ConfirmDialog';
 import {
   CircularProgress, IconButton, LinearProgress, Link,
   Paper,
@@ -13,7 +13,7 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import Item from '@/components/common/Item';
+import Item from 'curb-ui/src/components/common/Item';
 import moment from 'moment';
 import ReactEcharts from 'echarts-for-react';
 import * as echarts from 'echarts';

@@ -16,14 +16,14 @@ import {
   ArrowRightOutlined,
   ClearOutlined,
 } from '@mui/icons-material';
-import {ICarModel, LoadCarModels } from '@/components/database/car-model';
-import {ICarMake, LoadCarMakes, StandardEquipmentList } from '@/components/database/car-make';
-import { errorDialog } from '@/components/dialogs/ConfirmDialog';
-import {ICarYear, LoadModelYears } from '@/components/database/car-year';
-import { ICarTrim, LoadCarTrims } from '@/components/database/car-trim';
-import { TableHeader } from '@/components/car-definitions/TableHeader';
-import Item from '@/components/common/Item';
-import CheckboxTableRow from '@/components/common/CheckboxTableRow';
+import {ICarModel, LoadCarModels } from 'curb-ui/src/components/database/car-model';
+import {ICarMake, LoadCarMakes, StandardEquipmentList } from 'curb-ui/src/components/database/car-make';
+import { errorDialog } from 'curb-ui/src/components/dialogs/ConfirmDialog';
+import {ICarYear, LoadModelYears } from 'curb-ui/src/components/database/car-year';
+import { ICarTrim, LoadCarTrims } from 'curb-ui/src/components/database/car-trim';
+import { TableHeader } from 'curb-ui/src/components/car-definitions/TableHeader';
+import Item from 'curb-ui/src/components/common/Item';
+import CheckboxTableRow from 'curb-ui/src/components/common/CheckboxTableRow';
 
 interface ICarTrimInfo {
   id?: number;
@@ -397,8 +397,8 @@ const CarDefinitions: NextPage = () => {
             <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>
               <Table stickyHeader size={'small'}>
                 <TableHeader header={'Car Make'}
-                             onAdd={() => setCarMakesInputShowing(!carMakesInputShowing)}
-                             onEdit={() => {}}/>
+                  onAdd={() => setCarMakesInputShowing(!carMakesInputShowing)}
+                  onEdit={() => {}}/>
                 {carMakesInputShowing ? (
                   <>
                     <TableBody>
@@ -406,14 +406,14 @@ const CarDefinitions: NextPage = () => {
                         <TableCell>
                           <TextField id={'namespace'} variant={'standard'} required inputRef={carMakeRef}
                                      autoFocus fullWidth
-                                     onKeyDown={(ev) => {
-                                       if (ev.key === 'Escape') {
-                                         setCarMakesInputShowing(false);
-                                         carMakeRef.current.value = '';
-                                       } else if (ev.key === 'Enter') {
-                                         addCarMake();
-                                       }
-                                     }}/></TableCell>
+                            onKeyDown={(ev) => {
+                              if (ev.key === 'Escape') {
+                                setCarMakesInputShowing(false);
+                                carMakeRef.current.value = '';
+                              } else if (ev.key === 'Enter') {
+                                addCarMake();
+                              }
+                            }}/></TableCell>
                         <TableCell>
                           <Button variant={'contained'} onClick={() => addCarMake()}>ADD</Button>
                         </TableCell>
@@ -472,14 +472,14 @@ const CarDefinitions: NextPage = () => {
             <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>
               <Table stickyHeader size={'small'}>
                 <TableHeader header={'Car Models'}
-                             onAdd={() => {
-                               if (carMakeId === 0) {
-                                 errorDialog('You cannot add a car model without first selecting a car make.');
-                                 return;
-                               }
+                   onAdd={() => {
+                  if (carMakeId === 0) {
+                    errorDialog('You cannot add a car model without first selecting a car make.');
+                    return;
+                  }
 
-                               setCarModelsInputShowing(!carModelsInputShowing);
-                             }} onEdit={() => {}}/>
+                  setCarModelsInputShowing(!carModelsInputShowing);
+                }} onEdit={() => {}}/>
                 {carModelsInputShowing ? (
                   <TableBody>
                     <TableRow>
@@ -551,7 +551,7 @@ const CarDefinitions: NextPage = () => {
 
                   setCarYearsInputShowing(!carYearsInputShowing);
                 }}
-                             onEdit={() => {}}/>
+                  onEdit={() => {}}/>
                 {carYearsInputShowing ? (
                   <>
                     <TableBody>
@@ -622,7 +622,7 @@ const CarDefinitions: NextPage = () => {
 
                   setCarTrimsInputShowing(!carTrimsInputShowing);
                 }}
-                             onEdit={() => {}}/>
+                  onEdit={() => {}}/>
                 {carTrimsInputShowing ? (
                   <>
                     <TableBody>
@@ -656,11 +656,11 @@ const CarDefinitions: NextPage = () => {
                       return (
                         <TableRow hover sx={{ cursor: 'pointer' }} key={counter}>
                           <TableCell colSpan={2}
-                                     sx={{ backgroundColor: bgColor, width: '90%' }}
-                                     onClick={() => {
-                                       setCarTrimId(x.id);
-                                       loadCarTrimInfo(x.id);
-                                     }}><Typography>{x.name}</Typography></TableCell>
+                            sx={{ backgroundColor: bgColor, width: '90%' }}
+                            onClick={() => {
+                              setCarTrimId(x.id);
+                              loadCarTrimInfo(x.id);
+                            }}><Typography>{x.name}</Typography></TableCell>
                         </TableRow>
                       )})}
                   </TableBody>
@@ -866,17 +866,17 @@ const CarDefinitions: NextPage = () => {
                   {StandardEquipmentList
                     .sort((a, b) => (a > b ? 1 : -1))
                     .map((x, cnt: number) => (
-                      <>
-                        <CheckboxTableRow value={x} onClick={() => {
-                          const states = checkedStates;
+                    <>
+                      <CheckboxTableRow value={x} onClick={() => {
+                        const states = checkedStates;
 
-                          states[cnt] = !states[cnt];
+                        states[cnt] = !states[cnt];
 
-                          // Set checked states like this, or it will NOT WORK.
-                          setCheckedStates([...states]);
-                        }} checked={checkedStates[cnt]}/>
-                      </>
-                    ))}
+                        // Set checked states like this, or it will NOT WORK.
+                        setCheckedStates([...states]);
+                      }} checked={checkedStates[cnt]}/>
+                    </>
+                  ))}
                 </Table>
               </TableContainer>
             </div>
@@ -929,7 +929,7 @@ const CarDefinitions: NextPage = () => {
                           </TableCell>
                           <TableCell>
                             <Button variant={'contained'}
-                                    onClick={() => addTrimOption()}>ADD</Button>
+                              onClick={() => addTrimOption()}>ADD</Button>
                           </TableCell>
                         </TableRow>
                       </TableBody>
@@ -942,18 +942,18 @@ const CarDefinitions: NextPage = () => {
                     {(trimInfoPayload?.optionList ? trimInfoPayload.optionList : [])
                       .sort((a: any, b: any) => (a.name > b.name ? 1 : -1))
                       .map((x: any) => (
-                        <>
-                          <TableRow hover>
-                            <TableCell>{x.name}</TableCell>
-                            <TableCell>{x.value}</TableCell>
-                            <TableCell>
-                              <IconButton onClick={() => deleteOption(x)}>
-                                <ClearOutlined/>
-                              </IconButton>
-                            </TableCell>
-                          </TableRow>
-                        </>
-                      ))}
+                      <>
+                        <TableRow hover>
+                          <TableCell>{x.name}</TableCell>
+                          <TableCell>{x.value}</TableCell>
+                          <TableCell>
+                            <IconButton onClick={() => deleteOption(x)}>
+                              <ClearOutlined/>
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      </>
+                    ))}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -1020,99 +1020,99 @@ const CarDefinitions: NextPage = () => {
                     {(trimInfoPayload?.colorList ? trimInfoPayload.colorList : [])
                       .sort((a: any, b: any) => (a.name > b.name ? 1 : -1))
                       .map((x: any) => (
-                        <>
-                          <TableRow hover>
-                            <TableCell>{x.name}</TableCell>
-                            <TableCell>{x.value}</TableCell>
-                            <TableCell>
-                              <IconButton onClick={() => deleteColor(x)}>
-                                <ClearOutlined/>
-                              </IconButton>
-                            </TableCell>
-                          </TableRow>
-                        </>
-                      ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
+                      <>
+                        <TableRow hover>
+                        <TableCell>{x.name}</TableCell>
+                        <TableCell>{x.value}</TableCell>
+                        <TableCell>
+                          <IconButton onClick={() => deleteColor(x)}>
+                            <ClearOutlined/>
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </div>
+        </div>
 
-          <div style={{ display: 'flex', paddingTop: '1em' }}>
-            <div style={{ width: '100%', paddingLeft: '0.5em' }}>
-              <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Car Reviews</u></Typography>
+        <div style={{ display: 'flex', paddingTop: '1em' }}>
+          <div style={{ width: '100%', paddingLeft: '0.5em' }}>
+            <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Car Reviews</u></Typography>
 
-              <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
-                <Table stickyHeader size={'small'}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell sx={{ backgroundColor: '#cff', width: '35%' }}>Review Site</TableCell>
-                      <TableCell sx={{ backgroundColor: '#cff', width: '55%' }}>Review URL</TableCell>
-                      <TableCell sx={{ backgroundColor: '#cff', width: '10%', textAlign: 'right' }}>
-                        <IconButton size={'small'} onClick={() => setCarUrlInputShowing(!carUrlInputShowing)}>
-                          <AddOutlined/>
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  {carUrlInputShowing ? (
+            <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc' }}>
+              <Table stickyHeader size={'small'}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ backgroundColor: '#cff', width: '35%' }}>Review Site</TableCell>
+                    <TableCell sx={{ backgroundColor: '#cff', width: '55%' }}>Review URL</TableCell>
+                    <TableCell sx={{ backgroundColor: '#cff', width: '10%', textAlign: 'right' }}>
+                      <IconButton size={'small'} onClick={() => setCarUrlInputShowing(!carUrlInputShowing)}>
+                        <AddOutlined/>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                {carUrlInputShowing ? (
+                  <>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>
+                          <TextField
+                            label={'Review Site Name'} autoFocus fullWidth variant={'standard'}
+                            inputRef={trimInfoReviewUrlSiteRef}
+                            onKeyDown={(ev) => {
+                              if (ev.key === 'Escape') {
+                                setCarUrlInputShowing(false);
+                              } else if (ev.key === 'Enter') {
+                                addCarSite();
+                              }
+                            }}/>
+                        </TableCell>
+                        <TableCell>
+                          <TextField
+                            label={'Review Video URL'} fullWidth variant={'standard'}
+                            inputRef={trimInfoReviewUrlRef}
+                            onKeyDown={(ev) => {
+                              if (ev.key === 'Escape') {
+                                setCarUrlInputShowing(false);
+                              } else if (ev.key === 'Enter') {
+                                addCarSite();
+                              }
+                            }}/>
+                        </TableCell>
+                        <TableCell>
+                          <Button variant={'contained'}
+                                  onClick={() => addCarSite()}>ADD</Button>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </>
+                ) : (
+                  <>
+                  </>
+                )}
+                <TableBody>
+                  {(trimInfoPayload?.siteList ? trimInfoPayload.siteList : [])
+                    .sort((a: any, b: any) => (a.name > b.name ? 1 : -1))
+                    .map((x: any) => (
                     <>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell>
-                            <TextField
-                              label={'Review Site Name'} autoFocus fullWidth variant={'standard'}
-                              inputRef={trimInfoReviewUrlSiteRef}
-                              onKeyDown={(ev) => {
-                                if (ev.key === 'Escape') {
-                                  setCarUrlInputShowing(false);
-                                } else if (ev.key === 'Enter') {
-                                  addCarSite();
-                                }
-                              }}/>
-                          </TableCell>
-                          <TableCell>
-                            <TextField
-                              label={'Review Video URL'} fullWidth variant={'standard'}
-                              inputRef={trimInfoReviewUrlRef}
-                              onKeyDown={(ev) => {
-                                if (ev.key === 'Escape') {
-                                  setCarUrlInputShowing(false);
-                                } else if (ev.key === 'Enter') {
-                                  addCarSite();
-                                }
-                              }}/>
-                          </TableCell>
-                          <TableCell>
-                            <Button variant={'contained'}
-                                    onClick={() => addCarSite()}>ADD</Button>
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </>
-                  ) : (
-                    <>
-                    </>
-                  )}
-                  <TableBody>
-                    {(trimInfoPayload?.siteList ? trimInfoPayload.siteList : [])
-                      .sort((a: any, b: any) => (a.name > b.name ? 1 : -1))
-                      .map((x: any) => (
-                        <>
-                          <TableRow hover>
-                            <TableCell>{x.name}</TableCell>
-                            <TableCell>{x.url}</TableCell>
-                            <TableCell>
-                              <IconButton onClick={() => deleteSite(x)}>
-                                <ClearOutlined/>
-                              </IconButton>
-                            </TableCell>
-                          </TableRow>
-                        </>
-                      ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                    <TableRow hover>
+                    <TableCell>{x.name}</TableCell>
+                    <TableCell>{x.url}</TableCell>
+                    <TableCell>
+                      <IconButton onClick={() => deleteSite(x)}>
+                        <ClearOutlined/>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                </>
+                ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
             </div>
           </div>
 

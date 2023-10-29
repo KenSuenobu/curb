@@ -10,7 +10,7 @@ module.exports = withConfig({
   async rewrites() {
     return [
       {
-        source: "/app/:path*",
+        source: "/curb/:path*",
         destination: 'http://localhost:3001/:path*',
       },
     ];
@@ -18,7 +18,7 @@ module.exports = withConfig({
 });
 
 console.log(
-  'Redirecting /app/* to http://localhost:3001/*'
+  'Redirecting /curb/* to http://localhost:3001/*'
 );
 
 console.log('Allowing Global CSS');
