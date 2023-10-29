@@ -46,7 +46,24 @@ import PasswordTextField from '@/components/common/PasswordTextField';
 const Home: NextPage = () => {
   return (
     <>
-      Welcome to CURB!
+      <Stack direction={'row'}>
+        <Item sx={{ paddingLeft: '15px',
+          width: '100%',
+          textAlign: 'left',
+          backgroundColor: '#000',
+          color: '#fff'
+        }}>
+          <Typography fontWeight={'bold'}>
+            Dashboard
+          </Typography>
+        </Item>
+      </Stack>
+
+      <p/>
+
+      <Typography>
+        Dashboard is coming soon!
+      </Typography>
     </>
   );
 };

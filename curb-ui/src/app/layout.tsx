@@ -149,7 +149,7 @@ const Layout: NextPage = ({children, params}) => {
   const sidebarItems = [carItems];
 
   const handleHomeClicked = () => {
-
+    router.push('/');
   }
 
   const handleMenu = (e: any) => {
@@ -167,6 +167,11 @@ const Layout: NextPage = ({children, params}) => {
 
   const handleFeedback = () => {
     alertDialog('Feedback here');
+    handleClose();
+  }
+
+  const handleProfile = () => {
+    alertDialog('You will be able to fill out and complete your profile soon.  For now, enjoy CURB!');
     handleClose();
   }
 
@@ -246,7 +251,7 @@ const Layout: NextPage = ({children, params}) => {
                       open={Boolean(anchorEl)} onClose={handleClose}>
                   <MenuItem onClick={handleFeedback} style={{ fontWeight: 'bold' }} disabled>Feedback</MenuItem>
                   <Divider/>
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={handleProfile}>Profile</MenuItem>
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>
               </Item>
