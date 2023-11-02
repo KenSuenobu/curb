@@ -1,22 +1,18 @@
 'use client';
 
-import {useState} from 'react';
+import {useRef, useState} from 'react';
 import {signIn} from 'next-auth/react';
+import {Button, Stack, TextField, Typography} from '@mui/material';
+import Item from '@/app/components/common/Item';
+import PasswordTextField from '@/app/components/common/PasswordTextField';
+import {alertDialog, errorDialog} from '@/app/components/common/ConfirmDialog';
 import {useRouter} from 'next/navigation';
 
 const LoginForm = () => {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const router = useRouter();
 
-  const handleEmailChange = ((e) => setEmail(e.target.value));
-  const handlePasswordChange = ((e) => setPassword(e.target.value));
-  const clearInputs = () => {
-    setEmail('');
-    setPassword('');
-    setError('');
-  }
   const handleSubmit = (async (e) => {
     e.preventDefault();
     signIn('credentials', {
@@ -24,38 +20,58 @@ const LoginForm = () => {
       password,
       redirect: false,
     })
-      .then((res) => {
-        if (res.error) {
-          setError(JSON.parse(res.error).message);
-        } else {
-          clearInputs();
-          router.push('/');
-        }
+    .then((res) => {
+      if (res.error) {
+        clearInputs();
+        alertDialog(JSON.parse(res.error).message);
+      } else {
+        clearInputs();
+        router.push('/');
+      }
+    })
+    .catch((e) => {
+      console.error(e);
+    });
+  });
 
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  })
+  const onSignup = () => {
+
+  }
+
+  const clearInputs = () => {
+    setEmail('');
+    setPassword('');
+  }
+
+  const handleEmailChange = ((e) => setEmail(e.target.value));
+  const handlePasswordChange = ((e) => setPassword(e.target.value));
 
   return (
-    <>
-      <form onSubmit={handleSubmit} className={'flex flex-col space-y-12 w-full px-32'}>
-        <input type={'text'} value={email} onChange={handleEmailChange} placeholder={'Enter your email address'}
-               className={'border-b border-b-gray-200 hover:hover-b-gray-500'}/>
-        <input type={'text'} value={password} onChange={handlePasswordChange} placeholder={'Enter your password'}
-               className={'border-b border-b-gray-200 hover:hover-b-gray-500'}/>
-        <button type={'submit'}
-               className={'border rounded-lg px-6 py-2 bg-gray-100 hover:bg-gray-200 duration-300 uppercase text-sm'}>
-          Log In
-        </button>
-        {error && (
-          <p className={'text-red-500 font-bold text-center'}>
-          {error}
-          </p>
-        )}
+    <div style={{
+      backgroundColor: '#fff', paddingTop: '1.5em', paddingBottom: '1.5em',
+      paddingLeft: '1.5em', paddingRight: '1.5em', color: '#000', width: '450px'
+    }}>
+      <form onSubmit={handleSubmit}>
+        <Typography variant={'h5'} fontWeight={'bold'}>Account Login</Typography>
+
+        <br/>
+        <TextField type={'text'} fullWidth value={email} onChange={handleEmailChange} placeholder={'Enter your email address'}/>
+        <PasswordTextField fullWidth value={password} onChange={handlePasswordChange} placeholder={'Enter your password'}/>
+
+        <br/>
+        <br/>
+
+        <Button variant={'contained'}
+                sx={{ backgroundColor: '#66f', fontWeight: 'bold'}}
+                fullWidth
+                type={'submit'}>Log in</Button><br/>
+        <Button variant={'contained'}
+                fullWidth
+                onClick={onSignup}>
+          Request Early Access
+        </Button>
       </form>
-    </>
+    </div>
   );
 }
 

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { signJwtAccessToken } from '@/app/helpers/jwt';
+import axios from 'axios';
 
 export async function POST(request) {
   try {
@@ -11,15 +12,21 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    // Call local server login service
-    // if (!user) {
-    //   return NextResponse.json({
-    //     message: 'No such user exists',
-    //   }, { status: 400 });
-    // }
+    const userId = await axios.get(`${process.env.CURB_SERVER_URL}/user/login/${email}/${password}`)
+      .then((x) => x.data)
+      .catch((x) => {
+        console.error(x);
+        return null;
+      });
+
+    if (!userId || userId === 'error') {
+      return NextResponse.json({
+        message: 'No such user exists.  Please check your e-mail address and/or password and try again.'
+      }, { status: 400 });
+    }
 
     const accessToken = signJwtAccessToken({
-      userId: '1c59e125-9b29-4566-bc96-e64056c50cb4'
+      userId
     });
 
     console.log(`Access token: ${JSON.stringify(accessToken, null, 2)}`);

@@ -1,15 +1,30 @@
 import LoginForm from '@/app/components/LoginForm';
+import {Typography} from '@mui/material';
 
 const Login = () => {
+
   return (
-    <main className={'flex h-screen'}>
-      <div className={'w-1/3 flex justify-center items-center'}>
-        <LoginForm />
+    <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+      <div style={{display: 'flex', border: '1px solid #000'}}>
+        <div style={{
+          backgroundColor: '#66f', textAlign: 'center', paddingTop: '2em', paddingBottom: '2em',
+          paddingLeft: '1em', paddingRight: '1em', width: '300px', borderRight: '1px solid #000'
+        }}>
+          <Typography variant={'h4'} fontWeight={'bold'}>
+            CURB
+          </Typography>
+          <p/>
+          <Typography>
+            <b>Welcome to Curb</b><br/>
+            The simplified, enterprise,<br/>
+            fleet management software<br/>
+            for the rest of us.
+          </Typography>
+        </div>
+
+        <LoginForm/>
       </div>
-      <div className={'w-2/3 bg-[#0f0f16] flex items-center justify-center'}>
-        {/*// Login image*/}
-      </div>
-    </main>
+    </div>
   );
 }
 
