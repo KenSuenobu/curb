@@ -2,7 +2,7 @@
 
 import {useRef, useState} from 'react';
 import {signIn} from 'next-auth/react';
-import {Button, Stack, TextField, Typography} from '@mui/material';
+import {Button, Dialog, DialogContent, DialogContentText, Stack, TextField, Typography} from '@mui/material';
 import Item from '@/app/components/common/Item';
 import PasswordTextField from '@/app/components/common/PasswordTextField';
 import {alertDialog, errorDialog} from '@/app/components/common/ConfirmDialog';
@@ -11,9 +11,11 @@ import {useRouter} from 'next/navigation';
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loginShowing, setLoginShowing] = useState(false);
   const router = useRouter();
 
   const handleSubmit = (async (e) => {
+    setLoginShowing(true);
     e.preventDefault();
     signIn('credentials', {
       email,
@@ -23,13 +25,16 @@ const LoginForm = () => {
     .then((res) => {
       if (res.error) {
         clearInputs();
+        setLoginShowing(false);
         alertDialog(JSON.parse(res.error).message);
       } else {
         clearInputs();
+        setLoginShowing(false);
         router.push('/');
       }
     })
     .catch((e) => {
+      setLoginShowing(false);
       console.error(e);
     });
   });
@@ -47,31 +52,40 @@ const LoginForm = () => {
   const handlePasswordChange = ((e) => setPassword(e.target.value));
 
   return (
-    <div style={{
-      backgroundColor: '#fff', paddingTop: '1.5em', paddingBottom: '1.5em',
-      paddingLeft: '1.5em', paddingRight: '1.5em', color: '#000', width: '450px'
-    }}>
-      <form onSubmit={handleSubmit}>
-        <Typography variant={'h5'} fontWeight={'bold'}>Account Login</Typography>
+    <>
+      <Dialog open={loginShowing}>
+        <DialogContent>
+          <DialogContentText>Stand by, logging you in.</DialogContentText>
+        </DialogContent>
+      </Dialog>
 
-        <br/>
-        <TextField type={'text'} fullWidth value={email} onChange={handleEmailChange} placeholder={'Enter your email address'}/>
-        <PasswordTextField fullWidth value={password} onChange={handlePasswordChange} placeholder={'Enter your password'}/>
+      <div style={{
+        backgroundColor: '#fff', paddingTop: '1.5em', paddingBottom: '1.5em',
+        paddingLeft: '1.5em', paddingRight: '1.5em', color: '#000', width: '450px'
+      }}>
+        <form onSubmit={handleSubmit}>
+          <Typography variant={'h5'} fontWeight={'bold'}>Account Login</Typography>
 
-        <br/>
-        <br/>
+          <br/>
+          <TextField type={'text'} fullWidth value={email} onChange={handleEmailChange} placeholder={'Enter your email address'}/>
+          <PasswordTextField fullWidth value={password} onChange={handlePasswordChange} placeholder={'Enter your password'}/>
 
-        <Button variant={'contained'}
-                sx={{ backgroundColor: '#66f', fontWeight: 'bold'}}
-                fullWidth
-                type={'submit'}>Log in</Button><br/>
-        <Button variant={'contained'}
-                fullWidth
-                onClick={onSignup}>
-          Request Early Access
-        </Button>
-      </form>
-    </div>
+          <br/>
+          <br/>
+
+          <Button variant={'contained'}
+                  sx={{ backgroundColor: '#66f', fontWeight: 'bold'}}
+                  fullWidth
+                  type={'submit'}>Log in</Button><br/>
+          <Button variant={'contained'}
+                  fullWidth
+                  onClick={onSignup}
+                  disabled={true}>
+            Request Early Access
+          </Button>
+        </form>
+      </div>
+    </>
   );
 }
 
