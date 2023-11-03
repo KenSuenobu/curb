@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 import { verifyJwt } from '@/app/helpers/jwt';
 
-export async function GET(request) {
+export async function GET(request: any) {
   try {
     const accessToken = request.headers.get('Authorization');
     const decodedJwt = verifyJwt(accessToken);

@@ -1,4 +1,4 @@
-export const getAllMakes = (accessToken) => {
+export const getAllMakes = (accessToken: any) => {
   return new Promise((resolve, reject) => {
     fetch('/api/cars/make', {
       method: 'GET',

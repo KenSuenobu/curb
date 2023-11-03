@@ -14,7 +14,7 @@ const LoginForm = () => {
   const [loginShowing, setLoginShowing] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = (async (e) => {
+  const handleSubmit = (async (e: any) => {
     setLoginShowing(true);
     e.preventDefault();
     signIn('credentials', {
@@ -22,8 +22,8 @@ const LoginForm = () => {
       password,
       redirect: false,
     })
-    .then((res) => {
-      if (res.error) {
+    .then((res: any) => {
+      if (res?.error) {
         clearInputs();
         setLoginShowing(false);
         alertDialog(JSON.parse(res.error).message);
@@ -48,8 +48,8 @@ const LoginForm = () => {
     setPassword('');
   }
 
-  const handleEmailChange = ((e) => setEmail(e.target.value));
-  const handlePasswordChange = ((e) => setPassword(e.target.value));
+  const handleEmailChange = ((e: any) => setEmail(e.target.value));
+  const handlePasswordChange = ((e: any) => setPassword(e.target.value));
 
   return (
     <>

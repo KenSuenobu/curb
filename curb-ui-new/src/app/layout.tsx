@@ -1,38 +1,45 @@
 'use client';
 
 import './globals.css';
-import type { Metadata } from 'next';
+// import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import {IconButton, LinearProgress, Menu, MenuItem, Stack, Typography} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import React, {useEffect, useState} from 'react';
-import {
-  CalendarMonthOutlined,
-  CarCrashOutlined,
-  DirectionsCarOutlined, FeedbackOutlined,
-  GarageOutlined,
-  HouseOutlined,
-  MoneyOutlined, PeopleOutlined, PersonOffOutlined, ScheduleOutlined, TodayOutlined, TollOutlined, UpcomingOutlined
-} from '@mui/icons-material';
-import CarDefinitions from '../../../curb-ui-old/pages/car-definitions';
-import Fleet from '../../../curb-ui-old/pages/fleet';
-import FleetCarMaintenance from '../../../curb-ui-old/pages/fleet-car-maintenance';
-import FleetLoans from '../../../curb-ui-old/pages/fleet-loans';
-import DeliveryAddress from '../../../curb-ui-old/pages/delivery-address';
-import FleetMembership from '../../../curb-ui-old/pages/fleet-membership';
-import Guests from '../../../curb-ui-old/pages/guest';
-import Trip from '../../../curb-ui-old/pages/trip';
-import TripsList, {ITripType} from '../../../curb-ui-old/pages/trip/list';
-import Toll from '../../../curb-ui-old/pages/toll';
-import TollList from '../../../curb-ui-old/pages/toll/list';
-import Dashboard from '../../../curb-ui-old/pages/dashboard';
 import {NextPage} from 'next';
+import {useState} from 'react';
 import {usePathname, useRouter} from 'next/navigation';
-import Divider from '@mui/material/Divider';
-import axios from 'axios';
-import AuthProvider from '@/app/providers/AuthProvider';
 import ConfirmDialog from '@/app/components/common/ConfirmDialog';
+import {Stack, Typography} from '@mui/material';
 import Item from '@/app/components/common/Item';
+import AuthProvider from '@/app/providers/AuthProvider';
+// import {IconButton, LinearProgress, Menu, MenuItem, Stack, Typography} from '@mui/material';
+// import MenuIcon from '@mui/icons-material/Menu';
+// import React, {useEffect, useState} from 'react';
+// import {
+//   CalendarMonthOutlined,
+//   CarCrashOutlined,
+//   DirectionsCarOutlined, FeedbackOutlined,
+//   GarageOutlined,
+//   HouseOutlined,
+//   MoneyOutlined, PeopleOutlined, PersonOffOutlined, ScheduleOutlined, TodayOutlined, TollOutlined, UpcomingOutlined
+// } from '@mui/icons-material';
+// import CarDefinitions from '../../../curb-ui-old/pages/car-definitions';
+// import Fleet from '../../../curb-ui-old/pages/fleet';
+// import FleetCarMaintenance from '../../../curb-ui-old/pages/fleet-car-maintenance';
+// import FleetLoans from '../../../curb-ui-old/pages/fleet-loans';
+// import DeliveryAddress from '../../../curb-ui-old/pages/delivery-address';
+// import FleetMembership from '../../../curb-ui-old/pages/fleet-membership';
+// import Guests from '../../../curb-ui-old/pages/guest';
+// import Trip from '../../../curb-ui-old/pages/trip';
+// import TripsList, {ITripType} from '../../../curb-ui-old/pages/trip/list';
+// import Toll from '../../../curb-ui-old/pages/toll';
+// import TollList from '../../../curb-ui-old/pages/toll/list';
+// import Dashboard from '../../../curb-ui-old/pages/dashboard';
+// import {NextPage} from 'next';
+// import {usePathname, useRouter} from 'next/navigation';
+// import Divider from '@mui/material/Divider';
+// import axios from 'axios';
+// import AuthProvider from '@/app/providers/AuthProvider';
+// import ConfirmDialog from '@/app/components/common/ConfirmDialog';
+// import Item from '@/app/components/common/Item';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -41,7 +48,7 @@ const inter = Inter({ subsets: ['latin'] })
 //   description: 'CURB 0.1.0',
 // }
 
-const Layout: NextPage = ({children, params}) => {
+const Layout: NextPage = ({children, params}: any) => {
   const [currentPage, setCurrentPage] = useState(<></>);
   const [userInfo, setUserInfo] = useState(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

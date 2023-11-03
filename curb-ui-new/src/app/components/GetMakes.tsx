@@ -6,17 +6,19 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 const GetMakes = () => {
-  const [ makesList, setMakesList ] = useState();
+  const [ makesList, setMakesList ] = useState<any>();
   const { data: session } = useSession();
 
   useEffect(() => {
-    getAllMakes(session?.user.accessToken)
-      .then((res) => {
-        setMakesList(res);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+    if (session?.user) {
+      getAllMakes((session as any)['user']['accessToken'])
+        .then((res: any) => {
+          setMakesList(res);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    }
   }, [session]);
 
   return (

@@ -30,7 +30,8 @@ const authHandler = NextAuth({
             throw (JSON.stringify(json));
           }
         } catch(e) {
-          throw new Error(e);
+          // throw new Error(e);
+          throw (JSON.stringify(e));
         }
       }
     })

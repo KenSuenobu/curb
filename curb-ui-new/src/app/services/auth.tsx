@@ -1,4 +1,4 @@
-export const registerUser = (email, password) => {
+export const registerUser = (email: any, password: any) => {
   return new Promise((resolve, reject) => {
     fetch('/api/register', {
       method: 'POST',

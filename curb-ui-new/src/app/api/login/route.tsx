@@ -3,7 +3,7 @@ import { signJwtAccessToken } from '@/app/helpers/jwt';
 import axios from 'axios';
 import * as bcrypt from 'bcrypt';
 
-export async function POST(request) {
+export async function POST(request: any) {
   try {
     const { email, password } = await request.json();
 
@@ -13,9 +13,10 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    const encodedPassword = Buffer.from(await bcrypt.hash(password, 10, null)).toString('base64');
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const base64EncodedPassword = Buffer.from(hashedPassword).toString('base64');
 
-    const userId = await axios.get(`${process.env.CURB_SERVER_URL}/user/login/${email}/${encodedPassword}`)
+    const userId = await axios.get(`${process.env.CURB_SERVER_URL}/user/login/${email}/${base64EncodedPassword}`)
       .then((x) => x.data)
       .catch((x) => {
         console.error(x);
