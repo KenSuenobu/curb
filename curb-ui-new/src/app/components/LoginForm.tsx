@@ -26,7 +26,7 @@ const LoginForm = () => {
       if (res?.error) {
         clearInputs();
         setLoginShowing(false);
-        alertDialog(JSON.parse(res.error).message);
+        alertDialog('Failed to login - please check your e-mail or password');
       } else {
         clearInputs();
         setLoginShowing(false);
