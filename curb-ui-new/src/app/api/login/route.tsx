@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { signJwtAccessToken } from '@/app/helpers/jwt';
 import axios from 'axios';
+import * as bcrypt from 'bcrypt';
 
 export async function POST(request) {
   try {
@@ -12,7 +13,9 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    const userId = await axios.get(`${process.env.CURB_SERVER_URL}/user/login/${email}/${password}`)
+    const encodedPassword = Buffer.from(await bcrypt.hash(password, 10, null)).toString('base64');
+
+    const userId = await axios.get(`${process.env.CURB_SERVER_URL}/user/login/${email}/${encodedPassword}`)
       .then((x) => x.data)
       .catch((x) => {
         console.error(x);
@@ -29,11 +32,9 @@ export async function POST(request) {
       userId
     });
 
-    console.log(`Access token: ${JSON.stringify(accessToken, null, 2)}`);
-
     return NextResponse.json({
       result: {
-        userId: 2,
+        userId,
         accessToken
       },
     }, { status: 200 });

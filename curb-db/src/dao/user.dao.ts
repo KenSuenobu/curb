@@ -2,6 +2,7 @@ import { BaseDao } from './base.dao';
 import * as pgPromise from 'pg-promise';
 import {FleetCarLoanDto, UserDto} from 'src/dto';
 import {DaoUtils} from './dao-utils.dao';
+import * as bcrypt from 'bcrypt';
 
 export class UserDao extends BaseDao<UserDto> {
   constructor(readonly db: pgPromise.IDatabase<any>) {
@@ -38,11 +39,18 @@ export class UserDao extends BaseDao<UserDto> {
   }
 
   async login(emailAddress: string, password: string): Promise<string> {
-    const sqlStatement = `SELECT user_id FROM ${this.section} WHERE email_address=$1 AND password=$2`;
+    const sqlStatement = `SELECT user_id, password FROM ${this.section} WHERE email_address=$1`;
+    const results = await this.db.oneOrNone(sqlStatement, [ emailAddress ]);
 
-    return this.db.oneOrNone(sqlStatement, [ emailAddress, password ])
-      .then((x) => x.user_id)
-      .catch((x) => 'error');
+    if (results && results.password) {
+      const decodedPassword = Buffer.from(password, 'base64').toString();
+
+      if (bcrypt.compare(decodedPassword, results.password)) {
+        return results.user_id;
+      }
+    }
+
+    return 'error';
   }
 
   async getByEmail(emailAddress: string): Promise<UserDto | null> {
