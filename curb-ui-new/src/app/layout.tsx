@@ -11,7 +11,7 @@ import {IconButton, Menu, MenuItem, Stack, Typography} from '@mui/material';
 import Item from '@/app/components/common/Item';
 import AuthProvider from '@/app/providers/AuthProvider';
 import {SideBarMenuGroupProps} from '@/app/components/main-layout/SideBarMenuGroup';
-import {DirectionsCarOutlined, MenuOpenOutlined} from '@mui/icons-material';
+import {DirectionsCarOutlined, MenuOpenOutlined, RefreshOutlined} from '@mui/icons-material';
 import SideBar from '@/app/components/main-layout/SideBar';
 import {signOut} from 'next-auth/react';
 import Divider from '@mui/material/Divider';
@@ -266,7 +266,7 @@ const Layout: NextPage = ({children, params}: any) => {
                   open={Boolean(anchorEl)} onClose={handleClose}>
               <MenuItem onClick={handleFeedback} style={{ fontWeight: 'bold' }} disabled>Feedback</MenuItem>
               <Divider/>
-              <MenuItem onClick={handleProfile}>Profile</MenuItem>
+              <MenuItem onClick={handleProfile} disabled>Profile</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </Item>
@@ -289,7 +289,7 @@ const Layout: NextPage = ({children, params}: any) => {
         {headerTitle.toString().trim().length > 0 && (
           <Stack direction={'row'}>
             <Item sx={{ paddingLeft: '15px',
-              width: '100%',
+              width: '90%',
               textAlign: 'left',
               backgroundColor: '#000',
               color: '#fff'
@@ -297,6 +297,19 @@ const Layout: NextPage = ({children, params}: any) => {
               <Typography fontWeight={'bold'}>
                 {headerTitle}
               </Typography>
+            </Item>
+            <Item sx={{ paddingLeft: '15px',
+              width: '10%',
+              textAlign: 'right',
+              backgroundColor: '#000',
+              color: '#fff'
+            }}>
+              <IconButton style={{ padding: '0px' }}>
+                <RefreshOutlined style={{ color: 'white' }}
+                                 onClick={() => {
+                                   router.refresh();
+                                 }}/>
+              </IconButton>
             </Item>
           </Stack>
         )}

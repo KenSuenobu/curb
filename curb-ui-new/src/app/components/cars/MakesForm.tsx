@@ -18,6 +18,7 @@ import {TableHeader} from '@/app/components/common/TableHeader';
 import {alertDialog, errorDialog} from '@/app/components/common/ConfirmDialog';
 import {ArrowRightOutlined} from '@mui/icons-material';
 import LoadingTable from '@/app/components/common/LoadingTable';
+import ArrowedTableRow from '@/app/components/common/ArrowedTableRow';
 
 export interface IMakesForm {
   onSelect?: (x: any) => any;
@@ -64,6 +65,7 @@ const MakesForm = (props: IMakesForm) => {
       .then(async (res: any) => {
         makeRef.current.value = '';
         setInputShowing(false);
+        setSelectedId(0);
         await reloadMakes();
       })
       .catch((e) => {
@@ -89,10 +91,8 @@ const MakesForm = (props: IMakesForm) => {
                   <TableCell>
                     <TextField id={'namespace'}
                                variant={'outlined'}
-                               required
                                inputRef={makeRef}
-                               autoFocus
-                               fullWidth
+                               required autoFocus fullWidth
                                onKeyDown={(ev) => {
                                  if (ev.key === 'Escape') {
                                    setInputShowing(false);
@@ -114,39 +114,27 @@ const MakesForm = (props: IMakesForm) => {
           {makesList?.length > 0 ? (
             <TableBody>
               {makesList.map((x: any) => {
-                const bgColor = selectedId === x.id ? SELECTED_COLOR : '#fff';
+                  const bgColor = selectedId === x.id ? SELECTED_COLOR : '#fff';
 
-                return (
-                  <>
-                    <TableRow hover sx={{ cursor: 'pointer' }}>
-                      <TableCell
-                        sx={{ backgroundColor: bgColor, width: '90%' }}
-                        onClick={() => {
-                          setSelectedId(x.id);
-                          if (props.onSelect) {
-                            props.onSelect(x);
-                          }
-                        }}><Typography>{x.name}</Typography></TableCell>
-                      <TableCell
-                        onClick={() => {
-                          setSelectedId(x.id);
-                          if (props.onSelect) {
-                            props.onSelect(x);
-                          }
-                        }}
-                        sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}>
-                        <ArrowRightOutlined/>
-                      </TableCell>
-                    </TableRow>
-                  </>
-                )}
-              )}
+                  return <ArrowedTableRow value={x.name} bgColor={bgColor} onClick={() => {
+                    setSelectedId(x.id);
+                    if (props.onSelect) {
+                      props.onSelect(x);
+                    }
+                  }}/>;
+                })}
             </TableBody>
           ) : (
             <>
-              <p style={{ padding: '10px'}}>
-                No make listings have been recorded yet.
-              </p>
+              <TableBody>
+                <TableRow>
+                  <TableCell colSpan={2}>
+                    <p style={{ padding: '4px'}}>
+                      Empty list.
+                    </p>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
             </>
           )}
         </Table>
