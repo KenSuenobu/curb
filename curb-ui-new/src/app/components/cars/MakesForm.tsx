@@ -144,7 +144,7 @@ const MakesForm = (props: IMakesForm) => {
             </TableBody>
           ) : (
             <>
-              <p sx={{ padding: '10px'}}>
+              <p style={{ padding: '10px'}}>
                 No make listings have been recorded yet.
               </p>
             </>

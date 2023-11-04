@@ -203,7 +203,7 @@ const Layout: NextPage = ({children, params}: any) => {
     handleClose();
   }
 
-  const headerTitle: string | undefined = sidebarItems.map((x) => {
+  const headerTitle: any = sidebarItems.map((x) => {
     return x.items.map((x) => {
       if (pathname.startsWith(x.url)) {
         return x.label;
