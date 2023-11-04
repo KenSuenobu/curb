@@ -18,7 +18,7 @@ CREATE TABLE curb.user (
 CREATE UNIQUE INDEX idx_unique_user ON curb.user(email_address);
 
 INSERT INTO curb.user (user_id, email_address, password, verified)
-     VALUES ('1c59e125-9b29-4566-bc96-e64056c50cb4', 'admin@suenobu.llc', 'admin123', true);
+     VALUES ('1c59e125-9b29-4566-bc96-e64056c50cb4', 'admin@suenobu.llc', '$2b$10$hfeeu08E6nnwVrZ40s7N8..6aTwdw.yFw7hNgKwr6hELxUatnAb3G', true);
 
 ---
 
@@ -198,4 +198,17 @@ CREATE TABLE curb.toll (
 );
 
 CREATE UNIQUE INDEX idx_toll_trip_time ON curb.toll(trip_id, toll_time);
+
+---
+
+DROP TABLE IF EXISTS curb.fleet_car_maintenance;
+
+CREATE TABLE curb.fleet_car_maintenance (
+    id SERIAL NOT NULL PRIMARY KEY,
+    fleet_car_id INT NOT NULL REFERENCES curb.fleet_car(id),
+    maintenance_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    maintenance_type VARCHAR(20) NOT NULL,
+    note TEXT NOT NULL,
+    cost FLOAT NOT NULL DEFAULT 0.00
+);
 
