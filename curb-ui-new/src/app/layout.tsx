@@ -304,11 +304,11 @@ const Layout: NextPage = ({children, params}: any) => {
               backgroundColor: '#000',
               color: '#fff'
             }}>
-              <IconButton style={{ padding: '0px' }}>
-                <RefreshOutlined style={{ color: 'white' }}
-                                 onClick={() => {
-                                   router.refresh();
-                                 }}/>
+              <IconButton style={{ padding: '0px' }}
+                          onClick={() => {
+                            router.refresh();
+                          }}>
+                <RefreshOutlined style={{ color: 'white' }}/>
               </IconButton>
             </Item>
           </Stack>

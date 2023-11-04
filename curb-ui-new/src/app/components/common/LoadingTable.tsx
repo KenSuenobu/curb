@@ -7,7 +7,7 @@ export interface ILoadingTable {
 
 const LoadingTable = (props: ILoadingTable) => {
   return (
-    <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>
+    <TableContainer sx={{ maxHeight: 300, border: '1px solid #ccc', width: '100%' }}>
       <Table stickyHeader size={'small'}>
         <TableHeader header={props.header}/>
         <TableBody>

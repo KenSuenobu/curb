@@ -73,6 +73,13 @@ const MakesForm = (props: IMakesForm) => {
       });
   }
 
+  const cellClicked = (x: any) => {
+    setSelectedId(x.id);
+    if (props.onSelect) {
+      props.onSelect(x);
+    }
+  }
+
   if (loading) {
     return <LoadingTable header={'Car Make'}/>;
   }
@@ -113,15 +120,12 @@ const MakesForm = (props: IMakesForm) => {
           {makesList?.length > 0 ? (
             <TableBody>
               {makesList.map((x: any) => {
-                  const bgColor = selectedId === x.id ? SELECTED_COLOR : '#fff';
+                const bgColor = selectedId === x.id ? SELECTED_COLOR : '#fff';
 
-                  return <ArrowedTableRow value={x.name} bgColor={bgColor} onClick={() => {
-                    setSelectedId(x.id);
-                    if (props.onSelect) {
-                      props.onSelect(x);
-                    }
-                  }}/>;
-                })}
+                return <ArrowedTableRow value={x.name}
+                                        bgColor={bgColor}
+                                        onClick={() => cellClicked(x)}/>;
+              })}
             </TableBody>
           ) : (
             <>
