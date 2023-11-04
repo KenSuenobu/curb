@@ -5,18 +5,15 @@ import {createCarMake, getAllMakes} from '@/app/services/car-definitions';
 import { useSession } from 'next-auth/react';
 import {
   Button,
-  LinearProgress,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
   TextField,
-  Typography
 } from '@mui/material';
 import {TableHeader} from '@/app/components/common/TableHeader';
-import {alertDialog, errorDialog} from '@/app/components/common/ConfirmDialog';
-import {ArrowRightOutlined} from '@mui/icons-material';
+import {errorDialog} from '@/app/components/common/ConfirmDialog';
 import LoadingTable from '@/app/components/common/LoadingTable';
 import ArrowedTableRow from '@/app/components/common/ArrowedTableRow';
 
@@ -46,6 +43,8 @@ const MakesForm = (props: IMakesForm) => {
         })
         .catch((e) => {
           console.error(e);
+          setMakesList({});
+          setLoading(false);
         });
     }
   }
@@ -58,7 +57,7 @@ const MakesForm = (props: IMakesForm) => {
     const make = nameRef.current.value.toString().trim();
 
     if (!make) {
-      errorDialog('Name cannot be empty.');
+      errorDialog(`${HEADER_NAME} name cannot be empty.`);
       return;
     }
 
@@ -91,52 +90,50 @@ const MakesForm = (props: IMakesForm) => {
         <Table stickyHeader size={'small'}>
           <TableHeader header={HEADER_NAME}
                        onAdd={toggleInput}/>
+
           {inputShowing ? (
-            <>
-              <TableBody>
-                <TableRow>
-                  <TableCell>
-                    <TextField id={'namespace'}
-                               variant={'outlined'}
-                               inputRef={nameRef}
-                               required autoFocus fullWidth
-                               onKeyDown={(ev) => {
-                                 if (ev.key === 'Escape') {
-                                   setInputShowing(false);
-                                   nameRef.current.value = '';
-                                 } else if (ev.key === 'Enter') {
-                                   addMake();
-                                 }
-                               }}/></TableCell>
-                  <TableCell>
-                    <Button variant={'contained'} onClick={() => addMake()}>ADD</Button>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </>
-          ) : (
-            <>
-            </>
-          )}
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <TextField id={'namespace'}
+                             variant={'standard'}
+                             inputRef={nameRef}
+                             required autoFocus fullWidth
+                             placeholder={`${HEADER_NAME} name`}
+                             onKeyDown={(ev) => {
+                               if (ev.key === 'Escape') {
+                                 setInputShowing(false);
+                                 nameRef.current.value = '';
+                               } else if (ev.key === 'Enter') {
+                                 addMake();
+                               }
+                             }}/>
+                </TableCell>
+                <TableCell style={{ textAlign: 'right', padding: '0px', paddingRight: '5px' }}>
+                  <Button variant={'contained'} onClick={() => addMake()}>ADD</Button>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          ) : (<></>)}
+
           {makesList?.length > 0 ? (
             <TableBody>
-              {makesList.map((x: any) => <ArrowedTableRow value={x.name}
-                                        bgColor={(selectedId === x.id ? SELECTED_COLOR : '#fff')}
-                                        onClick={() => cellClicked(x)}/>
+              {makesList.map((x: any) =>
+                <ArrowedTableRow value={x.name}
+                                 bgColor={(selectedId === x.id ? SELECTED_COLOR : '#fff')}
+                                 onClick={() => cellClicked(x)}/>
               )}
             </TableBody>
           ) : (
-            <>
-              <TableBody>
-                <TableRow>
-                  <TableCell colSpan={2}>
-                    <p style={{ padding: '4px'}}>
-                      Empty list.
-                    </p>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </>
+            <TableBody>
+              <TableRow>
+                <TableCell colSpan={2}>
+                  <p style={{ padding: '4px'}}>
+                    Empty list.
+                  </p>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           )}
         </Table>
       </TableContainer>
