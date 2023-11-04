@@ -3,7 +3,6 @@ import axios from 'axios';
 import { verifyJwt } from '@/app/helpers/jwt';
 
 export async function GET(request: any) {
-  console.log(`Request: ${JSON.stringify(request, null, 2)}`);
   try {
     const accessToken = request.headers.get('Authorization');
     const decodedJwt = verifyJwt(accessToken);
