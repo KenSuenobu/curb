@@ -158,7 +158,7 @@ const MakesForm = (props: IMakesForm) => {
             </TableBody>
           ) : (
             <>
-              Nothing to show
+              No make listings have been recorded yet.
             </>
           )}
         </Table>
