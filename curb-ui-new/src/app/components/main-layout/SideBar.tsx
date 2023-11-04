@@ -72,8 +72,8 @@ export default function SideBar(props: SideBarProps) {
                   }}
                 />
               </ListItemButton>
-              <ListItemButton edge={'end'} onClick={infoClicked}>
-                <InfoOutlined edge={'end'}/>
+              <ListItemButton onClick={() => infoClicked()}>
+                <InfoOutlined/>
               </ListItemButton>
             </ListItem>
             <Divider />
