@@ -118,8 +118,9 @@ const MakesForm = (props: IMakesForm) => {
 
           {makesList?.length > 0 ? (
             <TableBody>
-              {makesList.map((x: any) =>
+              {makesList.map((x: any, count: number) =>
                 <ArrowedTableRow value={x.name}
+                                 key={count}
                                  bgColor={(selectedId === x.id ? SELECTED_COLOR : '#fff')}
                                  onClick={() => cellClicked(x)}/>
               )}
