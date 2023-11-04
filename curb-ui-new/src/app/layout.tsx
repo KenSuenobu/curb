@@ -203,14 +203,14 @@ const Layout: NextPage = ({children, params}: any) => {
     handleClose();
   }
 
-  // const headerTitle: string | undefined = sidebarItems.map((x) => {
-  //   return x.items.map((x) => {
-  //     if (pathname.startsWith(x.url)) {
-  //       return x.label;
-  //     }
-  //   });
-  // }) ?? '';
-  //
+  const headerTitle: string | undefined = sidebarItems.map((x) => {
+    return x.items.map((x) => {
+      if (pathname.startsWith(x.url)) {
+        return x.label;
+      }
+    });
+  }) ?? '';
+
   // if (!userInfo) {
   //   router.push('/login');
   // }
@@ -286,20 +286,20 @@ const Layout: NextPage = ({children, params}: any) => {
         color: '#000',
         overflowY: 'auto',
       }}>
-        {/*{headerTitle.toString().trim().length > 0 && (*/}
-        {/*  <Stack direction={'row'}>*/}
-        {/*    <Item sx={{ paddingLeft: '15px',*/}
-        {/*      width: '100%',*/}
-        {/*      textAlign: 'left',*/}
-        {/*      backgroundColor: '#000',*/}
-        {/*      color: '#fff'*/}
-        {/*    }}>*/}
-        {/*      <Typography fontWeight={'bold'}>*/}
-        {/*        {headerTitle}*/}
-        {/*      </Typography>*/}
-        {/*    </Item>*/}
-        {/*  </Stack>*/}
-        {/*)}*/}
+        {headerTitle.toString().trim().length > 0 && (
+          <Stack direction={'row'}>
+            <Item sx={{ paddingLeft: '15px',
+              width: '100%',
+              textAlign: 'left',
+              backgroundColor: '#000',
+              color: '#fff'
+            }}>
+              <Typography fontWeight={'bold'}>
+                {headerTitle}
+              </Typography>
+            </Item>
+          </Stack>
+        )}
         <AuthProvider>
           {children}
         </AuthProvider>

@@ -17,6 +17,7 @@ import {
 import {TableHeader} from '@/app/components/common/TableHeader';
 import {alertDialog, errorDialog} from '@/app/components/common/ConfirmDialog';
 import {ArrowRightOutlined} from '@mui/icons-material';
+import LoadingTable from '@/app/components/common/LoadingTable';
 
 export interface IMakesForm {
   onSelect?: (x: any) => any;
@@ -71,22 +72,7 @@ const MakesForm = (props: IMakesForm) => {
   }
 
   if (loading) {
-    return (
-      <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>
-        <Table stickyHeader size={'small'}>
-          <TableHeader header={'Car Make'}
-                       onAdd={() => {}}
-                       onEdit={() => {}}/>
-          <TableBody>
-            <TableRow>
-              <TableCell colSpan={2}>
-                <LinearProgress/>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-    )
+    return <LoadingTable header={'Car Make'}/>;
   }
 
   return (
