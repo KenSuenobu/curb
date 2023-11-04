@@ -11,7 +11,7 @@ import {IconButton, Menu, MenuItem, Stack, Typography} from '@mui/material';
 import Item from '@/app/components/common/Item';
 import AuthProvider from '@/app/providers/AuthProvider';
 import {SideBarMenuGroupProps} from '@/app/components/main-layout/SideBarMenuGroup';
-import {DirectionsCarOutlined} from '@mui/icons-material';
+import {DirectionsCarOutlined, MenuOpenOutlined} from '@mui/icons-material';
 import SideBar from '@/app/components/main-layout/SideBar';
 import {signOut} from 'next-auth/react';
 import Divider from '@mui/material/Divider';
@@ -250,13 +250,14 @@ const Layout: NextPage = ({children, params}: any) => {
         <Stack direction={'row'}>
           <Item sx={{ width: '90%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'left' }}>
             <Typography variant={'h6'} fontWeight={'bold'}>
+              Welcome to Curb
               {/*{userInfo?.emailAddress ?? <LinearProgress/>}*/}
             </Typography>
           </Item>
 
           <Item sx={{ width: '10%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'right', paddingTop: '4px' }}>
             <IconButton onClick={handleMenu}>
-              <MenuIcon style={{ color: 'white' }}/>
+              <MenuOpenOutlined style={{ color: 'white' }}/>
             </IconButton>
             <Menu id={'menu-appbar'} anchorEl={anchorEl}
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}

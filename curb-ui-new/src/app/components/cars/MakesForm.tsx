@@ -75,7 +75,7 @@ const MakesForm = (props: IMakesForm) => {
       <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>
         <Table stickyHeader size={'small'}>
           <TableHeader header={'Car Make'}
-                       onAdd={() => setInputShowing(!inputShowing)}
+                       onAdd={() => {}}
                        onEdit={() => {}}/>
           <TableBody>
             <TableRow>
@@ -94,7 +94,7 @@ const MakesForm = (props: IMakesForm) => {
       <TableContainer sx={{ maxHeight: 400, border: '1px solid #ccc', width: '100%' }}>
         <Table stickyHeader size={'small'}>
           <TableHeader header={'Car Make'}
-                       onAdd={() => {}}
+                       onAdd={() => setInputShowing(!inputShowing)}
                        onEdit={() => {}}/>
           {inputShowing ? (
             <>
@@ -125,7 +125,7 @@ const MakesForm = (props: IMakesForm) => {
             <>
             </>
           )}
-          {makesList.length > 0 ? (
+          {makesList?.length > 0 ? (
             <TableBody>
               {makesList.map((x: any) => {
                 const bgColor = selectedId === x.id ? SELECTED_COLOR : '#fff';
@@ -158,7 +158,9 @@ const MakesForm = (props: IMakesForm) => {
             </TableBody>
           ) : (
             <>
-              No make listings have been recorded yet.
+              <p sx={{ padding: '10px'}}>
+                No make listings have been recorded yet.
+              </p>
             </>
           )}
         </Table>
