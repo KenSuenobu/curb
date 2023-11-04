@@ -12,12 +12,16 @@ export const TableHeader = (props: ITableHeader) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell sx={{ backgroundColor: '#ddd' }}>
+        <TableCell sx={{ backgroundColor: '#ddd', borderBottom: '1px solid #000' }}>
           {props.header}
         </TableCell>
-        <TableCell sx={{ backgroundColor: '#ddd', textAlign: 'right', borderRight: '1px solid #aaa' }}>
+        <TableCell sx={{ backgroundColor: '#ddd',
+                         textAlign: 'right',
+                         borderRight: '1px solid #aaa',
+                         borderBottom: '1px solid #000' }}>
           {props.onAdd && (
-            <IconButton onClick={() => props.onAdd!()}>
+            <IconButton onClick={props.onAdd}
+            style={{ padding: '0px' }}>
               <AddOutlined/>
             </IconButton>
           )}

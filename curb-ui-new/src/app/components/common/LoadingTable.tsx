@@ -9,9 +9,7 @@ const LoadingTable = (props: ILoadingTable) => {
   return (
     <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>
       <Table stickyHeader size={'small'}>
-        <TableHeader header={props.header}
-                     onAdd={() => {}}
-                     onEdit={() => {}}/>
+        <TableHeader header={props.header}/>
         <TableBody>
           <TableRow>
             <TableCell colSpan={2}>

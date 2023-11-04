@@ -82,8 +82,7 @@ const MakesForm = (props: IMakesForm) => {
       <TableContainer sx={{ maxHeight: 400, border: '1px solid #ccc', width: '100%' }}>
         <Table stickyHeader size={'small'}>
           <TableHeader header={'Car Make'}
-                       onAdd={() => setInputShowing(!inputShowing)}
-                       onEdit={() => {}}/>
+                       onAdd={() => setInputShowing(!inputShowing)}/>
           {inputShowing ? (
             <>
               <TableBody>
