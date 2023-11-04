@@ -1,4 +1,4 @@
-import GetMakes from '@/app/components/GetMakes';
+import MakesForm from '@/app/components/cars/MakesForm';
 
 const CarDefinitions = () => {
   return (
@@ -6,7 +6,7 @@ const CarDefinitions = () => {
       <p/>
       All Makes:
       <p/>
-      <GetMakes/>
+      <MakesForm/>
     </main>
   );
 }

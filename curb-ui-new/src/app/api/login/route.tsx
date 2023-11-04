@@ -16,26 +16,24 @@ export async function POST(request: any) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const base64EncodedPassword = Buffer.from(hashedPassword).toString('base64');
 
-    const userId = await axios.get(`${process.env.CURB_SERVER_URL}/user/login/${email}/${base64EncodedPassword}`)
+    const user = await axios.get(`${process.env.CURB_SERVER_URL}/user/login/${email}/${base64EncodedPassword}`)
       .then((x) => x.data)
       .catch((x) => {
         console.error(x);
         return null;
       });
 
-    if (!userId || userId === 'error') {
+    if (!user || user === 'error') {
       return NextResponse.json({
         message: 'No such user exists.  Please check your e-mail address and/or password and try again.'
       }, { status: 400 });
     }
 
-    const accessToken = signJwtAccessToken({
-      userId
-    });
+    const accessToken = signJwtAccessToken(user);
 
     return NextResponse.json({
       result: {
-        userId,
+        ...user,
         accessToken
       },
     }, { status: 200 });

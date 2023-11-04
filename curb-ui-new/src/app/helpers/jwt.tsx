@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 const DEFAULT_OPTIONS = {
-  expiresIn: '1h',
+  expiresIn: '12h',
 }
 
 export const signJwtAccessToken = (payload: any, options: any = DEFAULT_OPTIONS) => {

@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import {NextResponse} from 'next/server';
 
 const authHandler = NextAuth({
   providers: [
@@ -30,8 +31,9 @@ const authHandler = NextAuth({
             throw (JSON.stringify(json));
           }
         } catch(e) {
-          // throw new Error(e);
-          throw (JSON.stringify(e));
+          throw (NextResponse.json({
+            message: 'Login failed',
+          }, { status: 401 }));
         }
       }
     })

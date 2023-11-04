@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import LogoutButton from '@/app/components/LogoutButton';
 import {getAllMakes} from '@/app/services/car-definitions';
-import GetMakes from '@/app/components/GetMakes';
+import MakesForm from '@/app/components/cars/MakesForm';
 
 export default function Home() {
   return (
