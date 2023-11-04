@@ -6,10 +6,16 @@ import { Inter } from 'next/font/google';
 import {NextPage} from 'next';
 import {useState} from 'react';
 import {usePathname, useRouter} from 'next/navigation';
-import ConfirmDialog from '@/app/components/common/ConfirmDialog';
-import {Stack, Typography} from '@mui/material';
+import ConfirmDialog, {alertDialog} from '@/app/components/common/ConfirmDialog';
+import {IconButton, Menu, MenuItem, Stack, Typography} from '@mui/material';
 import Item from '@/app/components/common/Item';
 import AuthProvider from '@/app/providers/AuthProvider';
+import {SideBarMenuGroupProps} from '@/app/components/main-layout/SideBarMenuGroup';
+import {DirectionsCarOutlined} from '@mui/icons-material';
+import SideBar from '@/app/components/main-layout/SideBar';
+import {signOut} from 'next-auth/react';
+import Divider from '@mui/material/Divider';
+
 // import {IconButton, LinearProgress, Menu, MenuItem, Stack, Typography} from '@mui/material';
 // import MenuIcon from '@mui/icons-material/Menu';
 // import React, {useEffect, useState} from 'react';
@@ -48,9 +54,11 @@ const inter = Inter({ subsets: ['latin'] })
 //   description: 'CURB 0.1.0',
 // }
 
+function MenuIcon(props: { style: { color: string } }) {
+  return null;
+}
+
 const Layout: NextPage = ({children, params}: any) => {
-  const [currentPage, setCurrentPage] = useState(<></>);
-  const [userInfo, setUserInfo] = useState(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const pathname = usePathname();
@@ -69,17 +77,18 @@ const Layout: NextPage = ({children, params}: any) => {
 
   // System layout
 
-  // const carItems: SideBarMenuGroupProps = {
-  //   label: 'Cars',
-  //   items: [
-  //     {
-  //       icon: <DirectionsCarOutlined/>,
-  //       label: 'Car Definitions',
-  //       onClick: () => router.push('/car-definitions'),
-  //       url: '/car-definitions',
-  //     },
-  //   ],
-  // };
+  const carItems: SideBarMenuGroupProps = {
+    label: 'Cars',
+    items: [
+      {
+        icon: <DirectionsCarOutlined/>,
+        label: 'Car Definitions',
+        onClick: () => router.push('/car-definitions'),
+        url: '/car-definitions',
+      },
+    ],
+  };
+
   // // const fleetItems: SideBarMenuGroupProps = {
   // //   label: 'Fleet',
   // //   items: [
@@ -165,49 +174,35 @@ const Layout: NextPage = ({children, params}: any) => {
   // //     },
   // //   ],
   // // }
-  // const sidebarItems = [carItems];
-  //
-  // const handleHomeClicked = () => {
-  //   router.push('/');
-  // }
-  //
-  // const handleMenu = (e: any) => {
-  //   setAnchorEl(e);
-  // }
-  //
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // }
-  //
-  // const handleLogout = () => {
-  //   handleClose();
-  //   router.push('/logout');
-  // }
-  //
-  // const handleFeedback = () => {
-  //   alertDialog('Feedback here');
-  //   handleClose();
-  // }
-  //
-  // const handleProfile = () => {
-  //   alertDialog('You will be able to fill out and complete your profile soon.  For now, enjoy CURB!');
-  //   handleClose();
-  // }
-  //
-  // useEffect(() => {
-  //   const jwtCookie = getCookie('jwt');
-  //
-  //   // setJwt(jwtCookie);
-  //   setCheckingJwt(false);
-  //
-  //   axios.get(`/curb/user/login/${jwtCookie}`)
-  //     .then((x) => {
-  //       setUserInfo(x.data);
-  //     }).catch((x) => {
-  //     return;
-  //   });
-  // }, [checkingJwt]);
-  //
+  const sidebarItems = [carItems];
+
+  const handleHomeClicked = () => {
+    router.push('/');
+  }
+
+  const handleMenu = (e: any) => {
+    setAnchorEl(e);
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  }
+
+  const handleLogout = async () => {
+    handleClose();
+    await signOut({});
+  }
+
+  const handleFeedback = () => {
+    alertDialog('Feedback here');
+    handleClose();
+  }
+
+  const handleProfile = () => {
+    alertDialog('You will be able to fill out and complete your profile soon.  For now, enjoy CURB!');
+    handleClose();
+  }
+
   // const headerTitle: string | undefined = sidebarItems.map((x) => {
   //   return x.items.map((x) => {
   //     if (pathname.startsWith(x.url)) {
@@ -230,7 +225,7 @@ const Layout: NextPage = ({children, params}: any) => {
   //     </html>
   //   );
   // }
-  //
+
   return (
     <html lang="en">
     <body className={inter.className}>
@@ -238,7 +233,7 @@ const Layout: NextPage = ({children, params}: any) => {
     <div style={{ display: 'flex', width: '100%' }}>
       {/* Side Divider, only contains the sidebar, which is static.*/}
       <div style={{ width: '260px' }}>
-        {/*<SideBar width={ 260 } sidebarItems={sidebarItems} onHomeClicked={handleHomeClicked}/>*/}
+        <SideBar width={ 260 } sidebarItems={sidebarItems} onHomeClicked={handleHomeClicked}/>
       </div>
 
       {/* Right side, top portion of the page, contains the top navigation bar. */}
@@ -260,19 +255,19 @@ const Layout: NextPage = ({children, params}: any) => {
           </Item>
 
           <Item sx={{ width: '10%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'right', paddingTop: '4px' }}>
-            {/*<IconButton onClick={handleMenu}>*/}
-            {/*  <MenuIcon style={{ color: 'white' }}/>*/}
-            {/*</IconButton>*/}
-            {/*<Menu id={'menu-appbar'} anchorEl={anchorEl}*/}
-            {/*      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}*/}
-            {/*      transformOrigin={{ vertical: 'top', horizontal: 'right' }}*/}
-            {/*      keepMounted*/}
-            {/*      open={Boolean(anchorEl)} onClose={handleClose}>*/}
-            {/*  <MenuItem onClick={handleFeedback} style={{ fontWeight: 'bold' }} disabled>Feedback</MenuItem>*/}
-            {/*  <Divider/>*/}
-            {/*  <MenuItem onClick={handleProfile}>Profile</MenuItem>*/}
-            {/*  <MenuItem onClick={handleLogout}>Logout</MenuItem>*/}
-            {/*</Menu>*/}
+            <IconButton onClick={handleMenu}>
+              <MenuIcon style={{ color: 'white' }}/>
+            </IconButton>
+            <Menu id={'menu-appbar'} anchorEl={anchorEl}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  keepMounted
+                  open={Boolean(anchorEl)} onClose={handleClose}>
+              <MenuItem onClick={handleFeedback} style={{ fontWeight: 'bold' }} disabled>Feedback</MenuItem>
+              <Divider/>
+              <MenuItem onClick={handleProfile}>Profile</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
           </Item>
         </Stack>
       </div>
