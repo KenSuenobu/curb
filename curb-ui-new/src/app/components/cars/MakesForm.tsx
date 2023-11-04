@@ -29,9 +29,9 @@ const MakesForm = (props: IMakesForm) => {
   const [inputShowing, setInputShowing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedId, setSelectedId] = useState<number>(0);
-  const makeRef = useRef('');
+  const makeRef = useRef<any>('');
   const {data: session} = useSession();
-  const accessToken = session ? session.user.accessToken : '';
+  const accessToken = session ? (session as any)['user']['accessToken'] : '';
 
   const reloadMakes = async () => {
     if (accessToken) {
@@ -127,7 +127,7 @@ const MakesForm = (props: IMakesForm) => {
           )}
           {makesList.length > 0 ? (
             <TableBody>
-              {makesList.map((x) => {
+              {makesList.map((x: any) => {
                 const bgColor = selectedId === x.id ? SELECTED_COLOR : '#fff';
 
                 return (
