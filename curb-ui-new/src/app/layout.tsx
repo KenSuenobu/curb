@@ -76,7 +76,6 @@ const Layout: NextPage = ({children, params}: any) => {
   }
 
   // System layout
-
   const carItems: SideBarMenuGroupProps = {
     label: 'Cars',
     items: [
@@ -89,91 +88,91 @@ const Layout: NextPage = ({children, params}: any) => {
     ],
   };
 
-  // // const fleetItems: SideBarMenuGroupProps = {
-  // //   label: 'Fleet',
-  // //   items: [
-  // //     {
-  // //       icon: <GarageOutlined/>,
-  // //       label: 'Fleet Cars',
-  // //       onClick: () => setCurrentPage(<Fleet jwt={jwt as string}/>),
-  // //     },
-  // //     {
-  // //       icon: <CarCrashOutlined/>,
-  // //       label: 'Fleet Car Maintenance',
-  // //       onClick: () => setCurrentPage(<FleetCarMaintenance jwt={jwt as string}/>),
-  // //     },
-  // //     {
-  // //       icon: <MoneyOutlined/>,
-  // //       label: 'Fleet Car Loans',
-  // //       onClick: () => setCurrentPage(<FleetLoans jwt={jwt as string}/>),
-  // //     },
-  // //     {
-  // //       icon: <HouseOutlined/>,
-  // //       label: 'Delivery Addresses',
-  // //       onClick: () => setCurrentPage(<DeliveryAddress jwt={jwt as string}/>),
-  // //     },
-  // //     {
-  // //       icon: <PeopleOutlined/>,
-  // //       label: 'Fleet Membership',
-  // //       onClick: () => setCurrentPage(<FleetMembership jwt={jwt as string}/>),
-  // //     },
-  // //   ],
-  // // };
-  // // const guestItems: SideBarMenuGroupProps = {
-  // //   label: 'Guests',
-  // //   items: [
-  // //     {
-  // //       icon: <PeopleOutlined/>,
-  // //       label: 'Guests',
-  // //       onClick: () => setCurrentPage(<Guests jwt={jwt as string} blacklisted={false}/>),
-  // //     },
-  // //     {
-  // //       icon: <PersonOffOutlined/>,
-  // //       label: 'Blacklisted Guests',
-  // //       onClick: () => setCurrentPage(<Guests jwt={jwt as string} blacklisted={true}/>),
-  // //     },
-  // //   ],
-  // // }
-  // // const tripItems: SideBarMenuGroupProps = {
-  // //   label: 'Trips',
-  // //   items: [
-  // //     {
-  // //       icon: <CalendarMonthOutlined/>,
-  // //       label: 'Trip Entry',
-  // //       onClick: () => setCurrentPage(<Trip jwt={jwt as string}/>),
-  // //     },
-  // //     {
-  // //       icon: <TodayOutlined/>,
-  // //       label: 'Current Trips',
-  // //       onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.CURRENT}/>),
-  // //     },
-  // //     {
-  // //       icon: <UpcomingOutlined/>,
-  // //       label: 'Upcoming Trips',
-  // //       onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.UPCOMING}/>),
-  // //     },
-  // //     {
-  // //       icon: <ScheduleOutlined/>,
-  // //       label: 'Past Trips',
-  // //       onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.PAST}/>),
-  // //     },
-  // //   ],
-  // // }
-  // // const tollItems: SideBarMenuGroupProps = {
-  // //   label: 'Tolls',
-  // //   items: [
-  // //     {
-  // //       icon: <TollOutlined/>,
-  // //       label: 'Toll Entry',
-  // //       onClick: () => setCurrentPage(<Toll jwt={jwt as string}/>),
-  // //     },
-  // //     {
-  // //       icon: <MoneyOutlined/>,
-  // //       label: 'Trip Tolls',
-  // //       onClick: () => setCurrentPage(<TollList jwt={jwt as string}/>),
-  // //     },
-  // //   ],
-  // // }
+  // const fleetItems: SideBarMenuGroupProps = {
+  //   label: 'Fleet',
+  //   items: [
+  //     {
+  //       icon: <GarageOutlined/>,
+  //       label: 'Fleet Cars',
+  //       onClick: () => setCurrentPage(<Fleet jwt={jwt as string}/>),
+  //     },
+  //     {
+  //       icon: <CarCrashOutlined/>,
+  //       label: 'Fleet Car Maintenance',
+  //       onClick: () => setCurrentPage(<FleetCarMaintenance jwt={jwt as string}/>),
+  //     },
+  //     {
+  //       icon: <MoneyOutlined/>,
+  //       label: 'Fleet Car Loans',
+  //       onClick: () => setCurrentPage(<FleetLoans jwt={jwt as string}/>),
+  //     },
+  //     {
+  //       icon: <HouseOutlined/>,
+  //       label: 'Delivery Addresses',
+  //       onClick: () => setCurrentPage(<DeliveryAddress jwt={jwt as string}/>),
+  //     },
+  //     {
+  //       icon: <PeopleOutlined/>,
+  //       label: 'Fleet Membership',
+  //       onClick: () => setCurrentPage(<FleetMembership jwt={jwt as string}/>),
+  //     },
+  //   ],
+  // };
+  // const guestItems: SideBarMenuGroupProps = {
+  //   label: 'Guests',
+  //   items: [
+  //     {
+  //       icon: <PeopleOutlined/>,
+  //       label: 'Guests',
+  //       onClick: () => setCurrentPage(<Guests jwt={jwt as string} blacklisted={false}/>),
+  //     },
+  //     {
+  //       icon: <PersonOffOutlined/>,
+  //       label: 'Blacklisted Guests',
+  //       onClick: () => setCurrentPage(<Guests jwt={jwt as string} blacklisted={true}/>),
+  //     },
+  //   ],
+  // }
+  // const tripItems: SideBarMenuGroupProps = {
+  //   label: 'Trips',
+  //   items: [
+  //     {
+  //       icon: <CalendarMonthOutlined/>,
+  //       label: 'Trip Entry',
+  //       onClick: () => setCurrentPage(<Trip jwt={jwt as string}/>),
+  //     },
+  //     {
+  //       icon: <TodayOutlined/>,
+  //       label: 'Current Trips',
+  //       onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.CURRENT}/>),
+  //     },
+  //     {
+  //       icon: <UpcomingOutlined/>,
+  //       label: 'Upcoming Trips',
+  //       onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.UPCOMING}/>),
+  //     },
+  //     {
+  //       icon: <ScheduleOutlined/>,
+  //       label: 'Past Trips',
+  //       onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.PAST}/>),
+  //     },
+  //   ],
+  // }
+  // const tollItems: SideBarMenuGroupProps = {
+  //   label: 'Tolls',
+  //   items: [
+  //     {
+  //       icon: <TollOutlined/>,
+  //       label: 'Toll Entry',
+  //       onClick: () => setCurrentPage(<Toll jwt={jwt as string}/>),
+  //     },
+  //     {
+  //       icon: <MoneyOutlined/>,
+  //       label: 'Trip Tolls',
+  //       onClick: () => setCurrentPage(<TollList jwt={jwt as string}/>),
+  //     },
+  //   ],
+  // }
   const sidebarItems = [carItems];
 
   const handleHomeClicked = () => {
@@ -210,21 +209,6 @@ const Layout: NextPage = ({children, params}: any) => {
       }
     });
   }) ?? '';
-
-  // if (!userInfo) {
-  //   router.push('/login');
-  // }
-  //
-  // if (pathname === '/login') {
-  //   return (
-  //     <html lang="en">
-  //     <body className={inter.className}>
-  //     <ConfirmDialog/>
-  //     {children}
-  //     </body>
-  //     </html>
-  //   );
-  // }
 
   return (
     <html lang="en">

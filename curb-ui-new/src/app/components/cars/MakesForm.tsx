@@ -25,14 +25,15 @@ export interface IMakesForm {
 }
 
 const SELECTED_COLOR = '#ccf';
+const HEADER_NAME = 'Car Make';
 
 const MakesForm = (props: IMakesForm) => {
   const [makesList, setMakesList] = useState<any>();
   const [inputShowing, setInputShowing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedId, setSelectedId] = useState<number>(0);
-  const makeRef = useRef<any>('');
   const {data: session} = useSession();
+  const nameRef = useRef<any>('');
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
 
   const reloadMakes = async () => {
@@ -54,16 +55,16 @@ const MakesForm = (props: IMakesForm) => {
   }, [session]);
 
   const addMake = () => {
-    const make = makeRef.current.value.toString().trim();
+    const make = nameRef.current.value.toString().trim();
 
     if (!make) {
-      errorDialog('Car make name is required');
+      errorDialog('Name cannot be empty.');
       return;
     }
 
     createCarMake(accessToken, make)
       .then(async (res: any) => {
-        makeRef.current.value = '';
+        nameRef.current.value = '';
         setInputShowing(false);
         setSelectedId(0);
         await reloadMakes();
@@ -75,21 +76,21 @@ const MakesForm = (props: IMakesForm) => {
 
   const cellClicked = (x: any) => {
     setSelectedId(x.id);
-    if (props.onSelect) {
-      props.onSelect(x);
-    }
+    props.onSelect && props.onSelect(x);
   }
 
+  const toggleInput = () => setInputShowing(!inputShowing);
+
   if (loading) {
-    return <LoadingTable header={'Car Make'}/>;
+    return <LoadingTable header={HEADER_NAME}/>;
   }
 
   return (
     <>
       <TableContainer sx={{ maxHeight: 400, border: '1px solid #ccc', width: '100%' }}>
         <Table stickyHeader size={'small'}>
-          <TableHeader header={'Car Make'}
-                       onAdd={() => setInputShowing(!inputShowing)}/>
+          <TableHeader header={HEADER_NAME}
+                       onAdd={toggleInput}/>
           {inputShowing ? (
             <>
               <TableBody>
@@ -97,12 +98,12 @@ const MakesForm = (props: IMakesForm) => {
                   <TableCell>
                     <TextField id={'namespace'}
                                variant={'outlined'}
-                               inputRef={makeRef}
+                               inputRef={nameRef}
                                required autoFocus fullWidth
                                onKeyDown={(ev) => {
                                  if (ev.key === 'Escape') {
                                    setInputShowing(false);
-                                   makeRef.current.value = '';
+                                   nameRef.current.value = '';
                                  } else if (ev.key === 'Enter') {
                                    addMake();
                                  }
@@ -119,13 +120,10 @@ const MakesForm = (props: IMakesForm) => {
           )}
           {makesList?.length > 0 ? (
             <TableBody>
-              {makesList.map((x: any) => {
-                const bgColor = selectedId === x.id ? SELECTED_COLOR : '#fff';
-
-                return <ArrowedTableRow value={x.name}
-                                        bgColor={bgColor}
-                                        onClick={() => cellClicked(x)}/>;
-              })}
+              {makesList.map((x: any) => <ArrowedTableRow value={x.name}
+                                        bgColor={(selectedId === x.id ? SELECTED_COLOR : '#fff')}
+                                        onClick={() => cellClicked(x)}/>
+              )}
             </TableBody>
           ) : (
             <>

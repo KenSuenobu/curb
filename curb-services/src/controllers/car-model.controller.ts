@@ -32,7 +32,7 @@ export class CarModelController {
     return this.service.createCarModel(payload);
   }
 
-  @Get('/list/:makeId')
+  @Get('/list/:carMakeId')
   @ApiOperation({
     summary: 'Lists models by make ID',
     description: 'Returns a list of all CarModelDto objects based on the make ID of the CarMakeDto',
@@ -44,8 +44,8 @@ export class CarModelController {
   })
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async listModelsByMakeId(@Param('makeId') makeId: number): Promise<CarModelDto[]> {
-    return this.service.listByMakeId(makeId);
+  async listModelsByMakeId(@Param('carMakeId') carMakeId: number): Promise<CarModelDto[]> {
+    return this.service.listByMakeId(carMakeId);
   }
 
 }

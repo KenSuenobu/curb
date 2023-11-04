@@ -13,20 +13,20 @@ export class CarModelDao extends BaseDao<CarModelDto> {
     return this.db.any<CarModelDto>(selectStatement);
   }
 
-  async listByMakeId(makeId: number): Promise<CarModelDto[]> {
-    const selectStatement = `SELECT * FROM ${this.section} WHERE make_id=$1 ORDER BY name ASC`;
+  async listByMakeId(carMakeId: number): Promise<CarModelDto[]> {
+    const selectStatement = `SELECT * FROM ${this.section} WHERE car_make_id=$1 ORDER BY name ASC`;
 
-    return this.db.any<CarModelDto>(selectStatement, [ makeId, ]);
+    return this.db.any<CarModelDto>(selectStatement, [ carMakeId, ]);
   }
 
   async edit(id: number, payload: CarModelDto): Promise<Boolean> {
     const sqlStatement =
-      'UPDATE curb.car_model SET name=$1, make_id=$2 WHERE id=$3';
+      'UPDATE curb.car_model SET name=$1, car_make_id=$2 WHERE id=$3';
 
     return this.db
       .none(sqlStatement, [
         payload.name,
-        payload.makeId,
+        payload.carMakeId,
         id,
       ])
       .then(() => true);
@@ -34,11 +34,12 @@ export class CarModelDao extends BaseDao<CarModelDto> {
 
   async create(payload: CarModelDto): Promise<CarModelDto> {
     const sqlStatement =
-      'INSERT INTO curb.car_model (name, make_id) VALUES ($1, $2) RETURNING *';
+      'INSERT INTO curb.car_model (creator_id, name, car_make_id) VALUES ($1, $2, $3) RETURNING *';
 
     return this.db.oneOrNone(sqlStatement, [
+      payload.creatorId,
       payload.name,
-      payload.makeId,
+      payload.carMakeId,
     ]);
   }
 }

@@ -31,7 +31,7 @@ import {DashboardService} from './services/dashboard.service';
   controllers: [
     // AddressController,
     CarMakeController,
-    // CarModelController,
+    CarModelController,
     // CarYearController,
     // CarTrimController,
     // CarTrimInfoController,
@@ -46,7 +46,7 @@ import {DashboardService} from './services/dashboard.service';
   providers: [
     // AddressService,
     CarMakeService,
-    // CarModelService,
+    CarModelService,
     // CarYearService,
     // CarTrimService,
     // CarTrimInfoService,
