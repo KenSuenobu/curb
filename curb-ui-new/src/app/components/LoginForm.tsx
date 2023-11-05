@@ -28,8 +28,24 @@ const LoginForm = () => {
   const router = useRouter();
 
   const handleSubmit = (async (e: any) => {
-    setLoginShowing(true);
     e.preventDefault();
+
+    if (!email) {
+      errorDialog('E-Mail Address cannot be blank.');
+      return;
+    }
+
+    if (!password) {
+      errorDialog('Password cannot be blank.');
+      return;
+    }
+
+    if (email.indexOf('@') === -1) {
+      errorDialog('Your E-Mail address is malformed.');
+      return;
+    }
+
+    setLoginShowing(true);
     signIn('credentials', {
       email,
       password,
@@ -185,9 +201,6 @@ const LoginForm = () => {
         paddingLeft: '1.5em', paddingRight: '1.5em', color: '#000', width: '450px'
       }}>
         <form onSubmit={handleSubmit}>
-          <Typography variant={'h5'} fontWeight={'bold'}>Account Login</Typography>
-
-          <br/>
           <TextField type={'text'} fullWidth value={email} onChange={handleEmailChange} placeholder={'Enter your email address'}/>
           <PasswordTextField fullWidth value={password} onChange={handlePasswordChange} placeholder={'Enter your password'}/>
 
@@ -195,19 +208,30 @@ const LoginForm = () => {
           <br/>
 
           <Stack direction={'row'}>
-            <Item sx={{ width: '50%', paddingLeft: '0px' }}>
+            <Item sx={{ width: '25%', paddingLeft: '0px' }}>
               <Button variant={'contained'}
                       sx={{ backgroundColor: '#66f', fontWeight: 'bold'}}
                       fullWidth
                       type={'submit'}>Log in</Button>
             </Item>
 
-            <Item sx={{ width: '50%', paddingRight: '0px' }}>
+            <Item sx={{ width: '25%', paddingLeft: '0px', paddingRight: '20px' }}>
+              <Button variant={'contained'}
+                      sx={{ fontWeight: 'bold'}}
+                      color={'error'}
+                      fullWidth
+                      onClick={() => {
+                        setEmail('');
+                        setPassword('');
+                      }}>Clear</Button>
+            </Item>
+
+            <Item sx={{ width: '50%', paddingLeft: '20px', paddingRight: '0px' }}>
               <Button variant={'contained'}
                       color={'success'}
                       fullWidth
                       onClick={onSignup}>
-                Request Access
+                Signup
               </Button>
             </Item>
           </Stack>
