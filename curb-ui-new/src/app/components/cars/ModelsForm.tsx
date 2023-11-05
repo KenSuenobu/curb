@@ -1,7 +1,7 @@
 'use client';
 
 import {useEffect, useRef, useState} from 'react';
-import {createCarMake, getAllMakes, getAllModels} from '@/app/services/car-definitions';
+import {createCarMake, createCarModel, getAllMakes, getAllModels} from '@/app/services/car-definitions';
 import { useSession } from 'next-auth/react';
 import {
   Button,
@@ -34,9 +34,10 @@ const ModelsForm = (props: IModelsForm) => {
   const nameRef = useRef<any>('');
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
 
-  const reloadMakes = async () => {
+  const reloadModels = async () => {
     if (accessToken) {
       setLoading(true);
+
       getAllModels(accessToken, props.makeId)
         .then((res: any) => {
           setModelsList(res.makes);
@@ -51,23 +52,23 @@ const ModelsForm = (props: IModelsForm) => {
   }
 
   useEffect(() => {
-    reloadMakes().then(() => {});
+    reloadModels().then(() => {});
   }, [session, props.makeId]);
 
-  const addMake = () => {
-    const make = nameRef.current.value.toString().trim();
+  const addModel = () => {
+    const model = nameRef.current.value.toString().trim();
 
-    if (!make) {
+    if (!model) {
       errorDialog(`${HEADER_NAME} name cannot be empty.`);
       return;
     }
 
-    createCarMake(accessToken, make)
+    createCarModel(accessToken, props.makeId, model)
       .then(async (res: any) => {
         nameRef.current.value = '';
         setInputShowing(false);
         setSelectedId(0);
-        await reloadMakes();
+        await reloadModels();
       })
       .catch((e) => {
         errorDialog('Unable to add car make.');
@@ -106,12 +107,12 @@ const ModelsForm = (props: IModelsForm) => {
                                  setInputShowing(false);
                                  nameRef.current.value = '';
                                } else if (ev.key === 'Enter') {
-                                 addMake();
+                                 addModel();
                                }
                              }}/>
                 </TableCell>
                 <TableCell style={{ textAlign: 'right', padding: '0px', paddingRight: '5px' }}>
-                  <Button variant={'contained'} onClick={() => addMake()}>ADD</Button>
+                  <Button variant={'contained'} onClick={() => addModel()}>ADD</Button>
                 </TableCell>
               </TableRow>
             </TableBody>

@@ -2,7 +2,16 @@
 
 import {useRef, useState} from 'react';
 import {signIn} from 'next-auth/react';
-import {Button, Dialog, DialogContent, DialogContentText, Stack, TextField, Typography} from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  LinearProgress,
+  Stack,
+  TextField,
+  Typography
+} from '@mui/material';
 import Item from '@/app/components/common/Item';
 import PasswordTextField from '@/app/components/common/PasswordTextField';
 import {alertDialog, errorDialog} from '@/app/components/common/ConfirmDialog';
@@ -55,7 +64,13 @@ const LoginForm = () => {
     <>
       <Dialog open={loginShowing}>
         <DialogContent>
-          <DialogContentText>Stand by, logging you in.</DialogContentText>
+          <DialogContentText>
+            <Typography>
+              Stand by, logging you in.
+            </Typography>
+            <p/>
+            <LinearProgress/>
+          </DialogContentText>
         </DialogContent>
       </Dialog>
 

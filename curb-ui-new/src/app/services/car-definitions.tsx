@@ -53,3 +53,20 @@ export const getAllModels = (accessToken: any, makeId: number) => {
       .catch(e => reject(e));
   });
 };
+
+export const createCarModel = (accessToken: any, carMakeId: number, model: string) => {
+  return new Promise((resolve, reject) => {
+    axios.post('/api/cars/model', {
+        carMakeId,
+        model,
+      }, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': accessToken,
+        }
+      })
+      .then((res) => resolve(res.data))
+      .catch(e => reject(e));
+  });
+}
