@@ -25,6 +25,8 @@ import {TollController} from './controllers/toll.controller';
 import {TollService} from './services/toll.service';
 import {DashboardController} from './controllers/dashboard.controller';
 import {DashboardService} from './services/dashboard.service';
+import {SignupService} from './services/signup.service';
+import {SignupController} from './controllers/signup.controller';
 
 @Module({
   imports: [],
@@ -35,6 +37,7 @@ import {DashboardService} from './services/dashboard.service';
     CarYearController,
     CarTrimController,
     CarTrimInfoController,
+    SignupController,
     // DashboardController,
     // FleetController,
     // FleetLoanController,
@@ -50,6 +53,7 @@ import {DashboardService} from './services/dashboard.service';
     CarYearService,
     CarTrimService,
     CarTrimInfoService,
+    SignupService,
     // DashboardService,
     // FleetService,
     // FleetLoanService,

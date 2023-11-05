@@ -11,6 +11,7 @@ export * from './fleet-car-maintenance.dto';
 export * from './fleet-membership.dto';
 export * from './guest.dto';
 export * from './loan-payment.dto';
+export * from './signup.dto';
 export * from './toll.dto';
 export * from './trip.dto';
 export * from './user.dto';

@@ -1,13 +1,13 @@
 'use client';
 
-import {useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {signIn} from 'next-auth/react';
 import {
   Button,
-  Dialog,
+  Dialog, DialogActions,
   DialogContent,
-  DialogContentText,
-  LinearProgress,
+  DialogContentText, DialogTitle, FormControl, InputLabel,
+  LinearProgress, MenuItem, Select,
   Stack,
   TextField,
   Typography
@@ -16,11 +16,15 @@ import Item from '@/app/components/common/Item';
 import PasswordTextField from '@/app/components/common/PasswordTextField';
 import {alertDialog, errorDialog} from '@/app/components/common/ConfirmDialog';
 import {useRouter} from 'next/navigation';
+import {createSignup} from '@/app/services/auth';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginShowing, setLoginShowing] = useState(false);
+  const [signupSending, setSendingSending] = useState(false);
+  const [signupShowing, setSignupShowing] = useState(false);
+  const [payload, setPayload] = useState<any>({});
   const router = useRouter();
 
   const handleSubmit = (async (e: any) => {
@@ -49,12 +53,38 @@ const LoginForm = () => {
   });
 
   const onSignup = () => {
+    setSignupShowing(true);
+  }
 
+  const signup = () => {
+    if (payload.emailAddress && payload.note) {
+      const ipAddress = '127.0.0.1';
+
+      setSignupShowing(true);
+      createSignup(payload.emailAddress, ipAddress, payload.source ?? '0', payload.note)
+        .then((x) => {
+          setSignupShowing(false);
+          alertDialog(x.message);
+        })
+        .catch((x) => {
+          setSignupShowing(false);
+          errorDialog('Your request failed.  If you have already requested access, please be patient.');
+        });
+    } else {
+      errorDialog('All fields are required.');
+    }
   }
 
   const clearInputs = () => {
     setEmail('');
     setPassword('');
+  }
+
+  const handleChange = (e: any) => {
+    setPayload({
+      ...payload,
+      [e.target.name]: e.target.value,
+    });
   }
 
   const handleEmailChange = ((e: any) => setEmail(e.target.value));
@@ -74,6 +104,82 @@ const LoginForm = () => {
         </DialogContent>
       </Dialog>
 
+      <Dialog open={signupSending}>
+        <DialogContent>
+          <DialogContentText>
+            <Typography>
+              Submitting request, one moment.
+            </Typography>
+            <p/>
+            <LinearProgress/>
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={signupShowing}>
+        <DialogTitle>
+          Request Early Access
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <Typography>
+              You are requesting early access to the Curb platform.  If you have already signed up,
+              please be patient - someone will contact you soon, as long as your request is legitimate.
+              <p/>
+              <b>Please note</b>: if you don't supply a note or message, you probably won't get approved.
+            </Typography>
+
+            <p/>
+
+            <Stack direction={'row'}>
+              <Item sx={{ width: '40%' }}>
+                <FormControl fullWidth>
+                  <InputLabel id={'source-label'}>Signup Source</InputLabel>
+                  <Select labelId={'source-label'} label={'Signup Source'} style={{ textAlign: 'left' }}
+                          value={payload?.signup ?? 0} fullWidth name={'signup'}
+                          onChange={handleChange}>
+                    <MenuItem value={0}>Word of Mouth</MenuItem>
+                    <MenuItem value={1}>Discord</MenuItem>
+                    <MenuItem value={2}>Facebook</MenuItem>
+                    <MenuItem value={3}>Youtube</MenuItem>
+                    <MenuItem value={4}>Turo</MenuItem>
+                    <MenuItem value={5}>Google</MenuItem>
+                    <MenuItem value={6}>Suenobu Rentals</MenuItem>
+                    <MenuItem value={7}>Other (See note)</MenuItem>
+                  </Select>
+                </FormControl>
+              </Item>
+
+              <Item sx={{ width: '60%' }}>
+                <TextField label={'E-Mail Address'} fullWidth value={payload?.emailAddress ?? ''} name={'emailAddress'}
+                           onChange={handleChange}/>
+              </Item>
+            </Stack>
+
+            <Stack direction={'row'}>
+              <Item sx={{ width: '100%' }}>
+                <TextField label={'Note or Message to the Admin'} multiline
+                           fullWidth rows={3} value={payload?.note ?? ''} name={'note'}
+                           onChange={handleChange}/>
+              </Item>
+            </Stack>
+          </DialogContentText>
+          <DialogActions>
+            <Button variant={'contained'}
+                    color={'success'}
+                    onClick={() => signup()}>
+              Submit</Button>
+
+            <Button variant={'contained'}
+                    color={'error'}
+                    onClick={() => {
+              setPayload({});
+              setSignupShowing(false);
+            }}>Cancel</Button>
+          </DialogActions>
+        </DialogContent>
+      </Dialog>
+
       <div style={{
         backgroundColor: '#fff', paddingTop: '1.5em', paddingBottom: '1.5em',
         paddingLeft: '1.5em', paddingRight: '1.5em', color: '#000', width: '450px'
@@ -88,16 +194,23 @@ const LoginForm = () => {
           <br/>
           <br/>
 
-          <Button variant={'contained'}
-                  sx={{ backgroundColor: '#66f', fontWeight: 'bold'}}
-                  fullWidth
-                  type={'submit'}>Log in</Button><br/>
-          <Button variant={'contained'}
-                  fullWidth
-                  onClick={onSignup}
-                  disabled={true}>
-            Request Early Access
-          </Button>
+          <Stack direction={'row'}>
+            <Item sx={{ width: '50%', paddingLeft: '0px' }}>
+              <Button variant={'contained'}
+                      sx={{ backgroundColor: '#66f', fontWeight: 'bold'}}
+                      fullWidth
+                      type={'submit'}>Log in</Button>
+            </Item>
+
+            <Item sx={{ width: '50%', paddingRight: '0px' }}>
+              <Button variant={'contained'}
+                      color={'success'}
+                      fullWidth
+                      onClick={onSignup}>
+                Request Access
+              </Button>
+            </Item>
+          </Stack>
         </form>
       </div>
     </>

@@ -89,6 +89,22 @@ CREATE TABLE curb.car_trim_info (
 
 CREATE UNIQUE INDEX idx_car_trim_info_unique ON curb.car_trim_info(car_trim_id);
 
+---
+
+DROP TABLE IF EXISTS curb.signup;
+DROP INDEX IF EXISTS idx_signup_unique;
+
+CREATE TABLE curb.signup (
+    id SERIAL NOT NULL PRIMARY KEY,
+    signup_date TIMESTAMP NOT NULL DEFAULT NOW(),
+    email_address VARCHAR(255) NOT NULL,
+    ip_address VARCHAR(255) NOT NULL,
+    source VARCHAR(80) NOT NULL,
+    note TEXT
+);
+
+CREATE UNIQUE INDEX idx_signup_unique ON curb.signup(email_address);
+
 -- ---
 --
 -- DROP TABLE IF EXISTS curb.fleet CASCADE;
