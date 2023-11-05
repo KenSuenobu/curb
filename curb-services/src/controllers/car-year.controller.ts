@@ -31,7 +31,7 @@ export class CarYearController {
     return this.service.createCarYear(payload);
   }
 
-  @Get('/list/:modelId')
+  @Get('/list/:carModelId')
   @ApiOperation({
     summary: 'Lists years by model ID',
     description: 'Returns a list of all CarYearDto objects based on the make ID of the CarModelDto',
@@ -43,8 +43,8 @@ export class CarYearController {
   })
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async listModelsByMakeId(@Param('modelId') modelId: number): Promise<CarYearDto[]> {
-    return this.service.listByModelId(modelId);
+  async listModelsByMakeId(@Param('carModelId') carModelId: number): Promise<CarYearDto[]> {
+    return this.service.listByModelId(carModelId);
   }
 
 }

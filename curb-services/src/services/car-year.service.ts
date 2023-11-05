@@ -12,9 +12,9 @@ export class CarYearService {
     return dao.create(payload);
   }
 
-  async listByModelId(modelId: number): Promise<CarYearDto[]> {
+  async listByModelId(carModelId: number): Promise<CarYearDto[]> {
     const dao = new CarYearDao(DaoUtils.getDatabase());
-    return dao.listByModelId(modelId);
+    return dao.listByModelId(carModelId);
   }
 
 }

@@ -70,3 +70,39 @@ export const createCarModel = (accessToken: any, carMakeId: number, model: strin
       .catch(e => reject(e));
   });
 }
+
+export const getAllYears = (accessToken: any, modelId: number) => {
+  return new Promise((resolve, reject) => {
+    fetch(`/api/cars/years?carModelId=${modelId}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+      .then((res) => {
+        res.json()
+          .then(json => resolve(json))
+          .catch(e => reject(e))
+      })
+      .catch(e => reject(e));
+  });
+};
+
+export const createCarYear = (accessToken: any, carModelId: number, year: string) => {
+  return new Promise((resolve, reject) => {
+    axios.post('/api/cars/years', {
+      carModelId,
+      year,
+    }, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+    .then((res) => resolve(res.data))
+    .catch(e => reject(e));
+  });
+}

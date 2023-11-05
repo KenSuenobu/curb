@@ -1,7 +1,14 @@
 'use client';
 
 import {useEffect, useRef, useState} from 'react';
-import {createCarMake, createCarModel, getAllMakes, getAllModels} from '@/app/services/car-definitions';
+import {
+  createCarMake,
+  createCarModel,
+  createCarYear,
+  getAllMakes,
+  getAllModels,
+  getAllYears
+} from '@/app/services/car-definitions';
 import { useSession } from 'next-auth/react';
 import {
   Button,
@@ -17,16 +24,16 @@ import {errorDialog} from '@/app/components/common/ConfirmDialog';
 import LoadingTable from '@/app/components/common/LoadingTable';
 import ArrowedTableRow from '@/app/components/common/ArrowedTableRow';
 
-export interface IModelsForm {
-  makeId: number;
+export interface IYearsForm {
+  modelId: number;
   onSelect?: (x: any) => any;
 }
 
 const SELECTED_COLOR = '#ccf';
-const HEADER_NAME = 'Car Model';
+const HEADER_NAME = 'Car Year';
 
-const ModelsForm = (props: IModelsForm) => {
-  const [modelsList, setModelsList] = useState<any>();
+const YearsForm = (props: IYearsForm) => {
+  const [yearsList, setYearsList] = useState<any>();
   const [inputShowing, setInputShowing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedId, setSelectedId] = useState<number>(0);
@@ -34,50 +41,50 @@ const ModelsForm = (props: IModelsForm) => {
   const nameRef = useRef<any>('');
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
 
-  const reloadModels = async () => {
+  const reloadYears = async () => {
     if (accessToken) {
       setLoading(true);
       setSelectedId(0);
 
-      getAllModels(accessToken, props.makeId)
+      getAllYears(accessToken, props.modelId)
         .then((res: any) => {
-          setModelsList(res.makes);
+          setYearsList(res.makes);
           setLoading(false);
         })
         .catch((e) => {
           console.error(e);
-          setModelsList({});
+          setYearsList({});
           setLoading(false);
         });
     }
   }
 
   useEffect(() => {
-    reloadModels().then(() => {});
-  }, [session, props.makeId]);
+    reloadYears().then(() => {});
+  }, [session, props.modelId]);
 
-  const addModel = () => {
-    if (props.makeId === 0) {
-      errorDialog('You must select a car make before adding a car model.');
+  const addYear = () => {
+    if (props.modelId === 0) {
+      errorDialog('You must select a car model before adding a car year.');
       return;
     }
 
-    const model = nameRef.current.value.toString().trim();
+    const year = nameRef.current.value.toString().trim();
 
-    if (!model) {
-      errorDialog(`${HEADER_NAME} name cannot be empty.`);
+    if (!year) {
+      errorDialog(`${HEADER_NAME} cannot be empty.`);
       return;
     }
 
-    createCarModel(accessToken, props.makeId, model)
+    createCarYear(accessToken, props.modelId, year)
       .then(async (res: any) => {
         nameRef.current.value = '';
         setInputShowing(false);
         setSelectedId(0);
-        await reloadModels();
+        await reloadYears();
       })
       .catch((e) => {
-        errorDialog('Unable to add car make.');
+        errorDialog('Unable to add car year.');
       });
   }
 
@@ -113,21 +120,21 @@ const ModelsForm = (props: IModelsForm) => {
                                  setInputShowing(false);
                                  nameRef.current.value = '';
                                } else if (ev.key === 'Enter') {
-                                 addModel();
+                                 addYear();
                                }
                              }}/>
                 </TableCell>
                 <TableCell style={{ textAlign: 'right', padding: '0px', paddingRight: '5px' }}>
-                  <Button variant={'contained'} onClick={() => addModel()}>ADD</Button>
+                  <Button variant={'contained'} onClick={() => addYear()}>ADD</Button>
                 </TableCell>
               </TableRow>
             </TableBody>
           ) : (<></>)}
 
-          {modelsList?.length > 0 ? (
+          {yearsList?.length > 0 ? (
             <TableBody>
-              {modelsList.map((x: any, count: number) =>
-                <ArrowedTableRow value={x.name}
+              {yearsList.map((x: any, count: number) =>
+                <ArrowedTableRow value={x.year}
                                  key={count}
                                  bgColor={(selectedId === x.id ? SELECTED_COLOR : '#fff')}
                                  onClick={() => cellClicked(x)}/>
@@ -150,4 +157,4 @@ const ModelsForm = (props: IModelsForm) => {
   )
 }
 
-export default ModelsForm;
+export default YearsForm;

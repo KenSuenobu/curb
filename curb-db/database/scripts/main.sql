@@ -47,19 +47,20 @@ CREATE TABLE curb.car_model (
 
 CREATE UNIQUE INDEX idx_car_model_unique ON curb.car_model(car_make_id, name);
 
--- ---
---
--- DROP TABLE IF EXISTS curb.car_year CASCADE;
--- DROP INDEX IF EXISTS idx_car_year_unique;
---
--- CREATE TABLE curb.car_year (
---     id SERIAL NOT NULL PRIMARY KEY,
---     model_id INT NOT NULL REFERENCES curb.car_model(id),
---     year INT NOT NULL
--- );
---
--- CREATE UNIQUE INDEX idx_car_year_unique ON curb.car_year(model_id, year);
---
+---
+
+DROP TABLE IF EXISTS curb.car_year CASCADE;
+DROP INDEX IF EXISTS idx_car_year_unique;
+
+CREATE TABLE curb.car_year (
+    id SERIAL NOT NULL PRIMARY KEY,
+    creator_id INT NOT NULL REFERENCES curb.user(id),
+    car_model_id INT NOT NULL REFERENCES curb.car_model(id),
+    year INT NOT NULL
+);
+
+CREATE UNIQUE INDEX idx_car_year_unique ON curb.car_year(car_model_id, year);
+
 -- ---
 --
 -- DROP TABLE IF EXISTS curb.car_trim CASCADE;

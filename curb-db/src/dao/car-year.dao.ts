@@ -13,20 +13,20 @@ export class CarYearDao extends BaseDao<CarYearDto> {
     return this.db.any<CarYearDto>(selectStatement);
   }
 
-  async listByModelId(modelId: number): Promise<CarYearDto[]> {
-    const selectStatement = `SELECT * FROM ${this.section} WHERE model_id=$1 ORDER BY year ASC`;
+  async listByModelId(carModelId: number): Promise<CarYearDto[]> {
+    const selectStatement = `SELECT * FROM ${this.section} WHERE car_model_id=$1 ORDER BY year ASC`;
 
-    return this.db.any<CarYearDto>(selectStatement, [ modelId, ]);
+    return this.db.any<CarYearDto>(selectStatement, [ carModelId, ]);
   }
 
   async edit(id: number, payload: CarYearDto): Promise<Boolean> {
     const sqlStatement =
-      `UPDATE ${this.section} SET year=$1, model_id=$2 WHERE id=$3`;
+      `UPDATE ${this.section} SET year=$1, car_model_id=$2 WHERE id=$3`;
 
     return this.db
       .none(sqlStatement, [
         payload.year,
-        payload.modelId,
+        payload.carModelId,
         id,
       ])
       .then(() => true);
@@ -34,11 +34,12 @@ export class CarYearDao extends BaseDao<CarYearDto> {
 
   async create(payload: CarYearDto): Promise<CarYearDto> {
     const sqlStatement =
-      `INSERT INTO ${this.section} (year, model_id) VALUES ($1, $2) RETURNING *`;
+      `INSERT INTO ${this.section} (creator_id, year, car_model_id) VALUES ($1, $2, $3) RETURNING *`;
 
     return this.db.oneOrNone(sqlStatement, [
+      payload.creatorId,
       payload.year,
-      payload.modelId,
+      payload.carModelId,
     ]);
   }
 }

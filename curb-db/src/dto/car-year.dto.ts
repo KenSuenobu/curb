@@ -9,12 +9,20 @@ export class CarYearDto {
   id?: number;
 
   @ApiProperty({
+    description: 'ID of the `User` that created this entry',
+    nullable: false,
+    type: Number,
+    required: true,
+  })
+  creatorId: number;
+
+  @ApiProperty({
     description: 'ID of the `CarModel` object',
     nullable: false,
     type: Number,
     required: true,
   })
-  modelId: number;
+  carModelId: number;
 
   @ApiProperty({
     description: 'Year of the Model',
