@@ -62,7 +62,7 @@ const LoginForm = () => {
 
       setSignupShowing(true);
       createSignup(payload.emailAddress, ipAddress, payload.source ?? '0', payload.note)
-        .then((x) => {
+        .then((x: any) => {
           setSignupShowing(false);
           alertDialog(x.message);
         })
