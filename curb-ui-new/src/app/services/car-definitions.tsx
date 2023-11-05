@@ -34,3 +34,22 @@ export const createCarMake = (accessToken: any, make: string) => {
       .catch(e => reject(e));
   });
 }
+
+export const getAllModels = (accessToken: any, makeId: number) => {
+  return new Promise((resolve, reject) => {
+    fetch(`/api/cars/model?carMakeId=${makeId}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+      .then((res) => {
+        res.json()
+          .then(json => resolve(json))
+          .catch(e => reject(e))
+      })
+      .catch(e => reject(e));
+  });
+};
