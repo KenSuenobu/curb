@@ -3,7 +3,7 @@
 import {
   Alert, Button,
   FormControl, IconButton,
-  InputLabel,
+  InputLabel, LinearProgress,
   MenuItem,
   Select,
   Snackbar,
@@ -27,6 +27,7 @@ export interface ITrimInfoForm {
 }
 
 const TrimInfoForm = (props: ITrimInfoForm) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [carTrimInfoId, setCarTrimInfoId] = useState<number>(0);
   const [trimInfoPayload, setTrimInfoPayload] = useState<any>({});
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
@@ -34,18 +35,20 @@ const TrimInfoForm = (props: ITrimInfoForm) => {
   const [carOptionsInputShowing, setCarOptionsInputShowing] = useState<boolean>(false);
   const [carColorsInputShowing, setCarColorsInputShowing] = useState<boolean>(false);
   const [carUrlInputShowing, setCarUrlInputShowing] = useState<boolean>(false);
-  const trimInfoOptionNameRef = useRef('');
-  const trimInfoOptionPriceRef = useRef('');
-  const colorNameRef = useRef('');
-  const colorPriceRef = useRef('');
-  const trimInfoReviewUrlRef = useRef('');
-  const trimInfoReviewUrlSiteRef = useRef('');
+  const trimInfoOptionNameRef = useRef<any>('');
+  const trimInfoOptionPriceRef = useRef<any>('');
+  const colorNameRef = useRef<any>('');
+  const colorPriceRef = useRef<any>('');
+  const trimInfoReviewUrlRef = useRef<any>('');
+  const trimInfoReviewUrlSiteRef = useRef<any>('');
   const {data: session} = useSession();
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
 
   const reloadCarTrimInfo = () => {
+    setLoading(true);
+
     getCarTrimInfo(accessToken, props.trimId)
-      .then((res) => {
+      .then((res: any) => {
         if (res.data) {
           setTrimInfoPayload(res.data);
           setCarTrimInfoId(res.id);
@@ -61,13 +64,18 @@ const TrimInfoForm = (props: ITrimInfoForm) => {
           });
 
           setCheckedStates(states);
+          setLoading(false);
         } else {
           setTrimInfoPayload({});
           setCarTrimInfoId(0);
+          setLoading(false);
           console.log('New record');
         }
       })
-      .catch((x) => console.error(x));
+      .catch((x) => {
+        setLoading(false);
+        console.error(x);
+      });
   }
 
   const handleChange = (e: any) => {
@@ -279,6 +287,12 @@ const TrimInfoForm = (props: ITrimInfoForm) => {
       ...trimInfoPayload,
       siteList,
     });
+  }
+
+  if (loading) {
+    return (
+      <LinearProgress/>
+    );
   }
 
   return (

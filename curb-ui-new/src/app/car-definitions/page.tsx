@@ -49,7 +49,6 @@ const CarDefinitions = () => {
       {selectedTrim !== 0 && (
         <>
           <p/>
-          <Divider fullWidth/>
           <TrimInfoForm trimId={selectedTrim}/>
         </>
       )}
