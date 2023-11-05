@@ -126,7 +126,7 @@ const LoginForm = () => {
               You are requesting early access to the Curb platform.  If you have already signed up,
               please be patient - someone will contact you soon, as long as your request is legitimate.
               <p/>
-              <b>Please note</b>: if you don't supply a note or message, you probably won't get approved.
+              <b>Please note</b>: if you don&apos;t supply a note or message, you probably won&apos;t get approved.
             </Typography>
 
             <p/>
