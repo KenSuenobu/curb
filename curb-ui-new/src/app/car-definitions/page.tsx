@@ -6,11 +6,13 @@ import {Stack} from '@mui/material';
 import ModelsForm from '@/app/components/cars/ModelsForm';
 import {useState} from 'react';
 import YearsForm from '@/app/components/cars/YearsForm';
+import TrimForm from '@/app/components/cars/TrimForm';
 
 const CarDefinitions = () => {
   const [selectedMake, setSelectedMake] = useState<number>(0);
   const [selectedModel, setSelectedModel] = useState<number>(0);
   const [selectedYear, setSelectedYear] = useState<number>(0);
+  const [selectedTrim, setSelectedTrim] = useState<number>(0);
 
   return (
     <main className={'bg-black flex flex-col justify-center items-center space-y-8 h-screen'}>
@@ -31,6 +33,10 @@ const CarDefinitions = () => {
         <Item sx={{ width: '25%', padding: '0px' }}>
           <YearsForm onSelect={(x: any) => setSelectedYear(x.id)}
                      modelId={selectedModel}/>
+        </Item>
+        <Item sx={{ width: '25%', padding: '0px' }}>
+          <TrimForm onSelect={(x: any) => setSelectedTrim(x.id)}
+                    yearId={selectedYear}/>
         </Item>
       </Stack>
     </main>

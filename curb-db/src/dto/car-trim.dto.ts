@@ -9,12 +9,20 @@ export class CarTrimDto {
   id?: number;
 
   @ApiProperty({
+    description: 'ID of the `User` that created this entry',
+    nullable: false,
+    type: Number,
+    required: true,
+  })
+  creatorId: number;
+
+  @ApiProperty({
     description: 'ID of the `CarYear` object',
     nullable: false,
     type: Number,
     required: true,
   })
-  yearId: number;
+  carYearId: number;
 
   @ApiProperty({
     description: 'Name of the Trim',

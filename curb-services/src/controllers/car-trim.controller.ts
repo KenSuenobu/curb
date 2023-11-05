@@ -33,7 +33,7 @@ export class CarTrimController {
     return this.service.createCarTrim(payload);
   }
 
-  @Get('/list/:yearId')
+  @Get('/list/:carYearId')
   @ApiOperation({
     summary: 'Lists models by year ID',
     description: 'Returns a list of all CarTrimDto objects based on the year ID of the CarYearDto',
@@ -45,8 +45,8 @@ export class CarTrimController {
   })
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async listTrimsByYearId(@Param('yearId') yearId: number): Promise<CarTrimDto[]> {
-    return this.service.listByYearId(yearId);
+  async listTrimsByYearId(@Param('carYearId') carYearId: number): Promise<CarTrimDto[]> {
+    return this.service.listByYearId(carYearId);
   }
 
 }

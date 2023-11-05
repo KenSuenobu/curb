@@ -106,3 +106,39 @@ export const createCarYear = (accessToken: any, carModelId: number, year: string
     .catch(e => reject(e));
   });
 }
+
+export const getAllTrims = (accessToken: any, yearId: number) => {
+  return new Promise((resolve, reject) => {
+    fetch(`/api/cars/trim?carYearId=${yearId}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+      .then((res) => {
+        res.json()
+          .then(json => resolve(json))
+          .catch(e => reject(e))
+      })
+      .catch(e => reject(e));
+  });
+};
+
+export const createCarTrim = (accessToken: any, carYearId: number, name: string) => {
+  return new Promise((resolve, reject) => {
+    axios.post('/api/cars/trim', {
+        carYearId,
+        name,
+      }, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': accessToken,
+        }
+      })
+      .then((res) => resolve(res.data))
+      .catch(e => reject(e));
+  });
+}
