@@ -2,11 +2,13 @@
 
 import MakesForm from '@/app/components/cars/MakesForm';
 import Item from '@/app/components/common/Item';
-import {Stack} from '@mui/material';
+import {Stack, Typography} from '@mui/material';
 import ModelsForm from '@/app/components/cars/ModelsForm';
 import {useState} from 'react';
 import YearsForm from '@/app/components/cars/YearsForm';
 import TrimForm from '@/app/components/cars/TrimForm';
+import Divider from '@mui/material/Divider';
+import TrimInfoForm from '@/app/components/cars/TrimInfoForm';
 
 const CarDefinitions = () => {
   const [selectedMake, setSelectedMake] = useState<number>(0);
@@ -43,6 +45,14 @@ const CarDefinitions = () => {
                     yearId={selectedYear}/>
         </Item>
       </Stack>
+
+      {selectedTrim !== 0 && (
+        <>
+          <p/>
+          <Divider fullWidth/>
+          <TrimInfoForm trimId={selectedTrim}/>
+        </>
+      )}
     </main>
   );
 }

@@ -142,3 +142,56 @@ export const createCarTrim = (accessToken: any, carYearId: number, name: string)
       .catch(e => reject(e));
   });
 }
+
+export const getCarTrimInfo = (accessToken: any, trimId: number) => {
+  return new Promise((resolve, reject) => {
+    fetch(`/api/cars/trim-info?carTrimId=${trimId}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+      .then((res) => {
+        res.json()
+          .then(json => resolve(json))
+          .catch(e => reject(e))
+      })
+      .catch(e => reject(e));
+  });
+}
+
+export const createCarTrimInfo = (accessToken: any, carTrimId: number, data: any) => {
+  return new Promise((resolve, reject) => {
+    axios.post('/api/cars/trim-info', {
+      carTrimId,
+      data,
+    }, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+    .then((res) => resolve(res.data))
+    .catch(e => reject(e));
+  });
+}
+
+export const saveCarTrimInfo = (accessToken: any, carTrimInfoId: number, carTrimId: number, data: any) => {
+  return new Promise((resolve, reject) => {
+    axios.put(`/api/cars/trim-info?carTrimInfoId=${carTrimInfoId}`, {
+      carTrimId,
+      data,
+    }, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+    .then((res) => resolve(res.data))
+    .catch(e => reject(e));
+  });
+}

@@ -34,7 +34,7 @@ export class CarTrimInfoController {
     return this.service.createCarTrimInfo(payload);
   }
 
-  @Put('/edit/:trimInfoId')
+  @Put('/edit/:carTrimInfoId')
   @ApiOperation({
     summary: 'Edits a CarTrimInfo object',
     description: 'Edits a CarTrimInfo object by its ID',
@@ -49,11 +49,11 @@ export class CarTrimInfoController {
   @ApiConflictResponse()
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async editCarTrim(@Body() payload: CarTrimInfoDto, @Param('trimInfoId') trimInfoId: number): Promise<boolean> {
-    return this.service.editCarTrimInfo(trimInfoId, payload);
+  async editCarTrim(@Body() payload: CarTrimInfoDto, @Param('carTrimInfoId') carTrimInfoId: number): Promise<boolean> {
+    return this.service.editCarTrimInfo(carTrimInfoId, payload);
   }
 
-  @Get('/get/:trimId')
+  @Get('/get/:carTrimId')
   @ApiOperation({
     summary: 'Retrieves a CarTrimInfoDto by the trim ID',
     description: 'Returns a list of all CarTrimInfoDto objects based on the trim ID of the CarTrimDto',
@@ -65,8 +65,8 @@ export class CarTrimInfoController {
   })
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async getTrimInfoByTrimId(@Param('trimId') trimId: number): Promise<CarTrimInfoDto> {
-    return this.service.getTrimInfoByTrimId(trimId);
+  async getTrimInfoByTrimId(@Param('carTrimId') carTrimId: number): Promise<CarTrimInfoDto> {
+    return this.service.getTrimInfoByTrimId(carTrimId);
   }
 
 }

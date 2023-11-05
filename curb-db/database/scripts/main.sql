@@ -75,19 +75,20 @@ CREATE TABLE curb.car_trim (
 
 CREATE UNIQUE INDEX idx_car_trim_unique ON curb.car_trim(car_year_id, name);
 
--- ---
---
--- DROP TABLE IF EXISTS curb.car_trim_info CASCADE;
--- DROP INDEX IF EXISTS idx_car_trim_info_unique;
---
--- CREATE TABLE curb.car_trim_info (
---     id SERIAL NOT NULL PRIMARY KEY,
---     trim_id INT NOT NULL REFERENCES curb.car_trim(id),
---     data JSONB
--- );
---
--- CREATE UNIQUE INDEX idx_car_trim_info_unique ON curb.car_trim_info(trim_id);
---
+---
+
+DROP TABLE IF EXISTS curb.car_trim_info CASCADE;
+DROP INDEX IF EXISTS idx_car_trim_info_unique;
+
+CREATE TABLE curb.car_trim_info (
+    id SERIAL NOT NULL PRIMARY KEY,
+    creator_id INT NOT NULL REFERENCES curb.user(id),
+    car_trim_id INT NOT NULL REFERENCES curb.car_trim(id),
+    data JSONB
+);
+
+CREATE UNIQUE INDEX idx_car_trim_info_unique ON curb.car_trim_info(car_trim_id);
+
 -- ---
 --
 -- DROP TABLE IF EXISTS curb.fleet CASCADE;
