@@ -22,17 +22,21 @@ const CarDefinitions = () => {
             setSelectedMake(x.id);
             setSelectedModel(0);
             setSelectedYear(0);
+            setSelectedTrim(0);
           }}/>
         </Item>
         <Item sx={{ width: '25%', padding: '0px' }}>
           <ModelsForm onSelect={(x: any) => {
             setSelectedModel(x.id);
             setSelectedYear(0);
+            setSelectedTrim(0);
           }} makeId={selectedMake}/>
         </Item>
         <Item sx={{ width: '25%', padding: '0px' }}>
-          <YearsForm onSelect={(x: any) => setSelectedYear(x.id)}
-                     modelId={selectedModel}/>
+          <YearsForm onSelect={(x: any) => {
+            setSelectedYear(x.id);
+            setSelectedTrim(0);
+          }} modelId={selectedModel}/>
         </Item>
         <Item sx={{ width: '25%', padding: '0px' }}>
           <TrimForm onSelect={(x: any) => setSelectedTrim(x.id)}
