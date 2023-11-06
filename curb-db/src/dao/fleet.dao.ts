@@ -1,16 +1,18 @@
 import { BaseDao } from './base.dao';
 import * as pgPromise from 'pg-promise';
-import { CarMakeDto, FleetDto } from '../dto';
+import { FleetDto } from '../dto';
+import {DaoUtils} from './dao-utils.dao';
 
 export class FleetDao extends BaseDao<FleetDto> {
   constructor(readonly db: pgPromise.IDatabase<any>) {
     super(db, 'curb.fleet');
   }
 
-  override async list(): Promise<FleetDto[]> {
-    const selectStatement = `SELECT * FROM ${this.section} ORDER BY name ASC`;
+  async listByCreatorId(creatorId: number): Promise<FleetDto[]> {
+    const selectStatement = `SELECT * FROM ${this.section} WHERE creator_id=$1 ORDER BY name ASC`;
 
-    return this.db.any<FleetDto>(selectStatement);
+    return (await this.db.any(selectStatement, [ creatorId ]))
+      .map((x) => DaoUtils.normalizeFields<FleetDto>(x));
   }
 
   async edit(id: number, payload: FleetDto): Promise<Boolean> {
@@ -27,8 +29,11 @@ export class FleetDao extends BaseDao<FleetDto> {
 
   async create(payload: FleetDto): Promise<FleetDto> {
     const sqlStatement =
-      `INSERT INTO ${this.section} (name) VALUES ($1) RETURNING *`;
+      `INSERT INTO ${this.section} (creator_id, name) VALUES ($1, $2) RETURNING *`;
 
-    return this.db.oneOrNone(sqlStatement, [ payload.name, ]);
+    return this.db.oneOrNone(sqlStatement, [
+      payload.creatorId,
+      payload.name,
+    ]);
   }
 }

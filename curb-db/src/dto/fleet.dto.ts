@@ -9,6 +9,14 @@ export class FleetDto {
   id?: number;
 
   @ApiProperty({
+    description: 'ID of the `User` that created this entry',
+    nullable: false,
+    type: Number,
+    required: true,
+  })
+  creatorId: number;
+
+  @ApiProperty({
     description: 'Name of the Fleet',
     nullable: false,
     type: String,

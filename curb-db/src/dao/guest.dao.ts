@@ -9,6 +9,14 @@ export class GuestDto {
   id?: number;
 
   @ApiProperty({
+    description: 'ID of the `User` that created this entry',
+    nullable: false,
+    type: Number,
+    required: true,
+  })
+  creatorId: number;
+
+  @ApiProperty({
     description: 'Uniquely Guest ID',
     nullable: false,
     type: String,

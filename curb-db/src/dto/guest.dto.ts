@@ -66,9 +66,10 @@ export class GuestDao extends BaseDao<GuestDto> {
 
   async create(payload: GuestDto): Promise<GuestDto> {
     const sqlStatement =
-      `INSERT INTO ${this.section} (guest_id, guest_id_source, blacklisted, first_name, middle_name, last_name, data) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
+      `INSERT INTO ${this.section} (creator_id, guest_id, guest_id_source, blacklisted, first_name, middle_name, last_name, data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
 
     return this.db.oneOrNone(sqlStatement, [
+      payload.creatorId,
       payload.guestId,
       payload.guestIdSource,
       payload.blacklisted,

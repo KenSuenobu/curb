@@ -11,7 +11,13 @@ import {IconButton, Menu, MenuItem, Stack, Typography} from '@mui/material';
 import Item from '@/app/components/common/Item';
 import AuthProvider from '@/app/providers/AuthProvider';
 import {SideBarMenuGroupProps} from '@/app/components/main-layout/SideBarMenuGroup';
-import {DirectionsCarOutlined, MenuOpenOutlined, RefreshOutlined} from '@mui/icons-material';
+import {
+  DirectionsCarOutlined, GarageOutlined,
+  MenuOpenOutlined,
+  PeopleOutlined,
+  PersonOffOutlined,
+  RefreshOutlined
+} from '@mui/icons-material';
 import SideBar from '@/app/components/main-layout/SideBar';
 import {signOut, useSession} from 'next-auth/react';
 import Divider from '@mui/material/Divider';
@@ -88,14 +94,15 @@ const Layout: NextPage = ({children, params}: any) => {
     ],
   };
 
-  // const fleetItems: SideBarMenuGroupProps = {
-  //   label: 'Fleet',
-  //   items: [
-  //     {
-  //       icon: <GarageOutlined/>,
-  //       label: 'Fleet Cars',
-  //       onClick: () => setCurrentPage(<Fleet jwt={jwt as string}/>),
-  //     },
+  const fleetItems: SideBarMenuGroupProps = {
+    label: 'Fleet',
+    items: [
+      {
+        icon: <GarageOutlined/>,
+        label: 'Fleet',
+        onClick: () => router.push('/fleet'),
+        url: '/fleet',
+      },
   //     {
   //       icon: <CarCrashOutlined/>,
   //       label: 'Fleet Car Maintenance',
@@ -116,23 +123,25 @@ const Layout: NextPage = ({children, params}: any) => {
   //       label: 'Fleet Membership',
   //       onClick: () => setCurrentPage(<FleetMembership jwt={jwt as string}/>),
   //     },
-  //   ],
-  // };
+    ],
+  };
   // const guestItems: SideBarMenuGroupProps = {
   //   label: 'Guests',
   //   items: [
   //     {
   //       icon: <PeopleOutlined/>,
   //       label: 'Guests',
-  //       onClick: () => setCurrentPage(<Guests jwt={jwt as string} blacklisted={false}/>),
+  //       onClick: () => router.push('/guests/whitelisted'),
+  //       url: '/guests/whitelisted',
   //     },
   //     {
   //       icon: <PersonOffOutlined/>,
   //       label: 'Blacklisted Guests',
-  //       onClick: () => setCurrentPage(<Guests jwt={jwt as string} blacklisted={true}/>),
+  //       onClick: () => router.push('/guests/blacklisted'),
+  //       url: '/guests/blacklisted',
   //     },
   //   ],
-  // }
+  // };
   // const tripItems: SideBarMenuGroupProps = {
   //   label: 'Trips',
   //   items: [
@@ -173,7 +182,7 @@ const Layout: NextPage = ({children, params}: any) => {
   //     },
   //   ],
   // }
-  const sidebarItems = [carItems];
+  const sidebarItems = [carItems, fleetItems];
 
   const handleHomeClicked = () => {
     router.push('/');
@@ -213,95 +222,96 @@ const Layout: NextPage = ({children, params}: any) => {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ConfirmDialog/>
-        <AuthProvider>
-          <div style={{ display: 'flex', width: '100%' }}>
-            {/* Side Divider, only contains the sidebar, which is static.*/}
-            <div style={{ width: '260px' }}>
-              <SideBar width={ 260 } sidebarItems={sidebarItems} onHomeClicked={handleHomeClicked}/>
-            </div>
 
-            {/* Right side, top portion of the page, contains the top navigation bar. */}
-            <div style={{ position: 'fixed',
-              paddingLeft: '10px',
-              paddingRight: '270px',
-              borderLeft: '1px solid rgb(35, 60, 82)',
-              borderBottom: '1px solid rgb(35, 60, 82)',
-              left: '260px',
-              width: '100%',
-              height: '46px',
-              backgroundColor: 'rgb(5, 30, 52)',
-              color: '#fff' }}>
+        <ConfirmDialog/>
+        <div style={{ display: 'flex', width: '100%' }}>
+          {/* Side Divider, only contains the sidebar, which is static.*/}
+          <div style={{ width: '260px' }}>
+            <SideBar width={ 260 } sidebarItems={sidebarItems} onHomeClicked={handleHomeClicked}/>
+          </div>
+
+          {/* Right side, top portion of the page, contains the top navigation bar. */}
+          <div style={{ position: 'fixed',
+            paddingLeft: '10px',
+            paddingRight: '270px',
+            borderLeft: '1px solid rgb(35, 60, 82)',
+            borderBottom: '1px solid rgb(35, 60, 82)',
+            left: '260px',
+            width: '100%',
+            height: '46px',
+            backgroundColor: 'rgb(5, 30, 52)',
+            color: '#fff' }}>
+            <Stack direction={'row'}>
+              <Item sx={{ width: '90%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'left' }}>
+                <Typography variant={'h6'} fontWeight={'bold'}>
+                  Welcome to Curb
+                  {/*{userInfo?.emailAddress ?? <LinearProgress/>}*/}
+                </Typography>
+              </Item>
+
+              <Item sx={{ width: '10%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'right', paddingTop: '4px' }}>
+                <IconButton onClick={handleMenu}>
+                  <MenuOpenOutlined style={{ color: 'white' }}/>
+                </IconButton>
+                <Menu id={'menu-appbar'} anchorEl={anchorEl}
+                      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                      keepMounted
+                      open={Boolean(anchorEl)} onClose={handleClose}>
+                  <MenuItem onClick={handleFeedback} style={{ fontWeight: 'bold' }} disabled>Feedback</MenuItem>
+                  <Divider/>
+                  <MenuItem onClick={handleProfile} disabled>Profile</MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </Item>
+            </Stack>
+          </div>
+
+          {/* Right side main container that displays all relevant content regarding the page that was selected */}
+          <div style={{ position: 'fixed',
+            paddingLeft: '10px',
+            paddingRight: '10px',
+            paddingTop: '10px',
+            left: '260px',
+            top: '47px',
+            width: 'calc(100% - 260px)',
+            height: 'calc(100% - 48px)',
+            backgroundColor: '#fff',
+            color: '#000',
+            overflowY: 'auto',
+          }}>
+            {headerTitle.toString().trim().length > 0 && (
               <Stack direction={'row'}>
-                <Item sx={{ width: '90%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'left' }}>
-                  <Typography variant={'h6'} fontWeight={'bold'}>
-                    Welcome to Curb
-                    {/*{userInfo?.emailAddress ?? <LinearProgress/>}*/}
+                <Item sx={{ paddingLeft: '15px',
+                  width: '90%',
+                  textAlign: 'left',
+                  backgroundColor: '#000',
+                  color: '#fff'
+                }}>
+                  <Typography fontWeight={'bold'}>
+                    {headerTitle}
                   </Typography>
                 </Item>
-
-                <Item sx={{ width: '10%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'right', paddingTop: '4px' }}>
-                  <IconButton onClick={handleMenu}>
-                    <MenuOpenOutlined style={{ color: 'white' }}/>
+                <Item sx={{ paddingLeft: '15px',
+                  width: '10%',
+                  textAlign: 'right',
+                  backgroundColor: '#000',
+                  color: '#fff'
+                }}>
+                  <IconButton style={{ padding: '0px' }}
+                              onClick={() => {
+                                router.refresh();
+                              }}>
+                    <RefreshOutlined style={{ color: 'white' }}/>
                   </IconButton>
-                  <Menu id={'menu-appbar'} anchorEl={anchorEl}
-                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                        keepMounted
-                        open={Boolean(anchorEl)} onClose={handleClose}>
-                    <MenuItem onClick={handleFeedback} style={{ fontWeight: 'bold' }} disabled>Feedback</MenuItem>
-                    <Divider/>
-                    <MenuItem onClick={handleProfile} disabled>Profile</MenuItem>
-                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                  </Menu>
                 </Item>
               </Stack>
-            </div>
-
-            {/* Right side main container that displays all relevant content regarding the page that was selected */}
-            <div style={{ position: 'fixed',
-              paddingLeft: '10px',
-              paddingRight: '10px',
-              paddingTop: '10px',
-              left: '260px',
-              top: '47px',
-              width: 'calc(100% - 260px)',
-              height: 'calc(100% - 48px)',
-              backgroundColor: '#fff',
-              color: '#000',
-              overflowY: 'auto',
-            }}>
-              {headerTitle.toString().trim().length > 0 && (
-                <Stack direction={'row'}>
-                  <Item sx={{ paddingLeft: '15px',
-                    width: '90%',
-                    textAlign: 'left',
-                    backgroundColor: '#000',
-                    color: '#fff'
-                  }}>
-                    <Typography fontWeight={'bold'}>
-                      {headerTitle}
-                    </Typography>
-                  </Item>
-                  <Item sx={{ paddingLeft: '15px',
-                    width: '10%',
-                    textAlign: 'right',
-                    backgroundColor: '#000',
-                    color: '#fff'
-                  }}>
-                    <IconButton style={{ padding: '0px' }}
-                                onClick={() => {
-                                  router.refresh();
-                                }}>
-                      <RefreshOutlined style={{ color: 'white' }}/>
-                    </IconButton>
-                  </Item>
-                </Stack>
-              )}
+            )}
+            <AuthProvider>
               {children}
-            </div>
+            </AuthProvider>
           </div>
-        </AuthProvider>
+        </div>
       </body>
     </html>
   );
