@@ -16,17 +16,17 @@ const HEADER_NAME = 'Fleet';
 
 const FleetList = (props: IFleetList) => {
   const [inputShowing, setInputShowing] = useState(false);
-  const [fleetList, setFleetList] = useState<IFleet[]>([]);
+  const [fleetList, setFleetList] = useState<any[]>([]);
   const [fleetId, setFleetId] = useState<number>(0);
   const [loading, setLoading] = useState(false);
-  const fleetRef = useRef('');
+  const fleetRef = useRef<any>('');
   const {data: session} = useSession();
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
 
   const reloadFleets = () => {
     setLoading(true);
     getAllFleets(accessToken)
-      .then((x) => {
+      .then((x: any) => {
         setFleetList(x.fleets ?? []);
         setLoading(false);
         setFleetId(0);
@@ -53,7 +53,7 @@ const FleetList = (props: IFleetList) => {
     }
 
     createFleet(accessToken, fleetName)
-      .then((x) => {
+      .then((x: any) => {
         reloadFleets();
       })
       .catch((x) => {
@@ -103,10 +103,10 @@ const FleetList = (props: IFleetList) => {
         )}
         {fleetList.length > 0 ? (
           <TableBody>
-            {fleetList.map((x) => {
+            {fleetList.map((x: any, count: number) => {
               const bgColor = fleetId === x.id ? SELECTED_COLOR : '#fff';
 
-              return <ArrowedTableRow value={x.name} bgColor={bgColor}
+              return <ArrowedTableRow value={x.name} bgColor={bgColor} key={count}
                                       onClick={() => selectFleetItem(x)}/>;
             })}
           </TableBody>
