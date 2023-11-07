@@ -12,7 +12,7 @@ import Item from '@/app/components/common/Item';
 import AuthProvider from '@/app/providers/AuthProvider';
 import {SideBarMenuGroupProps} from '@/app/components/main-layout/SideBarMenuGroup';
 import {
-  DirectionsCarOutlined, GarageOutlined,
+  DirectionsCarOutlined, GarageOutlined, InfoOutlined,
   MenuOpenOutlined,
   PeopleOutlined,
   PersonOffOutlined,
@@ -99,7 +99,7 @@ const Layout: NextPage = ({children, params}: any) => {
     items: [
       {
         icon: <GarageOutlined/>,
-        label: 'Fleet',
+        label: 'Fleet Cars',
         onClick: () => router.push('/fleet'),
         url: '/fleet',
       },
@@ -299,10 +299,8 @@ const Layout: NextPage = ({children, params}: any) => {
                   color: '#fff'
                 }}>
                   <IconButton style={{ padding: '0px' }}
-                              onClick={() => {
-                                router.refresh();
-                              }}>
-                    <RefreshOutlined style={{ color: 'white' }}/>
+                              onClick={() => {}}>
+                    <InfoOutlined style={{ color: 'white' }}/>
                   </IconButton>
                 </Item>
               </Stack>

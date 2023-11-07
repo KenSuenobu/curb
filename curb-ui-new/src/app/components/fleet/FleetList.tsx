@@ -3,18 +3,21 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useSession} from 'next-auth/react';
 import ArrowedTableRow from '@/app/components/common/ArrowedTableRow';
 import {TableHeader} from '@/app/components/common/TableHeader';
-import {getAllFleets} from '@/app/services/fleet';
+import {createFleet, getAllFleets} from '@/app/services/fleet';
 import LoadingTable from '@/app/components/common/LoadingTable';
+import {errorDialog} from '@/app/components/common/ConfirmDialog';
 
 export interface IFleetList {
   onClick: (x: any) => any;
 }
 
+const SELECTED_COLOR = '#ccf';
 const HEADER_NAME = 'Fleet';
 
 const FleetList = (props: IFleetList) => {
   const [inputShowing, setInputShowing] = useState(false);
   const [fleetList, setFleetList] = useState<IFleet[]>([]);
+  const [fleetId, setFleetId] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const fleetRef = useRef('');
   const {data: session} = useSession();
@@ -26,10 +29,12 @@ const FleetList = (props: IFleetList) => {
       .then((x) => {
         setFleetList(x.fleets ?? []);
         setLoading(false);
+        setFleetId(0);
       })
       .catch((x) => {
         setFleetList([]);
         setLoading(false);
+        setFleetId(0);
       });
   }
 
@@ -40,22 +45,25 @@ const FleetList = (props: IFleetList) => {
   }, [session]);
 
   const addFleet = () => {
-    // const fleetName = fleetRef.current.value.trim();
-    //
-    // if (fleetName.length === 0) {
-    //   errorDialog('Fleet name is required.');
-    //   return;
-    // }
-    //
-    // if (userInfo) {
-    //   axios.post(`/app/fleet/create/fleet/${userInfo.id}`, {
-    //     name: fleetName,
-    //   }).then((x) => {
-    //     reloadFleet(userInfo.id);
-    //     setFleetInputShowing(false);
-    //     fleetRef.current.value = '';
-    //   });
-    // }
+    const fleetName = fleetRef.current.value.trim();
+
+    if (fleetName.length === 0) {
+      errorDialog('Fleet name is required.');
+      return;
+    }
+
+    createFleet(accessToken, fleetName)
+      .then((x) => {
+        reloadFleets();
+      })
+      .catch((x) => {
+        errorDialog(`Failed to add fleet: ${x.message}`);
+      });
+  }
+
+  const selectFleetItem = (x: any) => {
+    setFleetId(x.id);
+    props.onClick(x);
   }
 
   if (loading) {
@@ -84,7 +92,7 @@ const FleetList = (props: IFleetList) => {
                                }
                              }}/></TableCell>
                 <TableCell>
-                  <Button variant={'contained'} onClick={() => addFleet()}>ADD</Button>
+                  <Button variant={'contained'} onClick={addFleet}>ADD</Button>
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -96,11 +104,10 @@ const FleetList = (props: IFleetList) => {
         {fleetList.length > 0 ? (
           <TableBody>
             {fleetList.map((x) => {
-              // const bgColor = fleetId === x.id ? SELECTED_COLOR : '#fff';
-              const bgColor = '#fff';
+              const bgColor = fleetId === x.id ? SELECTED_COLOR : '#fff';
 
               return <ArrowedTableRow value={x.name} bgColor={bgColor}
-                                      onClick={() => props.onClick(x)}/>;
+                                      onClick={() => selectFleetItem(x)}/>;
             })}
           </TableBody>
         ) : (

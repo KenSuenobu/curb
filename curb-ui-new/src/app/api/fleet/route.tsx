@@ -7,8 +7,6 @@ export async function GET(request: any) {
     const accessToken = request.headers.get('Authorization');
     const decodedJwt = verifyJwt(accessToken);
 
-    console.log(`AccessToken=${accessToken} decodedJwt=${JSON.stringify(decodedJwt, null, 2)}`);
-
     if (!accessToken || !decodedJwt) {
       return NextResponse.json({
         message: 'Unauthorized',
@@ -23,6 +21,39 @@ export async function GET(request: any) {
     console.error('Unable to get list of car makes', e);
     return NextResponse.json({
       message: 'Failed to retrieve list of car makes',
+      result: e,
+    }, { status: 500 });
+  }
+}
+
+export async function POST(request: any) {
+  try {
+    const { fleet } = await request.json();
+    const accessToken = request.headers.get('Authorization');
+    const decodedJwt: any = verifyJwt(accessToken);
+
+    if (!fleet) {
+      return NextResponse.json({
+        message: 'Fleet name is required'
+      }, { status: 400 });
+    }
+
+    const result = await axios.post(`${process.env.CURB_SERVER_URL}/fleet/create/fleet/${decodedJwt.id}`,
+        {
+          creatorId: decodedJwt.id,
+          name: fleet,
+        })
+      .then((res) => res.data);
+
+    return NextResponse.json({
+      result: {
+        accessToken
+      },
+    }, { status: 201 });
+  } catch (e) {
+    console.error('Unable to create car make', e);
+    return NextResponse.json({
+      message: 'Failed to create car make',
       result: e,
     }, { status: 500 });
   }
