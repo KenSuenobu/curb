@@ -107,18 +107,6 @@ CREATE UNIQUE INDEX idx_signup_unique ON curb.signup(email_address);
 
 -- ---
 --
--- DROP TABLE IF EXISTS curb.fleet_car CASCADE;
---
--- CREATE TABLE curb.fleet_car (
---     id SERIAL NOT NULL PRIMARY KEY,
---     fleet_id INT NOT NULL REFERENCES curb.fleet(id),
---     owner_id INT NOT NULL REFERENCES curb.user(id),
---     car_trim_id INT NOT NULL REFERENCES curb.car_trim(id),
---     data JSONB
--- );
---
--- ---
---
 -- DROP TABLE IF EXISTS curb.car_fleet_loan;
 -- DROP INDEX IF EXISTS idx_car_fleet_loan_unique;
 --

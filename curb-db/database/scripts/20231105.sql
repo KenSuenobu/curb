@@ -24,3 +24,14 @@ CREATE TABLE curb.fleet_membership (
 
 CREATE UNIQUE INDEX idx_fleet_membership_unique ON curb.fleet_membership(user_id, fleet_id);
 
+---
+
+DROP TABLE IF EXISTS curb.fleet_car CASCADE;
+
+CREATE TABLE curb.fleet_car (
+    id SERIAL NOT NULL PRIMARY KEY,
+    fleet_id INT NOT NULL REFERENCES curb.fleet(id),
+    owner_id INT NOT NULL REFERENCES curb.user(id),
+    car_trim_id INT NOT NULL REFERENCES curb.car_trim(id),
+    data JSONB
+);

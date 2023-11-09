@@ -8,6 +8,7 @@ export interface SideBarMenuItemProps {
   label: string;
   onClick: () => any;
   url: string;
+  info: any;
   disabled?: boolean;
 }
 

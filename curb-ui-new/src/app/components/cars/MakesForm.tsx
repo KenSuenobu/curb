@@ -36,6 +36,8 @@ const MakesForm = (props: IMakesForm) => {
   const reloadMakes = async () => {
     if (accessToken) {
       setLoading(true);
+      setSelectedId(0);
+
       getAllMakes(accessToken)
         .then((res: any) => {
           setMakesList(res.makes);

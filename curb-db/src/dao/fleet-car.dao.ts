@@ -16,9 +16,9 @@ export class FleetCarDao extends BaseDao<FleetCarDto> {
       'd.name AS model_name, e.name AS make_name ' +
       '  FROM curb.fleet_car a, curb.car_trim b, curb.car_year c, curb.car_model d, curb.car_make e' +
       ' WHERE b.id=a.car_trim_id ' +
-      '   AND c.id=b.year_id ' +
-      '   AND d.id=c.model_id ' +
-      '   AND e.id=d.make_id ' +
+      '   AND c.id=b.car_year_id ' +
+      '   AND d.id=c.car_model_id ' +
+      '   AND e.id=d.car_make_id ' +
       '   AND a.fleet_id=$1' +
       ' ORDER BY car_trim_id';
 
@@ -31,9 +31,9 @@ export class FleetCarDao extends BaseDao<FleetCarDto> {
       'd.name AS model_name, e.name AS make_name ' +
       '  FROM curb.fleet_car a, curb.car_trim b, curb.car_year c, curb.car_model d, curb.car_make e' +
       ' WHERE b.id=a.car_trim_id ' +
-      '   AND c.id=b.year_id ' +
-      '   AND d.id=c.model_id ' +
-      '   AND e.id=d.make_id ' +
+      '   AND c.id=b.car_year_id ' +
+      '   AND d.id=c.car_model_id ' +
+      '   AND e.id=d.car_make_id ' +
       '   AND a.data->>$1=$2' +
       ' ORDER BY car_trim_id';
 

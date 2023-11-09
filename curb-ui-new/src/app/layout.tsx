@@ -90,6 +90,24 @@ const Layout: NextPage = ({children, params}: any) => {
         label: 'Car Definitions',
         onClick: () => router.push('/car-definitions'),
         url: '/car-definitions',
+        info:
+          <>
+            <Typography>
+              <b>Car Definitions</b>
+              <p/>
+              Car definitions is a database of car makes, models, years, and trims.
+              This database is used to define the cars that are members of fleets, so the more
+              information contained in this database, the better.
+              <p/>
+              You are encouraged to add more car information to this database to help fill out
+              defined cars in your fleet.  Use sites like Consumer Reports&trade; and Car and Driver&trade;
+              to help enrichen the car information.
+              <p/>
+              The data here will eventually help give more information about your cars in the
+              dashboard, and will help show you depreciation schedules, comparisons with prices
+              other people paid, etc.
+            </Typography>
+          </>
       },
     ],
   };
@@ -102,6 +120,20 @@ const Layout: NextPage = ({children, params}: any) => {
         label: 'Fleet Cars',
         onClick: () => router.push('/fleet'),
         url: '/fleet',
+        info:
+          <>
+            <Typography>
+              <b>Fleet Cars</b>
+              <p/>
+              Use this section to create your fleet by name, and add the cars that your
+              fleet owns.
+              <p/>
+              Once each car is defined, you can provide a nickname, original purchase
+              price, car color, and much more.  As Curb grows, so will your fleet, and
+              so will your fleet info!  Stay tuned to these pages, and the What&apos;s
+              New pages to learn more as the project matures.
+            </Typography>
+          </>
       },
   //     {
   //       icon: <CarCrashOutlined/>,
@@ -219,6 +251,14 @@ const Layout: NextPage = ({children, params}: any) => {
     });
   }) ?? '';
 
+  const headerInfo: any = sidebarItems.map((x) => {
+    return x.items.map((x) => {
+      if (pathname.startsWith(x.url)) {
+        return x.info;
+      }
+    });
+  }) ?? '';
+
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -280,7 +320,7 @@ const Layout: NextPage = ({children, params}: any) => {
             color: '#000',
             overflowY: 'auto',
           }}>
-            {headerTitle.toString().trim().length > 0 && (
+            {headerTitle && (
               <Stack direction={'row'}>
                 <Item sx={{ paddingLeft: '15px',
                   width: '90%',
@@ -299,7 +339,7 @@ const Layout: NextPage = ({children, params}: any) => {
                   color: '#fff'
                 }}>
                   <IconButton style={{ padding: '0px' }}
-                              onClick={() => {}}>
+                              onClick={() => alertDialog(headerInfo)}>
                     <InfoOutlined style={{ color: 'white' }}/>
                   </IconButton>
                 </Item>

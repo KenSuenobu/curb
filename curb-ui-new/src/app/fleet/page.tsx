@@ -2,14 +2,45 @@
 
 import FleetList from '@/app/components/fleet/FleetList';
 import Paper from '@mui/material/Paper';
+import {useEffect, useState} from 'react';
+import {getFleetCars} from '@/app/services/fleet';
+import {useSession} from 'next-auth/react';
 
 const Fleet = () => {
+  const [fleetCarList, setFleetCarList] = useState<any[]>([]);
+  const [fleetCarId, setFleetCarId] = useState<number>(0);
+  const {data: session} = useSession();
+  const accessToken = session ? (session as any)['user']['accessToken'] : '';
+
+  const reloadFleetCars = () => {
+    if (accessToken) {
+      if (fleetCarId === 0) {
+        setFleetCarList([]);
+        setFleetCarId(0);
+        return;
+      }
+
+      getFleetCars(accessToken, fleetCarId)
+        .then((x) => {
+          console.log('Result data', x);
+        })
+        .catch((x) => {
+          console.log('Error', x);
+          setFleetCarList([]);
+        });
+    }
+  }
+
+  useEffect(() => {
+    reloadFleetCars();
+  }, [fleetCarId, accessToken]);
+
   return (
     <>
       <Paper sx={{ width: '100%' }}>
         <div style={{ display: 'flex' }}>
           <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
-            <FleetList onClick={(x: any) => {}}/>
+            <FleetList onClick={(x: any) => setFleetCarId(x.id)}/>
           </div>
         </div>
       </Paper>

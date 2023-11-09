@@ -47,7 +47,7 @@ export const confirmDialog = (message: string, onSubmit: () => void) => {
 
 export const alertDialog = (message: string) => {
   useConfirmDialogStore.setState({
-    message, title: 'Alert', dialogType: ConfirmDialogEnum.ALERT, isOpen: true
+    message, title: '', dialogType: ConfirmDialogEnum.ALERT, isOpen: true
   });
 }
 
