@@ -5,35 +5,13 @@ import Paper from '@mui/material/Paper';
 import {useEffect, useState} from 'react';
 import {getFleetCars} from '@/app/services/fleet';
 import {useSession} from 'next-auth/react';
+import FleetCarList from '@/app/components/fleet/FleetCarList';
+import {alertDialog} from '@/app/components/common/ConfirmDialog';
 
 const Fleet = () => {
-  const [fleetCarList, setFleetCarList] = useState<any[]>([]);
   const [fleetCarId, setFleetCarId] = useState<number>(0);
   const {data: session} = useSession();
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
-
-  const reloadFleetCars = () => {
-    if (accessToken) {
-      if (fleetCarId === 0) {
-        setFleetCarList([]);
-        setFleetCarId(0);
-        return;
-      }
-
-      getFleetCars(accessToken, fleetCarId)
-        .then((x) => {
-          console.log('Result data', x);
-        })
-        .catch((x) => {
-          console.log('Error', x);
-          setFleetCarList([]);
-        });
-    }
-  }
-
-  useEffect(() => {
-    reloadFleetCars();
-  }, [fleetCarId, accessToken]);
 
   return (
     <>
@@ -42,74 +20,16 @@ const Fleet = () => {
           <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
             <FleetList onClick={(x: any) => setFleetCarId(x.id)}/>
           </div>
+
+          <div style={{ width: '75%', borderRight: '1px solid #ccc' }}>
+            <FleetCarList fleetId={fleetCarId}
+                          onClick={(fleetCarId: number) => {
+                            alertDialog(`Selected fleet car ID: ${fleetCarId}`);
+                          }}/>
+          </div>
         </div>
       </Paper>
-            {/*<TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>*/}
-            {/*  <Table stickyHeader size={'small'}>*/}
-            {/*    <TableHeader header={'Fleet'}*/}
-            {/*                 onAdd={() => setFleetInputShowing(!fleetInputShowing)}*/}
-            {/*                 onEdit={() => {}}/>*/}
-            {/*    {fleetInputShowing ? (*/}
-            {/*      <>*/}
-            {/*        <TableBody>*/}
-            {/*          <TableRow>*/}
-            {/*            <TableCell>*/}
-            {/*              <TextField id={'namespace'} variant={'standard'} required inputRef={fleetRef}*/}
-            {/*                         autoFocus fullWidth*/}
-            {/*                         onKeyDown={(ev) => {*/}
-            {/*                           if (ev.key === 'Escape') {*/}
-            {/*                             setFleetInputShowing(false);*/}
-            {/*                             fleetRef.current.value = '';*/}
-            {/*                           } else if (ev.key === 'Enter') {*/}
-            {/*                             addFleet();*/}
-            {/*                           }*/}
-            {/*                         }}/></TableCell>*/}
-            {/*            <TableCell>*/}
-            {/*              <Button variant={'contained'} onClick={() => addFleet()}>ADD</Button>*/}
-            {/*            </TableCell>*/}
-            {/*          </TableRow>*/}
-            {/*        </TableBody>*/}
-            {/*      </>*/}
-            {/*    ) : (*/}
-            {/*      <>*/}
-            {/*      </>*/}
-            {/*    )}*/}
-            {/*    {fleetList.length > 0 ? (*/}
-            {/*      <TableBody>*/}
-            {/*        {fleetList.map((x) => {*/}
-            {/*          const bgColor = fleetId === x.id ? SELECTED_COLOR : '#fff';*/}
 
-            {/*          return (*/}
-            {/*            <>*/}
-            {/*              <TableRow hover sx={{ cursor: 'pointer' }}>*/}
-            {/*                <TableCell*/}
-            {/*                  sx={{ backgroundColor: bgColor, width: '90%' }}*/}
-            {/*                  onClick={() => {*/}
-            {/*                    setFleetId(x.id!);*/}
-            {/*                    setFleetCarId(0);*/}
-            {/*                    reloadFleetCars(x.id!);*/}
-            {/*                  }}><Typography>{x.name}</Typography></TableCell>*/}
-            {/*                <TableCell*/}
-            {/*                  onClick={() => {*/}
-            {/*                    setFleetId(x.id!);*/}
-            {/*                    setFleetCarId(0);*/}
-            {/*                    reloadFleetCars(x.id!);*/}
-            {/*                  }}*/}
-            {/*                  sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}><ArrowRightOutlined/></TableCell>*/}
-            {/*              </TableRow>*/}
-            {/*            </>*/}
-            {/*          )}*/}
-            {/*        )}*/}
-            {/*      </TableBody>*/}
-            {/*    ) : (*/}
-            {/*      <>*/}
-            {/*      </>*/}
-            {/*    )}*/}
-            {/*  </Table>*/}
-            {/*</TableContainer>*/}
-            {/*</div>*/}
-
-        {/*  <div style={{ width: '75%', borderRight: '1px solid #ccc' }}>*/}
         {/*    <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>*/}
         {/*      <Table stickyHeader size={'small'}>*/}
         {/*        <TableHeader header={'Fleet Car'}*/}
@@ -273,7 +193,6 @@ const Fleet = () => {
         {/*        )}*/}
         {/*      </Table>*/}
         {/*    </TableContainer>*/}
-      {/*    </div>*/}
       {/*</Paper>*/}
 
       {/*{fleetCarId != 0 ? (*/}

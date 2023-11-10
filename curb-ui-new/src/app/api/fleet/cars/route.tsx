@@ -21,7 +21,7 @@ export async function GET(request: any) {
       }, { status: 404 });
     }
 
-    const cars = await axios.get(`${process.env.CURB_SERVER_URL}/fleet/list/fleet/${fleetId}`)
+    const cars: any = await axios.get(`${process.env.CURB_SERVER_URL}/fleet/list/fleet/${fleetId}`)
       .then((res) => res.data);
 
     return NextResponse.json({ cars }, { status: 200 });
