@@ -33,3 +33,44 @@ export async function GET(request: any) {
     }, { status: 500 });
   }
 }
+
+export async function POST(request: any) {
+  try {
+    const { fleetId, carTrimId } = await request.json();
+    const accessToken = request.headers.get('Authorization');
+    const decodedJwt: any = verifyJwt(accessToken);
+
+    console.log(`Adding: fleetId=${fleetId} carTrimId=${carTrimId} ownerId=${decodedJwt.id}`);
+
+    if (!fleetId) {
+      return NextResponse.json({
+        message: 'Fleet ID is required'
+      }, { status: 400 });
+    }
+
+    if (!carTrimId) {
+      return NextResponse.json({
+        message: 'Car Trim ID is required'
+      }, { status: 400 });
+    }
+
+    const result = await axios.post(`${process.env.CURB_SERVER_URL}/fleet/create/car`, {
+      fleetId,
+      ownerId: decodedJwt.id,
+      carTrimId,
+      data: {}
+    }).then((res) => res.data);
+
+    return NextResponse.json({
+      result: {
+        accessToken
+      },
+    }, { status: 201 });
+  } catch (e) {
+    console.error('Unable to create car make', e);
+    return NextResponse.json({
+      message: 'Failed to create car make',
+      result: e,
+    }, { status: 500 });
+  }
+}

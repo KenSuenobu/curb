@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import LogoutButton from '@/app/components/LogoutButton';
+import LogoutButton from '@/app/components/login/LogoutButton';
 import {getAllMakes} from '@/app/services/car-definitions';
 import MakesForm from '@/app/components/cars/MakesForm';
 

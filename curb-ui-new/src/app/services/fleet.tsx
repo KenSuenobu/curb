@@ -53,3 +53,20 @@ export const getFleetCars = (accessToken: any, fleetId: number) => {
       .catch(e => reject(e));
   });
 }
+
+export const addFleetCar = (accessToken: any, fleetId: number, carTrimId: number) => {
+  return new Promise((resolve, reject) => {
+    axios.post('/api/fleet/cars', {
+      fleetId,
+      carTrimId,
+    }, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+    .then((res) => resolve(res.data))
+    .catch(e => reject(e));
+  });
+}

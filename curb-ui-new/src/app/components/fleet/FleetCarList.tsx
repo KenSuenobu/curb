@@ -1,10 +1,23 @@
-import {getFleetCars} from '@/app/services/fleet';
+import {addFleetCar, getFleetCars} from '@/app/services/fleet';
 import {useEffect, useState} from 'react';
 import {useSession} from 'next-auth/react';
-import {IconButton, Table, TableBody, TableCell, TableContainer, TableRow, Typography} from '@mui/material';
+import {
+  Button,
+  FormControl,
+  IconButton, InputLabel, MenuItem, Select,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography
+} from '@mui/material';
 import {TableHeader} from '@/app/components/common/TableHeader';
 import {errorDialog} from '@/app/components/common/ConfirmDialog';
 import {DeleteOutlined} from '@mui/icons-material';
+import Item from '@/app/components/common/Item';
+import {getAllMakes, getAllModels, getAllTrims, getAllYears} from '@/app/services/car-definitions';
 
 export interface IFleetCarList {
   fleetId: number;
@@ -20,6 +33,14 @@ const FleetCarList = (props: IFleetCarList) => {
   const [fleetCarList, setFleetCarList] = useState<any[]>([]);
   const [fleetCarId, setFleetCarId] = useState<number>(0);
   const [inputShowing, setInputShowing] = useState<boolean>(false);
+  const [carMakeList, setCarMakeList] = useState<any[]>([]);
+  const [carModelList, setCarModelList] = useState<any[]>([]);
+  const [carYearList, setCarYearList] = useState<any[]>([]);
+  const [carTrimList, setCarTrimList] = useState<any[]>([]);
+  const [carMakeId, setCarMakeId] = useState<number>(0);
+  const [carModelId, setCarModelId] = useState<number>(0);
+  const [carYearId, setCarYearId] = useState<number>(0);
+  const [carTrimId, setCarTrimId] = useState<number>(0);
 
   const reloadFleetCars = () => {
     if (accessToken) {
@@ -41,9 +62,19 @@ const FleetCarList = (props: IFleetCarList) => {
 
   useEffect(() => {
     reloadFleetCars();
+    getAllMakes(accessToken)
+      .then((x) => setCarMakeList(x.makes));
   }, [props.fleetId, accessToken]);
 
   const toggleInput = () => setInputShowing(!inputShowing);
+
+  const addFleetCarToFleet = () => {
+    addFleetCar(accessToken, props.fleetId, carTrimId)
+      .then((x) => {
+        console.log('Added fleet car', x);
+        reloadFleetCars();
+      });
+  }
 
   return (
     <>
@@ -58,104 +89,99 @@ const FleetCarList = (props: IFleetCarList) => {
 
                          toggleInput();
 
-                         // setCarMakeId(0);
-                         // setCarModelId(0);
-                         // setCarYearId(0);
-                         // setCarTrimId(0);
-                         // setFleetCarId(0);
-                         // setCarModelList([]);
-                         // setCarYearList([]);
-                         // setCarTrimList([]);
-                         // setCarFleetData({});
+                         setCarModelList([]);
+                         setCarYearList([]);
+                         setCarTrimList([]);
+                         setCarModelId(0);
+                         setCarYearId(0);
+                         setCarTrimId(0);
                        }}/>
-              {/*{inputShowing ? (*/}
-              {/*  <TableBody>*/}
-              {/*    <TableRow>*/}
-              {/*      <TableCell colSpan={2}>*/}
-              {/*        <Stack direction={'row'}>*/}
-              {/*          <Item sx={{ width: '25%' }}>*/}
-              {/*            <FormControl sx={{ width: '100%' }}>*/}
-              {/*              <InputLabel id={'fuel-type-label'}>Car Make</InputLabel>*/}
-              {/*              <Select labelId={'fuel-type-label'} label={'Car Make'} name={'carMake'}*/}
-              {/*                      style={{ textAlign: 'left' }} fullWidth*/}
-              {/*                      onChange={((e: any) => {*/}
-              {/*                        setCarMakeId(e.target.value);*/}
-              {/*                        setCarModelId(0);*/}
-              {/*                        setCarYearId(0);*/}
-              {/*                        setCarTrimId(0);*/}
-              {/*                        setFleetCarId(0);*/}
-              {/*                        LoadCarModels(e.target.value, (x) => setCarModelList(x as never[]));*/}
-              {/*                        setCarYearList([]);*/}
-              {/*                        setCarTrimList([]);*/}
-              {/*                        setCarFleetData({});*/}
-              {/*                      })}>*/}
-              {/*                {carMakeList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}*/}
-              {/*              </Select>*/}
-              {/*            </FormControl>*/}
-              {/*          </Item>*/}
-              {/*          <Item sx={{ width: '25%' }}>*/}
-              {/*            <FormControl sx={{ width: '100%' }}>*/}
-              {/*              <InputLabel id={'fuel-type-label'}>Car Model</InputLabel>*/}
-              {/*              <Select labelId={'fuel-type-label'} label={'Car Model'} name={'carModel'}*/}
-              {/*                      style={{ textAlign: 'left' }} fullWidth*/}
-              {/*                      onChange={(e: any) => {*/}
-              {/*                        setCarModelId(e.target.value);*/}
-              {/*                        setCarYearId(0);*/}
-              {/*                        setCarTrimId(0);*/}
-              {/*                        setFleetCarId(0);*/}
-              {/*                        LoadModelYears(e.target.value, (x) => setCarYearList(x as never[]));*/}
-              {/*                        setCarTrimList([]);*/}
-              {/*                        setCarFleetData({});*/}
-              {/*                      }}>*/}
-              {/*                {carModelList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}*/}
-              {/*              </Select>*/}
-              {/*            </FormControl>*/}
-              {/*          </Item>*/}
-              {/*          <Item sx={{ width: '25%' }}>*/}
-              {/*            <FormControl sx={{ width: '100%' }}>*/}
-              {/*              <InputLabel id={'fuel-type-label'}>Car Year</InputLabel>*/}
-              {/*              <Select labelId={'fuel-type-label'} label={'Car Year'} name={'carYear'}*/}
-              {/*                      style={{ textAlign: 'left' }} fullWidth*/}
-              {/*                      onChange={(e: any) => {*/}
-              {/*                        setCarYearId(e.target.value);*/}
-              {/*                        setCarTrimId(0);*/}
-              {/*                        setFleetCarId(0);*/}
-              {/*                        LoadCarTrims(e.target.value, (x) => setCarTrimList(x));*/}
-              {/*                        setCarFleetData({});*/}
-              {/*                      }}>*/}
-              {/*                {carYearList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.year}</MenuItem>)}*/}
-              {/*              </Select>*/}
-              {/*            </FormControl>*/}
-              {/*          </Item>*/}
-              {/*          <Item sx={{ width: '25%' }}>*/}
-              {/*            <FormControl sx={{ width: '100%' }}>*/}
-              {/*              <InputLabel id={'fuel-type-label'}>Car Trim</InputLabel>*/}
-              {/*              <Select labelId={'fuel-type-label'} label={'Car Trim'} name={'carTrim'}*/}
-              {/*                      style={{ textAlign: 'left' }} fullWidth*/}
-              {/*                      onChange={(e: any) => {*/}
-              {/*                        setCarTrimId(e.target.value);*/}
-              {/*                        setFleetCarId(0);*/}
-              {/*                        setCarFleetData({});*/}
-              {/*                      }}>*/}
-              {/*                {carTrimList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}*/}
-              {/*              </Select>*/}
-              {/*            </FormControl>*/}
-              {/*          </Item>*/}
-              {/*          <Item>*/}
-              {/*            <Button variant={'contained'}*/}
-              {/*                    disabled={carTrimId === 0}*/}
-              {/*                    onClick={() => addFleetCar()}>ADD</Button>*/}
-              {/*          </Item>*/}
-              {/*        </Stack>*/}
-              {/*      </TableCell>*/}
-              {/*    </TableRow>*/}
-              {/*  </TableBody>*/}
-              {/*) : (*/}
-              {/*  <>*/}
-              {/*  </>*/}
-              {/*)}*/}
-          {fleetCarList.length > 0 ? (
-            <TableBody>
+          <TableBody>
+          {inputShowing ?? (
+            <TableRow>
+              <TableCell colSpan={2}>
+                <Stack direction={'row'}>
+                  <Item sx={{ width: '25%', padding: '1px' }}>
+                    <FormControl sx={{ width: '100%' }}>
+                      <InputLabel id={'fuel-type-label'}>Car Make</InputLabel>
+                      <Select labelId={'fuel-type-label'} label={'Car Make'} name={'carMake'}
+                              style={{ textAlign: 'left' }} fullWidth
+                              onChange={((e: any) => {
+                                setCarMakeId(e.target.value);
+                                setCarModelList([]);
+                                setCarYearList([]);
+                                setCarTrimList([]);
+                                setCarModelId(0);
+                                setCarYearId(0);
+                                setCarTrimId(0);
+
+                                getAllModels(accessToken, e.target.value)
+                                  .then((x) => setCarModelList(x.makes));
+                              })}>
+                        {carMakeList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}
+                      </Select>
+                    </FormControl>
+                  </Item>
+                  <Item sx={{ width: '25%', padding: '1px' }}>
+                    <FormControl sx={{ width: '100%' }}>
+                      <InputLabel id={'fuel-type-label'}>Car Model</InputLabel>
+                      <Select labelId={'fuel-type-label'} label={'Car Model'} name={'carModel'}
+                              style={{ textAlign: 'left' }} fullWidth
+                              onChange={(e: any) => {
+                                setCarModelId(e.target.value);
+                                setCarYearList([]);
+                                setCarTrimList([]);
+                                setCarYearId(0);
+                                setCarTrimId(0);
+
+                                getAllYears(accessToken, e.target.value)
+                                  .then((x) => setCarYearList(x.makes));
+                              }}>
+                        {carModelList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}
+                      </Select>
+                    </FormControl>
+                  </Item>
+                  <Item sx={{ width: '25%', padding: '1px' }}>
+                    <FormControl sx={{ width: '100%' }}>
+                      <InputLabel id={'fuel-type-label'}>Car Year</InputLabel>
+                      <Select labelId={'fuel-type-label'} label={'Car Year'} name={'carYear'}
+                              style={{ textAlign: 'left' }} fullWidth
+                              onChange={(e: any) => {
+                                setCarYearId(e.target.value);
+                                setCarTrimList([]);
+                                setCarTrimId(0);
+
+                                getAllTrims(accessToken, e.target.value)
+                                  .then((x) => setCarTrimList(x.makes));
+                              }}>
+                        {carYearList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.year}</MenuItem>)}
+                      </Select>
+                    </FormControl>
+                  </Item>
+                  <Item sx={{ width: '25%', padding: '1px' }}>
+                    <FormControl sx={{ width: '100%' }}>
+                      <InputLabel id={'fuel-type-label'}>Car Trim</InputLabel>
+                      <Select labelId={'fuel-type-label'} label={'Car Trim'} name={'carTrim'}
+                              style={{ textAlign: 'left' }} fullWidth
+                              onChange={(e: any) => {
+                                setCarTrimId(e.target.value);
+                              }}>
+                        {carTrimList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}
+                      </Select>
+                    </FormControl>
+                  </Item>
+                  <Item sx={{ padding: '2px' }}>
+                    <Button variant={'contained'}
+                            disabled={carTrimId === 0}
+                            onClick={() => addFleetCarToFleet()}>ADD</Button>
+                  </Item>
+                </Stack>
+              </TableCell>
+            </TableRow>
+          )}
+
+          {fleetCarList.length > 0 && (
+            <>
               {fleetCarList.map((x: any) => {
                 const bgColor = fleetCarId === x.id ? SELECTED_COLOR : '#fff';
 
@@ -188,11 +214,9 @@ const FleetCarList = (props: IFleetCarList) => {
                   </>
                 )}
               )}
-            </TableBody>
-          ) : (
-            <>
             </>
           )}
+          </TableBody>
         </Table>
       </TableContainer>
     </>

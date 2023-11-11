@@ -1,207 +1,21 @@
-'use client';
+export interface IFleetCarForm {
+  fleetCarId: number;
+}
 
-import FleetList from '@/app/components/fleet/FleetList';
-import Paper from '@mui/material/Paper';
-import {useEffect, useState} from 'react';
-import {getFleetCars} from '@/app/services/fleet';
-import {useSession} from 'next-auth/react';
-import FleetCarList from '@/app/components/fleet/FleetCarList';
-import {alertDialog} from '@/app/components/common/ConfirmDialog';
-
-const Fleet = () => {
-  const [fleetCarId, setFleetCarId] = useState<number>(0);
-  const {data: session} = useSession();
-  const accessToken = session ? (session as any)['user']['accessToken'] : '';
+const FleetCarForm = (props: IFleetCarForm) => {
+  if (props.fleetCarId === 0) {
+    return (<></>);
+  }
 
   return (
     <>
-      <Paper sx={{ width: '100%' }}>
-        <div style={{ display: 'flex' }}>
-          <div style={{ width: '25%', borderRight: '1px solid #ccc' }}>
-            <FleetList onClick={(x: any) => setFleetCarId(x.id)}/>
-          </div>
+      Fleet Car ID: {props.fleetCarId}
 
-          <div style={{ width: '75%', borderRight: '1px solid #ccc' }}>
-            <FleetCarList fleetId={fleetCarId}
-                          onClick={(fleetCarId: number) => {
-                            alertDialog(`Selected fleet car ID: ${fleetCarId}`);
-                          }}/>
-          </div>
-        </div>
-      </Paper>
-
-        {/*    <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>*/}
-        {/*      <Table stickyHeader size={'small'}>*/}
-        {/*        <TableHeader header={'Fleet Car'}*/}
-        {/*                     onAdd={() => {*/}
-        {/*                       if (fleetId === 0) {*/}
-        {/*                         errorDialog('You must first select a fleet.');*/}
-        {/*                         return;*/}
-        {/*                       }*/}
-        {/*                       setFleetCarInputShowing(!fleetCarInputShowing);*/}
-        {/*                       setCarMakeId(0);*/}
-        {/*                       setCarModelId(0);*/}
-        {/*                       setCarYearId(0);*/}
-        {/*                       setCarTrimId(0);*/}
-        {/*                       setFleetCarId(0);*/}
-        {/*                       setCarModelList([]);*/}
-        {/*                       setCarYearList([]);*/}
-        {/*                       setCarTrimList([]);*/}
-        {/*                       setCarFleetData({});*/}
-        {/*                     }}*/}
-        {/*                     onEdit={() => {}}/>*/}
-        {/*        {fleetCarInputShowing ? (*/}
-        {/*          <TableBody>*/}
-        {/*            <TableRow>*/}
-        {/*              <TableCell colSpan={2}>*/}
-        {/*                <Stack direction={'row'}>*/}
-        {/*                  <Item sx={{ width: '25%' }}>*/}
-        {/*                    <FormControl sx={{ width: '100%' }}>*/}
-        {/*                      <InputLabel id={'fuel-type-label'}>Car Make</InputLabel>*/}
-        {/*                      <Select labelId={'fuel-type-label'} label={'Car Make'} name={'carMake'}*/}
-        {/*                              style={{ textAlign: 'left' }} fullWidth*/}
-        {/*                              onChange={((e: any) => {*/}
-        {/*                                setCarMakeId(e.target.value);*/}
-        {/*                                setCarModelId(0);*/}
-        {/*                                setCarYearId(0);*/}
-        {/*                                setCarTrimId(0);*/}
-        {/*                                setFleetCarId(0);*/}
-        {/*                                LoadCarModels(e.target.value, (x) => setCarModelList(x as never[]));*/}
-        {/*                                setCarYearList([]);*/}
-        {/*                                setCarTrimList([]);*/}
-        {/*                                setCarFleetData({});*/}
-        {/*                              })}>*/}
-        {/*                        {carMakeList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}*/}
-        {/*                      </Select>*/}
-        {/*                    </FormControl>*/}
-        {/*                  </Item>*/}
-        {/*                  <Item sx={{ width: '25%' }}>*/}
-        {/*                    <FormControl sx={{ width: '100%' }}>*/}
-        {/*                      <InputLabel id={'fuel-type-label'}>Car Model</InputLabel>*/}
-        {/*                      <Select labelId={'fuel-type-label'} label={'Car Model'} name={'carModel'}*/}
-        {/*                              style={{ textAlign: 'left' }} fullWidth*/}
-        {/*                              onChange={(e: any) => {*/}
-        {/*                                setCarModelId(e.target.value);*/}
-        {/*                                setCarYearId(0);*/}
-        {/*                                setCarTrimId(0);*/}
-        {/*                                setFleetCarId(0);*/}
-        {/*                                LoadModelYears(e.target.value, (x) => setCarYearList(x as never[]));*/}
-        {/*                                setCarTrimList([]);*/}
-        {/*                                setCarFleetData({});*/}
-        {/*                              }}>*/}
-        {/*                        {carModelList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}*/}
-        {/*                      </Select>*/}
-        {/*                    </FormControl>*/}
-        {/*                  </Item>*/}
-        {/*                  <Item sx={{ width: '25%' }}>*/}
-        {/*                    <FormControl sx={{ width: '100%' }}>*/}
-        {/*                      <InputLabel id={'fuel-type-label'}>Car Year</InputLabel>*/}
-        {/*                      <Select labelId={'fuel-type-label'} label={'Car Year'} name={'carYear'}*/}
-        {/*                              style={{ textAlign: 'left' }} fullWidth*/}
-        {/*                              onChange={(e: any) => {*/}
-        {/*                                setCarYearId(e.target.value);*/}
-        {/*                                setCarTrimId(0);*/}
-        {/*                                setFleetCarId(0);*/}
-        {/*                                LoadCarTrims(e.target.value, (x) => setCarTrimList(x));*/}
-        {/*                                setCarFleetData({});*/}
-        {/*                              }}>*/}
-        {/*                        {carYearList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.year}</MenuItem>)}*/}
-        {/*                      </Select>*/}
-        {/*                    </FormControl>*/}
-        {/*                  </Item>*/}
-        {/*                  <Item sx={{ width: '25%' }}>*/}
-        {/*                    <FormControl sx={{ width: '100%' }}>*/}
-        {/*                      <InputLabel id={'fuel-type-label'}>Car Trim</InputLabel>*/}
-        {/*                      <Select labelId={'fuel-type-label'} label={'Car Trim'} name={'carTrim'}*/}
-        {/*                              style={{ textAlign: 'left' }} fullWidth*/}
-        {/*                              onChange={(e: any) => {*/}
-        {/*                                setCarTrimId(e.target.value);*/}
-        {/*                                setFleetCarId(0);*/}
-        {/*                                setCarFleetData({});*/}
-        {/*                              }}>*/}
-        {/*                        {carTrimList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}*/}
-        {/*                      </Select>*/}
-        {/*                    </FormControl>*/}
-        {/*                  </Item>*/}
-        {/*                  <Item>*/}
-        {/*                    <Button variant={'contained'}*/}
-        {/*                            disabled={carTrimId === 0}*/}
-        {/*                            onClick={() => addFleetCar()}>ADD</Button>*/}
-        {/*                  </Item>*/}
-        {/*                </Stack>*/}
-        {/*              </TableCell>*/}
-        {/*            </TableRow>*/}
-        {/*          </TableBody>*/}
-        {/*        ) : (*/}
-        {/*          <>*/}
-        {/*          </>*/}
-        {/*        )}*/}
-        {/*        {fleetCarList.length > 0 ? (*/}
-        {/*          <TableBody>*/}
-        {/*            {fleetCarList.map((x: any) => {*/}
-        {/*              const bgColor = fleetCarId === x.id ? SELECTED_COLOR : '#fff';*/}
-
-        {/*              return (*/}
-        {/*                <>*/}
-        {/*                  <TableRow hover sx={{ cursor: 'pointer' }}>*/}
-        {/*                    <TableCell*/}
-        {/*                      sx={{ backgroundColor: bgColor, width: '90%' }}*/}
-        {/*                      onClick={() => {*/}
-        {/*                        setFleetCarId(x.id!);*/}
-        {/*                        setFleetCarInputShowing(false);*/}
-        {/*                        setFleetCar(x);*/}
-        {/*                        setCarFleetData(x.data);*/}
-        {/*                        setCarMakeId(0);*/}
-        {/*                        setCarModelId(0);*/}
-        {/*                        setCarYearId(0);*/}
-        {/*                        setCarTrimId(0);*/}
-        {/*                        setCarModelList([]);*/}
-        {/*                        setCarYearList([]);*/}
-        {/*                        setCarTrimList([]);*/}
-        {/*                      }}>*/}
-        {/*                      <Typography>*/}
-        {/*                        {x.carYear} {x.makeName} {x.modelName} {x.trimName}: &quot;{x.data.listingNickname ?? 'Unnamed'}&quot;*/}
-        {/*                      </Typography>*/}
-        {/*                    </TableCell>*/}
-        {/*                    <TableCell*/}
-        {/*                      onClick={() => {*/}
-        {/*                        setFleetCarId(x.id!);*/}
-        {/*                        setFleetCarInputShowing(false);*/}
-        {/*                        setFleetCar(x);*/}
-        {/*                        setCarFleetData(x.data);*/}
-        {/*                        setCarMakeId(0);*/}
-        {/*                        setCarModelId(0);*/}
-        {/*                        setCarYearId(0);*/}
-        {/*                        setCarTrimId(0);*/}
-        {/*                        setCarModelList([]);*/}
-        {/*                        setCarYearList([]);*/}
-        {/*                        setCarTrimList([]);*/}
-        {/*                      }}*/}
-        {/*                      sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}>*/}
-        {/*                      <IconButton>*/}
-        {/*                        <DeleteOutlined/>*/}
-        {/*                      </IconButton>*/}
-        {/*                    </TableCell>*/}
-        {/*                  </TableRow>*/}
-        {/*                </>*/}
-        {/*              )}*/}
-        {/*            )}*/}
-        {/*          </TableBody>*/}
-        {/*        ) : (*/}
-        {/*          <>*/}
-        {/*          </>*/}
-        {/*        )}*/}
-        {/*      </Table>*/}
-        {/*    </TableContainer>*/}
-      {/*</Paper>*/}
-
-      {/*{fleetCarId != 0 ? (*/}
-      {/*  <>*/}
-      {/*    <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={snackbarOpen}>*/}
-      {/*      <Alert severity={'success'} sx={{ width: '100%' }}>*/}
-      {/*        Car fleet information saved successfully.*/}
-      {/*      </Alert>*/}
-      {/*    </Snackbar>*/}
+      {/*<Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={snackbarOpen}>*/}
+      {/*  <Alert severity={'success'} sx={{ width: '100%' }}>*/}
+      {/*    Car fleet information saved successfully.*/}
+      {/*  </Alert>*/}
+      {/*</Snackbar>*/}
 
       {/*    <div style={{ width: '100%', paddingLeft: '0.5em', paddingTop: '1.5em' }}>*/}
       {/*      <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Fleet Car Detail</u></Typography>*/}
@@ -549,13 +363,8 @@ const Fleet = () => {
       {/*    <div style={{ display: 'flex', width: '100%', textAlign: 'right', paddingTop: '10px' }}>*/}
       {/*      <Button onClick={() => saveFleetCar()}>Save</Button>*/}
       {/*    </div>*/}
-      {/*  </>*/}
-      {/*) : (*/}
-      {/*  <>*/}
-      {/*  </>*/}
-      {/*)}*/}
     </>
   );
 }
 
-export default Fleet;
+export default FleetCarForm;
