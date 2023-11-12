@@ -48,8 +48,6 @@ export async function POST(request: any) {
     const accessToken = request.headers.get('Authorization');
     const decodedJwt: any = verifyJwt(accessToken);
 
-    console.log(`Adding: fleetId=${fleetId} carTrimId=${carTrimId} ownerId=${decodedJwt.id}`);
-
     if (!fleetId) {
       return NextResponse.json({
         message: 'Fleet ID is required'
