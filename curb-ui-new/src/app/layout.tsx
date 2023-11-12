@@ -23,6 +23,7 @@ import {signOut, useSession} from 'next-auth/react';
 import Divider from '@mui/material/Divider';
 import ProfileForm from '@/app/components/main-layout/ProfileForm';
 import {encrypt} from 'unixcrypt';
+import * as React from 'react';
 
 // import {IconButton, LinearProgress, Menu, MenuItem, Stack, Typography} from '@mui/material';
 // import MenuIcon from '@mui/icons-material/Menu';
@@ -65,6 +66,8 @@ const inter = Inter({ subsets: ['latin'] })
 function MenuIcon(props: { style: { color: string } }) {
   return null;
 }
+
+const APPLICATION_VERSION = '0.0.2-11122023';
 
 const Layout: NextPage = ({children, params}: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -271,90 +274,100 @@ const Layout: NextPage = ({children, params}: any) => {
                        onPropsSaved={() => setProfileOpen(false)}
                        onPropsClosed={() => setProfileOpen(false)}/>
 
-            <div style={{ display: 'flex', width: '100%' }}>
-              {/* Side Divider, only contains the sidebar, which is static.*/}
-              <div style={{ width: '260px' }}>
-                <SideBar width={ 260 } sidebarItems={sidebarItems} onHomeClicked={handleHomeClicked}/>
-              </div>
+          <div style={{ display: 'flex', width: '100%' }}>
+            {/* Side Divider, only contains the sidebar, which is static.*/}
+            <div style={{ width: '260px' }}>
+              <SideBar width={ 260 } sidebarItems={sidebarItems} onHomeClicked={handleHomeClicked}/>
+            </div>
 
-              {/* Right side, top portion of the page, contains the top navigation bar. */}
-              <div style={{ position: 'fixed',
-                paddingLeft: '10px',
-                paddingRight: '270px',
-                borderLeft: '1px solid rgb(35, 60, 82)',
-                borderBottom: '1px solid rgb(35, 60, 82)',
-                left: '260px',
-                width: '100%',
-                height: '46px',
-                backgroundColor: 'rgb(5, 30, 52)',
-                color: '#fff' }}>
+            {/* Right side, top portion of the page, contains the top navigation bar. */}
+            <div style={{ position: 'fixed',
+              paddingLeft: '10px',
+              paddingRight: '270px',
+              borderLeft: '1px solid rgb(35, 60, 82)',
+              borderBottom: '1px solid rgb(35, 60, 82)',
+              left: '260px',
+              width: '100%',
+              height: '46px',
+              backgroundColor: 'rgb(5, 30, 52)',
+              color: '#fff' }}>
+              <Stack direction={'row'}>
+                <Item sx={{ width: '90%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'left' }}>
+                  <Typography variant={'h6'} fontWeight={'bold'}>
+                    Welcome to Curb
+                    {/*{userInfo?.emailAddress ?? <LinearProgress/>}*/}
+                  </Typography>
+                </Item>
+
+                <Item sx={{ width: '10%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'right', paddingTop: '4px' }}>
+                  <IconButton onClick={handleMenu}>
+                    <MenuOpenOutlined style={{ color: 'white' }}/>
+                  </IconButton>
+                  <Menu id={'menu-appbar'} anchorEl={anchorEl}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        keepMounted
+                        open={Boolean(anchorEl)} onClose={handleClose}>
+                    <MenuItem onClick={handleFeedback} style={{ fontWeight: 'bold' }} disabled>Feedback</MenuItem>
+                    <Divider/>
+                    <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                  </Menu>
+                </Item>
+              </Stack>
+            </div>
+
+            {/* Right side main container that displays all relevant content regarding the page that was selected */}
+            <div style={{ position: 'fixed',
+              paddingLeft: '10px',
+              paddingRight: '10px',
+              paddingTop: '10px',
+              left: '260px',
+              top: '47px',
+              width: 'calc(100% - 260px)',
+              height: 'calc(100% - 48px)',
+              backgroundColor: '#fff',
+              color: '#000',
+              overflowY: 'auto',
+            }}>
+              {headerTitle && (
                 <Stack direction={'row'}>
-                  <Item sx={{ width: '90%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'left' }}>
-                    <Typography variant={'h6'} fontWeight={'bold'}>
-                      Welcome to Curb
-                      {/*{userInfo?.emailAddress ?? <LinearProgress/>}*/}
+                  <Item sx={{ paddingLeft: '15px',
+                    width: '90%',
+                    textAlign: 'left',
+                    backgroundColor: '#000',
+                    color: '#fff'
+                  }}>
+                    <Typography fontWeight={'bold'}>
+                      {headerTitle}
                     </Typography>
                   </Item>
-
-                  <Item sx={{ width: '10%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'right', paddingTop: '4px' }}>
-                    <IconButton onClick={handleMenu}>
-                      <MenuOpenOutlined style={{ color: 'white' }}/>
+                  <Item sx={{ paddingLeft: '15px',
+                    width: '10%',
+                    textAlign: 'right',
+                    backgroundColor: '#000',
+                    color: '#fff'
+                  }}>
+                    <IconButton style={{ padding: '0px' }}
+                                onClick={() => alertDialog(headerInfo)}>
+                      <InfoOutlined style={{ color: 'white' }}/>
                     </IconButton>
-                    <Menu id={'menu-appbar'} anchorEl={anchorEl}
-                          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                          keepMounted
-                          open={Boolean(anchorEl)} onClose={handleClose}>
-                      <MenuItem onClick={handleFeedback} style={{ fontWeight: 'bold' }} disabled>Feedback</MenuItem>
-                      <Divider/>
-                      <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                      <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                    </Menu>
                   </Item>
                 </Stack>
-              </div>
+              )}
+                {children}
+            </div>
+          </div>
 
-              {/* Right side main container that displays all relevant content regarding the page that was selected */}
-              <div style={{ position: 'fixed',
-                paddingLeft: '10px',
-                paddingRight: '10px',
-                paddingTop: '10px',
-                left: '260px',
-                top: '47px',
-                width: 'calc(100% - 260px)',
-                height: 'calc(100% - 48px)',
-                backgroundColor: '#fff',
-                color: '#000',
-                overflowY: 'auto',
-              }}>
-                {headerTitle && (
-                  <Stack direction={'row'}>
-                    <Item sx={{ paddingLeft: '15px',
-                      width: '90%',
-                      textAlign: 'left',
-                      backgroundColor: '#000',
-                      color: '#fff'
-                    }}>
-                      <Typography fontWeight={'bold'}>
-                        {headerTitle}
-                      </Typography>
-                    </Item>
-                    <Item sx={{ paddingLeft: '15px',
-                      width: '10%',
-                      textAlign: 'right',
-                      backgroundColor: '#000',
-                      color: '#fff'
-                    }}>
-                      <IconButton style={{ padding: '0px' }}
-                                  onClick={() => alertDialog(headerInfo)}>
-                        <InfoOutlined style={{ color: 'white' }}/>
-                      </IconButton>
-                    </Item>
-                  </Stack>
-                )}
-                  {children}
+          <div style={{ position: 'fixed', bottom: 0, width: '260px', height: '24px', backgroundColor: 'white', borderTop: '1px solid #000', borderRight: '1px solid #000' }}>
+            <div style={{ display: 'flex' }}>
+              <div style={{ width: '260px', paddingLeft: '10px', color: '#000', backgroundColor: 'rgb(55, 80, 102)' }}>
+                <Typography>
+                  v{APPLICATION_VERSION}
+                </Typography>
               </div>
             </div>
+          </div>
         </body>
       </AuthProvider>
     </html>

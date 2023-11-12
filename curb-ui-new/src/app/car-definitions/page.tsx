@@ -19,7 +19,7 @@ const CarDefinitions = () => {
   const [selectedModel, setSelectedModel] = useState<number>(0);
   const [selectedYear, setSelectedYear] = useState<number>(0);
   const [selectedTrim, setSelectedTrim] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [dashboard, setDashboard] = useState<any>({});
   const {data: session} = useSession();
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
