@@ -25,10 +25,6 @@ export interface IFleetCarForm {
 }
 
 const FleetCarForm = (props: IFleetCarForm) => {
-  if (props.fleetCarId === 0) {
-    return (<></>);
-  }
-
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [ownershipInputShowing, setOwnershipInputShowing] = useState<boolean>(false);
   const [insuranceInputShowing, setInsuranceInputShowing] = useState<boolean>(false);
@@ -142,6 +138,10 @@ const FleetCarForm = (props: IFleetCarForm) => {
           setSnackbarOpen(false);
         }, 3000);
       });
+  }
+
+  if (props.fleetCarId === 0) {
+    return (<></>);
   }
 
   return (
