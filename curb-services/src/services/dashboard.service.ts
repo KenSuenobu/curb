@@ -1,5 +1,6 @@
 import {DaoUtils} from 'curb-db/dist/dao/dao-utils.dao';
 import {
+  CarTrimDao,
   FleetCarDao,
   FleetCarLoanDao,
   FleetMembershipDao,
@@ -63,6 +64,15 @@ export class DashboardService {
     }
 
     return fleetCars;
+  }
+
+  async carDefinitionsDashboard(userId: number): Promise<any> {
+    const carDefinitionsDao = new CarTrimDao(DaoUtils.getDatabase());
+
+    return {
+      totalTrims: await carDefinitionsDao.getTotalTrims(),
+      totalContributed: await carDefinitionsDao.getTotalTrimsForUser(userId),
+    };
   }
 
 }

@@ -26,4 +26,19 @@ export class DashboardController {
     return this.service.list(userId);
   }
 
+  @Get('/car-definitions/:userId')
+  @ApiOperation({
+    summary: 'Lists stats for car definitions by user ID',
+    description: 'Returns a list of car definition statistics by the user ID - total trims, and total contributed trims',
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: Object,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async carDefinitionsDashboard(@Param('userId') userId: number): Promise<any> {
+    return this.service.carDefinitionsDashboard(userId);
+  }
+
 }

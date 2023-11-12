@@ -42,4 +42,19 @@ export class CarTrimDao extends BaseDao<CarTrimDto> {
       payload.carYearId,
     ]);
   }
+
+  async getTotalTrims(): Promise<number> {
+    const sqlStatement = `SELECT COUNT(*) AS total_trims FROM ${this.section}`;
+
+    return this.db.one(sqlStatement)
+      .then((x: any) => x.total_trims);
+  }
+
+  async getTotalTrimsForUser(userId: number): Promise<number> {
+    const sqlStatement = `SELECT COUNT(*) AS total_trims FROM ${this.section} WHERE creator_id=$1`;
+
+    return this.db.one(sqlStatement, [userId])
+      .then((x: any) => x.total_trims);
+  }
+
 }
