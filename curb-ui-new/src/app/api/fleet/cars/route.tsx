@@ -8,6 +8,7 @@ export async function GET(request: any) {
     const decodedJwt: any = verifyJwt(accessToken);
     const searchParams = request.nextUrl.searchParams;
     const fleetId = searchParams.get('fleetId');
+    const fleetCarId = searchParams.get('fleetCarId');
 
     if (!accessToken || !decodedJwt) {
       return NextResponse.json({
@@ -15,16 +16,23 @@ export async function GET(request: any) {
       }, { status: 401 });
     }
 
-    if (!fleetId) {
+    if (!fleetId && !fleetCarId) {
       return NextResponse.json({
-        message: 'Fleet ID missing',
+        message: 'Fleet ID or Fleet Car ID missing',
       }, { status: 404 });
     }
 
-    const cars: any = await axios.get(`${process.env.CURB_SERVER_URL}/fleet/list/fleet/${fleetId}`)
-      .then((res) => res.data);
+    if (fleetId) {
+      const cars: any = await axios.get(`${process.env.CURB_SERVER_URL}/fleet/list/fleet/${fleetId}`)
+        .then((res) => res.data);
 
-    return NextResponse.json({ cars }, { status: 200 });
+      return NextResponse.json({cars}, {status: 200});
+    } else {
+      const cars: any = await axios.get(`${process.env.CURB_SERVER_URL}/fleet/get/fleet-car/${fleetCarId}`)
+        .then((res) => res.data);
+
+      return NextResponse.json({cars}, {status: 200});
+    }
   } catch (e) {
     console.error('Unable to get list of cars for fleet', e);
     return NextResponse.json({
@@ -60,6 +68,38 @@ export async function POST(request: any) {
       carTrimId,
       data: {}
     }).then((res) => res.data);
+
+    return NextResponse.json({
+      result: {
+        accessToken
+      },
+    }, { status: 201 });
+  } catch (e) {
+    console.error('Unable to create car make', e);
+    return NextResponse.json({
+      message: 'Failed to create car make',
+      result: e,
+    }, { status: 500 });
+  }
+}
+
+export async function PUT(request: any) {
+  try {
+    const { payload } = await request.json();
+    const accessToken = request.headers.get('Authorization');
+    const decodedJwt: any = verifyJwt(accessToken);
+
+    if (!payload) {
+      return NextResponse.json({
+        message: 'Payload for editing is required'
+      }, { status: 400 });
+    }
+
+    const result = await axios.put(`${process.env.CURB_SERVER_URL}/fleet/save/car`, {
+      ...payload,
+    }).then((res) => {
+      return res.data;
+    });
 
     return NextResponse.json({
       result: {

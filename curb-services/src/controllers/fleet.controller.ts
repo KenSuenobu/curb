@@ -5,7 +5,7 @@ import {ApiBody, ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse,
 import {CarMakeService} from "../services/car-make.service";
 import {CarMakeDto, FleetCarDto, FleetDto} from 'curb-db/dist/dto';
 import {FleetService} from '../services/fleet.service';
-import {FleetCarLoanDto, FleetCarMaintenanceDto, FleetMembershipDto} from 'curb-db/dist';
+import {FleetCarDao, FleetCarLoanDto, FleetCarMaintenanceDto, FleetMembershipDto} from 'curb-db/dist';
 
 @ApiTags('fleet')
 @Controller('fleet')
@@ -179,6 +179,21 @@ export class FleetController {
   @ApiUnauthorizedResponse()
   async find(@Param('key') key: string, @Param('value') value: string): Promise<FleetCarDto[]> {
     return this.service.find(key, value);
+  }
+
+  @Get('/get/fleet-car/:fleetCarId')
+  @ApiOperation({
+    summary: 'Retrieves a fleet car record by its ID',
+    description: 'Retrieves a FleetCar record by its ID',
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: FleetCarDto,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async getFleetCarById(@Param('fleetCarId') fleetCarId: number): Promise<FleetCarDto> {
+    return this.service.getFleetCarById(fleetCarId);
   }
 
   @Put('/save/car')
