@@ -14,7 +14,7 @@ import {
   Typography
 } from '@mui/material';
 import {TableHeader} from '@/app/components/common/TableHeader';
-import {errorDialog} from '@/app/components/common/ConfirmDialog';
+import {alertDialog, errorDialog} from '@/app/components/common/ConfirmDialog';
 import {DeleteOutlined} from '@mui/icons-material';
 import Item from '@/app/components/common/Item';
 import {getAllMakes, getAllModels, getAllTrims, getAllYears} from '@/app/services/car-definitions';
@@ -62,11 +62,16 @@ const FleetCarList = (props: IFleetCarList) => {
 
   useEffect(() => {
     reloadFleetCars();
-    getAllMakes(accessToken)
-      .then((x: any) => setCarMakeList(x.makes));
+
+    if (accessToken) {
+      getAllMakes(accessToken)
+        .then((x: any) => setCarMakeList(x.makes));
+    }
   }, [props.fleetId, accessToken]);
 
-  const toggleInput = () => setInputShowing(!inputShowing);
+  const toggleInput = () => {
+    setInputShowing(!inputShowing);
+  }
 
   const addFleetCarToFleet = () => {
     addFleetCar(accessToken, props.fleetId, carTrimId)
@@ -97,7 +102,7 @@ const FleetCarList = (props: IFleetCarList) => {
                          setCarTrimId(0);
                        }}/>
           <TableBody>
-          {inputShowing ?? (
+          {inputShowing ? (
             <TableRow>
               <TableCell colSpan={2}>
                 <Stack direction={'row'}>
@@ -178,7 +183,7 @@ const FleetCarList = (props: IFleetCarList) => {
                 </Stack>
               </TableCell>
             </TableRow>
-          )}
+          ) : (<></>)}
 
           {fleetCarList.length > 0 && (
             <>

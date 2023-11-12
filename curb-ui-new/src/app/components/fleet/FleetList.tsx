@@ -24,25 +24,27 @@ const FleetList = (props: IFleetList) => {
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
 
   const reloadFleets = () => {
-    setLoading(true);
-    getAllFleets(accessToken)
-      .then((x: any) => {
-        setFleetList(x.fleets ?? []);
-        setLoading(false);
-        setFleetId(0);
-      })
-      .catch((x) => {
-        setFleetList([]);
-        setLoading(false);
-        setFleetId(0);
-      });
+    if (accessToken) {
+      setLoading(true);
+      getAllFleets(accessToken)
+        .then((x: any) => {
+          setFleetList(x.fleets ?? []);
+          setLoading(false);
+          setFleetId(0);
+        })
+        .catch((x) => {
+          setFleetList([]);
+          setLoading(false);
+          setFleetId(0);
+        });
+    }
   }
 
   const toggleInput = () => setInputShowing(!inputShowing);
 
   useEffect(() => {
     reloadFleets();
-  }, [session]);
+  }, [accessToken]);
 
   const addFleet = () => {
     const fleetName = fleetRef.current.value.trim();

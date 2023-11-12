@@ -126,8 +126,6 @@ const FleetCarForm = (props: IFleetCarForm) => {
 
     payload.data = carFleetData;
 
-    console.log(`Payload: ${JSON.stringify(payload, null, 2)}`);
-
     saveFleetCarData(accessToken, payload)
       .then((x) => {
         console.log('Saved fleet car', x);
@@ -146,8 +144,6 @@ const FleetCarForm = (props: IFleetCarForm) => {
 
   return (
     <>
-      Fleet Car ID: {props.fleetCarId}
-
       <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={snackbarOpen}>
         <Alert severity={'success'} sx={{ width: '100%' }}>
           Car fleet information saved successfully.
