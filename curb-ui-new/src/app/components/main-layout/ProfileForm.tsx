@@ -47,7 +47,7 @@ const ProfileForm = (props: IProfileForm) => {
     }
 
     changePassword(accessToken, oldPassword, newPassword1)
-      .then((x) => {
+      .then((x: any) => {
         if (x.result.result) {
           alertDialog('Your password has been successfully changed.');
           props.onPropsSaved();
