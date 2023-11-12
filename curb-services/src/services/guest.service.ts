@@ -26,14 +26,14 @@ export class GuestService {
       });
   }
 
-  async listAllGuests(): Promise<GuestDto[]> {
+  async listAllGuests(fleetId: number): Promise<GuestDto[]> {
     const dao = new GuestDao(DaoUtils.getDatabase());
-    return dao.listAll();
+    return dao.listAllByFleetId(fleetId);
   }
 
-  async listGuests(blacklisted: boolean): Promise<GuestDto[]> {
+  async listGuests(blacklisted: boolean, fleetId: number): Promise<GuestDto[]> {
     const dao = new GuestDao(DaoUtils.getDatabase());
-    return dao.list(blacklisted);
+    return dao.listByFleetId(fleetId, blacklisted);
   }
 
   async getGuest(id: number): Promise<GuestDto> {

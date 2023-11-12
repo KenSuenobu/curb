@@ -9,6 +9,14 @@ export class GuestDto {
   id?: number;
 
   @ApiProperty({
+    description: 'ID of the `Fleet` that this guest rented from',
+    nullable: false,
+    type: Number,
+    required: true,
+  })
+  fleetId: number;
+
+  @ApiProperty({
     description: 'ID of the `User` that created this entry',
     nullable: false,
     type: Number,
@@ -17,20 +25,20 @@ export class GuestDto {
   creatorId: number;
 
   @ApiProperty({
-    description: 'Uniquely Guest ID',
-    nullable: false,
-    type: String,
-    required: true,
-  })
-  guestId: string;
-
-  @ApiProperty({
     description: 'Uniquely Guest ID Source',
     nullable: false,
     type: String,
     required: true,
   })
   guestIdSource: string;
+
+  @ApiProperty({
+    description: 'Uniquely Guest ID',
+    nullable: false,
+    type: String,
+    required: true,
+  })
+  guestId: string;
 
   @ApiProperty({
     description: 'Indicates whether or not the guest is blacklisted',
@@ -72,12 +80,5 @@ export class GuestDto {
     required: false,
   })
   data: any;
-
-  @ApiProperty({
-    description: 'Incomplete flag from data',
-    nullable: true,
-    type: Boolean,
-  })
-  incomplete?: boolean;
 
 }

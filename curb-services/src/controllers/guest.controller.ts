@@ -57,10 +57,10 @@ export class GuestController {
     return this.service.saveGuest(payload);
   }
 
-  @Get('/list/:blacklisted')
+  @Get('/list-all/:fleetId/:blacklisted')
   @ApiOperation({
     summary: 'Lists guests',
-    description: 'Lists guests either white or blacklisted',
+    description: 'Lists guests either white or blacklisted for a fleet',
   })
   @ApiOkResponse({
     status: HttpStatus.OK,
@@ -69,14 +69,14 @@ export class GuestController {
   })
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async listGuests(@Param('blacklisted') blacklisted: boolean): Promise<GuestDto[]> {
-    return this.service.listGuests(blacklisted);
+  async listGuests(@Param('blacklisted') blacklisted: boolean, @Param('fleetId') fleetId: number): Promise<GuestDto[]> {
+    return this.service.listGuests(blacklisted, fleetId);
   }
 
-  @Get('/list-all')
+  @Get('/list-all/:fleetId')
   @ApiOperation({
-    summary: 'Lists all guests',
-    description: 'Lists all guests regardless of blacklisted status',
+    summary: 'Lists all guests for a fleet ID',
+    description: 'Lists all guests regardless of blacklisted status by Fleet ID',
   })
   @ApiOkResponse({
     status: HttpStatus.OK,
@@ -85,8 +85,8 @@ export class GuestController {
   })
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async listAllGuests(): Promise<GuestDto[]> {
-    return this.service.listAllGuests();
+  async listAllGuests(@Param('fleetId') fleetId: number): Promise<GuestDto[]> {
+    return this.service.listAllGuests(fleetId);
   }
 
   @Get('/get/:id')

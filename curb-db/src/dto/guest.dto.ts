@@ -14,19 +14,19 @@ export class GuestDao extends BaseDao<GuestDto> {
     super(db, 'curb.guest');
   }
 
-  override async list(blacklisted: boolean = false): Promise<GuestDto[]> {
+  async listByFleetId(fleetId: number, blacklisted: boolean = false): Promise<GuestDto[]> {
     const selectStatement = `SELECT id, guest_id, guest_id_source, blacklisted, first_name, middle_name, last_name, data->'incomplete' AS incomplete ` +
-      `FROM ${this.section} WHERE blacklisted=$1 ORDER BY last_name ASC`;
+      `FROM ${this.section} WHERE blacklisted=$1 AND fleet_id=$2 ORDER BY last_name ASC`;
 
-    return (await this.db.any(selectStatement, [ blacklisted ]))
+    return (await this.db.any(selectStatement, [ blacklisted, fleetId ]))
       .map((x) => DaoUtils.normalizeFields<GuestDto>(x));
   }
 
-  async listAll(): Promise<GuestDto[]> {
+  async listAllByFleetId(fleetId: number): Promise<GuestDto[]> {
     const selectStatement = `SELECT id, guest_id, guest_id_source, blacklisted, first_name, middle_name, last_name, data->'incomplete' AS incomplete ` +
-      `FROM ${this.section} ORDER BY last_name ASC`;
+      `FROM ${this.section} WHERE fleet_id=$1 ORDER BY last_name ASC`;
 
-    return (await this.db.any(selectStatement))
+    return (await this.db.any(selectStatement, [ fleetId ]))
       .map((x) => DaoUtils.normalizeFields<GuestDto>(x));
   }
 
@@ -66,10 +66,11 @@ export class GuestDao extends BaseDao<GuestDto> {
 
   async create(payload: GuestDto): Promise<GuestDto> {
     const sqlStatement =
-      `INSERT INTO ${this.section} (creator_id, guest_id, guest_id_source, blacklisted, first_name, middle_name, last_name, data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
+      `INSERT INTO ${this.section} (creator_id, fleet_id, guest_id, guest_id_source, blacklisted, first_name, middle_name, last_name, data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
 
     return this.db.oneOrNone(sqlStatement, [
       payload.creatorId,
+      payload.fleetId,
       payload.guestId,
       payload.guestIdSource,
       payload.blacklisted,
