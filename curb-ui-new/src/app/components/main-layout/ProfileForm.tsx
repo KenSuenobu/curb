@@ -75,7 +75,7 @@ const ProfileForm = (props: IProfileForm) => {
             <Button onClick={saveProfile}
                     variant={'contained'}
                     color={'success'}>
-              Save
+              Change Password
             </Button>
 
             <Button onClick={closeProfile}
