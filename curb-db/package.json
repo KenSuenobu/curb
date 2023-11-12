@@ -12,8 +12,8 @@
   "dependencies": {
     "@nestjs/common": "^10.2.8",
     "@nestjs/swagger": "^6.3.0",
-    "bcrypt": "^5.1.1",
-    "pg-promise": "^11.5.0"
+    "pg-promise": "^11.5.0",
+    "unixcrypt": "^1.2.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5",

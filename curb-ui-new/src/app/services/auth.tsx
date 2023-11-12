@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const registerUser = (email: any, password: any) => {
   return new Promise((resolve, reject) => {
     fetch('/api/register', {
@@ -31,5 +33,22 @@ export const createSignup = (emailAddress: string, ipAddress: string, source: st
          .catch((e) => reject(e));
       })
       .catch((e) => reject(e));
+  });
+}
+
+export const changePassword = (accessToken: string, oldPassword: string, newPassword: string) => {
+  return new Promise((resolve, reject) => {
+    axios.put('/api/profile', {
+      oldPassword,
+      newPassword,
+    }, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+    .then((res) => resolve(res.data))
+    .catch(e => reject(e));
   });
 }

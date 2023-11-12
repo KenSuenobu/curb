@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { signJwtAccessToken } from '@/app/helpers/jwt';
 import axios from 'axios';
-import * as bcrypt from 'bcrypt';
+import {encrypt} from 'unixcrypt';
 
 export async function POST(request: any) {
   try {
@@ -13,8 +13,7 @@ export async function POST(request: any) {
       }, { status: 400 });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const base64EncodedPassword = Buffer.from(hashedPassword).toString('base64');
+    const base64EncodedPassword = Buffer.from(password).toString('base64');
 
     const user = await axios.get(`${process.env.CURB_SERVER_URL}/user/login/${email}/${base64EncodedPassword}`)
       .then((x) => x.data)

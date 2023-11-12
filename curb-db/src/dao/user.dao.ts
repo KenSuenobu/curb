@@ -2,7 +2,7 @@ import { BaseDao } from './base.dao';
 import * as pgPromise from 'pg-promise';
 import {FleetCarLoanDto, UserDto} from 'src/dto';
 import {DaoUtils} from './dao-utils.dao';
-import * as bcrypt from 'bcrypt';
+import {encrypt, verify} from 'unixcrypt';
 
 export class UserDao extends BaseDao<UserDto> {
   constructor(readonly db: pgPromise.IDatabase<any>) {
@@ -44,8 +44,9 @@ export class UserDao extends BaseDao<UserDto> {
 
     if (results && results.password) {
       const decodedPassword = Buffer.from(password, 'base64').toString();
+      const verifyResult = verify(decodedPassword, results.password);
 
-      if (bcrypt.compare(decodedPassword, results.password)) {
+      if (verifyResult) {
         return {
           user_id: results.user_id,
           id: results.id,
@@ -54,6 +55,14 @@ export class UserDao extends BaseDao<UserDto> {
     }
 
     return 'error';
+  }
+
+  async changePassword(id: number, password: string): Promise<boolean> {
+    const sqlStatement = `UPDATE ${this.section} SET password=$1 WHERE id=$2`;
+
+    return this.db.none(sqlStatement, [ password, id ])
+      .then((x) => true)
+      .catch((x) => false);
   }
 
   async getByEmail(emailAddress: string): Promise<UserDto | null> {

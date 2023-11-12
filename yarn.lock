@@ -3725,7 +3725,6 @@ __metadata:
     "@types/react-dom": ^18
     autoprefixer: ^10
     axios: ^1.6.0
-    bcrypt: ^5.1.1
     eslint: ^8
     eslint-config-next: 13.5.6
     jsonwebtoken: ^9.0.2
@@ -3736,6 +3735,7 @@ __metadata:
     react-dom: ^18
     tailwindcss: ^3
     typescript: ^5
+    unixcrypt: ^1.2.0
     zustand: ^4.4.5
   languageName: unknown
   linkType: soft
@@ -9693,6 +9693,13 @@ __metadata:
   version: 2.0.1
   resolution: "universalify@npm:2.0.1"
   checksum: ecd8469fe0db28e7de9e5289d32bd1b6ba8f7183db34f3bfc4ca53c49891c2d6aa05f3fb3936a81285a905cc509fb641a0c3fc131ec786167eff41236ae32e60
+  languageName: node
+  linkType: hard
+
+"unixcrypt@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "unixcrypt@npm:1.2.0"
+  checksum: 944afa22362cb55bd215c80181f2b27fa7afff0a2b32e26a64b560b0cb6d25eff9359f11cdde61b14368ff1920e1a1b48a3bd1ad64123956c11ad2f4cfd4d3b1
   languageName: node
   linkType: hard
 

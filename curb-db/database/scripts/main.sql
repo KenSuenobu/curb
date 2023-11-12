@@ -10,7 +10,7 @@ CREATE TABLE curb.user (
     id SERIAL NOT NULL PRIMARY KEY,
     user_id VARCHAR(80) NOT NULL,
     email_address VARCHAR(255) NOT NULL,
-    password VARCHAR(80) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     verified BOOLEAN NOT NULL DEFAULT false,
     data JSON
 );
@@ -18,7 +18,7 @@ CREATE TABLE curb.user (
 CREATE UNIQUE INDEX idx_unique_user ON curb.user(email_address);
 
 INSERT INTO curb.user (user_id, email_address, password, verified)
-     VALUES ('1c59e125-9b29-4566-bc96-e64056c50cb4', 'admin@suenobu.llc', '$2b$10$hfeeu08E6nnwVrZ40s7N8..6aTwdw.yFw7hNgKwr6hELxUatnAb3G', true);
+     VALUES ('1c59e125-9b29-4566-bc96-e64056c50cb4', 'admin@suenobu.llc', '$6$RJ6hSgrYa7HIjNrg$Z6naZkq.hVCkgUGAfRQt0HYcmOawBHqXVCS1b4fq1rhi4rpV.gB2Vkg.S6stKXS0kFTpytI0P2rhTWdve05Nh.', true);
 
 ---
 
