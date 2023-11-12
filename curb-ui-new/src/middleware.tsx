@@ -5,5 +5,6 @@ export const config = {
     '/',
     '/car-definitions',
     '/fleet',
+    '/whats-new',
   ]
 }

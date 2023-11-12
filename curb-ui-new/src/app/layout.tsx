@@ -22,6 +22,7 @@ import SideBar from '@/app/components/main-layout/SideBar';
 import {signOut, useSession} from 'next-auth/react';
 import Divider from '@mui/material/Divider';
 import ProfileForm from '@/app/components/main-layout/ProfileForm';
+import {encrypt} from 'unixcrypt';
 
 // import {IconButton, LinearProgress, Menu, MenuItem, Stack, Typography} from '@mui/material';
 // import MenuIcon from '@mui/icons-material/Menu';
