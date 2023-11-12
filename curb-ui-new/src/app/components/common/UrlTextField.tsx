@@ -1,9 +1,10 @@
 import {IconButton, TextField, TextFieldProps} from '@mui/material';
 import {PreviewOutlined} from '@mui/icons-material';
+import {OutlinedTextFieldProps} from '@mui/material/TextField/TextField';
 
-interface IUrlTextField extends TextFieldProps {
+export type IUrlTextField = TextFieldProps & {
   onUrlClick: () => any;
-}
+};
 
 const UrlTextField = (props: IUrlTextField) => {
   const { onUrlClick, ...textFieldProps } = props;

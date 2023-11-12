@@ -50,7 +50,7 @@ const FleetCarList = (props: IFleetCarList) => {
       }
 
       getFleetCars(accessToken, props.fleetId)
-        .then((x) => {
+        .then((x: any) => {
           setFleetCarList(x.cars);
         })
         .catch((x) => {
@@ -63,7 +63,7 @@ const FleetCarList = (props: IFleetCarList) => {
   useEffect(() => {
     reloadFleetCars();
     getAllMakes(accessToken)
-      .then((x) => setCarMakeList(x.makes));
+      .then((x: any) => setCarMakeList(x.makes));
   }, [props.fleetId, accessToken]);
 
   const toggleInput = () => setInputShowing(!inputShowing);
@@ -116,9 +116,9 @@ const FleetCarList = (props: IFleetCarList) => {
                                 setCarTrimId(0);
 
                                 getAllModels(accessToken, e.target.value)
-                                  .then((x) => setCarModelList(x.makes));
+                                  .then((x: any) => setCarModelList(x.makes));
                               })}>
-                        {carMakeList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}
+                        {carMakeList.map((x: any, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}
                       </Select>
                     </FormControl>
                   </Item>
@@ -135,9 +135,9 @@ const FleetCarList = (props: IFleetCarList) => {
                                 setCarTrimId(0);
 
                                 getAllYears(accessToken, e.target.value)
-                                  .then((x) => setCarYearList(x.makes));
+                                  .then((x: any) => setCarYearList(x.makes));
                               }}>
-                        {carModelList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}
+                        {carModelList.map((x: any, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}
                       </Select>
                     </FormControl>
                   </Item>
@@ -152,9 +152,9 @@ const FleetCarList = (props: IFleetCarList) => {
                                 setCarTrimId(0);
 
                                 getAllTrims(accessToken, e.target.value)
-                                  .then((x) => setCarTrimList(x.makes));
+                                  .then((x: any) => setCarTrimList(x.makes));
                               }}>
-                        {carYearList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.year}</MenuItem>)}
+                        {carYearList.map((x: any, counter) => <MenuItem value={x.id} key={counter}>{x.year}</MenuItem>)}
                       </Select>
                     </FormControl>
                   </Item>
@@ -166,7 +166,7 @@ const FleetCarList = (props: IFleetCarList) => {
                               onChange={(e: any) => {
                                 setCarTrimId(e.target.value);
                               }}>
-                        {carTrimList.map((x, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}
+                        {carTrimList.map((x: any, counter) => <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>)}
                       </Select>
                     </FormControl>
                   </Item>

@@ -46,7 +46,7 @@ const FleetCarForm = (props: IFleetCarForm) => {
   useEffect(() => {
     if (accessToken && props.fleetCarId) {
       getFleetCarById(accessToken, props.fleetCarId)
-        .then((x) => {
+        .then((x: any) => {
           setFleetCar(x.cars);
           setCarFleetData(x.cars.data);
         });
