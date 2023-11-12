@@ -9,15 +9,13 @@ export async function PUT(request: any) {
     const accessToken = request.headers.get('Authorization');
     const decodedJwt: any = verifyJwt(accessToken);
 
-    console.log(`Old=${oldPassword} new=${newPassword}`);
-
     if (!oldPassword || !newPassword) {
       return NextResponse.json({
         message: 'Passwords are required'
       }, { status: 400 });
     }
 
-    const result = axios.put(`${process.env.CURB_SERVER_URL}/user/profile`, {
+    const result = await axios.put(`${process.env.CURB_SERVER_URL}/user/profile`, {
       id: decodedJwt.id,
       oldPassword: Buffer.from(oldPassword).toString('base64'),
       newPassword: Buffer.from(newPassword).toString('base64'),
@@ -25,10 +23,10 @@ export async function PUT(request: any) {
       return res.data;
     });
 
-    console.log('4');
     return NextResponse.json({
       result: {
-        accessToken
+        accessToken,
+        result,
       },
     }, { status: 201 });
   } catch (e) {

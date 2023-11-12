@@ -64,7 +64,7 @@ export class UserController {
   })
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async changePayload(@Body() payload: PasswordPayload) {
+  async changePayload(@Body() payload: PasswordPayload): Promise<boolean> {
     return this.service.changePayload(payload);
   }
 

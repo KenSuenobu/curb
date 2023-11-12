@@ -11,7 +11,7 @@ import React, {useRef} from 'react';
 import PasswordTextField from '@/app/components/common/PasswordTextField';
 import {changePassword} from '@/app/services/auth';
 import {useSession} from 'next-auth/react';
-import {errorDialog} from '@/app/components/common/ConfirmDialog';
+import {alertDialog, errorDialog} from '@/app/components/common/ConfirmDialog';
 
 export interface IProfileForm {
   open: boolean;
@@ -47,10 +47,14 @@ const ProfileForm = (props: IProfileForm) => {
     }
 
     changePassword(accessToken, oldPassword, newPassword1)
-      .then((x) => console.log(x));
-
-    return;
-    // props.onPropsSaved();
+      .then((x) => {
+        if (x.result.result) {
+          alertDialog('Your password has been successfully changed.');
+          props.onPropsSaved();
+        } else {
+          errorDialog('Your password could not be changed.  Please double-check your passwords and try again.');
+        }
+      });
   }
 
   const closeProfile = () => {
