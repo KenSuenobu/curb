@@ -4,7 +4,7 @@ import Divider from '@mui/material/Divider';
 const WhatsNew = () => {
   const newItems = [
     {
-      header: 'November 5, 2023',
+      header: 'November 12, 2023',
       text:
         <>
           <Typography>
@@ -15,15 +15,19 @@ const WhatsNew = () => {
             Even if you own your own car rental company, and need a way to manage your fleet, CURB is your one stop
             shop for these features.
             <p/>
-            This first release is very simple.  It only contains information about Car Definitions, which are cars
-            that you can buy in your region.  Since this software is not restricted to any one market, you may notice
-            cars available in Canada, Europe, India, and other countries.
+            There are currently two completed sections in the application so far: Car Definitions (under CARS) and Fleet Cars (under FLEET).
+            Car Definitions define the types of cars that can be added to a fleet, so the more complete the data, the
+            better.  Car Definitions are available to all users on the platform, so please be as complete as possible.
+            Do not vandalize the data - changes are recorded by the system.
             <p/>
-            We don&apos;t want to omit any cars, and we certainly don&apos;t want to omit users.  The car definitions listed
-            here may or may not be complete.  If you have the time and effort, please feel free to create or update
-            a car definition so that it&apos;s more complete.  The car definitions will be used in the platform to define
-            the cars that are part of your fleet, and that information is used to determine profitability, profit
-            and loss tables, and so much more.  The more complete the data, the better.
+            Fleet Cars allow you to create a fleet (the name of your company), as well as the different cars that are
+            assigned to each fleet: make, model, year, and trim.  Once you add a fleet car, you can add information such
+            as ownership in the fleet, insurance details, VIN details, and much more.
+            <p/>
+            This is a complex platform.  If you&apos;re finding things are difficult to navigate, or would like to see a
+            flow change, please feel free to reach out to the development team.
+            <p/>
+            More features are being added to the platform on a weekly basis.  Keep checking back for more!
           </Typography>
         </>
     }
