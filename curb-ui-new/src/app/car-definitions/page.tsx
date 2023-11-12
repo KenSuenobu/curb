@@ -29,11 +29,11 @@ const CarDefinitions = () => {
 
     if (accessToken) {
       getCarDefinitionsDashboard(accessToken)
-        .then((x) => {
+        .then((x: any) => {
           setDashboard(x.dashboard);
           setLoading(false);
         })
-        .catch((x) => {
+        .catch((x: any) => {
           setDashboard({
             totalTrims: 'N/A',
             totalContributed: 'N/A',

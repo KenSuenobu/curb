@@ -5,7 +5,7 @@ import axios from 'axios';
 export async function GET(request: any) {
   try {
     const accessToken = request.headers.get('Authorization');
-    const decodedJwt = verifyJwt(accessToken);
+    const decodedJwt: any = verifyJwt(accessToken);
 
     if (!accessToken || !decodedJwt) {
       return NextResponse.json({
