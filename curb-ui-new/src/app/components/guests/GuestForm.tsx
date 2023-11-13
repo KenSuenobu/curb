@@ -65,6 +65,8 @@ const GuestForm = (props: IGuestForm) => {
           setGuestData(x.guest);
           setLoading(false);
         });
+    } else {
+      clearForm();
     }
   }, [props.fleetId, props.guestId]);
 
@@ -197,6 +199,7 @@ const GuestForm = (props: IGuestForm) => {
           }
 
           props.onGuestSaved();
+          clearForm();
         });
     } else if (props.guestId) {
       saveGuest(accessToken, guestData)
