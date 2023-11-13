@@ -26,7 +26,7 @@ export interface IGuestForm {
   onGuestCleared: () => any;
 }
 
-export class IGuest {
+export interface IGuest {
   id: number;
   fleetId: number;
   guestIdSource: string;
@@ -58,12 +58,10 @@ const GuestForm = (props: IGuestForm) => {
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
 
   useEffect(() => {
-    console.log(`Load: fleet=${props.fleetId} guest=${props.guestId}`);
-
     if (props.guestId !== 0) {
       setLoading(true);
       getGuest(accessToken, props.guestId)
-        .then((x) => {
+        .then((x: any) => {
           setGuestData(x.guest);
           setLoading(false);
         });
@@ -144,7 +142,7 @@ const GuestForm = (props: IGuestForm) => {
     newGuestData.blacklisted = false;
 
     saveGuest(accessToken, newGuestData)
-      .then((x) => {
+      .then((x: any) => {
         if (!x.result.created) {
           errorDialog('Unable to save guest record: may be a duplicate.');
           return;
@@ -162,7 +160,7 @@ const GuestForm = (props: IGuestForm) => {
     newGuestData.blacklisted = true;
 
     saveGuest(accessToken, newGuestData)
-      .then((x) => {
+      .then((x: any) => {
         if (!x.result.created) {
           errorDialog('Unable to save guest record: may be a duplicate.');
           return;
@@ -192,7 +190,7 @@ const GuestForm = (props: IGuestForm) => {
 
     if (props.guestId === 0) {
       createGuest(accessToken, guestData)
-        .then((x) => {
+        .then((x: any) => {
           if (!x.result.created) {
             errorDialog('Unable to create guest record: may be a duplicate.');
             return;
@@ -202,7 +200,7 @@ const GuestForm = (props: IGuestForm) => {
         });
     } else if (props.guestId) {
       saveGuest(accessToken, guestData)
-        .then((x) => {
+        .then((x: any) => {
           if (!x.result.created) {
             errorDialog('Unable to save guest record: may be a duplicate.');
             return;

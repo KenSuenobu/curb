@@ -89,7 +89,7 @@ const Guests = () => {
                 <TableBody>
                 {loading && (
                   <>
-                    <TableRow colSpan={2}>
+                    <TableRow>
                       <TableCell>
                         <LinearProgress/>
                       </TableCell>
