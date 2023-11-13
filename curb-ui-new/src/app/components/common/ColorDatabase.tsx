@@ -14,6 +14,6 @@ const ColorDatabase = [
   { label: 'Purple', color: '#690FAD', },
 ];
 
-export const SELECTED_COLOR = '#ccc';
+export const SELECTED_COLOR = '#ccf';
 
 export default ColorDatabase;

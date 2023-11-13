@@ -6,13 +6,13 @@ import {TableHeader} from '@/app/components/common/TableHeader';
 import {createFleet, getAllFleets} from '@/app/services/fleet';
 import LoadingTable from '@/app/components/common/LoadingTable';
 import {errorDialog} from '@/app/components/common/ConfirmDialog';
+import {SELECTED_COLOR} from '@/app/components/common/ColorDatabase';
 
 export interface IFleetList {
   addable?: boolean;
   onClick: (x: any) => any;
 }
 
-const SELECTED_COLOR = '#ccf';
 const HEADER_NAME = 'Fleet';
 
 const FleetList = (props: IFleetList) => {

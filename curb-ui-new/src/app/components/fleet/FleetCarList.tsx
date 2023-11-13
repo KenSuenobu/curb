@@ -18,13 +18,13 @@ import {alertDialog, errorDialog} from '@/app/components/common/ConfirmDialog';
 import {DeleteOutlined} from '@mui/icons-material';
 import Item from '@/app/components/common/Item';
 import {getAllMakes, getAllModels, getAllTrims, getAllYears} from '@/app/services/car-definitions';
+import {SELECTED_COLOR} from '@/app/components/common/ColorDatabase';
 
 export interface IFleetCarList {
   fleetId: number;
   onClick: (carTrimId: number) => any;
 }
 
-const SELECTED_COLOR = '#ccf';
 const HEADER_NAME = 'Fleet Cars';
 
 const FleetCarList = (props: IFleetCarList) => {

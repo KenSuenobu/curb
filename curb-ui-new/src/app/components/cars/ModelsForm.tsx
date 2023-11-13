@@ -16,13 +16,13 @@ import {TableHeader} from '@/app/components/common/TableHeader';
 import {errorDialog} from '@/app/components/common/ConfirmDialog';
 import LoadingTable from '@/app/components/common/LoadingTable';
 import ArrowedTableRow from '@/app/components/common/ArrowedTableRow';
+import {SELECTED_COLOR} from '@/app/components/common/ColorDatabase';
 
 export interface IModelsForm {
   makeId: number;
   onSelect?: (x: any) => any;
 }
 
-const SELECTED_COLOR = '#ccf';
 const HEADER_NAME = 'Car Model';
 
 const ModelsForm = (props: IModelsForm) => {
