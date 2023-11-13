@@ -8,6 +8,7 @@ import LoadingTable from '@/app/components/common/LoadingTable';
 import {errorDialog} from '@/app/components/common/ConfirmDialog';
 
 export interface IFleetList {
+  addable?: boolean;
   onClick: (x: any) => any;
 }
 
@@ -75,8 +76,13 @@ const FleetList = (props: IFleetList) => {
   return (
     <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>
       <Table stickyHeader size={'small'}>
-        <TableHeader header={HEADER_NAME}
-                     onAdd={toggleInput}/>
+        {props.addable !== false ? (
+          <TableHeader header={HEADER_NAME}
+                       onAdd={toggleInput}/>
+          ) : (
+          <TableHeader header={HEADER_NAME}/>
+          )
+        }
         {inputShowing ? (
           <>
             <TableBody>

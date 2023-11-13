@@ -163,23 +163,50 @@ const Layout: NextPage = ({children, params}: any) => {
   //     },
     ],
   };
-  // const guestItems: SideBarMenuGroupProps = {
-  //   label: 'Guests',
-  //   items: [
-  //     {
-  //       icon: <PeopleOutlined/>,
-  //       label: 'Guests',
-  //       onClick: () => router.push('/guests/whitelisted'),
-  //       url: '/guests/whitelisted',
-  //     },
-  //     {
-  //       icon: <PersonOffOutlined/>,
-  //       label: 'Blacklisted Guests',
-  //       onClick: () => router.push('/guests/blacklisted'),
-  //       url: '/guests/blacklisted',
-  //     },
-  //   ],
-  // };
+  const guestItems: SideBarMenuGroupProps = {
+    label: 'Guests',
+    items: [
+      {
+        icon: <PeopleOutlined/>,
+        label: 'Guests',
+        onClick: () => router.push('/guests/whitelisted'),
+        url: '/guests/whitelisted',
+        info:
+          <>
+            <Typography>
+              <b>Whitelisted Guests</b>
+              <p/>
+              Whitelisted guests are guests that you trust, and have proven to be good.  These are generally
+              guests who have had no complaints, and have not left bad or derogatory feedback for you.
+              <p/>
+              Each guest area has notes, so if any guests mistreat your cars, leave inflamatory comments, or
+              anything else, you can leave notes here regarding the guests, and what they did.
+              <p/>
+              You also have the ability to blacklist a guest at any time.
+            </Typography>
+          </>
+      },
+      {
+        icon: <PersonOffOutlined/>,
+        label: 'Blacklisted Guests',
+        onClick: () => router.push('/guests/blacklisted'),
+        url: '/guests/blacklisted',
+        info:
+          <>
+            <Typography>
+              <b>Blacklisted Guests</b>
+              <p/>
+              Blacklisted guests are guests that you do not trust, and have proven to be bad actors.
+              <p/>
+              Each guest area has notes, so if any guests mistreat your cars, leave inflamatory comments, or
+              anything else, you can leave notes here regarding the guests, and what they did.
+              <p/>
+              You also have the ability to whitelist a guest at any time.
+            </Typography>
+          </>
+      },
+    ],
+  };
   // const tripItems: SideBarMenuGroupProps = {
   //   label: 'Trips',
   //   items: [
@@ -220,7 +247,7 @@ const Layout: NextPage = ({children, params}: any) => {
   //     },
   //   ],
   // }
-  const sidebarItems = [carItems, fleetItems];
+  const sidebarItems = [carItems, fleetItems, guestItems];
 
   const handleHomeClicked = () => {
     router.push('/');

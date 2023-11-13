@@ -4,6 +4,15 @@ import Divider from '@mui/material/Divider';
 const WhatsNew = () => {
   const newItems = [
     {
+      header: 'November 12, 2023 - v0.0.2',
+      text:
+        <>
+          <Typography>
+            This release introduces the ability to save guest information.
+          </Typography>
+        </>
+    },
+    {
       header: 'November 12, 2023',
       text:
         <>
@@ -37,8 +46,8 @@ const WhatsNew = () => {
     <>
       <Typography fontWeight={'bold'} fontSize={'24px'}>What&apos;s New?</Typography>
       <p/>
-      {newItems.map((x) => (
-        <>
+      {newItems.map((x: any, count: number) => (
+        <div key={count}>
           <Typography fontSize={'18px'}>{x.header}</Typography>
           <blockquote>
             {x.text}
@@ -46,7 +55,7 @@ const WhatsNew = () => {
           <p/>
           <Divider/>
           <p/>
-        </>
+        </div>
       ))}
     </>
   );
