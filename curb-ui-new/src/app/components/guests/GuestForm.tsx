@@ -13,7 +13,7 @@ import {
 import Item from '@/app/components/common/Item';
 import {TableHeader} from '@/app/components/common/TableHeader';
 import React, {useEffect, useRef, useState} from 'react';
-import {errorDialog} from '@/app/components/common/ConfirmDialog';
+import {confirmDialog, errorDialog} from '@/app/components/common/ConfirmDialog';
 import {useSession} from 'next-auth/react';
 import {createGuest, getGuest, saveGuest} from '@/app/services/guests';
 import UrlTextField from '@/app/components/common/UrlTextField';
@@ -139,39 +139,43 @@ const GuestForm = (props: IGuestForm) => {
   }
 
   const whitelistClicked = () => {
-    const newGuestData = guestData;
+    confirmDialog('Are you sure you wish to whitelist this guest?', () => {
+      const newGuestData = guestData;
 
-    newGuestData.blacklisted = false;
+      newGuestData.blacklisted = false;
 
-    saveGuest(accessToken, newGuestData)
-      .then((x: any) => {
-        if (!x.result.created) {
-          errorDialog('Unable to save guest record: may be a duplicate.');
-          return;
-        }
+      saveGuest(accessToken, newGuestData)
+        .then((x: any) => {
+          if (!x.result.created) {
+            errorDialog('Unable to save guest record: may be a duplicate.');
+            return;
+          }
 
-        props.onGuestSaved();
-      });
+          props.onGuestSaved();
+        });
 
-    props.onGuestCleared();
+      props.onGuestCleared();
+    });
   }
 
   const blacklistClicked = () => {
-    const newGuestData = guestData;
+    confirmDialog('Are you sure you wish to blacklist this guest?', () => {
+      const newGuestData = guestData;
 
-    newGuestData.blacklisted = true;
+      newGuestData.blacklisted = true;
 
-    saveGuest(accessToken, newGuestData)
-      .then((x: any) => {
-        if (!x.result.created) {
-          errorDialog('Unable to save guest record: may be a duplicate.');
-          return;
-        }
+      saveGuest(accessToken, newGuestData)
+        .then((x: any) => {
+          if (!x.result.created) {
+            errorDialog('Unable to save guest record: may be a duplicate.');
+            return;
+          }
 
-        props.onGuestSaved();
-      });
+          props.onGuestSaved();
+        });
 
-    props.onGuestCleared();
+      props.onGuestCleared();
+    });
   }
 
   const saveClicked = () => {
