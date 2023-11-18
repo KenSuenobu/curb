@@ -66,8 +66,7 @@ const AddressList = (props: IAddressList) => {
                 fullWidth>
           <MenuItem value={0} key={0}>
             <Stack direction={'row'}>
-              <div style={{ height: '20px', color: 'black' }}>{imageForCategory(0)}</div>
-              <div style={{ paddingLeft: '10px', height: '20px', color: 'black' }}><Typography> Uncategorized</Typography></div>
+              <div style={{ height: '20px', color: 'black' }}><Typography> None selected</Typography></div>
             </Stack>
           </MenuItem>
           {addressList.map((x: any, counter: number) => (
