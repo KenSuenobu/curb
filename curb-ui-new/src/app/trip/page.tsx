@@ -53,9 +53,11 @@ const Trip = () => {
                 fleetCarId={fleetCarId}
                 onSaved={() => tripSaved()}/>
       <p/>
-      <TripList fleetCarId={fleetCarId}
-                needsRefresh={listRefresh}
-                onRefresh={() => setListRefresh(false)}/>
+      {fleetCarId !== 0 ? (
+        <TripList fleetCarId={fleetCarId}
+                  needsRefresh={listRefresh}
+                  onRefresh={() => setListRefresh(false)}/>
+      ) : (<></>)}
     </>
   );
 }

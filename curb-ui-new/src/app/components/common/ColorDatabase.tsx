@@ -15,6 +15,7 @@ const ColorDatabase = [
 ];
 
 export const SELECTED_COLOR = '#ccf';
+export const SELECTED_MENU_COLOR = '#66a';
 
 export const colorForLabel = (color: string) => {
   const colorEntry: any = ColorDatabase.filter((x) => x.label === color);

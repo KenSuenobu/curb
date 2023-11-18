@@ -16,6 +16,8 @@ const WhatsNew = () => {
               <li> Fleet car list now shows the color of the car</li>
               <li> Fleet car list now shows the license plate of the car</li>
               <li> Guest list detail now indicates if the guest is an incomplete record</li>
+              <li> Menu icon has been improved</li>
+              <li> Sidebar navigation has been improved to highlight the current page</li>
             </ul>
           </Typography>
         </>

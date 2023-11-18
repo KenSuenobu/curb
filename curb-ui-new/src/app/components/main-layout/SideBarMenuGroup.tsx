@@ -6,6 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import SideBarMenuItem, { SideBarMenuItemProps } from './SideBarMenuItem';
 import {KeyboardArrowDownOutlined} from '@mui/icons-material';
 import {useState} from 'react';
+import {usePathname} from 'next/navigation';
 
 export interface SideBarMenuGroupProps {
   label: string;

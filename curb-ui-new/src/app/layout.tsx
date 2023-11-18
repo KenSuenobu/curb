@@ -17,7 +17,7 @@ import {
   PeopleOutlined,
   PersonOffOutlined,
   RefreshOutlined,
-  HouseOutlined, CalendarMonthOutlined,
+  HouseOutlined, CalendarMonthOutlined, MenuOutlined,
 } from '@mui/icons-material';
 import SideBar from '@/app/components/main-layout/SideBar';
 import {signOut, useSession} from 'next-auth/react';
@@ -361,7 +361,7 @@ const Layout: NextPage = ({children, params}: any) => {
 
                 <Item sx={{ width: '10%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'right', paddingTop: '4px' }}>
                   <IconButton onClick={handleMenu}>
-                    <MenuOpenOutlined style={{ color: 'white' }}/>
+                    <MenuOutlined style={{ color: 'white' }}/>
                   </IconButton>
                   <Menu id={'menu-appbar'} anchorEl={anchorEl}
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}

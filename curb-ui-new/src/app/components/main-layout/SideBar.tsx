@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import SideBarMenuGroup, { SideBarMenuGroupProps } from './SideBarMenuGroup';
 import {ListItem, Stack, Typography} from '@mui/material';
 import {InfoOutlined} from '@mui/icons-material';
-import {useRouter} from 'next/navigation';
+import {usePathname, useRouter} from 'next/navigation';
 
 const FireNav = styled(List)<{ component?: React.ElementType }>({
   "& .MuiListItemButton-root": {
