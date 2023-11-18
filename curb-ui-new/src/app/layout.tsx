@@ -16,7 +16,8 @@ import {
   MenuOpenOutlined,
   PeopleOutlined,
   PersonOffOutlined,
-  RefreshOutlined
+  RefreshOutlined,
+  HouseOutlined,
 } from '@mui/icons-material';
 import SideBar from '@/app/components/main-layout/SideBar';
 import {signOut, useSession} from 'next-auth/react';
@@ -67,7 +68,7 @@ function MenuIcon(props: { style: { color: string } }) {
   return null;
 }
 
-const APPLICATION_VERSION = '0.0.3-11122023';
+const APPLICATION_VERSION = '0.0.3-11172023';
 
 const Layout: NextPage = ({children, params}: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -89,7 +90,7 @@ const Layout: NextPage = ({children, params}: any) => {
 
   // System layout
   const carItems: SideBarMenuGroupProps = {
-    label: 'Cars',
+    label: 'Community',
     items: [
       {
         icon: <DirectionsCarOutlined/>,
@@ -112,6 +113,29 @@ const Layout: NextPage = ({children, params}: any) => {
               The data here will eventually help give more information about your cars in the
               dashboard, and will help show you depreciation schedules, comparisons with prices
               other people paid, etc.
+            </Typography>
+          </>
+      },
+      {
+        icon: <HouseOutlined/>,
+        label: 'Delivery Addresses',
+        onClick: () => router.push('/addresses'),
+        url: '/addresses',
+        info:
+          <>
+            <Typography>
+              <b>Delivery Addresses</b>
+              <p/>
+              These are sets of delivery destinations.  These include places like hotels, airports,
+              off-airport parking lots, and such.
+              <p/>
+              You have the ability to share the addresses with other Curb users by selecting &quot;Public&quot;
+              in the address lists.
+              <p/>
+              If you are adding an address that is intended for personal use, please do not mark it Public.
+              <p/>
+              You can add any address you like, but only you can add an address.  If the address is in use
+              by another fleet, you cannot delete the address, but you can modify it.
             </Typography>
           </>
       },
@@ -150,11 +174,6 @@ const Layout: NextPage = ({children, params}: any) => {
   //       icon: <MoneyOutlined/>,
   //       label: 'Fleet Car Loans',
   //       onClick: () => setCurrentPage(<FleetLoans jwt={jwt as string}/>),
-  //     },
-  //     {
-  //       icon: <HouseOutlined/>,
-  //       label: 'Delivery Addresses',
-  //       onClick: () => setCurrentPage(<DeliveryAddress jwt={jwt as string}/>),
   //     },
   //     {
   //       icon: <PeopleOutlined/>,

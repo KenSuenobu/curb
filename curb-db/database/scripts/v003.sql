@@ -7,6 +7,7 @@ CREATE TABLE curb.delivery_address (
     id SERIAL NOT NULL PRIMARY KEY,
     creator_id INT NOT NULL REFERENCES curb.user(id),
     fleet_id INT NOT NULL REFERENCES curb.fleet(id),
+    public BOOLEAN NOT NULL,
     name VARCHAR(255) NOT NULL,
     data JSON
 );

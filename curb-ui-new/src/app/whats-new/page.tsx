@@ -4,6 +4,26 @@ import Divider from '@mui/material/Divider';
 const WhatsNew = () => {
   const newItems = [
     {
+      header: 'November 17, 2023 - v0.0.3',
+      text:
+        <>
+          <Typography>
+            Community now includes the ability to define Delivery Addresses for upcoming trip functionality.
+            <p/>
+            This means, you can start adding delivery address data to the database for your own fleet, as well as
+            the entire community.  Community addresses can include addresses like airports, nearby hotels,
+            park-and-ride locations, and the like.
+            <p/>
+            Several other cosmetic changes and flow changes have been introduced.  Car definitions now displays
+            the total number of definitions that are contributed, and the total your fleet has defined.
+            <p/>
+            Guests now have the ability to blacklist or whitelist guests at any time.  If a guest, for example,
+            causes an issue and you want to keep track of that issue, simply add the guest note, and save it.
+            You can then blacklist or whitelist your guest based on the note.
+          </Typography>
+        </>
+    },
+    {
       header: 'November 12, 2023 - v0.0.2',
       text:
         <>
@@ -44,7 +64,7 @@ const WhatsNew = () => {
 
   return (
     <>
-      <Typography fontWeight={'bold'} fontSize={'24px'}>What&apos;s New?</Typography>
+      <Typography fontWeight={'bold'} fontSize={'24px'}>What&apos;s New? (Sorted by date, descending order.)</Typography>
       <p/>
       {newItems.map((x: any, count: number) => (
         <div key={count}>

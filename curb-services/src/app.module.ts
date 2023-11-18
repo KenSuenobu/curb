@@ -31,7 +31,7 @@ import {SignupController} from './controllers/signup.controller';
 @Module({
   imports: [],
   controllers: [
-    // AddressController,
+    AddressController,
     CarMakeController,
     CarModelController,
     CarYearController,
@@ -47,7 +47,7 @@ import {SignupController} from './controllers/signup.controller';
     UserController,
   ],
   providers: [
-    // AddressService,
+    AddressService,
     CarMakeService,
     CarModelService,
     CarYearService,

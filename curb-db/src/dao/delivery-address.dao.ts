@@ -9,37 +9,33 @@ export class DeliveryAddressDao extends BaseDao<DeliveryAddressDto> {
   }
 
   async listForFleetId(fleetId: number): Promise<DeliveryAddressDto[]> {
-    const selectStatement = `SELECT * FROM ${this.section} WHERE fleet_id=$1 ORDER BY name ASC`;
+    const selectStatement = `SELECT id, creator_id, fleet_id, public, name FROM ${this.section} WHERE fleet_id=$1 OR public IS TRUE ORDER BY name ASC`;
 
     return (await this.db.any(selectStatement, [ fleetId ]))
       .map((x) => DaoUtils.normalizeFields<DeliveryAddressDto>(x));
   }
 
-  override async list(): Promise<DeliveryAddressDto[]> {
-    const selectStatement = `SELECT * FROM ${this.section} ORDER BY name ASC`;
-
-    return (await this.db.any(selectStatement))
-      .map((x) => DaoUtils.normalizeFields<DeliveryAddressDto>(x));
-  }
-
   async edit(id: number, payload: DeliveryAddressDto): Promise<Boolean> {
     const sqlStatement =
-      `UPDATE ${this.section} SET name=$1, fleet_id=$2, data=$3 WHERE id=$4`;
+      `UPDATE ${this.section} SET name=$1, fleet_id=$2, data=$3, public=$4 WHERE id=$5`;
 
     return this.db
       .none(sqlStatement, [
         payload.name,
         payload.fleetId,
         payload.data,
+        payload.public,
         id,
       ])
       .then(() => true);
   }
 
   async create(payload: DeliveryAddressDto): Promise<DeliveryAddressDto> {
-    const sqlStatement =
-      `INSERT INTO ${this.section} (name, fleet_id, data) VALUES ($1, $2, $3) RETURNING *`;
+    console.log(`Payload: ${JSON.stringify(payload, null, 2)}`);
 
-    return this.db.oneOrNone(sqlStatement, [ payload.name, payload.fleetId, payload.data, ]);
+    const sqlStatement =
+      `INSERT INTO ${this.section} (name, creator_id, fleet_id, data, public) VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+
+    return this.db.oneOrNone(sqlStatement, [ payload.name, payload.creatorId, payload.fleetId, payload.data, payload.public ]);
   }
 }

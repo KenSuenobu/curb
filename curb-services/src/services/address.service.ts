@@ -31,4 +31,9 @@ export class AddressService {
     return dao.listForFleetId(fleetId);
   }
 
+  async getDeliveryAddressByAddressId(addressId: number): Promise<DeliveryAddressDto> {
+    const dao = new DeliveryAddressDao(DaoUtils.getDatabase());
+    return dao.getById(addressId);
+  }
+
 }

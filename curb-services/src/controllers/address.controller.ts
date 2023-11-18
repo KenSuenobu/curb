@@ -17,7 +17,7 @@ export class AddressController {
 
   constructor(private readonly service: AddressService) {}
 
-  @Post('/delivery/create')
+  @Post('/create')
   @ApiOperation({
     summary: 'Creates a new DeliveryAddress object',
     description: 'Creates a address for a delivery location',
@@ -37,7 +37,7 @@ export class AddressController {
     return this.service.createDeliveryAddress(payload);
   }
 
-  @Put('/delivery/edit')
+  @Put('/edit')
   @ApiOperation({
     summary: 'Saves a DeliveryAddress object',
     description: 'Saves a address for a delivery location',
@@ -57,7 +57,7 @@ export class AddressController {
     return this.service.saveDeliveryAddress(payload);
   }
 
-  @Get('/delivery/list/:fleetId')
+  @Get('/list/:fleetId')
   @ApiOperation({
     summary: 'Lists DeliveryAddress objects by fleet ID',
     description: 'Retrieves a list of all `DeliveryAddress` objects by fleet ID.',
@@ -71,6 +71,21 @@ export class AddressController {
   @ApiUnauthorizedResponse()
   async listDeliveryAddressesForFleetId(@Param('fleetId') fleetId: number): Promise<DeliveryAddressDto[]> {
     return this.service.listDeliveryAddressesForFleetId(fleetId);
+  }
+
+  @Get('/get/:addressId')
+  @ApiOperation({
+    summary: 'Gets a DeliveryAddress by address ID',
+    description: 'Retrieves a DeliveryAddress object by its address ID',
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: DeliveryAddressDto,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async getDeliveryAddressByAddressId(@Param('addressId') addressId: number) : Promise<DeliveryAddressDto> {
+    return this.service.getDeliveryAddressByAddressId(addressId);
   }
 
 }
