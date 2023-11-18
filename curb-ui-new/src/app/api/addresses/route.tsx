@@ -46,8 +46,6 @@ export async function POST(request: any) {
       })
     .then((res) => res.data);
 
-    console.log(`Data: ${JSON.stringify(result, null, 2)}`);
-
     return NextResponse.json({
       result: {
         accessToken

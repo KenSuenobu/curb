@@ -95,6 +95,7 @@ const AddressForm = (props: IAddressForm) => {
           }
 
           props.onSaved();
+          clearForm();
         });
     } else {
       saveAddress(accessToken, payload)
