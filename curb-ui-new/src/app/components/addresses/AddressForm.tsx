@@ -171,32 +171,32 @@ const AddressForm = (props: IAddressForm) => {
                         fullWidth>
                   <MenuItem value={0} key={0}>
                     <Stack direction={'row'}>
-                      <div>{imageForCategory(0)}</div>
-                      <div style={{ paddingLeft: '10px' }}><Typography>Uncategorized</Typography></div>
+                      <div style={{ height: '24px' }}>{imageForCategory(0)}</div>
+                      <div style={{ paddingLeft: '10px', height: '24px' }}><Typography>Uncategorized</Typography></div>
                     </Stack>
                   </MenuItem>
                   <MenuItem value={1} key={1}>
                     <Stack direction={'row'}>
-                      <div>{imageForCategory(1)}</div>
-                      <div style={{ paddingLeft: '10px' }}><Typography>Airport</Typography></div>
+                      <div style={{ height: '24px' }}>{imageForCategory(1)}</div>
+                      <div style={{ paddingLeft: '10px', height: '24px' }}><Typography>Airport</Typography></div>
                     </Stack>
                   </MenuItem>
                   <MenuItem value={2} key={2}>
                     <Stack direction={'row'}>
-                      <div>{imageForCategory(2)}</div>
-                      <div style={{ paddingLeft: '10px' }}><Typography>Hotel</Typography></div>
+                      <div style={{ height: '24px' }}>{imageForCategory(2)}</div>
+                      <div style={{ paddingLeft: '10px', height: '24px' }}><Typography>Hotel</Typography></div>
                     </Stack>
                   </MenuItem>
                   <MenuItem value={3} key={3}>
                     <Stack direction={'row'}>
-                      <div>{imageForCategory(3)}</div>
-                      <div style={{ paddingLeft: '10px' }}><Typography>Car Park/Park and Ride</Typography></div>
+                      <div style={{ height: '24px' }}>{imageForCategory(3)}</div>
+                      <div style={{ paddingLeft: '10px', height: '24px' }}><Typography>Car Park/Park and Ride</Typography></div>
                     </Stack>
                   </MenuItem>
                   <MenuItem value={4} key={4}>
                     <Stack direction={'row'}>
-                      <div>{imageForCategory(4)}</div>
-                      <div style={{ paddingLeft: '10px' }}><Typography>Private Residence</Typography></div>
+                      <div style={{ height: '24px' }}>{imageForCategory(4)}</div>
+                      <div style={{ paddingLeft: '10px', height: '24px' }}><Typography>Private Residence</Typography></div>
                     </Stack>
                   </MenuItem>
                 </Select>

@@ -104,11 +104,11 @@ const Addresses = () => {
                                 setAddressId(x.id);
                               }}>
                               <Stack direction={'row'}>
-                                <Item sx={{ width: '5%', backgroundColor: bgColor, padding: '3px', paddingTop: '4px' }}>
+                                <Item sx={{ width: '5%', backgroundColor: bgColor, padding: '3px', paddingTop: '4px', color: 'black' }}>
                                   {imageForCategory(parseInt(x.category))}
                                 </Item>
 
-                                <Item sx={{ backgroundColor: bgColor, padding: '3px', paddingTop: '4px' }}>
+                                <Item sx={{ backgroundColor: bgColor, padding: '3px', paddingTop: '4px', color: 'black' }}>
                                   <Typography>
                                     {x.name}
                                   </Typography>
