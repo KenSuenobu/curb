@@ -29,8 +29,8 @@ export interface ITrip {
   guestId: number;
   deliveryAddressId: number;
   tripId: string;
-  startTime: Date;
-  endTime: Date;
+  startTime: any;
+  endTime: any;
   mileage: number;
   earnings: number;
 }
@@ -160,11 +160,10 @@ const TripForm = (props: ITripForm) => {
         <Item sx={{ width: '25%' }}>
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <DateTimePicker label={'Trip Start'}
-                            fullWidth
-                            value={moment(tripData.startTime)} name={'startTime'} onChange={(e) => {
+                            value={moment(tripData.startTime)} onChange={(e) => {
               setTripData({
                 ...tripData,
-                startTime: e,
+                startTime: e!,
               });
             }}/>
           </LocalizationProvider>
@@ -176,7 +175,7 @@ const TripForm = (props: ITripForm) => {
                             value={moment(tripData.endTime)} onChange={(e) => {
               setTripData({
                 ...tripData,
-                endTime: e,
+                endTime: e!,
               });
             }}/>
           </LocalizationProvider>

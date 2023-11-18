@@ -28,7 +28,7 @@ const TripList = (props: ITripList) => {
     if (props.fleetCarId !== 0) {
       setLoading(true);
       loadTrips(accessToken, props.fleetCarId)
-        .then((x) => setTripList(x.trips))
+        .then((x: any) => setTripList(x.trips))
         .finally(() => setLoading(false));
     } else {
       setTripList([]);
@@ -55,7 +55,7 @@ const TripList = (props: ITripList) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tripList.map((row, counter) => {
+              {tripList.map((row: any, counter: number) => {
                 const now = moment();
                 const startTime = moment(row.startTime);
                 const endTime = moment(row.endTime);

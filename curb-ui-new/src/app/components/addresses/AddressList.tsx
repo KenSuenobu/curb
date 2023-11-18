@@ -54,7 +54,7 @@ const AddressList = (props: IAddressList) => {
                   props.onAddressSelected(selectedId);
                 }}
                 fullWidth>
-          {addressList.map((x, counter) => (
+          {addressList.map((x: any, counter: number) => (
             <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>
           ))}
         </Select>

@@ -19,7 +19,7 @@ const GuestList = (props: IGuestList) => {
     if (accessToken && props.fleetId) {
       setLoading(true);
       listAllGuests(accessToken, props.fleetId)
-        .then((x) => {
+        .then((x: any) => {
           setGuestList(x.guests);
         })
         .catch((x) => setGuestList([]))
@@ -54,7 +54,7 @@ const GuestList = (props: IGuestList) => {
                   props.onGuestSelected(selectedId);
                 }}
                 fullWidth>
-          {guestList.map((x, counter) => (
+          {guestList.map((x: any, counter: number) => (
             <MenuItem value={x.id} key={counter}>
               <Typography style={{ color: (x.blacklisted ? 'red' : 'black') }}>
                 {x.lastName}, {x.firstName} {x.middleName}
