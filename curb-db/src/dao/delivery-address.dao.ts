@@ -9,7 +9,7 @@ export class DeliveryAddressDao extends BaseDao<DeliveryAddressDto> {
   }
 
   async listForFleetId(fleetId: number): Promise<DeliveryAddressDto[]> {
-    const selectStatement = `SELECT id, creator_id, fleet_id, public, name FROM ${this.section} WHERE fleet_id=$1 OR public IS TRUE ORDER BY name ASC`;
+    const selectStatement = `SELECT id, creator_id, fleet_id, public, name, data->>'category' AS category FROM ${this.section} WHERE fleet_id=$1 OR public IS TRUE ORDER BY name ASC`;
 
     return (await this.db.any(selectStatement, [ fleetId ]))
       .map((x) => DaoUtils.normalizeFields<DeliveryAddressDto>(x));

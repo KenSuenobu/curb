@@ -1,8 +1,9 @@
-import {FormControl, InputLabel, LinearProgress, MenuItem, Select} from '@mui/material';
-import {useEffect, useState} from 'react';
+import {FormControl, InputLabel, LinearProgress, MenuItem, Select, Stack, Typography} from '@mui/material';
+import React, {useEffect, useState} from 'react';
 import {Simulate} from 'react-dom/test-utils';
 import {useSession} from 'next-auth/react';
 import {listAddresses} from '@/app/services/addresses';
+import {imageForCategory} from '@/app/services/trip';
 
 export interface IAddressList {
   fleetId: number;
@@ -63,9 +64,19 @@ const AddressList = (props: IAddressList) => {
                   props.onAddressSelected(selectedId);
                 }}
                 fullWidth>
-          <MenuItem value={0} key={0}>None selected</MenuItem>
+          <MenuItem value={0} key={0}>
+            <Stack direction={'row'}>
+              <div>{imageForCategory(0)}</div>
+              <div style={{ paddingLeft: '10px' }}><Typography> Uncategorized</Typography></div>
+            </Stack>
+          </MenuItem>
           {addressList.map((x: any, counter: number) => (
-            <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>
+            <MenuItem value={x.id} key={counter}>
+              <Stack direction={'row'}>
+                <div>{imageForCategory(parseInt(x.category))}</div>
+                <div style={{ paddingLeft: '10px' }}><Typography>{x.name}</Typography></div>
+              </Stack>
+            </MenuItem>
           ))}
         </Select>
       </FormControl>

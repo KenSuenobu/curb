@@ -4,6 +4,20 @@ import Divider from '@mui/material/Divider';
 const WhatsNew = () => {
   const newItems = [
     {
+      header: 'November 18, 2023 - v0.0.4',
+      text:
+        <>
+          <Typography>
+            This release adds the ability to store trips.  This is the first pass at the trip recording; there will be
+            more changes and improvements in the next few days.
+            <p/>
+            <ul>
+              <li> Improved delivery address list - now accepts an address category, and shows an icon representing the category</li>
+            </ul>
+          </Typography>
+        </>
+    },
+    {
       header: 'November 17, 2023 - v0.0.3',
       text:
         <>

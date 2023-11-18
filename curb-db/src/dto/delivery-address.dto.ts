@@ -47,4 +47,6 @@ export class DeliveryAddressDto {
     required: true,
   })
   data: any;
+
+  category?: number;
 }

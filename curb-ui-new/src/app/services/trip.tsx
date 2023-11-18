@@ -1,4 +1,11 @@
 import axios from 'axios';
+import {
+  BedroomParentOutlined,
+  GarageOutlined,
+  HouseOutlined,
+  LocalAirportOutlined,
+  QuestionMarkOutlined
+} from '@mui/icons-material';
 
 export const createTrip = (accessToken: any, payload: any) => {
   return new Promise((resolve, reject) => {
@@ -49,4 +56,22 @@ export const loadTrips = (accessToken: any, fleetCarId: number) => {
       })
       .catch(e => reject(e));
   });
+}
+
+export const imageForCategory = (category: number) => {
+  switch(category) {
+    case 1:
+      return (<LocalAirportOutlined/>);
+
+    case 2:
+      return (<BedroomParentOutlined/>);
+
+    case 3:
+      return (<GarageOutlined/>);
+
+    case 4:
+      return (<HouseOutlined/>);
+  }
+
+  return (<QuestionMarkOutlined/>);
 }

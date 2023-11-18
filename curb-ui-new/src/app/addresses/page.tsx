@@ -21,6 +21,8 @@ import AddressForm from '@/app/components/addresses/AddressForm';
 import {useSession} from 'next-auth/react';
 import {listAddresses} from '@/app/services/addresses';
 import {errorDialog} from '@/app/components/common/ConfirmDialog';
+import {imageForCategory} from '@/app/services/trip';
+import Item from '@/app/components/common/Item';
 
 const Addresses = () => {
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
@@ -37,6 +39,7 @@ const Addresses = () => {
       listAddresses(accessToken, fleetId)
         .then((x: any) => {
           setAddressList(x.addresses);
+          console.log(JSON.stringify(x.addresses, null, 2));
         })
         .catch((x: any) => {
           errorDialog(`Unable to retrieve address list: ${x.message}`);
@@ -96,13 +99,21 @@ const Addresses = () => {
                           <TableRow hover sx={{ cursor: 'pointer' }}>
                             <TableCell
                               colSpan={2}
-                              sx={{ backgroundColor: bgColor, width: '90%' }}
+                              sx={{ backgroundColor: bgColor, width: '90%', padding: '0px', paddingLeft: '10px' }}
                               onClick={() => {
                                 setAddressId(x.id);
                               }}>
-                              <Typography>
-                                {x.name}
-                              </Typography>
+                              <Stack direction={'row'}>
+                                <Item sx={{ width: '5%', backgroundColor: bgColor, padding: '3px', paddingTop: '4px' }}>
+                                  {imageForCategory(parseInt(x.category))}
+                                </Item>
+
+                                <Item sx={{ backgroundColor: bgColor, padding: '3px', paddingTop: '4px' }}>
+                                  <Typography>
+                                    {x.name}
+                                  </Typography>
+                                </Item>
+                              </Stack>
                             </TableCell>
                           </TableRow>
                         </>
