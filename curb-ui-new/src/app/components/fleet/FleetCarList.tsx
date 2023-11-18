@@ -23,6 +23,7 @@ import {SELECTED_COLOR} from '@/app/components/common/ColorDatabase';
 export interface IFleetCarList {
   fleetId: number;
   onClick: (carTrimId: number) => any;
+  addable?: boolean;
 }
 
 const HEADER_NAME = 'Fleet Cars';
@@ -85,22 +86,26 @@ const FleetCarList = (props: IFleetCarList) => {
     <>
       <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>
         <Table stickyHeader size={'small'}>
-          <TableHeader header={HEADER_NAME}
-                       onAdd={() => {
-                         if (props.fleetId === 0) {
-                           errorDialog('You must first select a fleet.');
-                           return;
-                         }
+          {props.addable ? (
+            <TableHeader header={HEADER_NAME}
+                         onAdd={() => {
+                           if (props.fleetId === 0) {
+                             errorDialog('You must first select a fleet.');
+                             return;
+                           }
 
-                         toggleInput();
+                           toggleInput();
 
-                         setCarModelList([]);
-                         setCarYearList([]);
-                         setCarTrimList([]);
-                         setCarModelId(0);
-                         setCarYearId(0);
-                         setCarTrimId(0);
-                       }}/>
+                           setCarModelList([]);
+                           setCarYearList([]);
+                           setCarTrimList([]);
+                           setCarModelId(0);
+                           setCarYearId(0);
+                           setCarTrimId(0);
+                         }}/>
+          ) : (
+            <TableHeader header={HEADER_NAME}/>
+          )}
           <TableBody>
           {inputShowing ? (
             <TableRow>

@@ -128,7 +128,7 @@ export class TripDao extends BaseDao<TripDto> {
 
   async edit(id: number, payload: TripDto): Promise<boolean> {
     const sqlStatement =
-      `UPDATE ${this.section} SET id=$1, fleet_car_id=$2, guest_id=$3, delivery_address_id=$4, trip_id=$5, trip_url=$6, start_time=$7, end_time=$8, mileage=$9, earnings=$10 WHERE id=$11`;
+      `UPDATE ${this.section} SET id=$1, fleet_car_id=$2, guest_id=$3, delivery_address_id=$4, trip_id=$5, start_time=$6, end_time=$7, mileage=$8, earnings=$9 WHERE id=$10`;
 
     return this.db
       .none(sqlStatement, [
@@ -137,7 +137,6 @@ export class TripDao extends BaseDao<TripDto> {
         payload.guestId,
         payload.deliveryAddressId,
         payload.tripId,
-        payload.tripUrl,
         payload.startTime,
         payload.endTime,
         payload.mileage,
@@ -149,14 +148,13 @@ export class TripDao extends BaseDao<TripDto> {
 
   async create(payload: TripDto): Promise<TripDto> {
     const sqlStatement =
-      `INSERT INTO ${this.section} (fleet_car_id, guest_id, delivery_address_id, trip_id, trip_url, start_time, end_time, mileage, earnings) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
+      `INSERT INTO ${this.section} (fleet_car_id, guest_id, delivery_address_id, trip_id, start_time, end_time, mileage, earnings) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
 
     return this.db.oneOrNone(sqlStatement, [
       payload.fleetCarId,
       payload.guestId,
       payload.deliveryAddressId,
       payload.tripId,
-      payload.tripUrl,
       payload.startTime,
       payload.endTime,
       payload.mileage,

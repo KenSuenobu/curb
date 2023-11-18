@@ -31,8 +31,6 @@ export class DeliveryAddressDao extends BaseDao<DeliveryAddressDto> {
   }
 
   async create(payload: DeliveryAddressDto): Promise<DeliveryAddressDto> {
-    console.log(`Payload: ${JSON.stringify(payload, null, 2)}`);
-
     const sqlStatement =
       `INSERT INTO ${this.section} (name, creator_id, fleet_id, data, public) VALUES ($1, $2, $3, $4, $5) RETURNING *`;
 

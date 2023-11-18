@@ -17,7 +17,7 @@ import {
   PeopleOutlined,
   PersonOffOutlined,
   RefreshOutlined,
-  HouseOutlined,
+  HouseOutlined, CalendarMonthOutlined,
 } from '@mui/icons-material';
 import SideBar from '@/app/components/main-layout/SideBar';
 import {signOut, useSession} from 'next-auth/react';
@@ -68,7 +68,7 @@ function MenuIcon(props: { style: { color: string } }) {
   return null;
 }
 
-const APPLICATION_VERSION = '0.0.3-11172023';
+const APPLICATION_VERSION = '0.0.4';
 
 const Layout: NextPage = ({children, params}: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -226,31 +226,45 @@ const Layout: NextPage = ({children, params}: any) => {
       },
     ],
   };
-  // const tripItems: SideBarMenuGroupProps = {
-  //   label: 'Trips',
-  //   items: [
-  //     {
-  //       icon: <CalendarMonthOutlined/>,
-  //       label: 'Trip Entry',
-  //       onClick: () => setCurrentPage(<Trip jwt={jwt as string}/>),
-  //     },
-  //     {
-  //       icon: <TodayOutlined/>,
-  //       label: 'Current Trips',
-  //       onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.CURRENT}/>),
-  //     },
-  //     {
-  //       icon: <UpcomingOutlined/>,
-  //       label: 'Upcoming Trips',
-  //       onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.UPCOMING}/>),
-  //     },
-  //     {
-  //       icon: <ScheduleOutlined/>,
-  //       label: 'Past Trips',
-  //       onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.PAST}/>),
-  //     },
-  //   ],
-  // }
+  const tripItems: SideBarMenuGroupProps = {
+    label: 'Trips',
+    items: [
+      {
+        icon: <CalendarMonthOutlined/>,
+        label: 'Trip Entry',
+        onClick: () => router.push('/trip'),
+        url: '/trip',
+        info:
+          <>
+            <Typography>
+              <b>Trips</b>
+              <p/>
+              Guests who book trips with you on any platform should be entered into this system as well.
+              This way, all trips - past, present, and future, can be accounted for, along with earnings,
+              losses, reimbursements, repairs, tolls, and more.
+              <p/>
+              You are also able to leave notes about trips to help keep track of what a guest did during
+              a trip, or any other worthwhile notes about the trip related to the guest.
+            </Typography>
+          </>
+      },
+      // {
+      //   icon: <TodayOutlined/>,
+      //   label: 'Current Trips',
+      //   onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.CURRENT}/>),
+      // },
+      // {
+      //   icon: <UpcomingOutlined/>,
+      //   label: 'Upcoming Trips',
+      //   onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.UPCOMING}/>),
+      // },
+      // {
+      //   icon: <ScheduleOutlined/>,
+      //   label: 'Past Trips',
+      //   onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.PAST}/>),
+      // },
+    ],
+  }
   // const tollItems: SideBarMenuGroupProps = {
   //   label: 'Tolls',
   //   items: [
@@ -266,7 +280,7 @@ const Layout: NextPage = ({children, params}: any) => {
   //     },
   //   ],
   // }
-  const sidebarItems = [carItems, fleetItems, guestItems];
+  const sidebarItems = [carItems, fleetItems, guestItems, tripItems];
 
   const handleHomeClicked = () => {
     router.push('/');

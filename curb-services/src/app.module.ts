@@ -43,7 +43,7 @@ import {SignupController} from './controllers/signup.controller';
     FleetController,
     // FleetLoanController,
     // TollController,
-    // TripController,
+    TripController,
     UserController,
   ],
   providers: [
@@ -59,7 +59,7 @@ import {SignupController} from './controllers/signup.controller';
     FleetService,
     // FleetLoanService,
     // TollService,
-    // TripService,
+    TripService,
     UserService,
   ],
 })

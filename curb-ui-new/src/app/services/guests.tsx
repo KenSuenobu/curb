@@ -19,6 +19,25 @@ export const listGuests = (accessToken: any, fleetId: number, blacklisted: boole
   });
 }
 
+export const listAllGuests = (accessToken: any, fleetId: number) => {
+  return new Promise((resolve, reject) => {
+    fetch(`/api/guests/list-all?fleetId=${fleetId}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+      .then((res) => {
+        res.json()
+          .then(json => resolve(json))
+          .catch(e => reject(e))
+      })
+      .catch(e => reject(e));
+  });
+}
+
 export const createGuest = (accessToken: any, payload: any) => {
   return new Promise((resolve, reject) => {
     axios.post('/api/guests', {

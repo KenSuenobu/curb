@@ -41,14 +41,6 @@ export class TripDto {
   tripId: string;
 
   @ApiProperty({
-    description: 'Trip URL record associated with this trip',
-    nullable: false,
-    type: String,
-    required: true,
-  })
-  tripUrl: string;
-
-  @ApiProperty({
     description: 'Trip start time',
     nullable: false,
     type: Date,
@@ -87,5 +79,4 @@ export class TripDto {
   locationName?: string;
 
   nickname?: string;
-
 }
