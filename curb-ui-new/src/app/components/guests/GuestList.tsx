@@ -5,7 +5,9 @@ import {listAllGuests, listGuests} from '@/app/services/guests';
 
 export interface IGuestList {
   fleetId: number;
+  cleared: boolean;
   onGuestSelected: (x: number) => any;
+  onCleared: () => any;
 }
 
 const GuestList = (props: IGuestList) => {
@@ -31,6 +33,13 @@ const GuestList = (props: IGuestList) => {
     reloadList();
   }, [accessToken, props.fleetId]);
 
+  useEffect(() => {
+    if (props.cleared) {
+      setGuestId(0);
+      props.onCleared();
+    }
+  }, [props.cleared])
+
   if (loading) {
     return (
       <>
@@ -54,6 +63,11 @@ const GuestList = (props: IGuestList) => {
                   props.onGuestSelected(selectedId);
                 }}
                 fullWidth>
+          <MenuItem value={0} key={0}>
+            <Typography style={{ color: 'black' }}>
+              None selected
+            </Typography>
+          </MenuItem>
           {guestList.map((x: any, counter: number) => (
             <MenuItem value={x.id} key={counter}>
               <Typography style={{ color: (x.blacklisted ? 'red' : 'black') }}>

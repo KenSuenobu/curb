@@ -6,7 +6,9 @@ import {listAddresses} from '@/app/services/addresses';
 
 export interface IAddressList {
   fleetId: number;
+  cleared: boolean;
   onAddressSelected: (x: number) => any;
+  onCleared: () => any;
 }
 
 const AddressList = (props: IAddressList) => {
@@ -31,6 +33,13 @@ const AddressList = (props: IAddressList) => {
     reloadAddressList();
   }, [accessToken, props.fleetId]);
 
+  useEffect(() => {
+    if (props.cleared) {
+      setAddressId(0);
+      props.onCleared();
+    }
+  }, [props.cleared]);
+
   if (!props.fleetId || loading) {
     return (
       <>
@@ -54,6 +63,7 @@ const AddressList = (props: IAddressList) => {
                   props.onAddressSelected(selectedId);
                 }}
                 fullWidth>
+          <MenuItem value={0} key={0}>None selected</MenuItem>
           {addressList.map((x: any, counter: number) => (
             <MenuItem value={x.id} key={counter}>{x.name}</MenuItem>
           ))}

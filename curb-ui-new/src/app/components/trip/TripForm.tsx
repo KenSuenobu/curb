@@ -38,12 +38,15 @@ export interface ITrip {
 export interface ITripForm {
   fleetId: number;
   fleetCarId: number;
+  onSaved: () => any;
 }
 
 const TripForm = (props: ITripForm) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingTrips, setLoadingTrips] = useState<boolean>(false);
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [guestCleared, setGuestCleared] = useState<boolean>(false);
+  const [addressCleared, setAddressCleared] = useState<boolean>(false);
   const [guestId, setGuestId] = useState<number>(0);
   const [addressId, setAddressId] = useState<number>(0);
   const [tripList, setTripList] = useState<any>([]);
@@ -69,8 +72,6 @@ const TripForm = (props: ITripForm) => {
   }
 
   const clearForm = () => {
-    setGuestId(0);
-    setAddressId(0);
     setTripData( {
       id: 0,
       fleetCarId: 0,
@@ -82,6 +83,10 @@ const TripForm = (props: ITripForm) => {
       mileage: 0,
       earnings: 0,
     });
+    setGuestId(0);
+    setAddressId(0);
+    setGuestCleared(true);
+    setAddressCleared(true);
   }
 
   const saveClicked = () => {
@@ -109,7 +114,8 @@ const TripForm = (props: ITripForm) => {
 
       createTrip(accessToken, tripData)
         .then((x) => {
-          console.log('Data saved', x);
+          clearForm();
+          props.onSaved();
         });
     }
   }
@@ -143,11 +149,17 @@ const TripForm = (props: ITripForm) => {
 
       <Stack direction={'row'}>
         <Item sx={{ width: '35%' }}>
-          <GuestList fleetId={props.fleetId} onGuestSelected={(x: number) => setGuestId(x)}/>
+          <GuestList fleetId={props.fleetId}
+                     cleared={guestCleared}
+                     onGuestSelected={(x: number) => setGuestId(x)}
+                     onCleared={() => setGuestCleared(false)}/>
         </Item>
 
         <Item sx={{ width: '65%' }}>
-          <AddressList fleetId={props.fleetId} onAddressSelected={(x: number) => setAddressId(x)}/>
+          <AddressList fleetId={props.fleetId}
+                       cleared={addressCleared}
+                       onAddressSelected={(x: number) => setAddressId(x)}
+                       onCleared={() => setAddressCleared(false)}/>
         </Item>
       </Stack>
 

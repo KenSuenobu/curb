@@ -16,6 +16,8 @@ import {loadTrips} from '@/app/services/trip';
 
 export interface ITripList {
   fleetCarId: number;
+  needsRefresh: boolean;
+  onRefresh: () => any;
 }
 
 const TripList = (props: ITripList) => {
@@ -24,17 +26,27 @@ const TripList = (props: ITripList) => {
   const {data: session} = useSession();
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
 
+  const reloadTrips = () => {
+    setLoading(true);
+    loadTrips(accessToken, props.fleetCarId)
+      .then((x: any) => setTripList(x.trips))
+      .finally(() => setLoading(false));
+  }
+
   useEffect(() => {
     if (props.fleetCarId !== 0) {
-      setLoading(true);
-      loadTrips(accessToken, props.fleetCarId)
-        .then((x: any) => setTripList(x.trips))
-        .finally(() => setLoading(false));
+      reloadTrips();
     } else {
       setTripList([]);
     }
+  }, [accessToken, props.fleetCarId]);
 
-  }, [accessToken, props.fleetCarId])
+  useEffect(() => {
+    if (props.needsRefresh) {
+      reloadTrips();
+      props.onRefresh();
+    }
+  }, [props.needsRefresh]);
 
   return (
     <>

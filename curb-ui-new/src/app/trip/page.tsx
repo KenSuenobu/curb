@@ -26,6 +26,11 @@ import TripList from '@/app/components/trip/TripList';
 const Trip = () => {
   const [fleetId, setFleetId] = useState<number>(0);
   const [fleetCarId, setFleetCarId] = useState<number>(0);
+  const [listRefresh, setListRefresh] = useState<boolean>(false);
+
+  const tripSaved = () => {
+    setListRefresh(true);
+  }
 
   return (
     <>
@@ -44,9 +49,13 @@ const Trip = () => {
         </div>
       </Paper>
 
-      <TripForm fleetId={fleetId} fleetCarId={fleetCarId}/>
+      <TripForm fleetId={fleetId}
+                fleetCarId={fleetCarId}
+                onSaved={() => tripSaved()}/>
       <p/>
-      <TripList fleetCarId={fleetCarId}/>
+      <TripList fleetCarId={fleetCarId}
+                needsRefresh={listRefresh}
+                onRefresh={() => setListRefresh(false)}/>
     </>
   );
 }
