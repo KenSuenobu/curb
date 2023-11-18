@@ -79,12 +79,12 @@ const GuestList = (props: IGuestList) => {
                       <ReportProblemOutlined style={{ color: 'red', padding: '0px' }}/>
                     </div>
 
-                    <div style={{ paddingLeft: '0px', color: 'black', paddingLeft: '10px' }}>
+                    <div style={{ color: 'black', paddingLeft: '10px' }}>
                       <Typography>{x.lastName}, {x.firstName} {x.middleName}</Typography>
                     </div>
                   </>
                 ) : (
-                  <div sx={{ paddingLeft: '10px', color: 'black' }}>
+                  <div style={{ paddingLeft: '10px', color: 'black' }}>
                     <Typography>{x.lastName}, {x.firstName} {x.middleName}</Typography>
                   </div>
                 )}
