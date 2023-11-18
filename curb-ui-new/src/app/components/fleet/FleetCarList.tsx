@@ -216,10 +216,17 @@ const FleetCarList = (props: IFleetCarList) => {
                           setInputShowing(false);
                           props.onClick(x.id);
                         }}
-                        sx={{ textAlign: 'right', backgroundColor: bgColor, width: '10%', paddingRight: '5px' }}>
-                        <IconButton style={{ padding: '2px' }}>
-                          <DeleteOutlined/>
-                        </IconButton>
+                        sx={{ textAlign: 'right', backgroundColor: bgColor, width: '25%', paddingRight: '5px' }}>
+                        <Stack direction={'row'}>
+                          <div>
+                            <Typography>({x.licenseplate})</Typography>
+                          </div>
+                          <div>
+                            <IconButton style={{ padding: '2px' }}>
+                              <DeleteOutlined/>
+                            </IconButton>
+                          </div>
+                        </Stack>
                       </TableCell>
                     </TableRow>
                   </>

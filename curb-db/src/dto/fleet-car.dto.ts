@@ -52,4 +52,7 @@ export class FleetCarDto {
   @ApiHideProperty()
   color: string;
 
+  @ApiHideProperty()
+  licensePlate: string;
+
 }

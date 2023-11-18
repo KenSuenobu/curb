@@ -12,7 +12,7 @@ export class FleetCarDao extends BaseDao<FleetCarDto> {
   }
 
   async listByFleetId(fleetId: number): Promise<FleetCarDto[]> {
-    const sqlStatement: string = 'SELECT a.*, a.data->>\'color\' AS color, b.name AS trim_name, c.year AS car_year, ' +
+    const sqlStatement: string = 'SELECT a.*, a.data->>\'color\' AS color, a.data->>\'licensePlate\' AS licensePlate, b.name AS trim_name, c.year AS car_year, ' +
       'd.name AS model_name, e.name AS make_name ' +
       '  FROM curb.fleet_car a, curb.car_trim b, curb.car_year c, curb.car_model d, curb.car_make e' +
       ' WHERE b.id=a.car_trim_id ' +
@@ -27,7 +27,7 @@ export class FleetCarDao extends BaseDao<FleetCarDto> {
   }
 
   async find(key: string, value: string): Promise<FleetCarDto[]> {
-    const sqlStatement: string = 'SELECT a.*, a.data->>\'color\' AS color, b.name AS trim_name, c.year AS car_year, ' +
+    const sqlStatement: string = 'SELECT a.*, a.data->>\'color\' AS color, a.data->>\'licensePlate\' AS licensePlate, b.name AS trim_name, c.year AS car_year, ' +
       'd.name AS model_name, e.name AS make_name ' +
       '  FROM curb.fleet_car a, curb.car_trim b, curb.car_year c, curb.car_model d, curb.car_make e' +
       ' WHERE b.id=a.car_trim_id ' +
