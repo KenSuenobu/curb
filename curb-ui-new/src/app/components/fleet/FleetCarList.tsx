@@ -18,7 +18,7 @@ import {alertDialog, errorDialog} from '@/app/components/common/ConfirmDialog';
 import {DeleteOutlined} from '@mui/icons-material';
 import Item from '@/app/components/common/Item';
 import {getAllMakes, getAllModels, getAllTrims, getAllYears} from '@/app/services/car-definitions';
-import {SELECTED_COLOR} from '@/app/components/common/ColorDatabase';
+import {colorForLabel, SELECTED_COLOR} from '@/app/components/common/ColorDatabase';
 
 export interface IFleetCarList {
   fleetId: number;
@@ -205,9 +205,10 @@ const FleetCarList = (props: IFleetCarList) => {
                           setInputShowing(false);
                           props.onClick(x.id);
                         }}>
-                        <Typography>
-                          {x.carYear} {x.makeName} {x.modelName} {x.trimName}: &quot;{x.data.listingNickname ?? 'Unnamed'}&quot;
-                        </Typography>
+                        <Stack direction={'row'}>
+                          <div style={{ width: '24px', backgroundColor: colorForLabel(x.color) }}>&nbsp;</div>
+                          <div style={{ paddingLeft: '10px' }}><Typography>{x.carYear} {x.makeName} {x.modelName} {x.trimName}: &quot;{x.data.listingNickname ?? 'Unnamed'}&quot;</Typography></div>
+                        </Stack>
                       </TableCell>
                       <TableCell
                         onClick={() => {

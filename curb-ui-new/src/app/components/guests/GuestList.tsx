@@ -1,7 +1,9 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSession} from 'next-auth/react';
-import {FormControl, InputLabel, LinearProgress, MenuItem, Select, Typography} from '@mui/material';
+import {FormControl, InputLabel, LinearProgress, MenuItem, Select, Stack, Typography} from '@mui/material';
 import {listAllGuests, listGuests} from '@/app/services/guests';
+import {ReportProblemOutlined} from '@mui/icons-material';
+import Item from '@/app/components/common/Item';
 
 export interface IGuestList {
   fleetId: number;
@@ -70,9 +72,26 @@ const GuestList = (props: IGuestList) => {
           </MenuItem>
           {guestList.map((x: any, counter: number) => (
             <MenuItem value={x.id} key={counter}>
-              <Typography style={{ color: (x.blacklisted ? 'red' : 'black') }}>
-                {x.lastName}, {x.firstName} {x.middleName}
-              </Typography>
+              <Stack direction={'row'}>
+                {x.incomplete === true ? (
+                  <>
+                    <div>
+                      <ReportProblemOutlined style={{ color: 'red', padding: '0px' }}/>
+                    </div>
+
+                    <div style={{ paddingLeft: '0px', color: 'black', paddingLeft: '10px' }}>
+                      <Typography>{x.lastName}, {x.firstName} {x.middleName}</Typography>
+                    </div>
+                  </>
+                ) : (
+                  <div sx={{ paddingLeft: '10px', color: 'black' }}>
+                    <Typography>{x.lastName}, {x.firstName} {x.middleName}</Typography>
+                  </div>
+                )}
+              </Stack>
+              {/*<Typography style={{ color: (x.blacklisted ? 'red' : 'black') }}>*/}
+              {/*  {x.incomplete && (<ReportProblemOutlined style={{ color: 'red', paddingBottom: '1px', paddingRight: '0px' }}/>)} {x.lastName}, {x.firstName} {x.middleName}*/}
+              {/*</Typography>*/}
             </MenuItem>
           ))}
         </Select>

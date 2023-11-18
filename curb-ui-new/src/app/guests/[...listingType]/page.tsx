@@ -110,14 +110,21 @@ const Guests = () => {
                                  setGuestId(x.id);
                                }}>
                                <Stack direction={'row'}>
-                                 {x.incomplete === true && (
+                                 {x.incomplete === true ? (
+                                   <>
                                    <Item sx={{ backgroundColor: bgColor }}>
-                                     <ReportProblemOutlined style={{ color: 'red', paddingBottom: '1px' }}/>
+                                     <ReportProblemOutlined style={{ color: 'red', paddingBottom: '1px', paddingRight: '0px' }}/>
+                                   </Item>
+
+                                   <Item sx={{ backgroundColor: bgColor, paddingLeft: '0px', color: 'black' }}>
+                                     <Typography>{x.lastName}, {x.firstName} {x.middleName}</Typography>
+                                   </Item>
+                                   </>
+                                 ) : (
+                                   <Item sx={{ backgroundColor: bgColor, paddingLeft: '10px', color: 'black' }}>
+                                     <Typography>{x.lastName}, {x.firstName} {x.middleName}</Typography>
                                    </Item>
                                  )}
-                                 <Item sx={{ backgroundColor: bgColor }}>
-                                   <Typography>{x.lastName}, {x.firstName} {x.middleName}</Typography>
-                                 </Item>
                                </Stack>
                              </TableCell>
 

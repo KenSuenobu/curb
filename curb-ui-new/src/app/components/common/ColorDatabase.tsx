@@ -16,4 +16,14 @@ const ColorDatabase = [
 
 export const SELECTED_COLOR = '#ccf';
 
+export const colorForLabel = (color: string) => {
+  const colorEntry: any = ColorDatabase.filter((x) => x.label === color);
+
+  if (colorEntry.length > 0) {
+    return colorEntry[0].color;
+  }
+
+  return '#fff';
+}
+
 export default ColorDatabase;

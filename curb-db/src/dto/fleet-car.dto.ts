@@ -48,4 +48,8 @@ export class FleetCarDto {
 
   @ApiHideProperty()
   makeName: string;
+
+  @ApiHideProperty()
+  color: string;
+
 }

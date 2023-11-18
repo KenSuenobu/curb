@@ -66,14 +66,14 @@ const AddressList = (props: IAddressList) => {
                 fullWidth>
           <MenuItem value={0} key={0}>
             <Stack direction={'row'}>
-              <div>{imageForCategory(0)}</div>
+              <div style={{ height: '20px' }}>{imageForCategory(0)}</div>
               <div style={{ paddingLeft: '10px' }}><Typography> Uncategorized</Typography></div>
             </Stack>
           </MenuItem>
           {addressList.map((x: any, counter: number) => (
             <MenuItem value={x.id} key={counter}>
               <Stack direction={'row'}>
-                <div>{imageForCategory(parseInt(x.category))}</div>
+                <div style={{ height: '20px' }}>{imageForCategory(parseInt(x.category))}</div>
                 <div style={{ paddingLeft: '10px' }}><Typography>{x.name}</Typography></div>
               </Stack>
             </MenuItem>
