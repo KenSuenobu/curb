@@ -24,12 +24,12 @@ export interface IAddressForm {
 }
 
 const AddressForm = (props: IAddressForm) => {
-  const {data: session} = useSession();
+  const {data: session} = useSession<any>();
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
   const [loading, setLoading] = useState<boolean>(false);
   const [addressData, setAddressData] = useState<IDeliveryAddress>({
     id: 0,
-    creatorId: session?.user.id ?? 0,
+    creatorId: (session?.user as any).id ?? 0,
     fleetId: 0,
     name: '',
     public: true,
@@ -64,7 +64,7 @@ const AddressForm = (props: IAddressForm) => {
   const clearForm = () => {
     setAddressData({
       id: 0,
-      creatorId: session?.user.id ?? 0,
+      creatorId: (session?.user as any).id ?? 0,
       fleetId: 0,
       name: '',
       public: true,
@@ -83,12 +83,12 @@ const AddressForm = (props: IAddressForm) => {
 
     const payload: any = addressData;
 
-    payload.creatorId = session.user.id;
+    payload.creatorId = (session?.user as any).id ?? 0;
     payload.fleetId = props.fleetId;
 
     if (addressData.id === 0) {
       createAddress(accessToken, payload)
-        .then((x) => {
+        .then((x: any) => {
           if (!x) {
             errorDialog('Unable to save address: possibly a duplicate.');
             return;
@@ -98,7 +98,7 @@ const AddressForm = (props: IAddressForm) => {
         });
     } else {
       saveAddress(accessToken, payload)
-        .then((x) => {
+        .then((x: any) => {
           if (!x) {
             errorDialog('Unable to save address: possibly a duplicate.');
             return;
@@ -115,7 +115,7 @@ const AddressForm = (props: IAddressForm) => {
     } else {
       setLoading(true);
       getAddress(accessToken, props.addressId)
-        .then((x) => {
+        .then((x: any) => {
           setAddressData(x.address);
         })
         .finally(() => {

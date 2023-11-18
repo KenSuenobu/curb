@@ -35,10 +35,10 @@ const Addresses = () => {
     if (fleetId !== 0) {
       setLoading(true);
       listAddresses(accessToken, fleetId)
-        .then((x) => {
+        .then((x: any) => {
           setAddressList(x.addresses);
         })
-        .catch((x) => {
+        .catch((x: any) => {
           errorDialog(`Unable to retrieve address list: ${x.message}`);
         })
         .finally(() => {

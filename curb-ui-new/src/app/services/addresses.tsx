@@ -51,7 +51,7 @@ export const listAddresses = (accessToken: any, fleetId: number) => {
   });
 }
 
-export const getAddress = (accessToken, addressId: number) => {
+export const getAddress = (accessToken: any, addressId: number) => {
   return new Promise((resolve, reject) => {
     fetch(`/api/addresses?addressId=${addressId}`, {
       method: 'GET',
