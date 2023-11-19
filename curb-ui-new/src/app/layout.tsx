@@ -245,6 +245,9 @@ const Layout: NextPage = ({children, params}: any) => {
               <p/>
               You are also able to leave notes about trips to help keep track of what a guest did during
               a trip, or any other worthwhile notes about the trip related to the guest.
+              <p/>
+              If trips provide information regarding the flight, you can store the FlightAware trip data
+              and watch the trip progress to time deliveries.
             </Typography>
           </>
       },
