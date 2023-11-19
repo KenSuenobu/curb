@@ -22,6 +22,7 @@ import AddressList from '@/app/components/addresses/AddressList';
 import moment from 'moment';
 import {createTrip, loadTrips, saveTrip} from '@/app/services/trip';
 import {errorDialog} from '@/app/components/common/ConfirmDialog';
+import AirlineCodeList from '@/app/components/common/AirlineCodeDatabase';
 
 export interface ITrip {
   id?: number;
@@ -33,6 +34,9 @@ export interface ITrip {
   endTime: any;
   mileage: number;
   earnings: number;
+  airlineIana: string;
+  flightNumber: string;
+  arrival: any;
 }
 
 export interface ITripForm {
@@ -60,6 +64,9 @@ const TripForm = (props: ITripForm) => {
     endTime: new Date(),
     mileage: 0,
     earnings: 0,
+    airlineIana: '',
+    flightNumber: '',
+    arrival: new Date(),
   });
   const {data: session} = useSession();
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
@@ -82,6 +89,9 @@ const TripForm = (props: ITripForm) => {
       endTime: new Date(),
       mileage: 0,
       earnings: 0,
+      airlineIana: '',
+      flightNumber: '',
+      arrival: new Date(),
     });
     setGuestId(0);
     setAddressId(0);
@@ -164,9 +174,51 @@ const TripForm = (props: ITripForm) => {
       </Stack>
 
       <Stack direction={'row'}>
-        <Item sx={{ width: '50%' }}>
+        <Item sx={{ width: '30%' }}>
           <TextField label={'Trip ID'} fullWidth value={tripData.tripId ?? ''}
                      name={'tripId'} onChange={handleChange}/>
+        </Item>
+
+        <Item sx={{ width: '30%' }}>
+          <FormControl sx={{ width: '100%' }}>
+            <InputLabel id={'airline-label'}>Airline</InputLabel>
+            <Select labelId={'airline-label'} label={'Airline'} name={'airlineIana'}
+                    style={{ textAlign: 'left' }} fullWidth
+                    onChange={handleChange}>
+              {AirlineCodeList.map((x: any, counter: number) => (
+                <MenuItem value={x.carrierCode} key={counter}>{x.airline}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Item>
+
+        <Item sx={{ width: '15%' }}>
+          <TextField label={'Flight Number'} fullWidth value={tripData.flightNumber ?? ''}
+                     name={'flightNumber'} onChange={handleChange}/>
+        </Item>
+
+        <Item sx={{ width: '25%' }}>
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <DateTimePicker label={'Arrival Date/Time'}
+                            value={moment(tripData.arrival)} onChange={(e) => {
+              setTripData({
+                ...tripData,
+                endTime: e!,
+              });
+            }}/>
+          </LocalizationProvider>
+        </Item>
+      </Stack>
+
+      <Stack direction={'row'}>
+        <Item sx={{ width: '25%' }}>
+          <TextField label={'Total Recorded Mileage'} fullWidth value={tripData.mileage ?? ''}
+                     name={'mileage'} onChange={handleChange}/>
+        </Item>
+
+        <Item sx={{ width: '25%' }}>
+          <TextField label={'Total Earnings'} fullWidth value={tripData.earnings ?? ''}
+                     name={'earnings'} onChange={handleChange}/>
         </Item>
 
         <Item sx={{ width: '25%' }}>
@@ -191,18 +243,6 @@ const TripForm = (props: ITripForm) => {
               });
             }}/>
           </LocalizationProvider>
-        </Item>
-      </Stack>
-
-      <Stack direction={'row'}>
-        <Item sx={{ width: '25%' }}>
-          <TextField label={'Total Recorded Mileage'} fullWidth value={tripData.mileage ?? ''}
-                     name={'mileage'} onChange={handleChange}/>
-        </Item>
-
-        <Item sx={{ width: '25%' }}>
-          <TextField label={'Total Earnings'} fullWidth value={tripData.earnings ?? ''}
-                     name={'earnings'} onChange={handleChange}/>
         </Item>
       </Stack>
 

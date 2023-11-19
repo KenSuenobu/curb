@@ -78,5 +78,25 @@ export class TripDto {
   })
   locationName?: string;
 
+  @ApiProperty({
+    description: 'Airline Flight IANA code',
+    type: String,
+  })
+  airlineIana?: string;
+
+  @ApiProperty({
+    description: 'Airline Flight number',
+    type: String,
+  })
+  flightNumber?: string;
+
+  @ApiProperty({
+    description: 'Airline Arrival Date and Time',
+    nullable: false,
+    type: Date,
+    required: true,
+  })
+  arrival: Date;
+
   nickname?: string;
 }
