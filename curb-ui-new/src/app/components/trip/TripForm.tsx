@@ -175,7 +175,7 @@ const TripForm = (props: ITripForm) => {
 
       <Stack direction={'row'}>
         <Item sx={{ width: '30%' }}>
-          <TextField label={'Trip ID'} fullWidth value={tripData.tripId ?? ''}
+          <TextField label={'Trip URL'} fullWidth value={tripData.tripId ?? ''}
                      name={'tripId'} onChange={handleChange}/>
         </Item>
 
