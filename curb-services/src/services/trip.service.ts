@@ -15,19 +15,19 @@ export class TripService {
     return dao.edit(payload.id, payload);
   }
 
-  async getUpcomingTrips(): Promise<TripDto[]> {
+  async getUpcomingTrips(fleetId: number): Promise<TripDto[]> {
     const dao = new TripDao(DaoUtils.getDatabase());
-    return dao.listUpcoming();
+    return dao.listUpcoming(fleetId);
   }
 
-  async getPastTrips(): Promise<TripDto[]> {
+  async getPastTrips(fleetId: number): Promise<TripDto[]> {
     const dao = new TripDao(DaoUtils.getDatabase());
-    return dao.listPast();
+    return dao.listPast(fleetId);
   }
 
-  async getCurrentTrips(): Promise<TripDto[]> {
+  async getCurrentTrips(fleetId: number): Promise<TripDto[]> {
     const dao = new TripDao(DaoUtils.getDatabase());
-    return dao.listCurrent();
+    return dao.listCurrent(fleetId);
   }
 
   async getTripsForGuestId(guestId: number): Promise<TripDto[]> {

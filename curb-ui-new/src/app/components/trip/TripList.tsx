@@ -86,7 +86,7 @@ const TripList = (props: ITripList) => {
                     '&:last-child td, &:last-child th': { border: 0 },
                     backgroundColor: bgColor
                   }}>
-                    <TableCell>{row.guestId}</TableCell>
+                    <TableCell>{row.lastName}, {row.firstName}</TableCell>
                     <TableCell>{row.deliveryAddressId}</TableCell>
                     <TableCell>{moment(row.startTime).format('ddd, MMM D YYYY; LT')}</TableCell>
                     <TableCell>{moment(row.endTime).format('ddd, MMM D YYYY; LT')}</TableCell>

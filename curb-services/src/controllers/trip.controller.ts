@@ -57,7 +57,7 @@ export class TripController {
     return this.service.edit(payload);
   }
 
-  @Get('/list/upcoming')
+  @Get('/list/upcoming/:fleetId')
   @ApiOperation({
     summary: 'Retrieves upcoming trips',
     description: 'Retrieves a list of upcoming trips',
@@ -69,11 +69,11 @@ export class TripController {
   })
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async getUpcomingTrips(): Promise<TripDto[]> {
-    return this.service.getUpcomingTrips();
+  async getUpcomingTrips(@Param('fleetId') fleetId: number): Promise<TripDto[]> {
+    return this.service.getUpcomingTrips(fleetId);
   }
 
-  @Get('/list/past')
+  @Get('/list/past/:fleetId')
   @ApiOperation({
     summary: 'Retrieves past trips',
     description: 'Retrieves a list of past trips',
@@ -85,11 +85,11 @@ export class TripController {
   })
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async getPastTrips(): Promise<TripDto[]> {
-    return this.service.getPastTrips();
+  async getPastTrips(@Param('fleetId') fleetId: number): Promise<TripDto[]> {
+    return this.service.getPastTrips(fleetId);
   }
 
-  @Get('/list/current')
+  @Get('/list/current/:fleetId')
   @ApiOperation({
     summary: 'Retrieves current trips',
     description: 'Retrieves a list of currently in progress trips',
@@ -101,8 +101,8 @@ export class TripController {
   })
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async getCurrentTrips(): Promise<TripDto[]> {
-    return this.service.getCurrentTrips();
+  async getCurrentTrips(@Param('fleetId') fleetId: number): Promise<TripDto[]> {
+    return this.service.getCurrentTrips(fleetId);
   }
 
   @Get('/list/guest/:guestId')

@@ -58,6 +58,25 @@ export const loadTrips = (accessToken: any, fleetCarId: number) => {
   });
 }
 
+export const getTripsByType = (accessToken: any, fleetId: number, tripType: string) => {
+  return new Promise((resolve, reject) => {
+    fetch(`/api/trip/list/${tripType}?fleetId=${fleetId}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+      .then((res) => {
+        res.json()
+          .then(json => resolve(json))
+          .catch(e => reject(e))
+      })
+      .catch(e => reject(e));
+  });
+}
+
 export const imageForCategory = (category: number) => {
   switch(category) {
     case 1:

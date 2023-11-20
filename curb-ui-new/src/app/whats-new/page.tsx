@@ -4,7 +4,22 @@ import Divider from '@mui/material/Divider';
 const WhatsNew = () => {
   const newItems = [
     {
-      header: 'November 19, 2023 - v0.0.5',
+      header: 'v0.0.6',
+      text:
+        <>
+          <Typography>
+            Past, Current, and Upcoming trips are now included.
+            <p/>
+            The following improvements have been made:
+            <p/>
+            <ul>
+              <li>Guest information in trips now shows the guest name: last, first</li>
+            </ul>
+          </Typography>
+        </>
+    },
+    {
+      header: 'v0.0.5',
       text:
         <>
           <Typography>
@@ -24,7 +39,7 @@ const WhatsNew = () => {
         </>
     },
     {
-      header: 'November 18, 2023 - v0.0.4',
+      header: 'v0.0.4',
       text:
         <>
           <Typography>
@@ -34,7 +49,7 @@ const WhatsNew = () => {
         </>
     },
     {
-      header: 'November 17, 2023 - v0.0.3',
+      header: 'v0.0.3',
       text:
         <>
           <Typography>
@@ -54,7 +69,7 @@ const WhatsNew = () => {
         </>
     },
     {
-      header: 'November 12, 2023 - v0.0.2',
+      header: 'v0.0.2',
       text:
         <>
           <Typography>
@@ -63,7 +78,7 @@ const WhatsNew = () => {
         </>
     },
     {
-      header: 'November 12, 2023',
+      header: 'First Release',
       text:
         <>
           <Typography>

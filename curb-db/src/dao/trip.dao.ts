@@ -12,7 +12,7 @@ export class TripDao extends BaseDao<TripDto> {
   }
 
   override async list(): Promise<TripDto[]> {
-    const selectStatement = `SELECT a.*, b.name AS location_name, c.data->'listingNickname' as nickname FROM ${this.section} a, curb.delivery_address b, curb.fleet_car c WHERE b.id=a.delivery_address_id AND c.id=a.fleet_car_id ORDER BY a.start_time DESC`;
+    const selectStatement = `SELECT a.*, b.name AS location_name, c.data->'listingNickname' as nickname, d.first_name, d.last_name, d.data->>'url' AS url FROM ${this.section} a, curb.delivery_address b, curb.fleet_car c, curb.guest d WHERE b.id=a.delivery_address_id AND c.id=a.fleet_car_id AND d.id=a.guest_id ORDER BY a.start_time DESC`;
 
     return (await this.db.any(selectStatement))
       .map((x) => DaoUtils.normalizeFields<TripDto>(x));
@@ -29,39 +29,39 @@ export class TripDao extends BaseDao<TripDto> {
       });
   }
 
-  async listUpcoming(): Promise<TripDto[]> {
-    const selectStatement = `SELECT a.*, b.name AS location_name, c.data->'listingNickname' as nickname FROM ${this.section} a, curb.delivery_address b, curb.fleet_car c WHERE a.start_time >= NOW() AND b.id=a.delivery_address_id AND c.id=a.fleet_car_id ORDER BY a.start_time ASC`;
+  async listUpcoming(fleetId: number): Promise<TripDto[]> {
+    const selectStatement = `SELECT a.*, b.name AS location_name, c.data->'listingNickname' as nickname, d.first_name, d.last_name, d.data->>'url' AS url FROM ${this.section} a, curb.delivery_address b, curb.fleet_car c, curb.guest d WHERE a.start_time >= NOW() AND b.id=a.delivery_address_id AND c.id=a.fleet_car_id AND c.fleet_id=${fleetId} AND d.id=a.guest_id ORDER BY a.start_time ASC`;
 
     return (await this.db.any(selectStatement))
       .map((x) => DaoUtils.normalizeFields<TripDto>(x));
   }
 
-  async listPast(): Promise<TripDto[]> {
-    const selectStatement = `SELECT a.*, b.name AS location_name, c.data->'listingNickname' as nickname FROM ${this.section} a, curb.delivery_address b, curb.fleet_car c WHERE a.end_time <= NOW() AND b.id=a.delivery_address_id AND c.id=a.fleet_car_id ORDER BY a.start_time DESC`;
+  async listPast(fleetId: number): Promise<TripDto[]> {
+    const selectStatement = `SELECT a.*, b.name AS location_name, c.data->'listingNickname' as nickname, d.first_name, d.last_name, d.data->>'url' AS url FROM ${this.section} a, curb.delivery_address b, curb.fleet_car c, curb.guest d WHERE a.end_time <= NOW() AND b.id=a.delivery_address_id AND c.id=a.fleet_car_id AND c.fleet_id=${fleetId} AND d.id=a.guest_id ORDER BY a.start_time DESC`;
 
     return (await this.db.any(selectStatement))
       .map((x) => DaoUtils.normalizeFields<TripDto>(x));
   }
 
-  async listCurrent(): Promise<TripDto[]> {
-    const selectStatement = `SELECT a.*, b.name AS location_name, c.data->'listingNickname' as nickname FROM ${this.section} a, curb.delivery_address b, curb.fleet_car c WHERE (a.end_time >= NOW() AND a.start_time <= NOW()) AND b.id=a.delivery_address_id AND c.id=a.fleet_car_id ORDER BY a.start_time DESC`
+  async listCurrent(fleetId: number): Promise<TripDto[]> {
+    const selectStatement = `SELECT a.*, b.name AS location_name, c.data->'listingNickname' as nickname, d.first_name, d.last_name, d.data->>'url' AS url FROM ${this.section} a, curb.delivery_address b, curb.fleet_car c, curb.guest d WHERE (a.end_time >= NOW() AND a.start_time <= NOW()) AND b.id=a.delivery_address_id AND c.id=a.fleet_car_id AND d.id=a.guest_id AND c.fleet_id=${fleetId} ORDER BY a.start_time DESC`
 
     return (await this.db.any(selectStatement))
       .map((x) => DaoUtils.normalizeFields<TripDto>(x));
   }
 
   async getCurrentByFleetCarId(fleetCarId: number): Promise<TripDto> {
-    const selectStatement = `SELECT a.*, b.name AS location_name, c.data->'listingNickname' as nickname ` +
-      `  FROM ${this.section} a, curb.delivery_address b, curb.fleet_car c ` +
+    const selectStatement = `SELECT a.*, b.name AS location_name, c.data->'listingNickname' as nickname, d.first_name, d.last_name, d.data->>'url' AS url ` +
+      `  FROM ${this.section} a, curb.delivery_address b, curb.fleet_car c, curb.guest d ` +
       ` WHERE (a.end_time >= NOW() AND a.start_time <= NOW()) AND b.id=a.delivery_address_id ` +
-      `   AND c.id=$1 AND a.fleet_car_id=$1 ORDER BY a.start_time DESC`
+      `   AND c.id=$1 AND a.fleet_car_id=$1 AND d.id=a.guest_id ORDER BY a.start_time DESC`
 
     return await this.db.oneOrNone(selectStatement, [ fleetCarId ])
       .then((x) => DaoUtils.normalizeFields<TripDto>(x));
   }
 
   async listByFleetCarId(fleetCarId: number): Promise<TripDto[]> {
-    const selectStatement = `SELECT * FROM ${this.section} WHERE fleet_car_id=$1 ORDER BY start_time DESC`;
+    const selectStatement = `select a.*, b.first_name, b.last_name, b.data->>'url' AS url from ${this.section} a, curb.guest b where a.fleet_car_id=$1 AND b.id=a.guest_id ORDER BY a.start_time DESC`;
 
     return (await this.db.any(selectStatement, [ fleetCarId ]))
       .map((x) => DaoUtils.normalizeFields<TripDto>(x));
@@ -75,7 +75,7 @@ export class TripDao extends BaseDao<TripDto> {
   }
 
   async getNextTripForFleetCarId(fleetCarId: number): Promise<TripDto | null> {
-    const selectStatement = `SELECT * FROM ${this.section} WHERE fleet_car_id=$1 AND start_time >= NOW() ORDER BY start_time ASC LIMIT 1`;
+    const selectStatement = `SELECT a.*, b.first_name, b.last_name, b.data->>'url' AS url FROM ${this.section} a, curb.guest b WHERE a.fleet_car_id=$1 AND a.start_time >= NOW() AND b.id=a.guest_id ORDER BY a.start_time ASC LIMIT 1`;
 
     return await this.db.oneOrNone(selectStatement, [ fleetCarId ])
       .then((x) => x ? DaoUtils.normalizeFields<TripDto>(x) : null);

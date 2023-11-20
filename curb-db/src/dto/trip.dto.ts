@@ -1,4 +1,4 @@
-import {ApiProperty} from "@nestjs/swagger";
+import {ApiHideProperty, ApiProperty} from '@nestjs/swagger';
 
 export class TripDto {
   @ApiProperty({
@@ -98,5 +98,16 @@ export class TripDto {
   })
   arrival: Date;
 
+  @ApiHideProperty()
   nickname?: string;
+
+  @ApiHideProperty()
+  firstName: string;
+
+  @ApiHideProperty()
+  lastName: string;
+
+  @ApiHideProperty()
+  url: string;
+
 }

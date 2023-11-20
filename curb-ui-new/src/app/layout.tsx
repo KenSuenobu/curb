@@ -17,7 +17,7 @@ import {
   PeopleOutlined,
   PersonOffOutlined,
   RefreshOutlined,
-  HouseOutlined, CalendarMonthOutlined, MenuOutlined,
+  HouseOutlined, CalendarMonthOutlined, MenuOutlined, TodayOutlined, UpcomingOutlined, ScheduleOutlined,
 } from '@mui/icons-material';
 import SideBar from '@/app/components/main-layout/SideBar';
 import {signOut, useSession} from 'next-auth/react';
@@ -68,7 +68,7 @@ function MenuIcon(props: { style: { color: string } }) {
   return null;
 }
 
-const APPLICATION_VERSION = '0.0.5';
+const APPLICATION_VERSION = '0.0.6';
 
 const Layout: NextPage = ({children, params}: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -95,7 +95,6 @@ const Layout: NextPage = ({children, params}: any) => {
       {
         icon: <DirectionsCarOutlined/>,
         label: 'Car Definitions',
-        onClick: () => router.push('/car-definitions'),
         url: '/car-definitions',
         info:
           <>
@@ -119,7 +118,6 @@ const Layout: NextPage = ({children, params}: any) => {
       {
         icon: <HouseOutlined/>,
         label: 'Delivery Addresses',
-        onClick: () => router.push('/addresses'),
         url: '/addresses',
         info:
           <>
@@ -148,7 +146,6 @@ const Layout: NextPage = ({children, params}: any) => {
       {
         icon: <GarageOutlined/>,
         label: 'Fleet Cars',
-        onClick: () => router.push('/fleet'),
         url: '/fleet',
         info:
           <>
@@ -188,7 +185,6 @@ const Layout: NextPage = ({children, params}: any) => {
       {
         icon: <PeopleOutlined/>,
         label: 'Guests',
-        onClick: () => router.push('/guests/whitelisted'),
         url: '/guests/whitelisted',
         info:
           <>
@@ -208,7 +204,6 @@ const Layout: NextPage = ({children, params}: any) => {
       {
         icon: <PersonOffOutlined/>,
         label: 'Blacklisted Guests',
-        onClick: () => router.push('/guests/blacklisted'),
         url: '/guests/blacklisted',
         info:
           <>
@@ -232,7 +227,6 @@ const Layout: NextPage = ({children, params}: any) => {
       {
         icon: <CalendarMonthOutlined/>,
         label: 'Trip Entry',
-        onClick: () => router.push('/trip'),
         url: '/trip',
         info:
           <>
@@ -251,21 +245,45 @@ const Layout: NextPage = ({children, params}: any) => {
             </Typography>
           </>
       },
-      // {
-      //   icon: <TodayOutlined/>,
-      //   label: 'Current Trips',
-      //   onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.CURRENT}/>),
-      // },
-      // {
-      //   icon: <UpcomingOutlined/>,
-      //   label: 'Upcoming Trips',
-      //   onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.UPCOMING}/>),
-      // },
-      // {
-      //   icon: <ScheduleOutlined/>,
-      //   label: 'Past Trips',
-      //   onClick: () => setCurrentPage(<TripsList jwt={jwt as string} tripType={ITripType.PAST}/>),
-      // },
+      {
+        icon: <TodayOutlined/>,
+        label: 'Current Trips',
+        url: '/trip/current',
+        info:
+          <>
+            <Typography>
+              <b>Current Trips</b>
+              <p/>
+              Displays a list of the trips that are currently in progress.
+            </Typography>
+          </>
+      },
+      {
+        icon: <UpcomingOutlined/>,
+        label: 'Upcoming Trips',
+        url: '/trip/upcoming',
+        info:
+          <>
+            <Typography>
+              <b>Upcoming Trips</b>
+              <p/>
+              Displays a list of the trips that are upcoming.
+            </Typography>
+          </>
+      },
+      {
+        icon: <ScheduleOutlined/>,
+        label: 'Past Trips',
+        url: '/trip/past',
+        info:
+          <>
+            <Typography>
+              <b>Past Trips</b>
+              <p/>
+              Displays a list of the trips that have completed.
+            </Typography>
+          </>
+      },
     ],
   }
   // const tollItems: SideBarMenuGroupProps = {
@@ -312,21 +330,30 @@ const Layout: NextPage = ({children, params}: any) => {
     handleClose();
   }
 
-  const headerTitle: any = sidebarItems.map((x) => {
-    return x.items.map((x) => {
-      if (pathname.startsWith(x.url)) {
-        return x.label;
+  const headerTitle: any = () => {
+    for(const x of sidebarItems) {
+      for(const y of x.items) {
+        if (y.url === pathname) {
+          return y.label;
+        }
       }
-    });
-  }) ?? '';
+    }
 
-  const headerInfo: any = sidebarItems.map((x) => {
-    return x.items.map((x) => {
-      if (pathname.startsWith(x.url)) {
-        return x.info;
+    return '';
+  }
+
+  const headerInfo: any = () => {
+    for(const x of sidebarItems) {
+      for(const y of x.items) {
+        console.log(y);
+        if (y.url === pathname) {
+          return y.info;
+        }
       }
-    });
-  }) ?? '';
+    }
+
+    return '';
+  }
 
   return (
     <html lang="en">
@@ -402,7 +429,7 @@ const Layout: NextPage = ({children, params}: any) => {
                     color: '#fff'
                   }}>
                     <Typography fontWeight={'bold'}>
-                      {headerTitle}
+                      {headerTitle()}
                     </Typography>
                   </Item>
                   <Item sx={{ paddingLeft: '15px',
@@ -412,7 +439,7 @@ const Layout: NextPage = ({children, params}: any) => {
                     color: '#fff'
                   }}>
                     <IconButton style={{ padding: '0px' }}
-                                onClick={() => alertDialog(headerInfo)}>
+                                onClick={() => alertDialog(headerInfo())}>
                       <InfoOutlined style={{ color: 'white' }}/>
                     </IconButton>
                   </Item>
