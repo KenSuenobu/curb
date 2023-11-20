@@ -22,7 +22,7 @@ export class DashboardController {
   })
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async list(@Param('userId') userId: string): Promise<any[]> {
+  async list(@Param('userId') userId: number): Promise<any[]> {
     return this.service.list(userId);
   }
 

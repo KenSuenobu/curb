@@ -14,9 +14,9 @@ import {Logger} from '@nestjs/common';
 export class DashboardService {
   private readonly logger = new Logger('dashboard.service');
 
-  async list(userId: string) : Promise<any[]> {
+  async list(userId: number) : Promise<any[]> {
     const userDao = new UserDao(DaoUtils.getDatabase());
-    const userInfo = await userDao.getUserInfo(userId);
+    const userInfo = await userDao.getById(userId);
     const fleetMembershipDao = new FleetMembershipDao(DaoUtils.getDatabase());
     const fleets = await fleetMembershipDao.getFleetsForUser(userInfo.id);
     const fleetCars: any[] = [];
