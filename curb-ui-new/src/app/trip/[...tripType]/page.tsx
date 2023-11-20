@@ -18,7 +18,8 @@ import {DeleteOutlined, EditCalendarOutlined} from '@mui/icons-material';
 import React, {useEffect, useState} from 'react';
 import {usePathname} from 'next/navigation';
 import {useSession} from 'next-auth/react';
-import {getTripsByType} from '@/app/services/trip';
+import {deleteTrip, getTripsByType} from '@/app/services/trip';
+import {confirmDialog, errorDialog} from '@/app/components/common/ConfirmDialog';
 
 const CurrentTrips = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -48,12 +49,21 @@ const CurrentTrips = () => {
     }
   }
 
-  const editTrip = (id: number) => {
+  const editClicked = (id: number) => {
 
   }
 
-  const deleteTrip = (id: number) => {
-
+  const deleteClicked = (id: number) => {
+    confirmDialog('Are you sure you wish to delete this trip?', () => {
+      deleteTrip(accessToken, id)
+        .then((x) => {
+          if (x) {
+            reloadTrips();
+          } else {
+            errorDialog('Unable to delete trip: trip may have already been deleted, or you may lack permission to delete this trip.');
+          }
+        });
+    });
   }
 
   useEffect(() => {
@@ -108,14 +118,14 @@ const CurrentTrips = () => {
                 <TableCell>{row.mileage}</TableCell>
                 <TableCell>$ {row.earnings.toFixed(2)}</TableCell>
                 <TableCell>
-                  {/*<Stack direction={'row'}>*/}
+                  <Stack direction={'row'}>
                   {/*  <IconButton onClick={() => {}}>*/}
                   {/*    <EditCalendarOutlined/>*/}
                   {/*  </IconButton>*/}
-                  {/*  <IconButton onClick={() => deleteTrip(row.id)}>*/}
-                  {/*    <DeleteOutlined/>*/}
-                  {/*  </IconButton>*/}
-                  {/*</Stack>*/}
+                    <IconButton onClick={() => deleteClicked(row.id)}>
+                      <DeleteOutlined/>
+                    </IconButton>
+                  </Stack>
                 </TableCell>
               </TableRow>
             ))}

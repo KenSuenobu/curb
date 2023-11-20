@@ -77,6 +77,20 @@ export const getTripsByType = (accessToken: any, fleetId: number, tripType: stri
   });
 }
 
+export const deleteTrip = (accessToken: any, tripId: number) => {
+  return new Promise((resolve, reject) => {
+    axios.delete(`/api/trip?tripId=${tripId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+    .then((res) => resolve(res.data))
+    .catch(e => reject(e));
+  });
+}
+
 export const imageForCategory = (category: number) => {
   switch(category) {
     case 1:

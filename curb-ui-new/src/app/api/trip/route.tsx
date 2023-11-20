@@ -65,3 +65,35 @@ export async function GET(request: any) {
     }, { status: 500 });
   }
 }
+
+export async function DELETE(request: any) {
+  try {
+    const accessToken = request.headers.get('Authorization');
+    const decodedJwt: any = verifyJwt(accessToken);
+    const searchParams = request.nextUrl.searchParams;
+    const tripId = searchParams.get('tripId');
+
+    if (!accessToken || !decodedJwt) {
+      return NextResponse.json({
+        message: 'Unauthorized',
+      }, { status: 401 });
+    }
+
+    if (!tripId) {
+      return NextResponse.json({
+        message: 'Trip ID is missing',
+      }, { status: 404 });
+    }
+
+    const result: any = await axios.delete(`${process.env.CURB_SERVER_URL}/trip/${tripId}`)
+      .then((res) => res.data);
+
+    return NextResponse.json({result}, {status: 200});
+  } catch (e) {
+    console.error('Unable to get list of cars for fleet', e);
+    return NextResponse.json({
+      message: 'Failed to retrieve list of fleet cars',
+      result: e,
+    }, { status: 500 });
+  }
+}

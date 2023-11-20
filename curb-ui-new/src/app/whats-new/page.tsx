@@ -13,7 +13,8 @@ const WhatsNew = () => {
             The following improvements have been made:
             <p/>
             <ul>
-              <li>Guest information in trips now shows the guest name: last, first</li>
+              <li> Guest information in trips now shows the guest name: last, first</li>
+              <li> Trips in the trip list can be deleted</li>
             </ul>
           </Typography>
         </>
