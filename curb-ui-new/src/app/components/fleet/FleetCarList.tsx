@@ -22,7 +22,9 @@ import {colorForLabel, SELECTED_COLOR} from '@/app/components/common/ColorDataba
 
 export interface IFleetCarList {
   fleetId: number;
+  needsClear?: boolean;
   onClick: (carTrimId: number) => any;
+  onClear?: () => any;
   addable?: boolean;
 }
 
@@ -69,6 +71,16 @@ const FleetCarList = (props: IFleetCarList) => {
         .then((x: any) => setCarMakeList(x.makes));
     }
   }, [props.fleetId, accessToken]);
+
+  useEffect(() => {
+    if (props.needsClear) {
+      setFleetCarId(0);
+    }
+
+    if (props.onClear) {
+      props.onClear();
+    }
+  }, [props.needsClear]);
 
   const toggleInput = () => {
     setInputShowing(!inputShowing);

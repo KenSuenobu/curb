@@ -105,3 +105,19 @@ export const saveFleetCarData = (accessToken: any, payload: any) => {
     .catch(e => reject(e));
   });
 }
+
+export const saveFleetLoan = (accessToken: any, payload: any) => {
+  return new Promise((resolve, reject) => {
+    axios.post('/api/fleet/loan', {
+      payload,
+    }, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+    .then((res) => resolve(res.data))
+    .catch(e => reject(e));
+  });
+}

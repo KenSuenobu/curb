@@ -4,6 +4,21 @@ import Divider from '@mui/material/Divider';
 const WhatsNew = () => {
   const newItems = [
     {
+      header: 'v0.0.7',
+      text:
+        <>
+          <Typography>
+            You can now keep track of fleet car loan information!  This can be used to keep track of the lein holder
+            information, as well as any banking or loan account data you need to track the car.
+            <p/>
+            You can also keep track of loan payments you have made for each loan.  This way, P/L reports can be
+            created more accurately based on the trips that each car gains.
+            <p/>
+            These reports will be made available soon, and will be displayed in simple detail on the Dashboard soon.
+          </Typography>
+        </>
+    },
+    {
       header: 'v0.0.6',
       text:
         <>

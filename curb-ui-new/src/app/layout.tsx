@@ -17,7 +17,7 @@ import {
   PeopleOutlined,
   PersonOffOutlined,
   RefreshOutlined,
-  HouseOutlined, CalendarMonthOutlined, MenuOutlined, TodayOutlined, UpcomingOutlined, ScheduleOutlined,
+  HouseOutlined, CalendarMonthOutlined, MenuOutlined, TodayOutlined, UpcomingOutlined, ScheduleOutlined, MoneyOutlined,
 } from '@mui/icons-material';
 import SideBar from '@/app/components/main-layout/SideBar';
 import {signOut, useSession} from 'next-auth/react';
@@ -68,7 +68,7 @@ function MenuIcon(props: { style: { color: string } }) {
   return null;
 }
 
-const APPLICATION_VERSION = '0.0.6';
+const APPLICATION_VERSION = '0.0.7';
 
 const Layout: NextPage = ({children, params}: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -167,11 +167,24 @@ const Layout: NextPage = ({children, params}: any) => {
   //       label: 'Fleet Car Maintenance',
   //       onClick: () => setCurrentPage(<FleetCarMaintenance jwt={jwt as string}/>),
   //     },
-  //     {
-  //       icon: <MoneyOutlined/>,
-  //       label: 'Fleet Car Loans',
-  //       onClick: () => setCurrentPage(<FleetLoans jwt={jwt as string}/>),
-  //     },
+      {
+        icon: <MoneyOutlined/>,
+        label: 'Fleet Car Loans',
+        url: '/fleet/loans',
+        info:
+          <>
+            <Typography>
+              <b>Fleet Loan Tracking</b>
+              <p/>
+              This section is used to keep track of loan information for each car in the
+              fleet.  Record the name of the lein holder as well as the URL to the
+              payment site, due date, payment amount, and other information.
+              <p/>
+              As each payment is made, enter that information into this section, so that
+              P/L can be accurately reported.
+            </Typography>
+          </>,
+      },
   //     {
   //       icon: <PeopleOutlined/>,
   //       label: 'Fleet Membership',
