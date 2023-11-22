@@ -283,7 +283,7 @@ const Layout: NextPage = ({children, params}: any) => {
               Displays a list of the trips that are upcoming.
               <p/>
               <u>Pro Tip:</u> Before a trip starts, remember to check the guest link and make sure their latest
-              trips don't have any negative ratings or comments.  Bad guests could affect future trips!
+              trips don&apos;t have any negative ratings or comments.  Bad guests could affect future trips!
             </Typography>
           </>
       },

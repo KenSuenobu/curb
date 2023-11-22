@@ -14,7 +14,8 @@ const WhatsNew = () => {
             You can also keep track of loan payments you have made for each loan.  This way, P/L reports can be
             created more accurately based on the trips that each car gains.
             <p/>
-            These reports will be made available soon, and will be displayed in simple detail on the Dashboard soon.
+            These reports will be made available soon.  The dashboard will contain that information as well, once
+            all of the car loan information is available.
           </Typography>
         </>
     },

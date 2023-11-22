@@ -121,9 +121,9 @@ const Home = () => {
     if (accessToken) {
       setLoading(true);
       loadDashboard(accessToken)
-        .then((x) => {
-          let addableArray = [];
-          const dataMap = [];
+        .then((x: any) => {
+          let addableArray: any[] = [];
+          const dataMap: any[] = [];
 
           for(const entry of x.dashboard) {
             addableArray.push(entry);
@@ -309,6 +309,9 @@ const Home = () => {
                   cardTripsChart.series[0].data[monthPosition - 1] = total;
                 }
 
+                const grossTotal = y.grossTotal ? parseFloat(y.grossTotal) : 0.00;
+                const loanTotal = y.loanTotal ? parseFloat(y.loanTotal) : 0.00;
+
                 return (
                   <>
                     {/* Card */}
@@ -325,9 +328,9 @@ const Home = () => {
 
                           <Typography color={'black'}>
                             <Link onClick={() => window.open(y.listingUrl, '_blank')}>
-                              {y.carYear} {y.modelName} {y.trimName} "{y.data.listingNickname}"<br/>
+                              {y.carYear} {y.modelName} {y.trimName} &quot;{y.data.listingNickname}&quot;<br/>
                             </Link>
-                            {y.milesTotal ?? 0} total miles @ $0.655: $ {parseFloat(y.milesTotal * 0.655).toFixed(2)}
+                            {y.milesTotal ?? 0} total miles @ $0.655: $ {(parseFloat(y.milesTotal) * 0.655).toFixed(2)}
                           </Typography>
                         </Item>
 
@@ -343,20 +346,20 @@ const Home = () => {
                       <Stack direction={'row'}>
                         <Item sx={{ width: '50%', textAlign: 'left', padding: '0px' }}>
                           <Typography color={'black'}>
-                            Gross: $ {parseFloat(y.grossTotal ?? '0.00').toFixed(2)}<br/>
-                            Loans: $ {parseFloat(y.loanTotal ?? '0.00').toFixed(2)} {y.carLoan.paymentDueDate && (
-                            <>
-                              <Link href={y.carLoan.paymentUrl} target={'_blank'}>
-                                (Due: {y.carLoan.paymentDueDate.replaceAll(/[^0-9]/g, '')})
-                              </Link>
-                            </>
-                          )}
+                            Gross: $ {grossTotal.toFixed(2)}<br/>
+                            {/*Loans: $ {parseFloat(y.loanTotal ?? '0.00').toFixed(2)} {y.carLoan.paymentDueDate && (*/}
+                          {/*  <>*/}
+                          {/*    <Link href={y.carLoan.paymentUrl} target={'_blank'}>*/}
+                          {/*      (Due: {y.carLoan.paymentDueDate.replaceAll(/[^0-9]/g, '')})*/}
+                          {/*    </Link>*/}
+                          {/*  </>*/}
+                          {/*)}*/}
                           </Typography>
                         </Item>
 
                         <Item sx={{ width: '50%', textAlign: 'right', padding: '0px' }}>
                           <Typography color={'black'}>
-                            Profit: $ {(parseFloat(y.grossTotal ?? '0.00').toFixed(2) - parseFloat(y.loanTotal ?? '0.00').toFixed(2)).toFixed(2)}<br/>
+                            Profit: $ {(grossTotal - loanTotal).toFixed(2)}<br/>
                           </Typography>
                         </Item>
                       </Stack>
