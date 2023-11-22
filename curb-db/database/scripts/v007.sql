@@ -12,3 +12,4 @@ CREATE TABLE curb.fleet_car_loan (
 --- Cars cannot technically have more than one loan ... ?
 CREATE UNIQUE INDEX idx_car_fleet_loan_unique ON curb.fleet_car_loan(fleet_car_id);
 
+ALTER TABLE curb.trip ADD COLUMN deleted BOOLEAN DEFAULT false;
