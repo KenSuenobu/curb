@@ -30,14 +30,6 @@ const CurrentTrips = () => {
   let tripLabel = '';
   let tripType: string = pathname.substring(pathname.lastIndexOf('/') + 1);
 
-  if (pathname.includes('/current')) {
-    tripLabel = 'Current Trips';
-  } else if (pathname.includes('/upcoming')) {
-    tripLabel = 'Upcoming Trips';
-  } else if (pathname.includes('/past')) {
-    tripLabel = 'Past Trips';
-  }
-
   const reloadTrips = () => {
     if (accessToken) {
       setLoading(true);
@@ -80,10 +72,6 @@ const CurrentTrips = () => {
 
   return (
     <>
-      <div style={{ width: '100%', paddingLeft: '0.5em', paddingTop: '1.5em' }}>
-        <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>{tripLabel}</u></Typography>
-      </div>
-
       <TableContainer component={Paper}>
         <Table size={'small'}>
           <TableHead>

@@ -24,7 +24,7 @@ export class DashboardService {
     const fleetCarLoanDao = new FleetCarLoanDao(DaoUtils.getDatabase());
     const tripDao = new TripDao(DaoUtils.getDatabase());
     const guestDao = new GuestDao(DaoUtils.getDatabase());
-    const loanPaymentDao = new LoanPaymentDao(DaoUtils.getDatabase());
+    // const loanPaymentDao = new LoanPaymentDao(DaoUtils.getDatabase());
     const earnings = await tripDao.totalEarningsPerMonth();
     const trips = await tripDao.totalTripsPerMonth();
 
@@ -33,7 +33,7 @@ export class DashboardService {
 
       for (const fleetCar of fleetCarsList) {
         const tripsTotal = await tripDao.summationByFleetCarId(fleetCar.id);
-        const loanTotal = await loanPaymentDao.summationByFleetCarId(fleetCar.id);
+        // const loanTotal = await loanPaymentDao.summationByFleetCarId(fleetCar.id);
         const totalMileage = await tripDao.totalMilesForFleetCarId(fleetCar.id);
         const totalEarnings = await tripDao.totalEarningsPerMonthByFleetCarId(fleetCar.id);
         const totalTrips = await tripDao.totalTripsPerMonthByFleetCarId(fleetCar.id);
@@ -46,7 +46,8 @@ export class DashboardService {
         fleetCars.push({
           ...fleetCar,
           grossTotal: tripsTotal,
-          loanTotal: loanTotal,
+          // loanTotal: loanTotal,
+          loanTotal: 0.00,
           milesTotal: totalMileage,
           nextTrip: nextTrip ? nextTrip.startTime : null,
           tripsCount: totalNumberOfTrips,
