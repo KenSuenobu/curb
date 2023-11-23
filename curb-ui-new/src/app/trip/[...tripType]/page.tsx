@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Dialog, DialogContent, DialogTitle,
   IconButton, LinearProgress,
   Link,
   Stack,
@@ -20,10 +21,14 @@ import {usePathname} from 'next/navigation';
 import {useSession} from 'next-auth/react';
 import {deleteTrip, getTripsByType} from '@/app/services/trip';
 import {confirmDialog, errorDialog} from '@/app/components/common/ConfirmDialog';
+import TripForm from '@/app/components/trip/TripForm';
+import TripEditForm from '@/app/components/trip/TripEditForm';
 
 const CurrentTrips = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [tripList, setTripList] = useState<any>([]);
+  const [editOpen, setEditOpen] = useState<boolean>(false);
+  const [tripId, setTripId] = useState<number>(0);
   const pathname = usePathname();
   const {data: session} = useSession();
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
@@ -42,7 +47,8 @@ const CurrentTrips = () => {
   }
 
   const editClicked = (id: number) => {
-
+    setTripId(id);
+    setEditOpen(true);
   }
 
   const deleteClicked = (id: number) => {
@@ -72,6 +78,18 @@ const CurrentTrips = () => {
 
   return (
     <>
+      <Dialog open={editOpen} fullWidth={true} maxWidth={'md'}>
+        <DialogTitle>Edit Trip</DialogTitle>
+        <DialogContent>
+          <TripEditForm tripId={tripId}
+                        onEdited={() => {
+                          setEditOpen(false);
+                          reloadTrips();
+                        }}
+                        onCanceled={() => setEditOpen(false)}/>
+        </DialogContent>
+      </Dialog>
+
       <TableContainer component={Paper}>
         <Table size={'small'}>
           <TableHead>
@@ -107,9 +125,9 @@ const CurrentTrips = () => {
                 <TableCell>$ {row.earnings.toFixed(2)}</TableCell>
                 <TableCell>
                   <Stack direction={'row'}>
-                  {/*  <IconButton onClick={() => {}}>*/}
-                  {/*    <EditCalendarOutlined/>*/}
-                  {/*  </IconButton>*/}
+                    <IconButton onClick={() => editClicked(row.id)}>
+                      <EditCalendarOutlined/>
+                    </IconButton>
                     <IconButton onClick={() => deleteClicked(row.id)}>
                       <DeleteOutlined/>
                     </IconButton>

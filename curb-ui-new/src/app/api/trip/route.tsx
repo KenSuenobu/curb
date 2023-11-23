@@ -10,7 +10,7 @@ export async function POST(request: any) {
 
     if (!payload) {
       return NextResponse.json({
-        message: 'Address payload is required'
+        message: 'Trip payload is required'
       }, { status: 400 });
     }
 
@@ -34,12 +34,45 @@ export async function POST(request: any) {
   }
 }
 
+export async function PUT(request: any) {
+  try {
+    const { payload } = await request.json();
+    const accessToken = request.headers.get('Authorization');
+    const decodedJwt: any = verifyJwt(accessToken);
+
+    if (!payload) {
+      return NextResponse.json({
+        message: 'Trip payload is required'
+      }, { status: 400 });
+    }
+
+    const result = await axios.put(`${process.env.CURB_SERVER_URL}/trip/edit`,
+      {
+        ...payload,
+      })
+    .then((res) => res.data);
+
+    return NextResponse.json({
+      result: {
+        accessToken
+      },
+    }, { status: 201 });
+  } catch (e) {
+    console.error('Unable to create car make', e);
+    return NextResponse.json({
+      message: 'Failed to create car make',
+      result: e,
+    }, { status: 500 });
+  }
+}
+
 export async function GET(request: any) {
   try {
     const accessToken = request.headers.get('Authorization');
     const decodedJwt: any = verifyJwt(accessToken);
     const searchParams = request.nextUrl.searchParams;
     const fleetCarId = searchParams.get('fleetCarId');
+    const tripId = searchParams.get('tripId');
 
     if (!accessToken || !decodedJwt) {
       return NextResponse.json({
@@ -47,16 +80,23 @@ export async function GET(request: any) {
       }, { status: 401 });
     }
 
-    if (!fleetCarId) {
+    if (!fleetCarId && !tripId) {
       return NextResponse.json({
-        message: 'Fleet Car ID is missing',
+        message: 'Fleet Car ID and Trip ID are missing',
       }, { status: 404 });
     }
 
-    const trips: any = await axios.get(`${process.env.CURB_SERVER_URL}/trip/list/car/${fleetCarId}`)
-      .then((res) => res.data);
+    if (fleetCarId) {
+      const trips: any = await axios.get(`${process.env.CURB_SERVER_URL}/trip/list/car/${fleetCarId}`)
+        .then((res) => res.data);
 
-    return NextResponse.json({trips}, {status: 200});
+      return NextResponse.json({trips}, {status: 200});
+    } else {
+      const trip: any = await axios.get(`${process.env.CURB_SERVER_URL}/trip/${tripId}`)
+        .then((res) => res.data);
+
+      return NextResponse.json({trip}, {status: 200});
+    }
   } catch (e) {
     console.error('Unable to get list of cars for fleet', e);
     return NextResponse.json({

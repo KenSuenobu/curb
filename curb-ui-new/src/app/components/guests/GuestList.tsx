@@ -7,6 +7,7 @@ import Item from '@/app/components/common/Item';
 
 export interface IGuestList {
   fleetId: number;
+  selectedGuestId?: number;
   cleared: boolean;
   onGuestSelected: (x: number) => any;
   onCleared: () => any;
@@ -25,6 +26,10 @@ const GuestList = (props: IGuestList) => {
       listAllGuests(accessToken, props.fleetId)
         .then((x: any) => {
           setGuestList(x.guests);
+
+          if (props.selectedGuestId) {
+            setGuestId(props.selectedGuestId);
+          }
         })
         .catch((x) => setGuestList([]))
         .finally(() => setLoading(false));
@@ -33,7 +38,7 @@ const GuestList = (props: IGuestList) => {
 
   useEffect(() => {
     reloadList();
-  }, [accessToken, props.fleetId]);
+  }, [accessToken, props.fleetId, props.selectedGuestId]);
 
   useEffect(() => {
     if (props.cleared) {

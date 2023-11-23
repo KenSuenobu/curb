@@ -167,4 +167,19 @@ export class TripController {
     return this.service.delete(tripId);
   }
 
+  @Get('/:tripId')
+  @ApiOperation({
+    summary: 'Gets a trip by ID',
+    description: 'Gets a trip by its trip ID',
+  })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: TripDto,
+  })
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  async get(@Param('tripId') tripId: number): Promise<TripDto> {
+    return this.service.get(tripId);
+  }
+
 }

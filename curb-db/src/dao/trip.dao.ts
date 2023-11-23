@@ -29,6 +29,13 @@ export class TripDao extends BaseDao<TripDto> {
       });
   }
 
+  async getTripByTripId(tripId: number): Promise<TripDto> {
+    const selectStatement = `SELECT a.*, c.id AS fleet_id FROM ${this.section} a, curb.fleet_car b, curb.fleet c WHERE a.id=$1 AND b.id=a.fleet_car_id AND c.id=b.fleet_id`;
+
+    return await this.db.oneOrNone(selectStatement, [tripId])
+      .then((x) => x ? DaoUtils.normalizeFields<TripDto>(x) : null);
+  }
+
   async listUpcoming(fleetId: number): Promise<TripDto[]> {
     const selectStatement = `SELECT a.*, b.name AS location_name, c.data->'listingNickname' as nickname, d.first_name, d.last_name, d.data->>'url' AS url FROM ${this.section} a, curb.delivery_address b, curb.fleet_car c, curb.guest d WHERE a.start_time >= NOW() AND b.id=a.delivery_address_id AND c.id=a.fleet_car_id AND c.fleet_id=${fleetId} AND d.id=a.guest_id ORDER BY a.start_time ASC`;
 

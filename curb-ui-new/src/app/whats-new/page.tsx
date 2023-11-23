@@ -5,6 +5,19 @@ import {ExpandMoreOutlined} from '@mui/icons-material';
 const WhatsNew = () => {
   const newItems = [
     {
+      header: 'v0.0.8',
+      text:
+        <>
+          <Typography>
+            The following improvements have been made:
+            <p/>
+            <ul>
+              <li> Trips can now be edited if new trip information is obtained, or if a trip itinerary changes</li>
+            </ul>
+          </Typography>
+        </>
+    },
+    {
       header: 'v0.0.7',
       text:
         <>

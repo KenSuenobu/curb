@@ -77,6 +77,25 @@ export const getTripsByType = (accessToken: any, fleetId: number, tripType: stri
   });
 }
 
+export const getTrip = (accessToken: any, tripId: number) => {
+  return new Promise((resolve, reject) => {
+    fetch(`/api/trip?tripId=${tripId}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+      .then((res) => {
+        res.json()
+          .then(json => resolve(json))
+          .catch(e => reject(e))
+      })
+      .catch(e => reject(e));
+  });
+}
+
 export const deleteTrip = (accessToken: any, tripId: number) => {
   return new Promise((resolve, reject) => {
     axios.delete(`/api/trip?tripId=${tripId}`, {

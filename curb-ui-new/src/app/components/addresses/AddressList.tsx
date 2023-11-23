@@ -8,6 +8,7 @@ import {imageForCategory} from '@/app/services/trip';
 export interface IAddressList {
   fleetId: number;
   cleared: boolean;
+  selectedAddressId?: number;
   onAddressSelected: (x: number) => any;
   onCleared: () => any;
 }
@@ -23,7 +24,13 @@ const AddressList = (props: IAddressList) => {
     if (accessToken && props.fleetId) {
       setLoading(true);
       listAddresses(accessToken, props.fleetId)
-        .then((x: any) => setAddressList(x.addresses))
+        .then((x: any) => {
+          setAddressList(x.addresses);
+
+          if (props.selectedAddressId) {
+            setAddressId(props.selectedAddressId);
+          }
+        })
         .finally(() => setLoading(false));
     } else {
       setAddressList([]);

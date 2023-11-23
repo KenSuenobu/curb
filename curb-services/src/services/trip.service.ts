@@ -50,4 +50,9 @@ export class TripService {
     return dao.deleteById(tripId);
   }
 
+  async get(tripId: number): Promise<TripDto> {
+    const dao = new TripDao(DaoUtils.getDatabase());
+    return dao.getTripByTripId(tripId);
+  }
+
 }

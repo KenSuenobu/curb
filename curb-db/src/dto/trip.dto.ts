@@ -110,4 +110,7 @@ export class TripDto {
   @ApiHideProperty()
   url: string;
 
+  @ApiHideProperty()
+  fleetId?: number;
+
 }
