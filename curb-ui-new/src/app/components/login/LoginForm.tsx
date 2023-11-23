@@ -203,8 +203,12 @@ const LoginForm = () => {
         <form onSubmit={handleSubmit}>
           <TextField type={'text'} fullWidth value={email} onChange={handleEmailChange} placeholder={'Enter your email address'}/>
           <PasswordTextField fullWidth value={password} onChange={handlePasswordChange} placeholder={'Enter your password'}/>
+          <Stack direction={'row'}>
+            <Item sx={{ width: '100%', textAlign: 'right', color: '#aaa', paddingBottom: '0px', paddingTop: '5px' }}>
+              [Forgot Login] | [Reset Password]
+            </Item>
+          </Stack>
 
-          <br/>
           <br/>
 
           <Stack direction={'row'}>
@@ -233,12 +237,6 @@ const LoginForm = () => {
                       onClick={onSignup}>
                 Signup
               </Button>
-            </Item>
-          </Stack>
-
-          <Stack direction={'row'}>
-            <Item sx={{ width: '100%', fontAlign: 'center', color: '#aaa', paddingBottom: '0px', paddingTop: '15px' }}>
-              [Forgot Login] | [Reset Password]
             </Item>
           </Stack>
         </form>
