@@ -139,7 +139,7 @@ const LoginForm = () => {
         <DialogContent>
           <DialogContentText>
             <Typography>
-              You are requesting early access to the Curb platform.  If you have already signed up,
+              You are requesting early access to the VURB platform.  If you have already signed up,
               please be patient - someone will contact you soon, as long as your request is legitimate.
               <p/>
               <b>Please note</b>: if you don&apos;t supply a note or message, you probably won&apos;t get approved.
@@ -233,6 +233,12 @@ const LoginForm = () => {
                       onClick={onSignup}>
                 Signup
               </Button>
+            </Item>
+          </Stack>
+
+          <Stack direction={'row'}>
+            <Item sx={{ width: '100%', fontAlign: 'center', color: '#aaa', paddingBottom: '0px', paddingTop: '15px' }}>
+              [Forgot Login] | [Reset Password]
             </Item>
           </Stack>
         </form>

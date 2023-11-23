@@ -26,6 +26,7 @@ const WhatsNew = () => {
               <li> Initial dashboard is in place, why not add some cars and trips?</li>
               <li> Older news is now shown in an expandable area below the first news item</li>
               <li> <Link href={'https://github.com/KenSuenobu/curb/issues/80'} target={'_blank'}>Issue #80:</Link> Bug fix, trip cannot end before the trip starts</li>
+              <li> CURB is now VURB: <b>Vehicle Universal Rental Business Fleet</b></li>
             </ul>
           </Typography>
         </>

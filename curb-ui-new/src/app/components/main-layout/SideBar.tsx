@@ -64,7 +64,7 @@ export default function SideBar(props: SideBarProps) {
               }} style={{ paddingLeft: '5px' }}>
                 <ListItemText
                   sx={{ my: 0, width: props.width - 40 }}
-                  primary="CURB"
+                  primary="VURB"
                   primaryTypographyProps={{
                     fontSize: 20,
                     fontWeight: "bold",

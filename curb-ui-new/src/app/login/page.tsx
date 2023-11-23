@@ -11,14 +11,16 @@ const Login = () => {
           paddingLeft: '1em', paddingRight: '1em', width: '300px', borderRight: '1px solid #000'
         }}>
           <Typography variant={'h4'} fontWeight={'bold'}>
-            CURB
+            VURB
           </Typography>
           <p/>
           <Typography>
-            <b>Welcome to Curb</b><br/>
-            The simplified, enterprise,<br/>
-            fleet management software<br/>
-            for the rest of us.
+            <b>Welcome to VURB</b>
+            <p/>
+            The <b>V</b>ehicle <b>U</b>niversal<br/>
+            <b>R</b>ental <b>B</b>usiness fleet<br/>
+            management software<br/>
+            for the rest of us
           </Typography>
         </div>
 
