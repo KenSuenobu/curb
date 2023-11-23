@@ -57,13 +57,13 @@ const FleetLoanForm = (props: IFleetLoanForm) => {
 
     if (!payload.id) {
       createFleetLoan(accessToken, payload)
-        .then((x) => {
+        .then((x: any) => {
           clearForm();
         })
         .catch((x) => console.log(x));
     } else {
       saveFleetLoan(accessToken, payload)
-        .then((x) => {
+        .then((x: any) => {
           clearForm();
         })
         .catch((x) => console.log(x));
@@ -80,7 +80,7 @@ const FleetLoanForm = (props: IFleetLoanForm) => {
     if (props.fleetCarId !== 0) {
       setLoading(true);
       loadFleetLoan(accessToken, props.fleetCarId)
-        .then((x) => {
+        .then((x: any) => {
           if (x) {
             setFleetLoan(x ?? {});
             setFleetLoanData(x.data ?? {});
