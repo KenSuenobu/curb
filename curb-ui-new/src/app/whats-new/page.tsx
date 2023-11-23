@@ -1,5 +1,6 @@
-import {Typography} from '@mui/material';
+import {Accordion, AccordionDetails, AccordionSummary, Link, Typography} from '@mui/material';
 import Divider from '@mui/material/Divider';
+import {ExpandMoreOutlined} from '@mui/icons-material';
 
 const WhatsNew = () => {
   const newItems = [
@@ -16,6 +17,16 @@ const WhatsNew = () => {
             <p/>
             These reports will be made available soon.  The dashboard will contain that information as well, once
             all of the car loan information is available.
+            <p/>
+            The following improvements have been made:
+            <p/>
+            <ul>
+              <li> Trip screen is now more concise instead of having the header above the table, the top layer already shows the page</li>
+              <li> Header kept popping up for no reason on some pages - this is fixed</li>
+              <li> Initial dashboard is in place, why not add some cars and trips?</li>
+              <li> Older news is now shown in an expandable area below the first news item</li>
+              <li> <Link href={'https://github.com/KenSuenobu/curb/issues/80'} target={'_blank'}>Issue #80:</Link> Bug fix, trip cannot end before the trip starts</li>
+            </ul>
           </Typography>
         </>
     },
@@ -128,17 +139,43 @@ const WhatsNew = () => {
     <>
       <Typography fontWeight={'bold'} fontSize={'24px'}>What&apos;s New? (Sorted by date, descending order.)</Typography>
       <p/>
-      {newItems.map((x: any, count: number) => (
-        <div key={count}>
+      {[newItems[0]].map((x: any) => (
+        <div key={0}>
           <Typography fontSize={'18px'}>{x.header}</Typography>
           <blockquote>
             {x.text}
           </blockquote>
           <p/>
-          <Divider/>
-          <p/>
         </div>
       ))}
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreOutlined/>}
+        style={{ backgroundColor: '#ddf', borderTop: '1px solid #000'}}>
+          <Typography>
+            Older News
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          {newItems.map((x: any, count: number) => {
+            // Skip the first whats-new item since these will be put into an accordion.
+            if (count === 0) {
+              return (<></>);
+            }
+
+            return (
+              <div key={count}>
+                <Typography fontSize={'18px'}>{x.header}</Typography>
+                <blockquote>
+                  {x.text}
+                </blockquote>
+                <p/>
+                <Divider/>
+                <p/>
+              </div>
+            );
+          })}
+        </AccordionDetails>
+      </Accordion>
     </>
   );
 }

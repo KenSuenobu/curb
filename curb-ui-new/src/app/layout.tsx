@@ -436,7 +436,7 @@ const Layout: NextPage = ({children, params}: any) => {
               color: '#000',
               overflowY: 'auto',
             }}>
-              {headerTitle && (
+              {headerTitle().length > 0 && (
                 <Stack direction={'row'}>
                   <Item sx={{ paddingLeft: '15px',
                     width: '90%',

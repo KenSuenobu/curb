@@ -116,6 +116,11 @@ const TripForm = (props: ITripForm) => {
         return;
       }
 
+      if (tripData.endTime < tripData.startTime) {
+        errorDialog('Your trip cannot end before the trip starts.');
+        return;
+      }
+
       const payload = tripData;
 
       payload.fleetCarId = props.fleetCarId;

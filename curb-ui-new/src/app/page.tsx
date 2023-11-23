@@ -180,11 +180,7 @@ const Home = () => {
     <main>
       <div style={{ width: '100%' }}>
         <Stack direction={'row'}>
-          <Item sx={{ width: '50%', textAlign: 'left' }}>
-            <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Dashboard</u></Typography>
-          </Item>
-
-          <Item sx={{ width: '50%', textAlign: 'right' }}>
+          <Item sx={{ width: '100%', textAlign: 'right' }}>
             <IconButton onClick={() => reloadDashboard()} disabled={loading}>
               <RefreshOutlined/>
             </IconButton>
