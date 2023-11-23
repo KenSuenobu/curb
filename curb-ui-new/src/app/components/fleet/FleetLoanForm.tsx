@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Alert,
   Button,
@@ -16,7 +16,7 @@ import {
 import Item from '@/app/components/common/Item';
 import UrlTextField from '@/app/components/common/UrlTextField';
 import {errorDialog} from '@/app/components/common/ConfirmDialog';
-import {saveFleetLoan} from '@/app/services/fleet';
+import {createFleetLoan, loadFleetLoan, saveFleetLoan} from '@/app/services/fleet';
 import {useSession} from 'next-auth/react';
 
 export interface IFleetLoanForm {
@@ -28,6 +28,7 @@ export interface IFleetLoanForm {
 const FleetLoanForm = (props: IFleetLoanForm) => {
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [fleetLoan, setFleetLoan] = useState<any>({});
   const [fleetLoanData, setFleetLoanData] = useState<any>({});
   const {data: session} = useSession();
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
@@ -47,18 +48,50 @@ const FleetLoanForm = (props: IFleetLoanForm) => {
 
     const payload: any = {};
 
+    if (fleetLoan.id) {
+      payload.id = fleetLoan.id;
+    }
+
     payload.fleetCarId = props.fleetCarId;
     payload.data = fleetLoanData;
 
-    saveFleetLoan(accessToken, payload)
-      .then((x) => console.log(x))
-      .catch((x) => console.log(x));
+    if (!payload.id) {
+      createFleetLoan(accessToken, payload)
+        .then((x) => {
+          clearForm();
+        })
+        .catch((x) => console.log(x));
+    } else {
+      saveFleetLoan(accessToken, payload)
+        .then((x) => {
+          clearForm();
+        })
+        .catch((x) => console.log(x));
+    }
   }
 
   const clearForm = () => {
+    setFleetLoan({});
     setFleetLoanData({});
     props.onClear();
   }
+
+  useEffect(() => {
+    if (props.fleetCarId !== 0) {
+      setLoading(true);
+      loadFleetLoan(accessToken, props.fleetCarId)
+        .then((x) => {
+          if (x) {
+            setFleetLoan(x ?? {});
+            setFleetLoanData(x.data ?? {});
+          } else {
+            setFleetLoan({});
+            setFleetLoanData({});
+          }
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [props.fleetCarId]);
 
   return (
     <>

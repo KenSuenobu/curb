@@ -106,7 +106,7 @@ export const saveFleetCarData = (accessToken: any, payload: any) => {
   });
 }
 
-export const saveFleetLoan = (accessToken: any, payload: any) => {
+export const createFleetLoan = (accessToken: any, payload: any) => {
   return new Promise((resolve, reject) => {
     axios.post('/api/fleet/loan', {
       payload,
@@ -120,4 +120,40 @@ export const saveFleetLoan = (accessToken: any, payload: any) => {
     .then((res) => resolve(res.data))
     .catch(e => reject(e));
   });
+}
+
+export const saveFleetLoan = (accessToken: any, payload: any) => {
+  return new Promise((resolve, reject) => {
+    axios.put('/api/fleet/loan', {
+      payload,
+    }, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+    .then((res) => resolve(res.data))
+    .catch(e => reject(e));
+  });
+}
+
+export const loadFleetLoan = (accessToken: any, fleetCarId: number) => {
+  return new Promise((resolve, reject) => {
+    fetch(`/api/fleet/loan?fleetCarId=${fleetCarId}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': accessToken,
+      }
+    })
+      .then((res) => {
+        res.json()
+          .then(json => resolve(json))
+          .catch(e => reject(e))
+      })
+      .catch(e => reject(e));
+  });
+
 }
