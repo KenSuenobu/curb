@@ -16,6 +16,7 @@ const WhatsNew = () => {
               <li> Formatting changes in the trips editing page</li>
               <li> Snackbar now displays when records are saved or edited</li>
               <li> Fixed trip airline selection dropdown</li>
+              <li> Airline information now shown in the dashboard</li>
             </ul>
           </Typography>
         </>

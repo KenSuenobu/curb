@@ -8,7 +8,7 @@ import React, {useEffect, useState} from 'react';
 import {useSession} from 'next-auth/react';
 import {loadDashboard} from '@/app/services/dashboard';
 import {IconButton, LinearProgress, Link, Paper, Stack, Typography} from '@mui/material';
-import {LocationSearchingOutlined, RefreshOutlined} from '@mui/icons-material';
+import {FlightOutlined, LocationSearchingOutlined, RefreshOutlined} from '@mui/icons-material';
 import moment from 'moment/moment';
 import Item from '@/app/components/common/Item';
 import ReactEcharts from 'echarts-for-react';
@@ -162,6 +162,13 @@ const Home = () => {
 
   const openTracker = (url: string) => {
     window.open(url, '_blank');
+  }
+
+  const openFlightAware = (trip: any) => {
+    const iana = trip.airlineIana;
+    const flightNumber = trip.flightNumber;
+
+    window.open(`https://flightaware.com/live/flight/${iana}${flightNumber}`, '_blank');
   }
 
   useEffect(() => {
@@ -334,6 +341,11 @@ const Home = () => {
                           {y.trackingUrl && (
                             <IconButton onClick={() => openTracker(y.trackingUrl)}>
                               <LocationSearchingOutlined/>
+                            </IconButton>
+                          )}
+                          {y.currentTrip?.airlineIana && (
+                            <IconButton onClick={() => openFlightAware(y.currentTrip)}>
+                              <FlightOutlined/>
                             </IconButton>
                           )}
                         </Item>
