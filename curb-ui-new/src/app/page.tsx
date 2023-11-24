@@ -20,6 +20,7 @@ const Home = () => {
   const [totalProfit, setTotalProfit] = useState<string>('0.00');
   const [totalTrips, setTotalTrips] = useState<number>(0);
   const [totalGross, setTotalGross] = useState<string>('0.00');
+  const [totalMiles, setTotalMiles] = useState<number>(0);
   const {data: session} = useSession();
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
 
@@ -143,16 +144,19 @@ const Home = () => {
           let total = 0.00;
           let trips: number = 0;
           let gross = 0.00;
+          let miles: number = 0;
 
           for(const trip of x.dashboard) {
             total += trip.grossTotal - trip.loanTotal;
             trips += parseInt(trip.tripsCount);
             gross += trip.grossTotal;
+            miles += parseInt(trip.milesTotal);
           }
 
           setTotalProfit(total.toFixed(2));
           setTotalTrips(trips);
           setTotalGross(gross.toFixed(2));
+          setTotalMiles(miles);
 
           console.log(x.dashboard);
         })
@@ -460,12 +464,25 @@ const Home = () => {
           <Item sx={{ width: '33%' }}>
             <Paper sx={{ width: '100%' }}>
               <Stack direction={'row'}>
-                <Item sx={{ width: '50%', color: 'black', textAlign: 'right', borderBottom: '1px solid #eee' }}>
-                  <Typography variant={'h5'} fontWeight={'bold'}>
-                    Total Gross:
+                <Item sx={{ width: '50%', color: 'white', backgroundColor: 'black', textAlign: 'right', borderBottom: '1px solid #eee' }}>
+                  <Typography fontWeight={'bold'}>
+                    Totals
                   </Typography>
                 </Item>
-                <Item sx={{ width: '50%', color: 'black', textAlign: 'left', paddingLeft: '1em', borderBottom: '1px solid #eee' }}>
+                <Item sx={{ width: '50%', color: 'white', backgroundColor: 'black', textAlign: 'right', borderLeft: '1px solid #fff', borderBottom: '1px solid #eee' }}>
+                  <Typography fontWeight={'bold'}>
+                    Amounts
+                  </Typography>
+                </Item>
+              </Stack>
+
+              <Stack direction={'row'}>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'right', borderBottom: '1px solid #eee' }}>
+                  <Typography variant={'h5'} fontWeight={'bold'}>
+                    Gross:
+                  </Typography>
+                </Item>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'left', paddingLeft: '1em', borderLeft: '1px solid #ccc', borderBottom: '1px solid #eee' }}>
                   <Typography variant={'h5'}>
                     $ {totalGross}
                   </Typography>
@@ -475,10 +492,10 @@ const Home = () => {
               <Stack direction={'row'}>
                 <Item sx={{ width: '50%', color: 'black', textAlign: 'right', borderBottom: '1px solid #eee' }}>
                   <Typography variant={'h5'} fontWeight={'bold'}>
-                    Total Profit:
+                    Profit:
                   </Typography>
                 </Item>
-                <Item sx={{ width: '50%', color: 'black', textAlign: 'left', paddingLeft: '1em', borderBottom: '1px solid #eee' }}>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'left', paddingLeft: '1em', borderLeft: '1px solid #ccc', borderBottom: '1px solid #eee' }}>
                   <Typography variant={'h5'}>
                     $ {totalProfit}
                   </Typography>
@@ -488,10 +505,10 @@ const Home = () => {
               <Stack direction={'row'}>
                 <Item sx={{ width: '50%', color: 'black', textAlign: 'right', borderBottom: '1px solid #eee' }}>
                   <Typography variant={'h5'} fontWeight={'bold'}>
-                    Total Loss:
+                    Loss:
                   </Typography>
                 </Item>
-                <Item sx={{ width: '50%', color: 'black', textAlign: 'left', paddingLeft: '1em', borderBottom: '1px solid #eee' }}>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'left', paddingLeft: '1em', borderLeft: '1px solid #ccc', borderBottom: '1px solid #eee' }}>
                   <Typography variant={'h5'}>
                     $ {(parseFloat(totalGross) - parseFloat(totalProfit)).toFixed(2)}
                   </Typography>
@@ -499,12 +516,25 @@ const Home = () => {
               </Stack>
 
               <Stack direction={'row'}>
-                <Item sx={{ width: '50%', color: 'black', textAlign: 'right' }}>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'right', borderBottom: '1px solid #eee' }}>
                   <Typography variant={'h5'} fontWeight={'bold'}>
-                    Total Trips:
+                    Miles:
                   </Typography>
                 </Item>
-                <Item sx={{ width: '50%', color: 'black', textAlign: 'left', paddingLeft: '1em' }}>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'left', paddingLeft: '1em', borderLeft: '1px solid #ccc', borderBottom: '1px solid #eee' }}>
+                  <Typography variant={'h5'}>
+                    {totalMiles}
+                  </Typography>
+                </Item>
+              </Stack>
+
+              <Stack direction={'row'}>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'right' }}>
+                  <Typography variant={'h5'} fontWeight={'bold'}>
+                    Trips:
+                  </Typography>
+                </Item>
+                <Item sx={{ width: '50%', color: 'black', textAlign: 'left', paddingLeft: '1em', borderLeft: '1px solid #ccc' }}>
                   <Typography variant={'h5'}>
                     {totalTrips}
                   </Typography>

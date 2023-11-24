@@ -17,6 +17,7 @@ const WhatsNew = () => {
               <li> Snackbar now displays when records are saved or edited</li>
               <li> Fixed trip airline selection dropdown</li>
               <li> Airline information now shown in the dashboard</li>
+              <li> Dashboard now shows mileage totals</li>
             </ul>
           </Typography>
         </>
