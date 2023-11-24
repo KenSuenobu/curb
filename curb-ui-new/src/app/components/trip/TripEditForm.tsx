@@ -146,7 +146,7 @@ const TripEditForm = (props: ITripEditForm) => {
 
         <Item sx={{ width: '30%' }}>
           <TextField label={'Flight Number'} fullWidth value={tripData.flightNumber ?? ''}
-                     name={'flightNumber'} onChange={handleChange}/>
+                     name={'flightNumber'}  onChange={handleChange}/>
         </Item>
 
         <Item sx={{ width: '30%' }}>
@@ -165,12 +165,12 @@ const TripEditForm = (props: ITripEditForm) => {
       <Stack direction={'row'}>
         <Item sx={{ width: '25%' }}>
           <TextField label={'Total Recorded Mileage'} fullWidth value={tripData.mileage ?? ''}
-                     name={'mileage'} onChange={handleChange}/>
+                     name={'mileage'} inputProps={{ type: 'number' }}  onChange={handleChange}/>
         </Item>
 
         <Item sx={{ width: '25%' }}>
           <TextField label={'Total Earnings'} fullWidth value={tripData.earnings ?? ''}
-                     name={'earnings'} onChange={handleChange}/>
+                     name={'earnings'} inputProps={{ type: 'number' }}  onChange={handleChange}/>
         </Item>
 
         <Item sx={{ width: '25%' }}>

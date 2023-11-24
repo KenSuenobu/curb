@@ -250,13 +250,13 @@ const FleetCarForm = (props: IFleetCarForm) => {
 
             <Item sx={{ width: '17%' }}>
               <TextField label={'Expire Month'} fullWidth value={carFleetData.licenseExpireMonth ?? ''}
-                         name={'licenseExpireMonth'}
+                         name={'licenseExpireMonth'} inputProps={{ type: 'number' }}
                          onChange={handleChange}/>
             </Item>
 
             <Item sx={{ width: '17%' }}>
               <TextField label={'Expire Year'} fullWidth value={carFleetData.licenseExpireYear ?? ''}
-                         name={'licenseExpireYear'}
+                         name={'licenseExpireYear'} inputProps={{ type: 'number' }}
                          onChange={handleChange}/>
             </Item>
           </Stack>

@@ -225,7 +225,7 @@ const FleetLoanForm = (props: IFleetLoanForm) => {
 
             <Item sx={{ width: '20%' }}>
               <TextField label={'Original Balance'} fullWidth value={fleetLoanData.originalBalance ?? ''}
-                         name={'originalBalance'} onChange={handleChange}/>
+                         name={'originalBalance'} inputProps={{ type: 'number' }}  onChange={handleChange}/>
             </Item>
 
             <Item sx={{ width: '20%' }}>
@@ -242,7 +242,7 @@ const FleetLoanForm = (props: IFleetLoanForm) => {
 
             <Item sx={{ width: '20%' }}>
               <TextField label={'APR %'} fullWidth value={fleetLoanData.apr ?? ''}
-                         name={'apr'} onChange={handleChange}
+                         name={'apr'} inputProps={{ type: 'number' }}  onChange={handleChange}
                          disabled={fleetLoanData.loanType === 'Owned'}/>
             </Item>
           </Stack>

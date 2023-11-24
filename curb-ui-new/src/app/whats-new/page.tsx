@@ -18,6 +18,7 @@ const WhatsNew = () => {
               <li> Fixed trip airline selection dropdown</li>
               <li> Airline information now shown in the dashboard</li>
               <li> Dashboard now shows mileage totals</li>
+              <li> Input fixes so that numeric fields only accept numeric values</li>
             </ul>
           </Typography>
         </>

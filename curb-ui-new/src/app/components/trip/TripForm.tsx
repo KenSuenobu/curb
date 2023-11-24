@@ -225,12 +225,12 @@ const TripForm = (props: ITripForm) => {
       <Stack direction={'row'}>
         <Item sx={{ width: '25%' }}>
           <TextField label={'Total Recorded Mileage'} fullWidth value={tripData.mileage ?? ''}
-                     name={'mileage'} onChange={handleChange}/>
+                     name={'mileage'} inputProps={{ type: 'number' }}  onChange={handleChange}/>
         </Item>
 
         <Item sx={{ width: '25%' }}>
           <TextField label={'Total Earnings'} fullWidth value={tripData.earnings ?? ''}
-                     name={'earnings'} onChange={handleChange}/>
+                     name={'earnings'} inputProps={{ type: 'number' }}  onChange={handleChange}/>
         </Item>
 
         <Item sx={{ width: '25%' }}>
