@@ -150,7 +150,7 @@ const TripEditForm = (props: ITripEditForm) => {
                             value={moment(tripData.arrival)} onChange={(e) => {
               setTripData({
                 ...tripData,
-                endTime: e!,
+                arrival: e!,
               });
             }}/>
           </LocalizationProvider>

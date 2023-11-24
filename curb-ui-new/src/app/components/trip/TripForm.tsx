@@ -208,7 +208,7 @@ const TripForm = (props: ITripForm) => {
                             value={moment(tripData.arrival)} onChange={(e) => {
               setTripData({
                 ...tripData,
-                endTime: e!,
+                arrival: e!,
               });
             }}/>
           </LocalizationProvider>
