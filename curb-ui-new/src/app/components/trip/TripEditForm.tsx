@@ -121,12 +121,14 @@ const TripEditForm = (props: ITripEditForm) => {
       </Stack>
 
       <Stack direction={'row'}>
-        <Item sx={{ width: '30%' }}>
+        <Item sx={{ width: '100%' }}>
           <TextField label={'Trip URL'} fullWidth value={tripData.tripId ?? ''}
                      name={'tripId'} onChange={handleChange}/>
         </Item>
+      </Stack>
 
-        <Item sx={{ width: '30%' }}>
+      <Stack direction={'row'}>
+        <Item sx={{ width: '40%' }}>
           <FormControl sx={{ width: '100%' }}>
             <InputLabel id={'airline-label'}>Airline</InputLabel>
             <Select labelId={'airline-label'} label={'Airline'} name={'airlineIana'}
@@ -139,12 +141,12 @@ const TripEditForm = (props: ITripEditForm) => {
           </FormControl>
         </Item>
 
-        <Item sx={{ width: '15%' }}>
+        <Item sx={{ width: '30%' }}>
           <TextField label={'Flight Number'} fullWidth value={tripData.flightNumber ?? ''}
                      name={'flightNumber'} onChange={handleChange}/>
         </Item>
 
-        <Item sx={{ width: '25%' }}>
+        <Item sx={{ width: '30%' }}>
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <DateTimePicker label={'Arrival Date/Time'}
                             value={moment(tripData.arrival)} onChange={(e) => {
