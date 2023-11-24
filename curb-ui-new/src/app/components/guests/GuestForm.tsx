@@ -204,6 +204,12 @@ const GuestForm = (props: IGuestForm) => {
 
           props.onGuestSaved();
           clearForm();
+
+          setSnackbarOpen(true);
+
+          setTimeout(() => {
+            setSnackbarOpen(false);
+          }, 3000);
         });
     } else if (props.guestId) {
       saveGuest(accessToken, guestData)
@@ -214,6 +220,12 @@ const GuestForm = (props: IGuestForm) => {
           }
 
           props.onGuestSaved();
+
+          setSnackbarOpen(true);
+
+          setTimeout(() => {
+            setSnackbarOpen(false);
+          }, 3000);
         });
     }
   }

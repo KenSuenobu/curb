@@ -67,6 +67,12 @@ const TripEditForm = (props: ITripEditForm) => {
     saveTrip(accessToken, tripData)
       .then((x: any) => {
         props.onEdited();
+
+        setSnackbarOpen(true);
+
+        setTimeout(() => {
+          setSnackbarOpen(false);
+        }, 3000);
       });
   }
 
@@ -97,10 +103,6 @@ const TripEditForm = (props: ITripEditForm) => {
           Trip record saved successfully.
         </Alert>
       </Snackbar>
-
-      <div style={{ width: '100%', paddingLeft: '0.5em', paddingTop: '1.5em' }}>
-        <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Trip Detail</u></Typography>
-      </div>
 
       <Stack direction={'row'}>
         <Item sx={{ width: '35%' }}>

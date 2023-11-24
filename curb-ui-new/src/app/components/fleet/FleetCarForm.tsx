@@ -128,8 +128,6 @@ const FleetCarForm = (props: IFleetCarForm) => {
 
     saveFleetCarData(accessToken, payload)
       .then((x) => {
-        console.log('Saved fleet car', x);
-
         setSnackbarOpen(true);
 
         setTimeout(() => {

@@ -59,12 +59,24 @@ const FleetLoanForm = (props: IFleetLoanForm) => {
       createFleetLoan(accessToken, payload)
         .then((x: any) => {
           clearForm();
+
+          setSnackbarOpen(true);
+
+          setTimeout(() => {
+            setSnackbarOpen(false);
+          }, 3000);
         })
         .catch((x) => console.log(x));
     } else {
       saveFleetLoan(accessToken, payload)
         .then((x: any) => {
           clearForm();
+
+          setSnackbarOpen(true);
+
+          setTimeout(() => {
+            setSnackbarOpen(false);
+          }, 3000);
         })
         .catch((x) => console.log(x));
     }

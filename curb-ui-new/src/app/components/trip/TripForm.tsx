@@ -131,6 +131,12 @@ const TripForm = (props: ITripForm) => {
         .then((x) => {
           clearForm();
           props.onSaved();
+
+          setSnackbarOpen(true);
+
+          setTimeout(() => {
+            setSnackbarOpen(false);
+          }, 3000);
         });
     }
   }
