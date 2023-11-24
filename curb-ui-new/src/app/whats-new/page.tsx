@@ -15,6 +15,7 @@ const WhatsNew = () => {
               <li> Trips can now be edited if new trip information is obtained, or if a trip itinerary changes</li>
               <li> Formatting changes in the trips editing page</li>
               <li> Snackbar now displays when records are saved or edited</li>
+              <li> Fixed trip airline selection dropdown</li>
             </ul>
           </Typography>
         </>

@@ -135,6 +135,7 @@ const TripEditForm = (props: ITripEditForm) => {
             <InputLabel id={'airline-label'}>Airline</InputLabel>
             <Select labelId={'airline-label'} label={'Airline'} name={'airlineIana'}
                     style={{ textAlign: 'left' }} fullWidth
+                    value={tripData.airlineIana ?? 0}
                     onChange={handleChange}>
               {AirlineCodeList.map((x: any, counter: number) => (
                 <MenuItem value={x.carrierCode} key={counter}>{x.airline}</MenuItem>
