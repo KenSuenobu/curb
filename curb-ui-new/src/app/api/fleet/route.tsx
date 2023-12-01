@@ -1,60 +1,50 @@
-import {verifyJwt} from '@/app/helpers/jwt';
-import {NextResponse} from 'next/server';
 import axios from 'axios';
+import RouteHelper from '@/app/components/routes/RouteHelper';
 
 export async function GET(request: any) {
-  try {
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
+  const helper = new RouteHelper(request);
 
-    if (!accessToken || !decodedJwt) {
-      return NextResponse.json({
-        message: 'Unauthorized',
-      }, { status: 401 });
+  try {
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
     }
 
     const fleets = await axios.get(`${process.env.CURB_SERVER_URL}/fleet/list/${decodedJwt.id}`)
       .then((res) => res.data);
 
-    return NextResponse.json({ fleets }, { status: 200 });
+    return helper.createResponse({ fleets });
   } catch (e) {
-    console.error('Unable to get list of car makes', e);
-    return NextResponse.json({
-      message: 'Failed to retrieve list of car makes',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to retrieve fleet list', e);
   }
 }
 
 export async function POST(request: any) {
+  const helper = new RouteHelper(request);
+
   try {
-    const { fleet } = await request.json();
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
+    }
+
+    const { fleet } = await helper.getPostPayload();
 
     if (!fleet) {
-      return NextResponse.json({
-        message: 'Fleet name is required'
-      }, { status: 400 });
+      return helper.missingFieldResponse('Fleet name');
     }
 
     const result = await axios.post(`${process.env.CURB_SERVER_URL}/fleet/create/fleet/${decodedJwt.id}`,
         {
-          creatorId: decodedJwt.id,
+          creatorId: helper.getJwt().id,
           name: fleet,
         })
       .then((res) => res.data);
 
-    return NextResponse.json({
+    return helper.createResponse({
       result: {
-        accessToken
+        accessToken: helper.getAccessToken(),
       },
-    }, { status: 201 });
+    }, 201);
   } catch (e) {
-    console.error('Unable to create car make', e);
-    return NextResponse.json({
-      message: 'Failed to create car make',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to create fleet record', e);
   }
 }

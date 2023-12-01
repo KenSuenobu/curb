@@ -1,69 +1,58 @@
 import {NextRequest, NextResponse} from 'next/server';
 import {verifyJwt} from '@/app/helpers/jwt';
 import axios from 'axios';
+import RouteHelper from '@/app/components/routes/RouteHelper';
 
 export async function GET(request: NextRequest) {
-  try {
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt = verifyJwt(accessToken);
-    const searchParams = request.nextUrl.searchParams;
-    const carModelId = searchParams.get('carModelId');
+  const helper = new RouteHelper(request);
 
-    if (!accessToken || !decodedJwt) {
-      return NextResponse.json({
-        message: 'Unauthorized',
-      }, { status: 401 });
+  try {
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
     }
 
+    const carModelId = helper.getInputVariable('carModelId');
     const makes = await axios.get(`${process.env.CURB_SERVER_URL}/car-year/list/${carModelId}`)
       .then((res) => res.data);
 
-    return NextResponse.json({ makes }, { status: 200 });
+    return helper.createResponse({ makes });
   } catch (e) {
-    console.error('Unable to get list of car models', e);
-    return NextResponse.json({
-      message: 'Failed to retrieve list of car models',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to retrieve list of car years', e);
   }
 }
 
 export async function POST(request: any) {
+  const helper = new RouteHelper(request);
+
   try {
-    const { carModelId, year } = await request.json();
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
+    }
+
+    const { carModelId, year } = await helper.getPostPayload();
 
     if (!year) {
-      return NextResponse.json({
-        message: 'Car year is required'
-      }, { status: 400 });
+      return helper.missingFieldResponse('Car year');
     }
 
     if (!carModelId || carModelId === 0) {
-      return NextResponse.json({
-        message: 'Car model ID is required'
-      }, { status: 400 });
+      return helper.missingFieldResponse('Car model ID');
     }
 
     const result = await axios.post(`${process.env.CURB_SERVER_URL}/car-year/create`,
-        {
-          creatorId: decodedJwt.id,
-          carModelId,
-          year: parseInt(year),
-        })
+      {
+        creatorId: helper.getJwt().id,
+        carModelId,
+        year: parseInt(year),
+      })
       .then((res) => res.data);
 
-    return NextResponse.json({
+    return helper.createResponse({
       result: {
-        accessToken
+        accessToken: helper.getAccessToken(),
       },
-    }, { status: 201 });
+    }, 201);
   } catch (e) {
-    console.error('Unable to create car make', e);
-    return NextResponse.json({
-      message: 'Failed to create car make',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to create car year', e);
   }
 }

@@ -1,95 +1,83 @@
 import {verifyJwt} from '@/app/helpers/jwt';
 import {NextResponse} from 'next/server';
 import axios from 'axios';
+import RouteHelper from '@/app/components/routes/RouteHelper';
 
 export async function GET(request: any) {
-  try {
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
-    const searchParams = request.nextUrl.searchParams;
-    const fleetCarId = searchParams.get('fleetCarId');
+  const helper = new RouteHelper(request);
 
-    if (!accessToken || !decodedJwt) {
-      return NextResponse.json({
-        message: 'Unauthorized',
-      }, { status: 401 });
+  try {
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
     }
 
+    const fleetCarId = helper.getInputVariable('fleetCarId');
+
     if (!fleetCarId) {
-      return NextResponse.json({
-        message: 'Fleet Car ID missing',
-      }, { status: 404 });
+      return helper.missingFieldResponse('Fleet Car ID');
     }
 
     const loan: any = await axios.get(`${process.env.CURB_SERVER_URL}/fleet/loan/${fleetCarId}`)
       .then((res) => res.data);
 
-    return NextResponse.json({...loan}, {status: 200});
+    return helper.createResponse({...loan});
   } catch (e) {
-    console.error('Unable to get list of cars for fleet', e);
-    return NextResponse.json({
-      message: 'Failed to retrieve list of fleet cars',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to retrieve list of loans', e);
   }
 }
 
 export async function POST(request: any) {
+  const helper = new RouteHelper(request);
+
   try {
-    const { payload } = await request.json();
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
+    }
+
+    const { payload } = await helper.getPostPayload();
 
     if (!payload) {
-      return NextResponse.json({
-        message: 'Car Loan Payload is required'
-      }, { status: 400 });
+      return helper.missingFieldResponse('Car Loan Payload');
     }
 
     const result = await axios.post(`${process.env.CURB_SERVER_URL}/fleet/create/loan`, {
       ...payload,
     }).then((res) => res.data);
 
-    return NextResponse.json({
+    return helper.createResponse({
       result: {
-        accessToken
+        accessToken: helper.getAccessToken(),
       },
-    }, { status: 201 });
+    }, 201);
   } catch (e) {
-    console.error('Unable to create car make', e);
-    return NextResponse.json({
-      message: 'Failed to create car make',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to create car loan entry', e);
   }
 }
 
 export async function PUT(request: any) {
+  const helper = new RouteHelper(request);
+
   try {
-    const { payload } = await request.json();
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
+    }
+
+    const { payload } = await helper.getPostPayload();
 
     if (!payload) {
-      return NextResponse.json({
-        message: 'Car Loan Payload is required'
-      }, { status: 400 });
+      return helper.missingFieldResponse('Car Loan Payload');
     }
 
     const result = await axios.put(`${process.env.CURB_SERVER_URL}/fleet/save/loan`, {
       ...payload,
     }).then((res) => res.data);
 
-    return NextResponse.json({
+    return helper.createResponse({
       result: {
-        accessToken
+        accessToken: helper.getAccessToken(),
       },
-    }, { status: 201 });
+    }, 201);
   } catch (e) {
-    console.error('Unable to create car make', e);
-    return NextResponse.json({
-      message: 'Failed to create car make',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to save car loan entry', e);
   }
 }

@@ -38,8 +38,8 @@ const Addresses = () => {
       setLoading(true);
       listAddresses(accessToken, fleetId)
         .then((x: any) => {
+          console.log(JSON.stringify(x, null, 2));
           setAddressList(x.addresses);
-          console.log(JSON.stringify(x.addresses, null, 2));
         })
         .catch((x: any) => {
           errorDialog(`Unable to retrieve address list: ${x.message}`);

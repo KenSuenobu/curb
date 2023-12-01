@@ -1,35 +1,26 @@
-import {verifyJwt} from '@/app/helpers/jwt';
 import {NextResponse} from 'next/server';
 import axios from 'axios';
+import RouteHelper from '@/app/components/routes/RouteHelper';
 
 export async function GET(request: any, fleetId: number) {
-  try {
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt = verifyJwt(accessToken);
-    const searchParams = request.nextUrl.searchParams;
-    const fleetId = searchParams.get('fleetId');
+  const helper = new RouteHelper(request);
 
-    if (!accessToken || !decodedJwt) {
-      return NextResponse.json({
-        message: 'Unauthorized',
-      }, { status: 401 });
+  try {
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
     }
 
+    const fleetId = helper.getInputVariable('fleetId');
+
     if (!fleetId) {
-      return NextResponse.json({
-        message: 'Fleet ID is required',
-      }, { status: 404 });
+      return helper.missingFieldResponse('fieldId');
     }
 
     const addresses = await axios.get(`${process.env.CURB_SERVER_URL}/address/list/${fleetId}`)
       .then((res) => res.data);
 
-    return NextResponse.json({ addresses }, { status: 200 });
+    return helper.createResponse({ addresses });
   } catch (e) {
-    console.error('Unable to get list of car makes', e);
-    return NextResponse.json({
-      message: 'Failed to retrieve list of car makes',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to retrieve list of car makes', e);
   }
 }

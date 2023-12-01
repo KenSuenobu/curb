@@ -1,96 +1,86 @@
 import {verifyJwt} from '@/app/helpers/jwt';
 import {NextResponse} from 'next/server';
 import axios from 'axios';
+import RouteHelper from '@/app/components/routes/RouteHelper';
 
 export async function GET(request: any) {
-  try {
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
-    const searchParams = request.nextUrl.searchParams;
-    const fleetId = searchParams.get('fleetId');
-    const fleetCarId = searchParams.get('fleetCarId');
+  const helper = new RouteHelper(request);
 
-    if (!accessToken || !decodedJwt) {
-      return NextResponse.json({
-        message: 'Unauthorized',
-      }, { status: 401 });
+  try {
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
     }
 
+    const fleetId = helper.getInputVariable('fleetId');
+    const fleetCarId = helper.getInputVariable('fleetCarId');
+
     if (!fleetId && !fleetCarId) {
-      return NextResponse.json({
-        message: 'Fleet ID or Fleet Car ID missing',
-      }, { status: 404 });
+      return helper.missingFieldResponse('Fleet ID or Fleet Car ID');
     }
 
     if (fleetId) {
       const cars: any = await axios.get(`${process.env.CURB_SERVER_URL}/fleet/list/fleet/${fleetId}`)
         .then((res) => res.data);
 
-      return NextResponse.json({cars}, {status: 200});
+      return helper.createResponse({cars});
     } else {
       const cars: any = await axios.get(`${process.env.CURB_SERVER_URL}/fleet/get/fleet-car/${fleetCarId}`)
         .then((res) => res.data);
 
-      return NextResponse.json({cars}, {status: 200});
+      return helper.createResponse({cars});
     }
   } catch (e) {
-    console.error('Unable to get list of cars for fleet', e);
-    return NextResponse.json({
-      message: 'Failed to retrieve list of fleet cars',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to retrieve list of fleet cars', e);
   }
 }
 
 export async function POST(request: any) {
+  const helper = new RouteHelper(request);
+
   try {
-    const { fleetId, carTrimId } = await request.json();
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
+    }
+
+    const { fleetId, carTrimId } = await helper.getPostPayload();
 
     if (!fleetId) {
-      return NextResponse.json({
-        message: 'Fleet ID is required'
-      }, { status: 400 });
+      return helper.missingFieldResponse('Fleet ID');
     }
 
     if (!carTrimId) {
-      return NextResponse.json({
-        message: 'Car Trim ID is required'
-      }, { status: 400 });
+      return helper.missingFieldResponse('Car Trim ID');
     }
 
     const result = await axios.post(`${process.env.CURB_SERVER_URL}/fleet/create/car`, {
       fleetId,
-      ownerId: decodedJwt.id,
+      ownerId: helper.getJwt().id,
       carTrimId,
       data: {}
     }).then((res) => res.data);
 
-    return NextResponse.json({
+    return helper.createResponse({
       result: {
-        accessToken
+        accessToken: helper.getAccessToken(),
       },
-    }, { status: 201 });
+    }, 201);
   } catch (e) {
-    console.error('Unable to create car make', e);
-    return NextResponse.json({
-      message: 'Failed to create car make',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to create fleet car', e);
   }
 }
 
 export async function PUT(request: any) {
+  const helper = new RouteHelper(request);
+
   try {
-    const { payload } = await request.json();
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
+    }
+
+    const { payload } = await helper.getPostPayload();
 
     if (!payload) {
-      return NextResponse.json({
-        message: 'Payload for editing is required'
-      }, { status: 400 });
+      return helper.missingFieldResponse('Payload for editing');
     }
 
     const result = await axios.put(`${process.env.CURB_SERVER_URL}/fleet/save/car`, {
@@ -99,16 +89,12 @@ export async function PUT(request: any) {
       return res.data;
     });
 
-    return NextResponse.json({
+    return helper.createResponse({
       result: {
-        accessToken
+        accessToken: helper.getAccessToken(),
       },
-    }, { status: 201 });
+    }, 201);
   } catch (e) {
-    console.error('Unable to create car make', e);
-    return NextResponse.json({
-      message: 'Failed to create car make',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to create fleet car', e);
   }
 }

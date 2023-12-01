@@ -1,75 +1,68 @@
 import {verifyJwt} from '@/app/helpers/jwt';
 import {NextRequest, NextResponse} from 'next/server';
 import axios from 'axios';
+import RouteHelper from '@/app/components/routes/RouteHelper';
 
 export async function GET(request: NextRequest) {
-  try {
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt = verifyJwt(accessToken);
-    const searchParams = request.nextUrl.searchParams;
-    const addressId = searchParams.get('addressId');
+  const helper = new RouteHelper(request);
 
-    if (!accessToken || !decodedJwt) {
-      return NextResponse.json({
-        message: 'Unauthorized',
-      }, { status: 401 });
+  try {
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
     }
 
+    const addressId = helper.getInputVariable('addressId');
     const address = await axios.get(`${process.env.CURB_SERVER_URL}/address/get/${addressId}`)
       .then((res) => res.data);
 
-    return NextResponse.json({ address }, { status: 200 });
+    return helper.createResponse({ address });
   } catch (e) {
-    console.error('Unable to get list of car models', e);
-    return NextResponse.json({
-      message: 'Failed to retrieve list of car models',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to retrieve list of addresses', e);
   }
 }
 
 export async function POST(request: any) {
-  try {
-    const { payload } = await request.json();
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
+  const helper = new RouteHelper(request);
 
-    if (!payload) {
-      return NextResponse.json({
-        message: 'Address payload is required'
-      }, { status: 400 });
+  try {
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
     }
 
-    const result = await axios.post(`${process.env.CURB_SERVER_URL}/address/create`,
+    const { payload } = await helper.getPostPayload();
+
+    if (!payload) {
+      return helper.missingFieldResponse('Address payload');
+    }
+
+    await axios.post(`${process.env.CURB_SERVER_URL}/address/create`,
       {
         ...payload,
       })
     .then((res) => res.data);
 
-    return NextResponse.json({
+    return helper.createResponse({
       result: {
-        accessToken
+        accessToken: helper.getAccessToken(),
       },
-    }, { status: 201 });
+    }, 201);
   } catch (e) {
-    console.error('Unable to create car make', e);
-    return NextResponse.json({
-      message: 'Failed to create car make',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to save new address', e);
   }
 }
 
 export async function PUT(request: any) {
+  const helper = new RouteHelper(request);
+
   try {
-    const { payload } = await request.json();
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
+    }
+
+    const { payload } = await helper.getPostPayload();
 
     if (!payload) {
-      return NextResponse.json({
-        message: 'Payload data is required'
-      }, { status: 400 });
+      return helper.missingFieldResponse('Payload data');
     }
 
     const result = await axios.put(`${process.env.CURB_SERVER_URL}/address/edit`,
@@ -78,16 +71,12 @@ export async function PUT(request: any) {
         })
       .then((res) => res.data);
 
-    return NextResponse.json({
+    return helper.createResponse({
       result: {
-        accessToken
+        accessToken: helper.getAccessToken(),
       },
-    }, { status: 201 });
+    }, 201);
   } catch (e) {
-    console.error('Unable to create car make', e);
-    return NextResponse.json({
-      message: 'Failed to create car make',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to save address changes', e);
   }
 }
