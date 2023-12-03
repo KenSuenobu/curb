@@ -1,103 +1,91 @@
 import {verifyJwt} from '@/app/helpers/jwt';
 import {NextResponse} from 'next/server';
 import axios from 'axios';
+import RouteHelper from '@/app/components/routes/RouteHelper';
 
 export async function GET(request: any) {
-  try {
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
-    const searchParams = request.nextUrl.searchParams;
-    const guestId = searchParams.get('guestId');
+  const helper = new RouteHelper(request);
 
-    if (!accessToken || !decodedJwt) {
-      return NextResponse.json({
-        message: 'Unauthorized',
-      }, { status: 401 });
+  try {
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
     }
 
+    const guestId = helper.getInputVariable('guestId');
+
     if (!guestId) {
-      return NextResponse.json({
-        message: 'Guest not found by ID',
-      }, { status: 404 });
+      return helper.missingFieldResponse('Guest ID');
     }
 
     const guest = await axios.get(`${process.env.CURB_SERVER_URL}/guest/get/${guestId}`)
       .then((res) => res.data);
 
-    return NextResponse.json({ guest }, { status: 200 });
+    return helper.createResponse({ guest });
   } catch (e) {
-    console.error('Unable to get list of car makes', e);
-    return NextResponse.json({
-      message: 'Failed to retrieve list of car makes',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to retrieve list of guests', e);
   }
 }
 
 export async function POST(request: any) {
+  const helper = new RouteHelper(request);
+
   try {
-    const { payload } = await request.json();
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
+    }
+
+    const { payload } = await helper.getPostPayload();
 
     if (!payload) {
-      return NextResponse.json({
-        message: 'Missing payload'
-      }, { status: 400 });
+      return helper.missingFieldResponse('Payload');
     }
 
     const result = await axios.post(`${process.env.CURB_SERVER_URL}/guest/create`,
         {
           ...payload,
-          creatorId: decodedJwt.id,
+          creatorId: helper.getJwt().id,
         })
       .then((res) => res.data);
 
-    return NextResponse.json({
+    return helper.createResponse({
       result: {
-        accessToken,
+        accessToken: helper.getAccessToken(),
         created: result,
       },
-    }, { status: 201 });
+    }, 201);
   } catch (e) {
-    console.error('Unable to create car make', e);
-    return NextResponse.json({
-      message: 'Failed to create car make',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to create guest record', e);
   }
 }
 
 export async function PUT(request: any) {
+  const helper = new RouteHelper(request);
+
   try {
-    const { payload } = await request.json();
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
+    }
+
+    const { payload } = await helper.getPostPayload();
 
     if (!payload) {
-      return NextResponse.json({
-        message: 'Missing payload'
-      }, { status: 400 });
+      return helper.missingFieldResponse('Payload');
     }
 
     const result = await axios.put(`${process.env.CURB_SERVER_URL}/guest/edit`,
         {
           ...payload,
-          creatorId: decodedJwt.id,
+          creatorId: helper.getJwt().id,
         })
       .then((res) => res.data);
 
-    return NextResponse.json({
+    return helper.createResponse({
       result: {
-        accessToken,
+        accessToken: helper.getAccessToken(),
         created: result,
       },
-    }, { status: 201 });
+    }, 201);
   } catch (e) {
-    console.error('Unable to create car make', e);
-    return NextResponse.json({
-      message: 'Failed to create car make',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to save guest record', e);
   }
 }

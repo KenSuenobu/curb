@@ -1,139 +1,116 @@
 import {verifyJwt} from '@/app/helpers/jwt';
 import {NextResponse} from 'next/server';
 import axios from 'axios';
+import RouteHelper from '@/app/components/routes/RouteHelper';
 
 export async function POST(request: any) {
-  try {
-    const { payload } = await request.json();
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
+  const helper = new RouteHelper(request);
 
-    if (!payload) {
-      return NextResponse.json({
-        message: 'Trip payload is required'
-      }, { status: 400 });
+  try {
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
     }
 
-    const result = await axios.post(`${process.env.CURB_SERVER_URL}/trip/create`,
-        {
-          ...payload,
-        })
-      .then((res) => res.data);
+    const { payload } = await helper.getPostPayload();
 
-    return NextResponse.json({
+    if (!payload) {
+      return helper.missingFieldResponse('Trip payload');
+    }
+
+    await axios.post(`${process.env.CURB_SERVER_URL}/trip/create`,
+      {
+        ...payload,
+      });
+
+    return helper.createResponse({
       result: {
-        accessToken
+        accessToken: helper.getAccessToken(),
       },
-    }, { status: 201 });
+    }, 201);
   } catch (e) {
-    console.error('Unable to create car make', e);
-    return NextResponse.json({
-      message: 'Failed to create car make',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to create trip', e);
   }
 }
 
 export async function PUT(request: any) {
-  try {
-    const { payload } = await request.json();
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
+  const helper = new RouteHelper(request);
 
-    if (!payload) {
-      return NextResponse.json({
-        message: 'Trip payload is required'
-      }, { status: 400 });
+  try {
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
     }
 
-    const result = await axios.put(`${process.env.CURB_SERVER_URL}/trip/edit`,
+    const { payload } = await helper.getPostPayload();
+
+    if (!payload) {
+      return helper.missingFieldResponse('Trip payload');
+    }
+
+    await axios.put(`${process.env.CURB_SERVER_URL}/trip/edit`,
       {
         ...payload,
-      })
-    .then((res) => res.data);
+      });
 
-    return NextResponse.json({
+    return helper.createResponse({
       result: {
-        accessToken
+        accessToken: helper.getAccessToken(),
       },
-    }, { status: 201 });
+    }, 201);
   } catch (e) {
-    console.error('Unable to create car make', e);
-    return NextResponse.json({
-      message: 'Failed to create car make',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to save trip changes', e);
   }
 }
 
 export async function GET(request: any) {
-  try {
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
-    const searchParams = request.nextUrl.searchParams;
-    const fleetCarId = searchParams.get('fleetCarId');
-    const tripId = searchParams.get('tripId');
+  const helper = new RouteHelper(request);
 
-    if (!accessToken || !decodedJwt) {
-      return NextResponse.json({
-        message: 'Unauthorized',
-      }, { status: 401 });
+  try {
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
     }
 
+    const fleetCarId = helper.getInputVariable('fleetCarId');
+    const tripId = helper.getInputVariable('tripId');
+
     if (!fleetCarId && !tripId) {
-      return NextResponse.json({
-        message: 'Fleet Car ID and Trip ID are missing',
-      }, { status: 404 });
+      return helper.missingFieldResponse('Fleet Car ID and Trip ID');
     }
 
     if (fleetCarId) {
       const trips: any = await axios.get(`${process.env.CURB_SERVER_URL}/trip/list/car/${fleetCarId}`)
         .then((res) => res.data);
 
-      return NextResponse.json({trips}, {status: 200});
+      return helper.createResponse({ trips });
     } else {
       const trip: any = await axios.get(`${process.env.CURB_SERVER_URL}/trip/${tripId}`)
         .then((res) => res.data);
 
-      return NextResponse.json({trip}, {status: 200});
+      return helper.createResponse({ trip });
     }
   } catch (e) {
-    console.error('Unable to get list of cars for fleet', e);
-    return NextResponse.json({
-      message: 'Failed to retrieve list of fleet cars',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to retrieve list of trips', e);
   }
 }
 
 export async function DELETE(request: any) {
-  try {
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
-    const searchParams = request.nextUrl.searchParams;
-    const tripId = searchParams.get('tripId');
+  const helper = new RouteHelper(request);
 
-    if (!accessToken || !decodedJwt) {
-      return NextResponse.json({
-        message: 'Unauthorized',
-      }, { status: 401 });
+  try {
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
     }
 
+    const tripId = helper.getInputVariable('tripId');
+
     if (!tripId) {
-      return NextResponse.json({
-        message: 'Trip ID is missing',
-      }, { status: 404 });
+      return helper.missingFieldResponse('Trip ID');
     }
 
     const result: any = await axios.delete(`${process.env.CURB_SERVER_URL}/trip/${tripId}`)
       .then((res) => res.data);
 
-    return NextResponse.json({result}, {status: 200});
+    return helper.createResponse({ result });
   } catch (e) {
-    console.error('Unable to get list of cars for fleet', e);
-    return NextResponse.json({
-      message: 'Failed to retrieve list of fleet cars',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to delete trip', e);
   }
 }

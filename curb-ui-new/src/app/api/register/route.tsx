@@ -1,25 +1,19 @@
-import { NextResponse } from 'next/server';
+import RouteHelper from '@/app/components/routes/RouteHelper';
 
 export async function POST(request: any) {
+  const helper = new RouteHelper(request);
+
   try {
-    const {email, password} = await request.json();
+    const {email, password} = await helper.getPostPayload();
 
     if (!email || !password) {
-      return NextResponse.json({
-        message: 'Both email and password fields are required'
-      }, { status: 400 });
+      return helper.missingFieldResponse('Email and Password');
     }
 
-    return NextResponse.json({
+    return helper.createResponse({
       message: 'Account created',
-    }, { status: 201 });
-  } catch(e) {
-    console.error(e);
-    return NextResponse.json({
-      message: 'Something went wrong while trying to register',
-      result: e
-    }, {
-      status: 500,
     });
+  } catch(e) {
+    return helper.createErrorResponse('Something went wrong while trying to register', e);
   }
 }

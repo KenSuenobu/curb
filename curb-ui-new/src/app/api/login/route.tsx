@@ -2,15 +2,16 @@ import { NextResponse } from 'next/server';
 import { signJwtAccessToken } from '@/app/helpers/jwt';
 import axios from 'axios';
 import {encrypt} from 'unixcrypt';
+import RouteHelper from '@/app/components/routes/RouteHelper';
 
 export async function POST(request: any) {
+  const helper = new RouteHelper(request);
+
   try {
-    const { email, password } = await request.json();
+    const { email, password } = await helper.getPostPayload();
 
     if (!email || !password) {
-      return NextResponse.json({
-        message: 'Both email and password fields are required'
-      }, { status: 400 });
+      return helper.missingFieldResponse('Email and Password');
     }
 
     const base64EncodedPassword = Buffer.from(password).toString('base64');
@@ -37,12 +38,6 @@ export async function POST(request: any) {
       },
     }, { status: 200 });
   } catch(e) {
-    console.error(e);
-    return NextResponse.json({
-      message: 'Something went wrong while trying to log in',
-      result: e
-    }, {
-      status: 500,
-    });
+    return helper.createErrorResponse('Something went wrong while trying to log in', e);
   }
 }

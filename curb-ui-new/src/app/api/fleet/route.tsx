@@ -32,12 +32,11 @@ export async function POST(request: any) {
       return helper.missingFieldResponse('Fleet name');
     }
 
-    const result = await axios.post(`${process.env.CURB_SERVER_URL}/fleet/create/fleet/${decodedJwt.id}`,
-        {
-          creatorId: helper.getJwt().id,
-          name: fleet,
-        })
-      .then((res) => res.data);
+    await axios.post(`${process.env.CURB_SERVER_URL}/fleet/create/fleet/${decodedJwt.id}`,
+      {
+        creatorId: helper.getJwt().id,
+        name: fleet,
+      });
 
     return helper.createResponse({
       result: {

@@ -1,39 +1,35 @@
-import {verifyJwt} from '@/app/helpers/jwt';
-import {NextResponse} from 'next/server';
 import axios from 'axios';
-import * as bcrypt from 'bcrypt';
+import RouteHelper from '@/app/components/routes/RouteHelper';
 
 export async function PUT(request: any) {
+  const helper = new RouteHelper(request);
+
   try {
-    const { oldPassword, newPassword } = await request.json();
-    const accessToken = request.headers.get('Authorization');
-    const decodedJwt: any = verifyJwt(accessToken);
+    if (!helper.isAuthorized()) {
+      return helper.unauthorizedResponse();
+    }
+
+    const { oldPassword, newPassword } = await helper.getPostPayload();
 
     if (!oldPassword || !newPassword) {
-      return NextResponse.json({
-        message: 'Passwords are required'
-      }, { status: 400 });
+      return helper.missingFieldResponse('Old and New Password');
     }
 
     const result = await axios.put(`${process.env.CURB_SERVER_URL}/user/profile`, {
-      id: decodedJwt.id,
+      id: helper.getJwt().id,
       oldPassword: Buffer.from(oldPassword).toString('base64'),
       newPassword: Buffer.from(newPassword).toString('base64'),
     }).then((res) => {
       return res.data;
     });
 
-    return NextResponse.json({
+    return helper.createResponse({
       result: {
-        accessToken,
+        accessToken: helper.getAccessToken(),
         result,
       },
-    }, { status: 201 });
+    });
   } catch (e) {
-    console.error('Unable to create car make', e);
-    return NextResponse.json({
-      message: 'Failed to create car make',
-      result: e,
-    }, { status: 500 });
+    return helper.createErrorResponse('Failed to save profile', e);
   }
 }
