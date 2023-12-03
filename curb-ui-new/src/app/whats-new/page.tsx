@@ -19,6 +19,8 @@ const WhatsNew = () => {
               <li> Airline information now shown in the dashboard</li>
               <li> Dashboard now shows mileage totals</li>
               <li> Input fixes so that numeric fields only accept numeric values</li>
+              <li> #103: Re-enabled the ability to add fleet car entries</li>
+              <li> #102: General optimizations to code</li>
             </ul>
           </Typography>
         </>
