@@ -1,5 +1,3 @@
-import {verifyJwt} from '@/app/helpers/jwt';
-import {NextResponse} from 'next/server';
 import axios from 'axios';
 import RouteHelper from '@/app/components/routes/RouteHelper';
 

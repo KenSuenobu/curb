@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { signJwtAccessToken } from '@/app/helpers/jwt';
 import axios from 'axios';
-import {encrypt} from 'unixcrypt';
 import RouteHelper from '@/app/components/routes/RouteHelper';
 
 export async function POST(request: any) {

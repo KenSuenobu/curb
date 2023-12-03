@@ -9,7 +9,7 @@ export async function GET(request: any) {
       return helper.unauthorizedResponse();
     }
 
-    const fleets = await axios.get(`${process.env.CURB_SERVER_URL}/fleet/list/${decodedJwt.id}`)
+    const fleets = await axios.get(`${process.env.CURB_SERVER_URL}/fleet/list/${helper.getJwt().id}`)
       .then((res) => res.data);
 
     return helper.createResponse({ fleets });
@@ -32,7 +32,7 @@ export async function POST(request: any) {
       return helper.missingFieldResponse('Fleet name');
     }
 
-    await axios.post(`${process.env.CURB_SERVER_URL}/fleet/create/fleet/${decodedJwt.id}`,
+    await axios.post(`${process.env.CURB_SERVER_URL}/fleet/create/fleet/${helper.getJwt().id}`,
       {
         creatorId: helper.getJwt().id,
         name: fleet,

@@ -1,7 +1,4 @@
-import {verifyJwt} from '@/app/helpers/jwt';
-import {NextResponse} from 'next/server';
 import axios from 'axios';
-import {usePathname} from 'next/navigation';
 import RouteHelper from '@/app/components/routes/RouteHelper';
 
 export async function GET(request: any) {

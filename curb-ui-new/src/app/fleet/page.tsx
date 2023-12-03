@@ -26,6 +26,7 @@ const Fleet = () => {
 
           <div style={{ width: '75%', borderRight: '1px solid #ccc' }}>
             <FleetCarList fleetId={fleetId}
+                          addable={true}
                           onClick={(fleetCarId: number) => {
                             setFleetCarId(fleetCarId);
                           }}/>

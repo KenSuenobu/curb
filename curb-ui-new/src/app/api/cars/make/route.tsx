@@ -1,6 +1,4 @@
-import { NextResponse } from 'next/server';
 import axios from 'axios';
-import { verifyJwt } from '@/app/helpers/jwt';
 import RouteHelper from '@/app/components/routes/RouteHelper';
 
 export async function GET(request: any) {
