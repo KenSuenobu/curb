@@ -492,9 +492,11 @@ const FleetCarForm = (props: IFleetCarForm) => {
         </div>
       </div>
 
-      <div style={{ display: 'flex', width: '100%', textAlign: 'right', paddingTop: '10px' }}>
-        <Button onClick={() => saveFleetCar()}>Save</Button>
-      </div>
+      <Stack direction={'row'}>
+        <Item sx={{ width: '100%', textAlign: 'right', paddingTop: '1em' }}>
+          <Button variant={'contained'} onClick={() => saveFleetCar()}>Save</Button>
+        </Item>
+      </Stack>
     </>
   );
 }
