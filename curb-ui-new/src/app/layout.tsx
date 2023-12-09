@@ -68,7 +68,7 @@ function MenuIcon(props: { style: { color: string } }) {
   return null;
 }
 
-const APPLICATION_VERSION = '0.0.8';
+const APPLICATION_VERSION = '0.0.9';
 
 const Layout: NextPage = ({children, params}: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

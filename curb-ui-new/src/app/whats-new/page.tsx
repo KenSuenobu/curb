@@ -5,6 +5,18 @@ import {ExpandMoreOutlined} from '@mui/icons-material';
 const WhatsNew = () => {
   const newItems = [
     {
+      header: 'v0.0.9',
+      text:
+        <>
+          <Typography>
+            The following improvements have been made:
+            <p/>
+            <ul>
+            </ul>
+          </Typography>
+        </>
+    },
+    {
       header: 'v0.0.8',
       text:
         <>
