@@ -43,6 +43,7 @@ export interface ITripForm {
   fleetId: number;
   fleetCarId: number;
   onSaved: () => any;
+  onClear: () => any;
 }
 
 const TripForm = (props: ITripForm) => {
@@ -97,6 +98,7 @@ const TripForm = (props: ITripForm) => {
     setAddressId(0);
     setGuestCleared(true);
     setAddressCleared(true);
+    props.onClear();
   }
 
   const saveClicked = () => {

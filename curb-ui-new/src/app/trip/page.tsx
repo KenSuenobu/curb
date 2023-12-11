@@ -27,6 +27,7 @@ const Trip = () => {
   const [fleetId, setFleetId] = useState<number>(0);
   const [fleetCarId, setFleetCarId] = useState<number>(0);
   const [listRefresh, setListRefresh] = useState<boolean>(false);
+  const [needsClear, setNeedsClear] = useState<boolean>(false);
 
   const tripSaved = () => {
     setListRefresh(true);
@@ -41,7 +42,10 @@ const Trip = () => {
           </div>
 
           <div style={{ width: '75%', borderRight: '1px solid #ccc' }}>
-            <FleetCarList fleetId={fleetId} addable={false}
+            <FleetCarList fleetId={fleetId}
+                          addable={false}
+                          needsClear={needsClear}
+                          onClear={() => setNeedsClear(false)}
                           onClick={(fleetCarId: number) => {
                             setFleetCarId(fleetCarId);
                           }}/>
@@ -51,6 +55,10 @@ const Trip = () => {
 
       <TripForm fleetId={fleetId}
                 fleetCarId={fleetCarId}
+                onClear={() => {
+                  setFleetCarId(0);
+                  setNeedsClear(true);
+                }}
                 onSaved={() => tripSaved()}/>
       <p/>
       {fleetCarId !== 0 ? (

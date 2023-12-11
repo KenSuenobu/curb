@@ -12,7 +12,8 @@ const WhatsNew = () => {
             The following improvements have been made:
             <p/>
             <ul>
-              <li> #92 - displays guest counts</li>
+              <li> #92: Displays guest counts</li>
+              <li> #99: Clear form in trip form now deselects form elements properly</li>
             </ul>
           </Typography>
         </>
