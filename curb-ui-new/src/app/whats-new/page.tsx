@@ -12,6 +12,7 @@ const WhatsNew = () => {
             The following improvements have been made:
             <p/>
             <ul>
+              <li> #92 - displays guest counts</li>
             </ul>
           </Typography>
         </>

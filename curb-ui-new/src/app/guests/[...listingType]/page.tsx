@@ -66,7 +66,7 @@ const Guests = () => {
             <TableContainer sx={{ maxHeight: 300, borderBottom: '1px solid #ccc', width: '100%' }}>
               <Table stickyHeader size={'small'}>
                 {isBlacklisted ? (
-                  <TableHeader header={'Blacklisted Guests'}
+                  <TableHeader header={`Blacklisted Guests: ${guestList.length} guest(s)`}
                                onAdd={() => {
                                  if (!fleetId) {
                                    alertDialog('You must first select a fleet');
@@ -76,7 +76,7 @@ const Guests = () => {
                                  setGuestId(0);
                                }}/>
                 ) : (
-                  <TableHeader header={'Guests'}
+                  <TableHeader header={`Guests: ${guestList.length} guest(s)`}
                                onAdd={() => {
                                  if (!fleetId) {
                                    alertDialog('You must first select a fleet');
