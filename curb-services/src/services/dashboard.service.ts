@@ -14,7 +14,7 @@ import {Logger} from '@nestjs/common';
 export class DashboardService {
   private readonly logger = new Logger('dashboard.service');
 
-  async list(userId: number) : Promise<any[]> {
+  async list(userId: number, year: string) : Promise<any[]> {
     const userDao = new UserDao(DaoUtils.getDatabase());
     const userInfo = await userDao.getById(userId);
     const fleetMembershipDao = new FleetMembershipDao(DaoUtils.getDatabase());
@@ -32,15 +32,15 @@ export class DashboardService {
       const fleetCarsList = await fleetCarsDao.listByFleetId(fleet.id);
 
       for (const fleetCar of fleetCarsList) {
-        const tripsTotal = await tripDao.summationByFleetCarId(fleetCar.id);
+        const tripsTotal = await tripDao.summationByFleetCarId(fleetCar.id, year);
         // const loanTotal = await loanPaymentDao.summationByFleetCarId(fleetCar.id);
-        const totalMileage = await tripDao.totalMilesForFleetCarId(fleetCar.id);
-        const totalEarnings = await tripDao.totalEarningsPerMonthByFleetCarId(fleetCar.id);
-        const totalTrips = await tripDao.totalTripsPerMonthByFleetCarId(fleetCar.id);
-        const nextTrip = await tripDao.getNextTripForFleetCarId(fleetCar.id);
-        const totalNumberOfTrips = await tripDao.totalTripsForFleetCarId(fleetCar.id);
+        const totalMileage = await tripDao.totalMilesForFleetCarId(fleetCar.id, year);
+        const totalEarnings = await tripDao.totalEarningsPerMonthByFleetCarId(fleetCar.id, year);
+        const totalTrips = await tripDao.totalTripsPerMonthByFleetCarId(fleetCar.id, year);
+        const nextTrip = await tripDao.getNextTripForFleetCarId(fleetCar.id, year);
+        const totalNumberOfTrips = await tripDao.totalTripsForFleetCarId(fleetCar.id, year);
         const carLoan = await fleetCarLoanDao.getByFleetCarId(fleetCar.id);
-        const currentTrip = await tripDao.getCurrentByFleetCarId(fleetCar.id);
+        const currentTrip = await tripDao.getCurrentByFleetCarId(fleetCar.id, year);
         const currentTripGuest = currentTrip ? await guestDao.getById(currentTrip.guestId) : {};
 
         fleetCars.push({

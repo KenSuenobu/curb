@@ -17,9 +17,9 @@ export const getCarDefinitionsDashboard = (accessToken: any) => {
   });
 }
 
-export const loadDashboard = (accessToken: any) => {
+export const loadDashboard = (accessToken: any, year: string) => {
   return new Promise((resolve, reject) => {
-    fetch(`/api/dashboard`, {
+    fetch(`/api/dashboard?year=${year}`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

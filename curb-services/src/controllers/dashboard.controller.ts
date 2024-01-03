@@ -10,7 +10,7 @@ export class DashboardController {
 
   constructor(private readonly service: DashboardService) {}
 
-  @Get('/list/:userId')
+  @Get('/list/:userId/:year')
   @ApiOperation({
     summary: 'Lists car information for user ID',
     description: 'Returns a list of all cars and related information about the car',
@@ -22,8 +22,8 @@ export class DashboardController {
   })
   @ApiForbiddenResponse()
   @ApiUnauthorizedResponse()
-  async list(@Param('userId') userId: number): Promise<any[]> {
-    return this.service.list(userId);
+  async list(@Param('userId') userId: number, @Param('year') year: string): Promise<any[]> {
+    return this.service.list(userId, year);
   }
 
   @Get('/car-definitions/:userId')

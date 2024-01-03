@@ -1,15 +1,21 @@
 'use client';
 
-import Image from 'next/image'
-import LogoutButton from '@/app/components/login/LogoutButton';
-import {getAllMakes} from '@/app/services/car-definitions';
-import MakesForm from '@/app/components/cars/MakesForm';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useSession} from 'next-auth/react';
 import {loadDashboard} from '@/app/services/dashboard';
-import {IconButton, LinearProgress, Link, Paper, Stack, Typography} from '@mui/material';
+import {
+  FormControl,
+  IconButton,
+  InputLabel,
+  LinearProgress,
+  Link, MenuItem,
+  Paper,
+  Select, SelectChangeEvent,
+  Stack,
+  Typography
+} from '@mui/material';
 import {FlightOutlined, LocationSearchingOutlined, RefreshOutlined} from '@mui/icons-material';
-import moment from 'moment/moment';
+import moment from 'moment';
 import Item from '@/app/components/common/Item';
 import ReactEcharts from 'echarts-for-react';
 import * as echarts from 'echarts';
@@ -22,6 +28,7 @@ const Home = () => {
   const [totalGross, setTotalGross] = useState<string>('0.00');
   const [totalMiles, setTotalMiles] = useState<number>(0);
   const {data: session} = useSession();
+  const [year, setYear] = useState<string>(moment().format('YYYY'));
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
 
   const totalsChart: any = {
@@ -118,10 +125,11 @@ const Home = () => {
     },
   };
 
-  const reloadDashboard = () => {
+  const reloadDashboard = (yearValue: string) => {
     if (accessToken) {
+      setYear(yearValue);
       setLoading(true);
-      loadDashboard(accessToken)
+      loadDashboard(accessToken, yearValue)
         .then((x: any) => {
           let addableArray: any[] = [];
           const dataMap: any[] = [];
@@ -150,7 +158,7 @@ const Home = () => {
             total += trip.grossTotal - trip.loanTotal;
             trips += parseInt(trip.tripsCount);
             gross += trip.grossTotal;
-            miles += parseInt(trip.milesTotal);
+            miles += parseInt(trip.milesTotal ?? 0);
           }
 
           setTotalProfit(total.toFixed(2));
@@ -175,8 +183,12 @@ const Home = () => {
     window.open(`https://flightaware.com/live/flight/${iana}${flightNumber}`, '_blank');
   }
 
+  const onYearChange = (event: SelectChangeEvent) => {
+    reloadDashboard(event.target.value as string);
+  }
+
   useEffect(() => {
-    reloadDashboard();
+    reloadDashboard(moment().format('YYYY'));
   }, [accessToken]);
 
   if (!dashboardData) {
@@ -191,8 +203,24 @@ const Home = () => {
     <main>
       <div style={{ width: '100%' }}>
         <Stack direction={'row'}>
-          <Item sx={{ width: '100%', textAlign: 'right' }}>
-            <IconButton onClick={() => reloadDashboard()} disabled={loading}>
+          <Item sx={{ width: '25%', textAlign: 'left' }}>
+            <FormControl fullWidth>
+              <InputLabel id={'source-label'}>Reporting Year</InputLabel>
+              <Select labelId={'source-label'} label={'Reporting Year'}
+                      style={{ textAlign: 'left' }}
+                      value={year}
+                      onChange={onYearChange}
+                      fullWidth>
+                <MenuItem value={moment().format('YYYY') - 3}>{moment().format('YYYY') - 3}</MenuItem>
+                <MenuItem value={moment().format('YYYY') - 2}>{moment().format('YYYY') - 2}</MenuItem>
+                <MenuItem value={moment().format('YYYY') - 1}>{moment().format('YYYY') - 1}</MenuItem>
+                <MenuItem value={moment().format('YYYY')}>{moment().format('YYYY')}</MenuItem>
+              </Select>
+            </FormControl>
+          </Item>
+
+          <Item sx={{ width: '75%', textAlign: 'right' }}>
+            <IconButton onClick={() => reloadDashboard(year)} disabled={loading}>
               <RefreshOutlined/>
             </IconButton>
           </Item>
@@ -337,7 +365,7 @@ const Home = () => {
                             <Link onClick={() => window.open(y.listingUrl, '_blank')}>
                               {y.carYear} {y.modelName} {y.trimName} &quot;{y.data.listingNickname}&quot;<br/>
                             </Link>
-                            {y.milesTotal ?? 0} total miles @ $0.655: $ {(parseFloat(y.milesTotal) * 0.655).toFixed(2)}
+                            {y.milesTotal ?? 0} total miles @ $0.655: $ {(parseFloat(y.milesTotal ?? 0.00) * 0.655).toFixed(2)}
                           </Typography>
                         </Item>
 

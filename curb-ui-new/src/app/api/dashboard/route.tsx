@@ -9,7 +9,8 @@ export async function GET(request: any) {
       return helper.unauthorizedResponse();
     }
 
-    const dashboard = await axios.get(`${process.env.CURB_SERVER_URL}/dashboard/list/${helper.getJwt().id}`)
+    const year = helper.getInputVariable('year');
+    const dashboard = await axios.get(`${process.env.CURB_SERVER_URL}/dashboard/list/${helper.getJwt().id}/${year}`)
       .then((res) => res.data);
 
     return helper.createResponse({ dashboard });
