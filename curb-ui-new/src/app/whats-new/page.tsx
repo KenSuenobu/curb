@@ -14,7 +14,7 @@ const WhatsNew = () => {
             <ul>
               <li> #92: Displays guest counts</li>
               <li> #99: Clear form in trip form now deselects form elements properly</li>
-              <li> #86: Adds year dropdown selection to the dashboard</li>
+              <li> #106, #86: Adds year dropdown selection to the dashboard</li>
             </ul>
           </Typography>
         </>
