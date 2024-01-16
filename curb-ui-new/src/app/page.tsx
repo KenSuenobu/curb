@@ -211,9 +211,9 @@ const Home = () => {
                       value={year}
                       onChange={onYearChange}
                       fullWidth>
-                <MenuItem value={moment().format('YYYY') - 3}>{moment().format('YYYY') - 3}</MenuItem>
-                <MenuItem value={moment().format('YYYY') - 2}>{moment().format('YYYY') - 2}</MenuItem>
-                <MenuItem value={moment().format('YYYY') - 1}>{moment().format('YYYY') - 1}</MenuItem>
+                <MenuItem value={parseInt(moment().format('YYYY')) - 3}>{parseInt(moment().format('YYYY')) - 3}</MenuItem>
+                <MenuItem value={parseInt(moment().format('YYYY')) - 2}>{parseInt(moment().format('YYYY')) - 2}</MenuItem>
+                <MenuItem value={parseInt(moment().format('YYYY')) - 1}>{parseInt(moment().format('YYYY')) - 1}</MenuItem>
                 <MenuItem value={moment().format('YYYY')}>{moment().format('YYYY')}</MenuItem>
               </Select>
             </FormControl>
