@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {
-  Alert, Button,
-  FormControl, IconButton,
+  Alert, Button, Checkbox,
+  FormControl, FormControlLabel, FormGroup, IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -53,6 +53,13 @@ const FleetCarForm = (props: IFleetCarForm) => {
     setCarFleetData({
       ...carFleetData,
       [e.target.name]: e.target.value,
+    });
+  }
+
+  const handleChangeChecked = (e: any) => {
+    setCarFleetData({
+      ...carFleetData,
+      [e.target.name]: e.target.checked,
     });
   }
 
@@ -148,8 +155,33 @@ const FleetCarForm = (props: IFleetCarForm) => {
         </Alert>
       </Snackbar>
 
-      <div style={{ width: '100%', paddingLeft: '0.5em', paddingTop: '1.5em' }}>
-        <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Fleet Car Detail</u></Typography>
+      <div style={{ display: 'flex' }}>
+        <div style={{ width: '100%' }}>
+          <Stack direction={'row'}>
+            <Item sx={{ width: '75%', textAlign: 'left' }}>
+              <Typography sx={{ fontWeight: 'bold', color: '#000' }}><u>Fleet Car Detail</u></Typography>
+            </Item>
+
+            <Item sx={{ width: '25%', textAlign: 'right' }}>
+              <FormControl fullWidth>
+                <InputLabel id={'enabled-label'}>Status</InputLabel>
+                <Select labelId={'enabled-label'} label={'Status'}
+                        style={{ textAlign: 'left' }}
+                        value={carFleetData.enabled ?? 'true'}
+                        name={'enabled'}
+                        onChange={handleChange}
+                        fullWidth>
+                  <MenuItem value={'true'}>
+                    <div style={{paddingLeft: '4px'}}><Typography>Listed</Typography></div>
+                  </MenuItem>
+                  <MenuItem value={'false'}>
+                    <div style={{paddingLeft: '4px'}}><Typography>Unlisted</Typography></div>
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Item>
+          </Stack>
+        </div>
       </div>
 
       <div style={{ display: 'flex' }}>

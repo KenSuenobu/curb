@@ -205,7 +205,15 @@ const FleetCarList = (props: IFleetCarList) => {
           {fleetCarList.length > 0 && (
             <>
               {fleetCarList.map((x: any) => {
-                const bgColor = fleetCarId === x.id ? SELECTED_COLOR : '#fff';
+                let bgColor = fleetCarId === x.id ? SELECTED_COLOR : '#fff';
+
+                if (x.data.enabled === 'false') {
+                  if (fleetCarId === x.id) {
+                    bgColor = '#ffaaaa';
+                  } else {
+                    bgColor = '#ff0000';
+                  }
+                }
 
                 return (
                   <>

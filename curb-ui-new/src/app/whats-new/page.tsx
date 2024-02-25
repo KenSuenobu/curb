@@ -5,6 +5,19 @@ import {ExpandMoreOutlined} from '@mui/icons-material';
 const WhatsNew = () => {
   const newItems = [
     {
+      header: 'v0.0.10',
+      text:
+        <>
+          <Typography>
+            The following improvements have been made:
+            <p/>
+            <ul>
+              <li> #107: Added the ability to enable/disable a car entry (Listed/Delisted)</li>
+            </ul>
+          </Typography>
+        </>
+    },
+    {
       header: 'v0.0.9',
       text:
         <>
