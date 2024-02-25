@@ -13,6 +13,7 @@ const WhatsNew = () => {
             <p/>
             <ul>
               <li> #107: Added the ability to enable/disable a car entry (Listed/Delisted)</li>
+              <li> #108: Any delisted cars are no longer displayed in the Dashboard</li>
             </ul>
           </Typography>
         </>
