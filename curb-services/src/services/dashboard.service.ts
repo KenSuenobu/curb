@@ -32,35 +32,37 @@ export class DashboardService {
       const fleetCarsList = await fleetCarsDao.listByFleetId(fleet.id);
 
       for (const fleetCar of fleetCarsList) {
-        const tripsTotal = await tripDao.summationByFleetCarId(fleetCar.id, year);
-        // const loanTotal = await loanPaymentDao.summationByFleetCarId(fleetCar.id);
-        const totalMileage = await tripDao.totalMilesForFleetCarId(fleetCar.id, year);
-        const totalEarnings = await tripDao.totalEarningsPerMonthByFleetCarId(fleetCar.id, year);
-        const totalTrips = await tripDao.totalTripsPerMonthByFleetCarId(fleetCar.id, year);
-        const nextTrip = await tripDao.getNextTripForFleetCarId(fleetCar.id, year);
-        const totalNumberOfTrips = await tripDao.totalTripsForFleetCarId(fleetCar.id, year);
-        const carLoan = await fleetCarLoanDao.getByFleetCarId(fleetCar.id);
-        const currentTrip = await tripDao.getCurrentByFleetCarId(fleetCar.id, year);
-        const currentTripGuest = currentTrip ? await guestDao.getById(currentTrip.guestId) : {};
+        if (fleetCar.data.enabled !== 'false') {
+          const tripsTotal = await tripDao.summationByFleetCarId(fleetCar.id, year);
+          // const loanTotal = await loanPaymentDao.summationByFleetCarId(fleetCar.id);
+          const totalMileage = await tripDao.totalMilesForFleetCarId(fleetCar.id, year);
+          const totalEarnings = await tripDao.totalEarningsPerMonthByFleetCarId(fleetCar.id, year);
+          const totalTrips = await tripDao.totalTripsPerMonthByFleetCarId(fleetCar.id, year);
+          const nextTrip = await tripDao.getNextTripForFleetCarId(fleetCar.id, year);
+          const totalNumberOfTrips = await tripDao.totalTripsForFleetCarId(fleetCar.id, year);
+          const carLoan = await fleetCarLoanDao.getByFleetCarId(fleetCar.id);
+          const currentTrip = await tripDao.getCurrentByFleetCarId(fleetCar.id, year);
+          const currentTripGuest = currentTrip ? await guestDao.getById(currentTrip.guestId) : {};
 
-        fleetCars.push({
-          ...fleetCar,
-          grossTotal: tripsTotal,
-          // loanTotal: loanTotal,
-          loanTotal: 0.00,
-          milesTotal: totalMileage,
-          nextTrip: nextTrip ? nextTrip.startTime : null,
-          tripsCount: totalNumberOfTrips,
-          tripCarEarnings: totalEarnings,
-          tripCarTrips: totalTrips,
-          listingUrl: fleetCar.data.listingUrl,
-          trackingUrl: fleetCar.data.trackingUrl ?? '',
-          carLoan: carLoan?.data ?? {},
-          currentTrip,
-          currentTripGuest,
-          earnings,
-          trips,
-        });
+          fleetCars.push({
+            ...fleetCar,
+            grossTotal: tripsTotal,
+            // loanTotal: loanTotal,
+            loanTotal: 0.00,
+            milesTotal: totalMileage,
+            nextTrip: nextTrip ? nextTrip.startTime : null,
+            tripsCount: totalNumberOfTrips,
+            tripCarEarnings: totalEarnings,
+            tripCarTrips: totalTrips,
+            listingUrl: fleetCar.data.listingUrl,
+            trackingUrl: fleetCar.data.trackingUrl ?? '',
+            carLoan: carLoan?.data ?? {},
+            currentTrip,
+            currentTripGuest,
+            earnings,
+            trips,
+          });
+        }
       }
     }
 
