@@ -12,12 +12,23 @@ import Item from '@/app/components/common/Item';
 import AuthProvider from '@/app/providers/AuthProvider';
 import {SideBarMenuGroupProps} from '@/app/components/main-layout/SideBarMenuGroup';
 import {
-  DirectionsCarOutlined, GarageOutlined, InfoOutlined,
+  DirectionsCarOutlined,
+  GarageOutlined,
+  InfoOutlined,
   MenuOpenOutlined,
   PeopleOutlined,
   PersonOffOutlined,
   RefreshOutlined,
-  HouseOutlined, CalendarMonthOutlined, MenuOutlined, TodayOutlined, UpcomingOutlined, ScheduleOutlined, MoneyOutlined,
+  HouseOutlined,
+  CalendarMonthOutlined,
+  MenuOutlined,
+  TodayOutlined,
+  UpcomingOutlined,
+  ScheduleOutlined,
+  MoneyOutlined,
+  Email,
+  Person2,
+  Logout,
 } from '@mui/icons-material';
 import SideBar from '@/app/components/main-layout/SideBar';
 import {signOut, useSession} from 'next-auth/react';
@@ -25,6 +36,7 @@ import Divider from '@mui/material/Divider';
 import ProfileForm from '@/app/components/main-layout/ProfileForm';
 import {encrypt} from 'unixcrypt';
 import * as React from 'react';
+import ListItemIcon from "@mui/material/ListItemIcon";
 
 // import {IconButton, LinearProgress, Menu, MenuItem, Stack, Typography} from '@mui/material';
 // import MenuIcon from '@mui/icons-material/Menu';
@@ -413,11 +425,27 @@ const Layout: NextPage = ({children, params}: any) => {
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                         keepMounted
+                        sx={{ top: '28px' }}
                         open={Boolean(anchorEl)} onClose={handleClose}>
-                    <MenuItem onClick={handleFeedback} style={{ fontWeight: 'bold' }} disabled>Feedback</MenuItem>
+                    <MenuItem onClick={handleFeedback} style={{ fontWeight: 'bold' }} disabled>
+                      <ListItemIcon>
+                        <Email/>
+                      </ListItemIcon>
+                      Feedback
+                    </MenuItem>
                     <Divider/>
-                    <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    <MenuItem onClick={handleProfile}>
+                      <ListItemIcon>
+                        <Person2/>
+                      </ListItemIcon>
+                      Profile
+                    </MenuItem>
+                    <MenuItem onClick={handleLogout}>
+                      <ListItemIcon>
+                        <Logout/>
+                      </ListItemIcon>
+                      Logout
+                    </MenuItem>
                   </Menu>
                 </Item>
               </Stack>

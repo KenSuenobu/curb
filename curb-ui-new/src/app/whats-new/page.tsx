@@ -16,6 +16,7 @@ const WhatsNew = () => {
               <li> #108: Any delisted cars are no longer displayed in the Dashboard</li>
               <li> #38: Active/inactive covered by #107</li>
               <li> #95: Vehicle indication status now indicates red when disabled</li>
+              <li> #110: Moves menu below hamburger menu, adds icons to items</li>
             </ul>
           </Typography>
         </>
