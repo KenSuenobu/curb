@@ -27,6 +27,7 @@ const Home = () => {
   const [totalTrips, setTotalTrips] = useState<number>(0);
   const [totalGross, setTotalGross] = useState<string>('0.00');
   const [totalMiles, setTotalMiles] = useState<number>(0);
+  const [totalAccumulatedTrips, setTotalAccumulatedTrips] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const {data: session} = useSession();
   const [year, setYear] = useState<string>(moment().format('YYYY'));
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
@@ -96,9 +97,7 @@ const Home = () => {
     },
     series: [
       {
-        data: [
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        ],
+        data: totalAccumulatedTrips,
         type: 'bar',
         smooth: true,
         areaStyle: {
@@ -133,6 +132,7 @@ const Home = () => {
         .then((x: any) => {
           let addableArray: any[] = [];
           const dataMap: any[] = [];
+          const tripsMap: any[number] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
           for(const entry of x.dashboard) {
             addableArray.push(entry);
@@ -159,6 +159,13 @@ const Home = () => {
             trips += parseInt(trip.tripsCount);
             gross += trip.grossTotal;
             miles += parseInt(trip.milesTotal ?? 0);
+
+            for(const tripTotal of trip.tripCarTrips) {
+              const currentMonth = parseInt(tripTotal.month) - 1;
+              const earning = parseInt(tripTotal.total_trips);
+
+              tripsMap[currentMonth] += earning;
+            }
           }
 
           setTotalProfit(total.toFixed(2));
@@ -166,7 +173,9 @@ const Home = () => {
           setTotalGross(gross.toFixed(2));
           setTotalMiles(miles);
 
-          console.log(x.dashboard);
+          setTotalAccumulatedTrips(tripsMap);
+
+          console.log(`Trips: ${tripsMap.toString()}`);
         })
         .finally(() => setLoading(false));
     }
