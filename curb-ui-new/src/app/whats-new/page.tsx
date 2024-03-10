@@ -19,6 +19,7 @@ const WhatsNew = () => {
               <li> #110: Moves menu below hamburger menu, adds icons to items</li>
               <li> #111: Now properly shows the total accumulated trips in the dashboard</li>
               <li> #113: Now shows gross income in the dashboard</li>
+              <li> #112: Changed "net" to "gross" in charts</li>
             </ul>
           </Typography>
         </>
