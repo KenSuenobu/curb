@@ -28,6 +28,7 @@ const Home = () => {
   const [totalGross, setTotalGross] = useState<string>('0.00');
   const [totalMiles, setTotalMiles] = useState<number>(0);
   const [totalAccumulatedTrips, setTotalAccumulatedTrips] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  const [totalAccumulatedGross, setTotalAccumulatedGross] = useState<number[]>([0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]);
   const {data: session} = useSession();
   const [year, setYear] = useState<string>(moment().format('YYYY'));
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
@@ -40,7 +41,7 @@ const Home = () => {
         "October", "November", "December"],
     },
     title: {
-      text: 'Total Revenue per Month',
+      text: 'Total Gross per Month',
     },
     legend: {
       text: 'Month',
@@ -50,9 +51,7 @@ const Home = () => {
     },
     series: [
       {
-        data: [
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        ],
+        data: totalAccumulatedGross,
         type: 'bar',
         smooth: true,
         areaStyle: {
@@ -133,6 +132,7 @@ const Home = () => {
           let addableArray: any[] = [];
           const dataMap: any[] = [];
           const tripsMap: any[number] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+          const grossMap: any[number] = [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00];
 
           for(const entry of x.dashboard) {
             addableArray.push(entry);
@@ -166,6 +166,12 @@ const Home = () => {
 
               tripsMap[currentMonth] += earning;
             }
+
+            for(const tripEarning of trip.tripCarEarnings) {
+              const currentMonth = parseInt(tripEarning.month) - 1;
+
+              grossMap[currentMonth] = parseFloat(parseFloat(tripEarning.earnings_total).toFixed(2));
+            }
           }
 
           setTotalProfit(total.toFixed(2));
@@ -174,8 +180,7 @@ const Home = () => {
           setTotalMiles(miles);
 
           setTotalAccumulatedTrips(tripsMap);
-
-          console.log(`Trips: ${tripsMap.toString()}`);
+          setTotalAccumulatedGross(grossMap);
         })
         .finally(() => setLoading(false));
     }

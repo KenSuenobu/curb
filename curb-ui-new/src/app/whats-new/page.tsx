@@ -17,6 +17,8 @@ const WhatsNew = () => {
               <li> #38: Active/inactive covered by #107</li>
               <li> #95: Vehicle indication status now indicates red when disabled</li>
               <li> #110: Moves menu below hamburger menu, adds icons to items</li>
+              <li> #111: Now properly shows the total accumulated trips in the dashboard</li>
+              <li> #113: Now shows gross income in the dashboard</li>
             </ul>
           </Typography>
         </>
