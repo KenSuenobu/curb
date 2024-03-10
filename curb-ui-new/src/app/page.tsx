@@ -258,7 +258,7 @@ const Home = () => {
                       "October", "November", "December"],
                   },
                   title: {
-                    text: 'Total Net',
+                    text: 'Total Gross',
                   },
                   legend: {
                     text: 'Month',
