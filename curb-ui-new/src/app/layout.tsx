@@ -71,16 +71,11 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 
 const inter = Inter({ subsets: ['latin'] })
 
-// export const metadata: Metadata = {
-//   title: 'CURB: Car Universal Rental App',
-//   description: 'CURB 0.1.0',
-// }
-
 function MenuIcon(props: { style: { color: string } }) {
   return null;
 }
 
-const APPLICATION_VERSION = '0.0.10';
+const APPLICATION_VERSION = '0.0.11';
 
 const Layout: NextPage = ({children, params}: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

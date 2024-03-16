@@ -5,6 +5,19 @@ import {ExpandMoreOutlined} from '@mui/icons-material';
 const WhatsNew = () => {
   const newItems = [
     {
+      header: 'v0.0.11',
+      text:
+          <>
+            <Typography>
+              The following improvements have been made:
+              <p/>
+              <ul>
+                <li> #114: Gross is now calculated properly</li>
+              </ul>
+            </Typography>
+          </>
+    },
+    {
       header: 'v0.0.10',
       text:
         <>

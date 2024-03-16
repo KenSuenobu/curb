@@ -170,7 +170,7 @@ const Home = () => {
             for(const tripEarning of trip.tripCarEarnings) {
               const currentMonth = parseInt(tripEarning.month) - 1;
 
-              grossMap[currentMonth] = parseFloat(parseFloat(tripEarning.earnings_total).toFixed(2));
+              grossMap[currentMonth] += parseFloat(parseFloat(tripEarning.earnings_total).toFixed(2));
             }
           }
 
