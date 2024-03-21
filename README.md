@@ -6,7 +6,7 @@ The **V**ehicle **U**niversal **R**ental **B**usiness.
 
 ## What is it?
 
-VURB is a NextJS/NestJS application that allows Turo hosts to easily
+VURB is a NextJS/NestJS React application that allows Turo hosts to easily
 track their cars, providing record keeping for each car they host.
 
 ## Roadmap
