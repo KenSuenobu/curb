@@ -1,12 +1,10 @@
-# vurb
+# curb
 
-The **V**ehicle **U**niversal **R**ental **B**usiness.
-
-(I reserve the right to rename this sucker if the acronym doesn't stick!)
+The **C**ar **U**niversal **R**ental **B**usiness.
 
 ## What is it?
 
-VURB is a NextJS/NestJS React application that allows Turo hosts to easily
+CURB(fleet) is a NextJS/NestJS React application that allows Turo hosts to easily
 track their cars, providing record keeping for each car they host.
 
 ## Prerequisites
