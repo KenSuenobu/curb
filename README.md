@@ -1,13 +1,19 @@
-# vurb
+# curb
 
-The **V**ehicle **U**niversal **R**ental **B**usiness.
-
-(I reserve the right to rename this sucker if the acronym doesn't stick!)
+The **C**ar **U**niversal **R**ental **B**usiness.
 
 ## What is it?
 
-VURB is a NextJS/NestJS application that allows Turo hosts to easily
+CURB(fleet) is a NextJS/NestJS React application that allows Turo hosts to easily
 track their cars, providing record keeping for each car they host.
+
+## Prerequisites
+
+- A [Turo](https://www.turo.com), [getAround](https://www.getaround.com), or [Uber Car Share](https://www.ubercarshare.com/us/en/) account (or account on a like system)
+- [PostgreSQL](https://www.postgresql.org) 16+
+- [Schema Evolution Manager](https://github.com/mbryzek/schema-evolution-manager) tools
+
+Optimally, installing in a Kubernetes cluster would be ideal using a Docker image.  Services are hosted on port 3001, and should be hosted internally with no external routes.  **nginx** is recommended for routing, but is not required.
 
 ## Roadmap
 
