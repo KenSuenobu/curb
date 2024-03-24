@@ -13,6 +13,7 @@ const WhatsNew = () => {
               <p/>
               <ul>
                 <li> #114: Gross is now calculated properly</li>
+                <li> #116: Fleet cars ordered by name, make, and model</li>
               </ul>
             </Typography>
           </>

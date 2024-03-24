@@ -20,7 +20,7 @@ export class FleetCarDao extends BaseDao<FleetCarDto> {
       '   AND d.id=c.car_model_id ' +
       '   AND e.id=d.car_make_id ' +
       '   AND a.fleet_id=$1' +
-      ' ORDER BY car_trim_id';
+      ' ORDER BY make_name, model_name, trim_name';
 
     return (await this.db.any<FleetCarDto>(sqlStatement, [ fleetId, ]))
       .map((x) => DaoUtils.normalizeFields<FleetCarDto>(x));
@@ -35,7 +35,7 @@ export class FleetCarDao extends BaseDao<FleetCarDto> {
       '   AND d.id=c.car_model_id ' +
       '   AND e.id=d.car_make_id ' +
       '   AND a.data->>$1=$2' +
-      ' ORDER BY car_trim_id';
+      ' ORDER BY make_name, model_name, trim_name';
 
     return (await this.db.manyOrNone<FleetCarDto>(sqlStatement, [
       key,
