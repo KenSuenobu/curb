@@ -407,7 +407,7 @@ const Layout: NextPage = ({children, params}: any) => {
               <Stack direction={'row'}>
                 <Item sx={{ width: '90%', backgroundColor: 'rgb(5, 30, 52)', color: '#fff', textAlign: 'left' }}>
                   <Typography variant={'h6'} fontWeight={'bold'}>
-                    Welcome to VURB
+                    Welcome to CURB
                     {/*{userInfo?.emailAddress ?? <LinearProgress/>}*/}
                   </Typography>
                 </Item>

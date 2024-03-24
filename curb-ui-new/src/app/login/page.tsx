@@ -11,13 +11,13 @@ const Login = () => {
           paddingLeft: '1em', paddingRight: '1em', width: '300px', borderRight: '1px solid #000'
         }}>
           <Typography variant={'h4'} fontWeight={'bold'}>
-            VURB
+            CURB
           </Typography>
           <p/>
           <Typography>
-            <b>Welcome to VURB</b>
+            <b>Welcome to CURB</b>
             <p/>
-            The <b>V</b>ehicle <b>U</b>niversal<br/>
+            The <b>C</b>ar <b>U</b>niversal<br/>
             <b>R</b>ental <b>B</b>usiness fleet<br/>
             management software<br/>
             for the rest of us

@@ -139,10 +139,14 @@ const LoginForm = () => {
         <DialogContent>
           <DialogContentText>
             <Typography>
-              You are requesting early access to the VURB platform.  If you have already signed up,
-              please be patient - someone will contact you soon, as long as your request is legitimate.
+              You are requesting early access to the CURB platform. If you have already signed up,
+              <b>please be patient</b> - someone will contact you soon, as long as your request is legitimate.
               <p/>
-              <b>Please note</b>: if you don&apos;t supply a note or message, you probably won&apos;t get approved.
+              <b>Please note</b>: you must be an all-star or power host to be considered for early access.
+              <p/>
+              <u>We are not accepting signups unless you are a serious host.</u>
+              <br/>
+              <br/>
             </Typography>
 
             <p/>
@@ -157,11 +161,11 @@ const LoginForm = () => {
                     <MenuItem value={0}>Word of Mouth</MenuItem>
                     <MenuItem value={1}>Discord</MenuItem>
                     <MenuItem value={2}>Facebook</MenuItem>
-                    <MenuItem value={3}>Youtube</MenuItem>
+                    <MenuItem value={3}>YouTube</MenuItem>
                     <MenuItem value={4}>Turo</MenuItem>
                     <MenuItem value={5}>Google</MenuItem>
                     <MenuItem value={6}>Suenobu Rentals</MenuItem>
-                    <MenuItem value={7}>Other (See note)</MenuItem>
+                    <MenuItem value={7}>Other</MenuItem>
                   </Select>
                 </FormControl>
               </Item>
@@ -174,8 +178,8 @@ const LoginForm = () => {
 
             <Stack direction={'row'}>
               <Item sx={{ width: '100%' }}>
-                <TextField label={'Note or Message to the Admin'} multiline
-                           fullWidth rows={3} value={payload?.note ?? ''} name={'note'}
+                <TextField label={'URL to your profile'}
+                           fullWidth value={payload?.note ?? ''} name={'note'}
                            onChange={handleChange}/>
               </Item>
             </Stack>
