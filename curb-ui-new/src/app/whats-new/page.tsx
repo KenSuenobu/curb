@@ -14,6 +14,7 @@ const WhatsNew = () => {
               <ul>
                 <li> #114: Gross is now calculated properly</li>
                 <li> #116: Fleet cars ordered by name, make, and model</li>
+                <li> #120: Only accepting signups from serious hosts; updated signup form</li>
               </ul>
             </Typography>
           </>
