@@ -134,7 +134,7 @@ const Layout: NextPage = ({children, params}: any) => {
               These are sets of delivery destinations.  These include places like hotels, airports,
               off-airport parking lots, and such.
               <p/>
-              You have the ability to share the addresses with other VURB users by selecting &quot;Public&quot;
+              You have the ability to share the addresses with other CURB users by selecting &quot;Public&quot;
               in the address lists.
               <p/>
               If you are adding an address that is intended for personal use, please do not mark it Public.
@@ -163,7 +163,7 @@ const Layout: NextPage = ({children, params}: any) => {
               fleet owns.
               <p/>
               Once each car is defined, you can provide a nickname, original purchase
-              price, car color, and much more.  As VURB grows, so will your fleet, and
+              price, car color, and much more.  As CURB grows, so will your fleet, and
               so will your fleet info!  Stay tuned to these pages, and the What&apos;s
               New pages to learn more as the project matures.
             </Typography>
