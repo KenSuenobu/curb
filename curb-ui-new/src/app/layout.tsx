@@ -6,7 +6,7 @@ import { Inter } from 'next/font/google';
 import {NextPage} from 'next';
 import {useState} from 'react';
 import {usePathname, useRouter} from 'next/navigation';
-import ConfirmDialog, {alertDialog} from '@/app/components/common/ConfirmDialog';
+import ConfirmDialog, {alertDialog, confirmDialog} from '@/app/components/common/ConfirmDialog';
 import {IconButton, Menu, MenuItem, Stack, Typography} from '@mui/material';
 import Item from '@/app/components/common/Item';
 import AuthProvider from '@/app/providers/AuthProvider';
@@ -340,7 +340,10 @@ const Layout: NextPage = ({children, params}: any) => {
 
   const handleLogout = async () => {
     handleClose();
-    await signOut({});
+
+    confirmDialog('Doing this will end your session.  Are you sure?', async () => {
+      await signOut({});
+    });
   }
 
   const handleFeedback = () => {
