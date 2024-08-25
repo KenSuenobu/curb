@@ -33,6 +33,8 @@ const TripList = (props: ITripList) => {
       .finally(() => setLoading(false));
   }
 
+  const parseTrip = (trip: string) => trip.indexOf('/') !== -1 ? trip.substring(trip.lastIndexOf('/') + 1) : trip;
+
   useEffect(() => {
     if (props.fleetCarId !== 0) {
       reloadTrips();
@@ -91,8 +93,8 @@ const TripList = (props: ITripList) => {
                     <TableCell>{moment(row.startTime).format('ddd, MMM D YYYY; LT')}</TableCell>
                     <TableCell>{moment(row.endTime).format('ddd, MMM D YYYY; LT')}</TableCell>
                     <TableCell><Link
-                      href={(row.tripId.indexOf('/') !== -1 ? row.tripId.substring(row.tripId.lastIndexOf('/') + 1) : `https://turo.com/us/en/reservation/${row.tripId}`)}
-                      target={'_blank'}>{(row.tripId.indexOf('/') !== -1 ? row.tripId.substring(row.tripId.lastIndexOf('/') + 1) : row.tripId)}</Link></TableCell>
+                      href={'https://turo.com/us/en/reservation/' + parseTrip(row.tripId)}
+                      target={'_blank'}>{parseTrip(row.tripId)}</Link></TableCell>
                     <TableCell>{row.mileage}</TableCell>
                     <TableCell>$ {row.earnings.toFixed(2)}</TableCell>
                   </TableRow>
