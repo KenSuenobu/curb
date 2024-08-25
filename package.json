@@ -5,7 +5,7 @@
   "scripts": {
     "start-ui": "cd curb-ui-new && yarn start",
     "start-server": "cd curb-services && yarn start",
-    "start": "concurrently \"npm start-ui\" \"npm start-server\""
+    "start": "concurrently \"yarn start-ui\" \"yarn start-server\""
   },
   "workspaces": [
     "curb-db",
