@@ -4,7 +4,7 @@ import {
   FormControl, FormControlLabel, FormGroup, IconButton,
   InputLabel,
   MenuItem,
-  Select,
+  Select, SelectChangeEvent,
   Snackbar,
   Stack, Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow,
@@ -35,7 +35,7 @@ const FleetCarForm = (props: IFleetCarForm) => {
   const ownershipPercentageRef = useRef<any>('');
   const insuranceNameRef = useRef<any>('');
   const insurancePriceRef = useRef<any>('');
-  const insuranceScheduleRef = useRef<any>('');
+  const [paymentSchedule, setPaymentSchedule] = useState('');
   const {data: session} = useSession();
   const accessToken = session ? (session as any)['user']['accessToken'] : '';
 
@@ -61,6 +61,10 @@ const FleetCarForm = (props: IFleetCarForm) => {
       ...carFleetData,
       [e.target.name]: e.target.checked,
     });
+  }
+
+  const handlePaymentScheduleChange = (e: SelectChangeEvent) => {
+    setPaymentSchedule(e.target.value as string);
   }
 
   const addOwnershipDetail = () => {
@@ -96,7 +100,7 @@ const FleetCarForm = (props: IFleetCarForm) => {
   const addInsuranceDetail = () => {
     const insuranceName = insuranceNameRef.current.value;
     const insurancePrice = insurancePriceRef.current.value;
-    const insuranceSchedule = insuranceScheduleRef.current.value;
+    const insuranceSchedule = paymentSchedule;
 
     if (!insuranceName || !insurancePrice || !insuranceSchedule) {
       errorDialog('Insurance name, price, and payment schedule rate are required fields.');
@@ -118,7 +122,6 @@ const FleetCarForm = (props: IFleetCarForm) => {
 
     insuranceNameRef.current.value = '';
     insurancePriceRef.current.value = '';
-    insuranceScheduleRef.current.value = '';
 
     setInsuranceInputShowing(false);
   }
@@ -486,16 +489,16 @@ const FleetCarForm = (props: IFleetCarForm) => {
                           }}/>
                       </TableCell>
                       <TableCell>
-                        <TextField
-                          label={'Payment Schedule'} fullWidth variant={'standard'}
-                          inputRef={insuranceScheduleRef}
-                          onKeyDown={(ev) => {
-                            if (ev.key === 'Escape') {
-                              setInsuranceInputShowing(false);
-                            } else if (ev.key === 'Enter') {
-                              addInsuranceDetail();
-                            }
-                          }}/>
+                        <InputLabel id={'color-label'}></InputLabel>
+                        <Select labelId={'color-label'} label={''}
+                                style={{ textAlign: 'left' }}
+                                name={'paymentSchedule'}
+                                onChange={handlePaymentScheduleChange}
+                                fullWidth>
+                          <MenuItem value={'Monthly'}>Monthly</MenuItem>
+                          <MenuItem value={'Quarterly'}>Quarterly</MenuItem>
+                          <MenuItem value={'Yearly'}>Yearly</MenuItem>
+                        </Select>
                       </TableCell>
                       <TableCell>
                         <Button variant={'contained'}
