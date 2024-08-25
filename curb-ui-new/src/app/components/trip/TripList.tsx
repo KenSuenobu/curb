@@ -33,7 +33,7 @@ const TripList = (props: ITripList) => {
       .finally(() => setLoading(false));
   }
 
-  const parseTrip = (trip: string) => trip.indexOf('/') !== -1 ? trip.substring(trip.lastIndexOf('/') + 1) : trip;
+  const parseId = (id: string) => id.indexOf('/') !== -1 ? id.substring(id.lastIndexOf('/') + 1) : id;
 
   useEffect(() => {
     if (props.fleetCarId !== 0) {
@@ -88,13 +88,15 @@ const TripList = (props: ITripList) => {
                     '&:last-child td, &:last-child th': { border: 0 },
                     backgroundColor: bgColor
                   }}>
-                    <TableCell>{row.lastName}, {row.firstName}</TableCell>
+                    <TableCell><Link
+                      href={'https://turo.com/us/en/drivers/' + parseId(row.url)}
+                      target={'_blank'}>{row.lastName}, {row.firstName}</Link></TableCell>
                     <TableCell>{row.deliveryAddressId}</TableCell>
                     <TableCell>{moment(row.startTime).format('ddd, MMM D YYYY; LT')}</TableCell>
                     <TableCell>{moment(row.endTime).format('ddd, MMM D YYYY; LT')}</TableCell>
                     <TableCell><Link
-                      href={'https://turo.com/us/en/reservation/' + parseTrip(row.tripId)}
-                      target={'_blank'}>{parseTrip(row.tripId)}</Link></TableCell>
+                      href={'https://turo.com/us/en/reservation/' + parseId(row.tripId)}
+                      target={'_blank'}>{parseId(row.tripId)}</Link></TableCell>
                     <TableCell>{row.mileage}</TableCell>
                     <TableCell>$ {row.earnings.toFixed(2)}</TableCell>
                   </TableRow>

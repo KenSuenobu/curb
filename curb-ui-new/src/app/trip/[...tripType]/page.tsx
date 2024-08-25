@@ -68,7 +68,7 @@ const CurrentTrips = () => {
     reloadTrips();
   }, [accessToken]);
 
-  const parseTrip = (trip: string) => trip.indexOf('/') !== -1 ? trip.substring(trip.lastIndexOf('/') + 1) : trip;
+  const parseId = (id: string) => id.indexOf('/') !== -1 ? id.substring(id.lastIndexOf('/') + 1) : id;
 
   if (loading) {
     return (
@@ -115,7 +115,8 @@ const CurrentTrips = () => {
                   {row.nickname}
                 </TableCell>
                 <TableCell>
-                  {row.lastName}, {row.firstName}
+                  <Link href={'https://turo.com/us/en/drivers/' + parseId(row.url)}
+                        target={'_blank'}>{row.lastName}, {row.firstName}</Link>
                 </TableCell>
                 <TableCell>{row.locationName ?? 'N/A'}</TableCell>
                 <TableCell>
@@ -123,8 +124,8 @@ const CurrentTrips = () => {
                   {moment(row.endTime).format('MM/DD/YY; LT')}
                 </TableCell>
                 <TableCell><Link
-                  href={'https://turo.com/us/en/reservation/' + parseTrip(row.tripId)}
-                  target={'_blank'}>{parseTrip(row.tripId)}</Link></TableCell>
+                  href={'https://turo.com/us/en/reservation/' + parseId(row.tripId)}
+                  target={'_blank'}>{parseId(row.tripId)}</Link></TableCell>
                 <TableCell>{row.mileage}</TableCell>
                 <TableCell>$ {row.earnings.toFixed(2)}</TableCell>
                 <TableCell>
