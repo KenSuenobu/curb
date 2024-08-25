@@ -54,7 +54,10 @@ const FleetCarList = (props: IFleetCarList) => {
 
       getFleetCars(accessToken, props.fleetId)
         .then((x: any) => {
-          setFleetCarList(x.cars);
+          const enabledCars: any[] = x.cars.filter((y: any) => y.data.enabled);
+          const disabledCars: any[] = x.cars.filter((y: any) => !y.data.enabled);
+
+          setFleetCarList([ ...disabledCars, ...enabledCars ]);
         })
         .catch((x) => {
           console.log('Error', x);
@@ -204,7 +207,8 @@ const FleetCarList = (props: IFleetCarList) => {
 
           {fleetCarList.length > 0 && (
             <>
-              {fleetCarList.map((x: any) => {
+              {fleetCarList
+                .map((x: any) => {
                 let bgColor = fleetCarId === x.id ? SELECTED_COLOR : '#fff';
 
                 if (x.data.enabled === 'false') {
@@ -226,7 +230,7 @@ const FleetCarList = (props: IFleetCarList) => {
                           props.onClick(x.id);
                         }}>
                         <Stack direction={'row'}>
-                          <div style={{ width: '24px', backgroundColor: colorForLabel(x.color) }}>&nbsp;</div>
+                          <div style={{ width: '24px', backgroundColor: colorForLabel(x.color), border: '1px solid #000' }}>&nbsp;</div>
                           <div style={{ paddingLeft: '10px' }}><Typography>{x.carYear} {x.makeName} {x.modelName} {x.trimName}: &quot;{x.data.listingNickname ?? 'Unnamed'}&quot;</Typography></div>
                         </Stack>
                       </TableCell>
@@ -236,15 +240,10 @@ const FleetCarList = (props: IFleetCarList) => {
                           setInputShowing(false);
                           props.onClick(x.id);
                         }}
-                        sx={{ textAlign: 'right', backgroundColor: bgColor, width: '25%', paddingRight: '5px' }}>
+                        sx={{ textAlign: 'right', backgroundColor: bgColor, width: '30%', paddingRight: '5px' }}>
                         <Stack direction={'row'}>
                           <div>
                             <Typography>({x.licenseplate})</Typography>
-                          </div>
-                          <div>
-                            <IconButton style={{ padding: '2px' }}>
-                              <DeleteOutlined/>
-                            </IconButton>
                           </div>
                         </Stack>
                       </TableCell>

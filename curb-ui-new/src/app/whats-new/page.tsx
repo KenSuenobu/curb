@@ -17,6 +17,8 @@ const WhatsNew = () => {
               <li> #134: Trip information only uses the trip ID</li>
               <li> #135: Added financials tab</li>
               <li> #137: Enables links for guests in the trip listings</li>
+              <li> #138: Moves the list of disabled cars to the bottom of the fleet cars list on trip entry</li>
+              <li> Slight updates to trips page in fleet cars layout</li>
             </ul>
           </Typography>
         </>
