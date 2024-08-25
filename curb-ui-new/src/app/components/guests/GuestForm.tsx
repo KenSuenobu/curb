@@ -253,24 +253,22 @@ const GuestForm = (props: IGuestForm) => {
       <div style={{ display: 'flex' }}>
         <div style={{ width: '100%' }}>
           <Stack direction={'row'}>
-            <Item sx={{ width: '33%' }}>
+            <Item sx={{ width: '20%' }}>
               <TextField label={'First Name'} fullWidth value={guestData.firstName ?? ''}
                          name={'firstName'} onChange={handleChange}/>
             </Item>
 
-            <Item sx={{ width: '34%' }}>
-              <TextField label={'Middle Name/Initial'} fullWidth value={guestData.middleName ?? ''}
+            <Item sx={{ width: '20%' }}>
+              <TextField label={'Middle'} fullWidth value={guestData.middleName ?? ''}
                          name={'middleName'} onChange={handleChange}/>
             </Item>
 
-            <Item sx={{ width: '33%' }}>
+            <Item sx={{ width: '20%' }}>
               <TextField label={'Last Name'} fullWidth value={guestData.lastName ?? ''}
                          name={'lastName'} onChange={handleChange}/>
             </Item>
-          </Stack>
 
-          <Stack direction={'row'}>
-            <Item sx={{ width: '33%' }}>
+            <Item sx={{ width: '20%' }}>
               <FormControl fullWidth>
                 <InputLabel id={'source-label'}>Guest ID Source</InputLabel>
                 <Select labelId={'source-label'} label={'Guest ID Source'}
@@ -287,12 +285,37 @@ const GuestForm = (props: IGuestForm) => {
               </FormControl>
             </Item>
 
-            <Item sx={{ width: '67%' }}>
-              <UrlTextField label={'Guest URL'} fullWidth value={guestData.data.url ?? ''}
+            <Item sx={{ width: '20%' }}>
+              <UrlTextField label={'Guest ID'} fullWidth value={
+                (guestData.data.url ?
+                  (guestData.data.url.indexOf('/') !== -1 ?
+                    guestData.data.url.substring(guestData.data.url.lastIndexOf('/') + 1) : guestData.data.url
+                  ) : ''
+                )}
                             name={'url'} onChange={handleDataChange}
                             onUrlClick={() => {
                               if (guestData.data.url) {
-                                window.open(guestData.data.url, '_blank');
+                                let guestId = guestData.data.url;
+
+                                if (guestId.indexOf('/') !== -1) {
+                                  guestId = guestId.substring(guestId.lastIndexOf('/') + 1);
+                                }
+
+                                switch(guestData.guestIdSource) {
+                                  case 1:
+                                    break;
+
+                                  case 2:
+                                    break;
+
+                                  case 99:
+                                    window.open(guestData.data.url, '_blank');
+                                    break;
+
+                                  default:
+                                    window.open(`https://turo.com/us/en/drivers/${guestId}`, '_blank');
+                                    break;
+                                }
                               }
                             }}/>
             </Item>

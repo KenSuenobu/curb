@@ -5,10 +5,24 @@ import {ExpandMoreOutlined} from '@mui/icons-material';
 const WhatsNew = () => {
   const newItems = [
     {
+      header: 'v0.0.12',
+      text:
+        <>
+          <Typography>
+            The following improvements have been made:
+            <p/>
+            <ul>
+              <li> #2: Insurance Detail payment schedule is now a dropdown selector instead of freeform text</li>
+              <li> #133: Add ability to enter guest information by selecting platform and just supplying the ID</li>
+            </ul>
+          </Typography>
+        </>
+    },
+    {
       header: 'v0.0.11',
       text:
-          <>
-            <Typography>
+        <>
+          <Typography>
               The following improvements have been made:
               <p/>
               <ul>
