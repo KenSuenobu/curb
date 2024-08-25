@@ -28,7 +28,7 @@ import {
   MoneyOutlined,
   Email,
   Person2,
-  Logout,
+  Logout, LocalAtmOutlined,
 } from '@mui/icons-material';
 import SideBar from '@/app/components/main-layout/SideBar';
 import {signOut, useSession} from 'next-auth/react';
@@ -309,6 +309,26 @@ const Layout: NextPage = ({children, params}: any) => {
       },
     ],
   }
+
+  const financialItems: SideBarMenuGroupProps = {
+    label: 'Financials',
+    items: [
+      {
+        icon: <LocalAtmOutlined/>,
+        label: 'Expenses',
+        url: '/expenses',
+        info:
+          <>
+            <Typography>
+              <b>Expenses</b>
+              <p/>
+              Expenses are tracked here.
+            </Typography>
+          </>
+      },
+    ],
+  };
+
   // const tollItems: SideBarMenuGroupProps = {
   //   label: 'Tolls',
   //   items: [
@@ -324,7 +344,7 @@ const Layout: NextPage = ({children, params}: any) => {
   //     },
   //   ],
   // }
-  const sidebarItems = [carItems, fleetItems, guestItems, tripItems];
+  const sidebarItems = [carItems, fleetItems, guestItems, tripItems, financialItems];
 
   const handleHomeClicked = () => {
     router.push('/');

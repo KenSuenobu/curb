@@ -15,6 +15,7 @@ const WhatsNew = () => {
               <li> #2: Insurance Detail payment schedule is now a dropdown selector instead of freeform text</li>
               <li> #133: Add ability to enter guest information by selecting platform and just supplying the ID</li>
               <li> #134: Trip information only uses the trip ID</li>
+              <li> #135: Added financials tab</li>
             </ul>
           </Typography>
         </>
