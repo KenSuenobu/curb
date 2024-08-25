@@ -301,7 +301,7 @@ const GuestForm = (props: IGuestForm) => {
                                   guestId = guestId.substring(guestId.lastIndexOf('/') + 1);
                                 }
 
-                                switch(guestData.guestIdSource) {
+                                switch(parseInt(guestData.guestIdSource ?? '0')) {
                                   case 1:
                                     break;
 
