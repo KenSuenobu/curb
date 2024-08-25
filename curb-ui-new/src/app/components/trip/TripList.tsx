@@ -90,7 +90,9 @@ const TripList = (props: ITripList) => {
                     <TableCell>{row.deliveryAddressId}</TableCell>
                     <TableCell>{moment(row.startTime).format('ddd, MMM D YYYY; LT')}</TableCell>
                     <TableCell>{moment(row.endTime).format('ddd, MMM D YYYY; LT')}</TableCell>
-                    <TableCell><Link href={row.tripId}>{row.tripId.substring(row.tripId.lastIndexOf('/') + 1)}</Link></TableCell>
+                    <TableCell><Link
+                      href={(row.tripId.indexOf('/') !== -1 ? row.tripId.substring(row.tripId.lastIndexOf('/') + 1) : `https://turo.com/us/en/reservation/${row.tripId}`)}
+                      target={'_blank'}>{(row.tripId.indexOf('/') !== -1 ? row.tripId.substring(row.tripId.lastIndexOf('/') + 1) : row.tripId)}</Link></TableCell>
                     <TableCell>{row.mileage}</TableCell>
                     <TableCell>$ {row.earnings.toFixed(2)}</TableCell>
                   </TableRow>

@@ -187,12 +187,17 @@ const TripForm = (props: ITripForm) => {
       </Stack>
 
       <Stack direction={'row'}>
-        <Item sx={{ width: '30%' }}>
-          <TextField label={'Trip URL'} fullWidth value={tripData.tripId ?? ''}
+        <Item sx={{ width: '20%' }}>
+          <TextField label={'Trip ID'} fullWidth value={
+            (tripData.tripId ?
+                (tripData.tripId.indexOf('/') !== -1 ?
+                    tripData.tripId.substring(tripData.tripId.lastIndexOf('/') + 1) : tripData.tripId
+                ) : ''
+            )}
                      name={'tripId'} onChange={handleChange}/>
         </Item>
 
-        <Item sx={{ width: '30%' }}>
+        <Item sx={{ width: '40%' }}>
           <FormControl sx={{ width: '100%' }}>
             <InputLabel id={'airline-label'}>Airline</InputLabel>
             <Select labelId={'airline-label'} label={'Airline'} name={'airlineIana'}
